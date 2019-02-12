@@ -1,10 +1,15 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import javax.persistence.*;
 
 @Data
+@Entity
 public class AddressEntity {
 
+    @Id
+    @GeneratedValue
     private Long id;
     private String street;
     private int housenumber;
