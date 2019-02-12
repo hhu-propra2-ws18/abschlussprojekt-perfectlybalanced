@@ -2,9 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -17,7 +15,9 @@ public class ProductEntity {
     private String titel;
     private int surety;
     private int cost;
+    @OneToMany
     private AddressEntity location;
+    @OneToMany
     private UserEntity owner;
 
     public ProductEntity() {
