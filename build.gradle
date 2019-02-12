@@ -1,3 +1,5 @@
+import com.github.spotbugs.SpotBugsTask
+
 buildscript {
 	ext {
 		springBootVersion = '2.1.2.RELEASE'
@@ -10,6 +12,11 @@ buildscript {
 	}
 }
 
+plugins {
+	id "com.github.spotbugs" version "1.6.9"
+	id 'checkstyle'
+}
+
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -20,6 +27,29 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+}
+
+checkstyle {
+	toolVersion '8.17'
+	configFile file("config/checkstyle/checkstyle.xml")
+}
+
+checkstyleMain {
+	source ='src/main/java'
+}
+
+checkstyleTest {
+	source ='src/test/java'
+}
+
+spotbugs {
+	toolVersion = '3.1.11'
+}
+
+// To generate an HTML report instead of XML
+tasks.withType(SpotBugsTask) {
+	reports.xml.enabled = false
+	reports.html.enabled = true
 }
 
 dependencies {

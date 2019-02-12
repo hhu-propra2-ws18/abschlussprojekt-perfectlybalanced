@@ -1,5 +1,4 @@
 language: java
-jdk: oraclejdk8
 
 script:
-- ./buildtest.sh
+  - ./gradlew test
