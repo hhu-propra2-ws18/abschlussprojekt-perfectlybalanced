@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verleihplattform Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<nav th:replace="nav-fragment"></nav>
+<div class="container">
+    <div class="m-3"></div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h3> Profile </h3>
+            <span>Benutzername: </span>
+            <br>
+            <span>Email: </span>
+        </div>
+        <div class="col-md-6">
+            <h3>ProPay</h3>
+            <p>
+                Kontostand:
+            </p>
+            <a href="/propay/ueberweisen?id=3">
+                Geld auf dieses Konto ueberweisen
+            </a>
+            <p>
+                Transaktionsverlauf:
+            </p>
+            <ul class="list-group">
+                <li class="list-group-item">Einzahlung: 1 Euro</li>
+                <li class="list-group-item">Peter hat 300 Euro Kaution ueberwiesen</li>
+                <li class="list-group-item">Olaf hat 3 Euro Ausleihgebuer fuer Rasenmaeher gezahlt</li>
+                <li class="list-group-item">Olaf hat 100 Euro Kaution fuer Rasenmaeher gezahlt</li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
