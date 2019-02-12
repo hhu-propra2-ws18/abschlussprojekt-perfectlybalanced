@@ -4,6 +4,7 @@
 nohup.out
 *.class
 .idea/
+.project
 
 # Log file
 *.log
