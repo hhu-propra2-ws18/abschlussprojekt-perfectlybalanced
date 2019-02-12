@@ -27,3 +27,4 @@ nohup.out
 hs_err_pid*
 README.md
 build/
+out/
