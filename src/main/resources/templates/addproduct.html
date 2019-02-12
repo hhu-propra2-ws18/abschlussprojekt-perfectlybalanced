@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artikel einstellen</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<nav th:replace="nav-fragment"></nav>
+<div class="container">
+    <div class="m-3"></div>
+    <h2>Artikel einstellen</h2>
+    <form>
+        <div class="form-group">
+            <label class="label" for="titel">Titel:</label>
+            <input type="text" name="titel" id="titel" placeholder="Titel">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="beschreibung">Beschreibung:</label>
+            <textarea class="form-control" rows="5" id="beschreibung" placeholder="Beschreiben Sie Ihren Artikel mit einigen Worten"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="kosten">Kosten:</label>
+            <input type="text" name="kosten" id="kosten" placeholder="Kosten">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="kaution">Kaution:</label>
+            <input type="text" name="kaution" id="kaution" placeholder="Kaution">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Erstellen</button>
+    </form>
+</div>
+</body>
+</html>
