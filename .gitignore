@@ -5,6 +5,7 @@ nohup.out
 *.class
 .idea/
 .project
+.vscode/
 
 # Log file
 *.log
