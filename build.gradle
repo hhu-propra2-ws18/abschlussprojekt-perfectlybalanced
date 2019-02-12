@@ -14,12 +14,12 @@ buildscript {
 
 plugins {
 	id "com.github.spotbugs" version "1.6.9"
+	id 'checkstyle'
 }
 
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'checkstyle'
 
 group = 'de.hhu'
 version = '0.0.1-SNAPSHOT'
@@ -27,6 +27,10 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+}
+
+checkstyle {
+	toolVersion '8.17'
 }
 
 checkstyleMain {
