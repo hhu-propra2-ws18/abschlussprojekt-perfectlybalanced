@@ -8,8 +8,6 @@ import javax.persistence.*;
 @Embeddable
 public class AddressEntity {
 
-    @Id
-    private Long addressId;
     private String street;
     private int housenumber;
     private int postcode;
