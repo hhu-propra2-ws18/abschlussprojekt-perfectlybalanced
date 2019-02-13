@@ -19,47 +19,36 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Test
-    public void startConfigTestOneUseerIsInDatabase(){
-
-        int numberOfUsers = userRepository.getNumberOfUsers();
-        Assert.assertEquals(1, numberOfUsers);
-
-    }
 
     @Test
-    public void saveOneUserToDatabase(){
-
+    public void saveOneUserToDatabase() {
+        int numberOfUsersatTestStart = userRepository.getNumberOfUsers();
         UserEntity user = new UserEntity("firstName", "LastName", "username", "password", "email");
         userRepository.saveUser(user);
         int numberOfUsers = userRepository.getNumberOfUsers();
-        Assert.assertEquals(2, numberOfUsers);
+        Assert.assertEquals(numberOfUsersatTestStart + 1, numberOfUsers);
 
     }
 
     @Test
-    public void startConfigTestLoadMaxMusterMann(){
+    public void startConfigTestLoadMaxMusterMann() {
 
         UserEntity user = new UserEntity("Max", "Mustermann", "MMustermann", "MaxMuster223", "Max@Mustermann.de");
         UserEntity loadedUser = userRepository.findById(1L);
         Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname()) &&
-                                    user.getLastname().equals(loadedUser.getLastname()) &&
-                                    user.getUsername().equals(loadedUser.getUsername()) &&
-                                    user.getEmail().equals(loadedUser.getEmail()));
+                user.getLastname().equals(loadedUser.getLastname()) &&
+                user.getUsername().equals(loadedUser.getUsername()) &&
+                user.getEmail().equals(loadedUser.getEmail()));
 
     }
 
-    @Test
-    public void getAllUserWithStartConfig(){
-        List<UserEntity> allUser = userRepository.getAllUser();
-        Assert.assertEquals(1, allUser.size());
-    }
 
     @Test
-    public void getAllUsersAfterAddingOneUser(){
+    public void getAllUsersAfterAddingOneUser() {
+        int numberOfUserAtTestStart = userRepository.getNumberOfUsers();
         UserEntity user = new UserEntity("firstName", "LastName", "username", "password", "email");
         userRepository.saveUser(user);
         List<UserEntity> allUser = userRepository.getAllUser();
-        Assert.assertEquals(2, allUser.size());
+        Assert.assertEquals(numberOfUserAtTestStart +1, allUser.size());
     }
 }
