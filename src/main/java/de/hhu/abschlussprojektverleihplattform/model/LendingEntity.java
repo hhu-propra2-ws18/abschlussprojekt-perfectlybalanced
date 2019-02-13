@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class LendingEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Lendingstatus status;
     private Timestamp start;
