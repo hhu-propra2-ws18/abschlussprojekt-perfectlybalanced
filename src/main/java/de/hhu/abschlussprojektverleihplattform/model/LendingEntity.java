@@ -15,7 +15,7 @@ public class LendingEntity {
     private Lendingstatus status;
     private Timestamp start;
     private Timestamp end;
-    @OneToMany
+    @OneToOne
     private UserEntity borrower;
     @OneToOne
     private ProductEntity product;

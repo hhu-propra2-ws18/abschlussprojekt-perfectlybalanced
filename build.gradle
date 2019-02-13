@@ -23,6 +23,8 @@ repositories {
 }
 
 dependencies {
+	compile 'javax.xml.bind:jaxb-api:2.3.0'
+	testCompile('javax.xml.bind:jaxb-api')
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	compile'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtime'org.springframework.boot:spring-boot-devtools'
