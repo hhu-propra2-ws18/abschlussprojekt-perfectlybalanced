@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
-import de.hhu.abschlussprojektverleihplattform.database.DatabaseManager;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
