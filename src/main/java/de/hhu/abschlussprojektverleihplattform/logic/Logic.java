@@ -61,11 +61,14 @@ public class Logic {
         int totalcost = product.getCost() + product.getSurety();
         boolean MoneyIsOK = payment_service.UserHasAmount(actingUser, totalcost);
         if (TimeIsOK && MoneyIsOK) {
-            LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, actingUser, product);
-            lending_service.addLending(lending);
-            if (payment_service.reservateAmount(actingUser, totalcost)) {
-                return true;
-            }
+//            LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, actingUser, product);
+//            lending_service.addLending(lending);
+//            if (payment_service.reservateAmount(actingUser, product.getOwner(), product.getSurety())) {
+//                if(payment_service.reservateAmount(actingUser, product.getOwner(), product.getCost())) {
+//                    return true;
+//                }
+//                payment_service.returnReservatedMoney(actingUser, product.getSurety());
+//            }
         }
         return false;
     }
@@ -76,7 +79,8 @@ public class Logic {
         lending_service.update(lending);
         UserEntity productowner = lending.getProduct().getOwner();
         int cost = lending.getProduct().getCost();
-        return payment_service.tranferReservatedMoney(actingUser, productowner, cost);
+//        return payment_service.tranferReservatedMoney(actingUser, productowner, cost);
+        return false;
     }
 
     // Artikel zurueckgeben
@@ -99,7 +103,8 @@ public class Logic {
             lending_service.update(lending);
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            return payment_service.returnReservatedMoney(customer, surety);
+//            return payment_service.returnReservatedMoney(customer, surety);
+            return false;
         } else {
             lending.setStatus(Lendingstatus.conflict);
             return true;
@@ -114,7 +119,8 @@ public class Logic {
             lending_service.update(lending);
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            return payment_service.returnReservatedMoney(customer, surety);
+//            return payment_service.returnReservatedMoney(customer, surety);
+            return false;
         } else {
             lending.setStatus(Lendingstatus.conflict);
             return true;
@@ -127,15 +133,15 @@ public class Logic {
             UserEntity customer = lending.getBorrower();
             UserEntity owner = lending.getProduct().getOwner();
             int surety = lending.getProduct().getSurety();
-            if (!payment_service.tranferReservatedMoney(customer, owner, surety)) {
-                return false;
-            }
+//            if (!payment_service.tranferReservatedMoney(customer, owner, surety)) {
+//                return false;
+//            }
         } else {
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            if (!payment_service.reservateAmount(customer, surety)) {
-                return false;
-            }
+//            if (!payment_service.reservateAmount(customer, surety)) {
+//                return false;
+//            }
         }
         lending.setStatus(Lendingstatus.done);
         lending_service.update(lending);
