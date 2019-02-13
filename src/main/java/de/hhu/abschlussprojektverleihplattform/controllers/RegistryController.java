@@ -1,7 +1,9 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,10 +13,17 @@ import org.springframework.web.server.ResponseStatusException;
 public class RegistryController {
 
     @GetMapping("/register")
-    public String getRegisterPage(){
+    public String getRegisterPage(Model model){
+        model.addAttribute("user", new UserEntity());
         return "registry";
     }
 
+    @PostMapping("/register")
+    public String setUser(UserEntity user) {
+        // TODO: Logik saveUser
+        return "redirect:/";
+    }
+    /*
     @PostMapping("/register")
     public String postRegisterUser(
             @RequestParam(value="username")String username,
@@ -35,4 +44,5 @@ public class RegistryController {
 
         return "redirect:/";
     }
+    */
 }
