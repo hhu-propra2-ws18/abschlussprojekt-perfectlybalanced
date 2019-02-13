@@ -76,7 +76,7 @@ public class LogicModel {
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
-    public void CheckReturnedProduct(UserEntity actingUser, LendingEntity lending, boolean isAcceptable) {
+    public void CheckReturnedProduct(LendingEntity lending, boolean isAcceptable) {
         if(isAcceptable) {
             lending.setStatus(Lendingstatus.done);
             lending_service.update(lending);
@@ -84,26 +84,69 @@ public class LogicModel {
             int surety = lending.getProduct().getSurety();
             payment_service.returnReservatedMoney(customer, surety);
         } else {
-            
+            lending.setStatus(Lendingstatus.conflict);
+        }
+    }
+
+    // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
+    public void CheckReturnedProduct(UserEntity actingUser, ProductEntity product, boolean isAcceptable) {
+        LendingEntity lending = lending_service.getLendingByProductAndUser(product, actingUser);
+        if(isAcceptable) {
+            lending.setStatus(Lendingstatus.done);
+            lending_service.update(lending);
+            UserEntity customer = lending.getBorrower();
+            int surety = lending.getProduct().getSurety();
+            payment_service.returnReservatedMoney(customer, surety);
+        } else {
+            lending.setStatus(Lendingstatus.conflict);
         }
     }
 
     // Konflikt vom Admin loesen
-
+    public void ResolveConflict(LendingEntity lending, boolean OwnerRecivesSurety) {
+        if(OwnerRecivesSurety) {
+            UserEntity customer = lending.getBorrower();
+            UserEntity owner = lending.getProduct().getOwner();
+            int surety = lending.getProduct().getSurety();
+            payment_service.tranferReservatedMoney(customer, owner, surety);
+        } else {
+            UserEntity customer = lending.getBorrower();
+            int surety = lending.getProduct().getSurety();
+            payment_service.reservateAmount(customer, surety);
+        }
+    }
 
     //// Abfragen:
 
     // Alle Produkte
+    public List<ProductEntity> GetAllProducts() {
+        return product_service.getAllProducts();
+    }
 
     // Alle eingehenden Anfragen
+    public List<LendingEntity> GetRequestForUser(UserEntity actingUser) {
+        return lending_service.getAllRequestsForUser(actingUser);
+    }
 
     // Alle geliehenen Produkte
+    public List<LendingEntity> GetLendingForUser(UserEntity actingUser) {
+        return lending_service.getAllLendingsForUser(actingUser);
+    }
 
     // Alle verliehenden Produkte
+    public List<LendingEntity> GetLedingsFromUser(UserEntity actingUser) {
+        return lending_service.getAllLendingsFromUser(actingUser);
+    }
 
-    // Alle zurueckgegebene Pridukte
+    // Alle zurueckgegebene Produkte
+    public List<LendingEntity> GetReturnedLendings(UserEntity activeUser) {
+        return lending_service.getReturnedLendingFromUser(activeUser);
+    }
 
     // Alle Konflikte
+    public List<LendingEntity> GetAllConflicts() {
+        return lending_service.getAllConflicts();
+    }
 
     // Detais zu Produkte/Abfragen/Konflikten/...
 }

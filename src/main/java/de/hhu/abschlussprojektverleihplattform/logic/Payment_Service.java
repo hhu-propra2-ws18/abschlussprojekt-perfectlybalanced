@@ -11,4 +11,7 @@ public interface Payment_Service {
     void tranferReservatedMoney(UserEntity payingUser, UserEntity recivingUser, int amount);
 
     void returnReservatedMoney(UserEntity userEntity, int amount);
+
+
+    // Da ich die genaue funktionsweise des reservierens nicht kenne, kann sich hier noch einiges aendern
 }
