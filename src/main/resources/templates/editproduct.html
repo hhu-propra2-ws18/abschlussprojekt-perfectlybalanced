@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artikel bearbeiten</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<nav th:replace="nav-fragment"></nav>
+<div class="container">
+    <div class="m-3"></div>
+    <h2>Artikel bearbeiten</h2>
+    <form>
+        <div class="form-group">
+            <label class="label" for="titel">Titel:</label>
+            <input type="text" name="titel" id="titel">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="beschreibung">Beschreibung:</label>
+            <textarea class="form-control" rows="5" id="beschreibung"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="kosten">Kosten:</label>
+            <input type="text" name="kosten" id="kosten">
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="kaution">Kaution:</label>
+            <input type="text" name="kaution" id="kaution">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Bearbeiten</button>
+    </form>
+</div>
+</body>
+</html>
