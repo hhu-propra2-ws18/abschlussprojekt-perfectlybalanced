@@ -2,15 +2,25 @@ package de.hhu.abschlussprojektverleihplattform.model;
 
 import lombok.Data;
 
+import javax.persistence.*;
+
 @Data
+@Entity
 public class ProductEntity {
 
+    @Id
+    @GeneratedValue
     private Long id;
     private String description;
     private String titel;
     private int surety;
     private int cost;
+
+    @Embedded
     private AddressEntity location;
+
+    @OneToOne
+    @Embedded
     private UserEntity owner;
 
     public ProductEntity() {

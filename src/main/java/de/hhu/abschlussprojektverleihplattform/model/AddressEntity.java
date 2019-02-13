@@ -1,11 +1,15 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import javax.persistence.*;
 
 @Data
+@Embeddable
 public class AddressEntity {
 
-    private Long id;
+    @Id
+    private Long addressId;
     private String street;
     private int housenumber;
     private int postcode;
