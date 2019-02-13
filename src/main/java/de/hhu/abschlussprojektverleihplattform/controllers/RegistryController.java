@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
-import de.hhu.abschlussprojektverleihplattform.database.DatabaseManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
