@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -40,11 +42,24 @@ public class UserRepositoryTest {
 
         UserEntity user = new UserEntity("Max", "Mustermann", "MMustermann", "MaxMuster223", "Max@Mustermann.de");
         UserEntity loadedUser = userRepository.findById(1L);
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" + loadedUser);
         Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname()) &&
                                     user.getLastname().equals(loadedUser.getLastname()) &&
                                     user.getUsername().equals(loadedUser.getUsername()) &&
                                     user.getEmail().equals(loadedUser.getEmail()));
 
+    }
+
+    @Test
+    public void getAllUserWithStartConfig(){
+        List<UserEntity> allUser = userRepository.getAllUser();
+        Assert.assertEquals(1, allUser.size());
+    }
+
+    @Test
+    public void getAllUsersAfterAddingOneUser(){
+        UserEntity user = new UserEntity("firstName", "LastName", "username", "password", "email");
+        userRepository.saveUser(user);
+        List<UserEntity> allUser = userRepository.getAllUser();
+        Assert.assertEquals(2, allUser.size());
     }
 }

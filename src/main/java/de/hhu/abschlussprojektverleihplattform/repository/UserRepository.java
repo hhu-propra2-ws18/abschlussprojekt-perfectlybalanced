@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,16 +12,21 @@ import java.util.List;
 
 @Data
 @Repository
-public class UserRepository implements IUserRepository{
+public class UserRepository implements IUserRepository {
+
+    final
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    public UserRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public UserEntity findById(Long userId) {
         return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY where user_Id=?",
-                                            new Object[] { userId },
-                                            new BeanPropertyRowMapper<UserEntity>(UserEntity.class));
+                new Object[]{userId},
+                new BeanPropertyRowMapper<UserEntity>(UserEntity.class));
     }
 
     @Override
@@ -28,12 +34,11 @@ public class UserRepository implements IUserRepository{
         jdbcTemplate.update(
                 "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL)" +
                         "VALUES (?,?,?,?,?)",
-                        new Object[]{user.getFirstname(),
-                                    user.getLastname(),
-                                    user.getUsername(),
-                                    user.getPassword(),
-                                    user.getEmail()}
-        );
+                user.getFirstname(),
+                user.getLastname(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail());
     }
 
     @Override
@@ -42,7 +47,7 @@ public class UserRepository implements IUserRepository{
     }
 
     @Override
-    public List<UserEntity> alleUser() {
-        return null;
+    public List<UserEntity> getAllUser() {
+        return jdbcTemplate.query("SELECT * FROM USER_ENTITY", new BeanPropertyRowMapper<>(UserEntity.class));
     }
 }
