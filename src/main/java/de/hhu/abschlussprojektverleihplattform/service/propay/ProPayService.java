@@ -11,6 +11,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+
 @Component
 public class ProPayService implements IProPayService, IPayment {
 
@@ -47,18 +49,7 @@ public class ProPayService implements IProPayService, IPayment {
 
     @Override
     public long getBalance(String username) throws Exception{
-        Account account=null;
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-
-            String url = baseurl + "account/" + username;
-            account = restTemplate.getForObject(url, Account.class);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new Exception("user not exists?");
-        }
-
-        return account.amount;
+        return this.getAccount(username).amount;
     }
 
     @Override
@@ -130,8 +121,35 @@ public class ProPayService implements IProPayService, IPayment {
     @Override
     public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget, long amount) throws Exception {
 
-        //TODO: implement
-        return null;
+        RestTemplate restTemplate = new RestTemplate();
+
+        String method_url = "reservation/reserve/"+userSource+"/"+userTarget;
+        String url = baseurl + method_url+"?amount="+amount;
+
+        System.out.println("url:"+url);
+
+        ResponseEntity<Reservation> reservation = restTemplate.postForEntity(URI.create(url),null,Reservation.class);
+
+        if(reservation.getStatusCode().is4xxClientError()){
+            throw new Exception("cannot make reservation");
+        }
+        return reservation.getBody();
+    }
+
+    @Override
+    public Account getAccount(String username) throws Exception {
+        Account account=null;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            String url = baseurl + "account/" + username;
+            account = restTemplate.getForObject(url, Account.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception("user not exists?");
+        }
+
+        return account;
     }
 
 

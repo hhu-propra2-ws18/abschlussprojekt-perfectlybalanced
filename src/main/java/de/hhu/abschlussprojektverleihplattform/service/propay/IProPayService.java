@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
+import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 
 public interface IProPayService {
@@ -16,4 +17,5 @@ public interface IProPayService {
 
     public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget,long amount) throws Exception;
 
+    public Account getAccount(String username) throws Exception;
 }
