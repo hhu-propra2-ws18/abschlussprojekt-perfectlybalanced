@@ -2,16 +2,22 @@ package de.hhu.abschlussprojektverleihplattform.model;
 
 import lombok.Data;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Data
+@Entity
 public class LendingEntity {
 
+    @Id
+    @GeneratedValue
     private Long id;
     private Lendingstatus status;
     private Timestamp start;
     private Timestamp end;
+    @OneToOne
     private UserEntity borrower;
+    @OneToOne
     private ProductEntity product;
 
     public LendingEntity() {
