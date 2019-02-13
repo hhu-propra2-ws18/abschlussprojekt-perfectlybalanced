@@ -51,7 +51,12 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 dependencies {
+	compile 'javax.xml.bind:jaxb-api:2.3.0'
+	testCompile('javax.xml.bind:jaxb-api')
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	compile'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtime'org.springframework.boot:spring-boot-devtools'
+	compile'mysql:mysql-connector-java'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
