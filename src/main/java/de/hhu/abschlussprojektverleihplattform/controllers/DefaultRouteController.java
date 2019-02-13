@@ -11,6 +11,7 @@ public class DefaultRouteController {
     public String getDefaultRouteOverviewOfProducts(Model model){
 
         //TODO: redirect if user is not logged in
+        // Startseite für alle
 
         return "productoverview";
     }
