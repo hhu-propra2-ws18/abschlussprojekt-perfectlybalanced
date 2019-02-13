@@ -1,20 +1,9 @@
 version: "3.1"
 services:
-  proxy:
-    image: nginx:1.15-alpine
-    ports:
-      - "8080:80"
-    volumes:
-      - ./proxy/conf/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./proxy/conf/domain.conf:/etc/nginx/domain.conf:ro
-    depends_on:
-      - dienst
-      - datenbank
-
   dienst:
     build: .
     ports:
-      - "8081:8081"
+      - "8080:8080"
     environment:
       - DB_HOST=db
       - DB_PORT=1521
@@ -22,6 +11,7 @@ services:
       - DB_PASSWORD=whatdiditcost
     links:
       - datenbank
+      - propay
 
   datenbank:
     container_name: datenbank
@@ -35,3 +25,11 @@ services:
       - H2_USER=perfectlybalanced
       - H2_PASSWORD=whatdiditcost
       - H2_ROOT_PASSWORD=everything
+
+  propay:
+    image: propra/propay
+    ports:
+      - "8888:8888"
+    # Optional
+    volumes:
+      - ./data:/code/data
