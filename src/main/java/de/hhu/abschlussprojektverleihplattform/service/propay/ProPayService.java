@@ -166,18 +166,27 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
     @Override
-    public boolean reservateAmount(UserEntity user, int amount) {
-        //TODO: implement
+    public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
+        try {
+            Reservation reservation = makeReservationFromSourceUserToTargetUser(payingUser.getUsername(), recivingUser.getUsername(), amount);
+            return reservation.id;
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
+    @Override
+    public boolean tranferReservatedMoney(Long id) {
+        //TODO
         return false;
     }
 
     @Override
-    public void tranferReservatedMoney(UserEntity payingUser, UserEntity recivingUser, int amount) {
-        //TODO: implement
+    public boolean returnReservatedMoney(Long id) {
+        //TODO
+        return false;
     }
 
-    @Override
-    public void returnReservatedMoney(UserEntity userEntity, int amount) {
-        //TODO: implement
-    }
+
 }
