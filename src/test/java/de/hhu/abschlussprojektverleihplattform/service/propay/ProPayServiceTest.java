@@ -4,9 +4,17 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ProPayServiceTest {
+
+    @Autowired
+    private ProPayService proPayService;
 
     private String make_new_user(){
         return RandomStringUtils.random(10,true,false);
@@ -15,13 +23,13 @@ public class ProPayServiceTest {
     @Test
     public void testnewuserhaszerobalance() throws Exception{
         String generated_username = this.make_new_user();
-        Assert.assertEquals(0,ProPayService.getInstance().getBalance(generated_username));
+        Assert.assertEquals(0,this.proPayService.getBalance(generated_username));
     }
 
     @Test
     public void test_can_create_account() {
         try {
-            ProPayService.getInstance().createAccountIfNotExists("alice");
+            this.proPayService.createAccountIfNotExists("alice");
         } catch (Exception e) {
             Assert.fail();
         }
@@ -30,10 +38,10 @@ public class ProPayServiceTest {
     @Test
     public void test_increaseuser_has_positive_balance(){
         try {
-            ProPayService.getInstance().createAccountIfNotExists("alice");
-            ProPayService.getInstance().changeUserBalanceBy("alice",10000);
+            this.proPayService.createAccountIfNotExists("alice");
+            this.proPayService.changeUserBalanceBy("alice",10000);
 
-            Assert.assertTrue(ProPayService.getInstance().getBalance("alice")>=0);
+            Assert.assertTrue(this.proPayService.getBalance("alice")>=0);
         }catch (Exception e) {
             Assert.fail();
         }
@@ -44,12 +52,12 @@ public class ProPayServiceTest {
         String user1 = this.make_new_user();
         String user2 = this.make_new_user();
 
-        ProPayService.getInstance().createAccountIfNotExists(user1);
-        ProPayService.getInstance().createAccountIfNotExists(user2);
+        this.proPayService.createAccountIfNotExists(user1);
+        this.proPayService.createAccountIfNotExists(user2);
 
-        ProPayService.getInstance().changeUserBalanceBy(user1,1);
-        ProPayService.getInstance().makePayment(user1,user2,1);
+        this.proPayService.changeUserBalanceBy(user1,1);
+        this.proPayService.makePayment(user1,user2,1);
 
-        Assert.assertEquals(ProPayService.getInstance().getBalance(user2),1);
+        Assert.assertEquals(this.proPayService.getBalance(user2),1);
     }
 }

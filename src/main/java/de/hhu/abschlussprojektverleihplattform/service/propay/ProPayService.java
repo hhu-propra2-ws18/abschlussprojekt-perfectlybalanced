@@ -3,24 +3,30 @@ package de.hhu.abschlussprojektverleihplattform.service.propay;
 import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
+import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+@Component
 public class ProPayService implements IProPayService, IPayment {
 
     public static final String baseurl = "http://propra-propay.herokuapp.com/";
 
     private static ProPayService instance=null;
 
+    //jens said we should use dependency injection
+    /*
     public synchronized static ProPayService getInstance(){
         if(instance==null){
             instance=new ProPayService();
         }
         return instance;
     }
+    */
 
     private ProPayService(){}
 
@@ -119,6 +125,13 @@ public class ProPayService implements IProPayService, IPayment {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget, long amount) throws Exception {
+
+        //TODO: implement
+        return null;
     }
 
 
