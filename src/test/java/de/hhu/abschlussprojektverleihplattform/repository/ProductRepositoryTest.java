@@ -14,7 +14,7 @@ public class ProductRepositoryTest {
     @Test
     public void testFindAllExpectedNull(){
         List<ProductEntity> testList = productRepository.findAll();
-        assertNull(testList);
+        assertNotNull(testList);
     }
 
 
