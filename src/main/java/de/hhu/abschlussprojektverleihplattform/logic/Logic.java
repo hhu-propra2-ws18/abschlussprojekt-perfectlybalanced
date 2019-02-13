@@ -16,6 +16,13 @@ public class Logic {
     private IProduct product_service;
     private IUser user_service;
 
+    public Logic(ILending lending_service, IPayment payment_service, IProduct product_service, IUser user_service) {
+        this.lending_service = lending_service;
+        this.payment_service = payment_service;
+        this.product_service = product_service;
+        this.user_service = user_service;
+    }
+
     // werden momentan nicht gebraucht
     //private IAddress address_service;
     //private IAdmin admin_service;
@@ -120,13 +127,13 @@ public class Logic {
             UserEntity customer = lending.getBorrower();
             UserEntity owner = lending.getProduct().getOwner();
             int surety = lending.getProduct().getSurety();
-            if(!payment_service.tranferReservatedMoney(customer, owner, surety)) {
+            if (!payment_service.tranferReservatedMoney(customer, owner, surety)) {
                 return false;
             }
         } else {
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            if(!payment_service.reservateAmount(customer, surety)) {
+            if (!payment_service.reservateAmount(customer, surety)) {
                 return false;
             }
         }
