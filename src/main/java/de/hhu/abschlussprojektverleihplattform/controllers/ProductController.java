@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ProductController {
 
+    // PostMapping fehlt noch
+
     @GetMapping("/addproduct")
     public String getAddProduct(Model model) {
         return "addproduct";
@@ -18,5 +20,14 @@ public class ProductController {
         return "editproduct";
     }
 
+    @GetMapping("/removeproduct")
+    public String getRemoveProduct(Model model) {
+        return "removeproduct";
+    }
+
+    @GetMapping("/productdetail")
+    public String getProductDetails(Model model) {
+        return "productdetailedview";
+    }
 }
 
