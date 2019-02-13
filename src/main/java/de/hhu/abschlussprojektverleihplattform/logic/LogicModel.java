@@ -7,43 +7,43 @@ import java.util.List;
 
 public class LogicModel {
 
-    private Address_Service address_service;
-    private Admin_Service admin_service;
-    private Lending_Service lending_service;
-    private Payment_Service payment_service;
-    private Product_Service product_service;
-    private User_Service user_service;
+    private IAddress IAddress_;
+    private IAdmin IAdmin_;
+    private ILending ILending_;
+    private IPayment IPayment_;
+    private IProduct IProduct_;
+    private IUser IUser_;
 
     public void AddUser(String firstname, String lastname, String username, String password, String email) {
         UserEntity u = new UserEntity(firstname, lastname, username, password, email);
-        user_service.addUser(u);
+        IUser_.addUser(u);
     }
 
     public void AddProduct(UserEntity actingUser, String description, String titel, int surety, int cost, String street, int housenumber, int postcode, String city) {
         AddressEntity location = new AddressEntity(street, housenumber, postcode, city);
         ProductEntity p = new ProductEntity(description, titel, surety, cost, location, actingUser);
-        product_service.addProduct(p);
+        IProduct_.addProduct(p);
     }
 
     //// Operationen:
 
     // Verfuegbaren Zeitraum pruefen
     public TempZeitraumModel getTime(ProductEntity product) {
-        List<LendingEntity> lendings = lending_service.getAllLendingsFromProduct(product);
+        List<LendingEntity> lendings = ILending_.getAllLendingsFromProduct(product);
         // Irgendwie in ein Format umwandeln, was die Viwes anzeigen koennen
         return  new TempZeitraumModel();
     }
 
     // Anfrage einer Buchung eintragen
     public boolean RequestLending(UserEntity actingUser, ProductEntity product, Timestamp start, Timestamp end) {
-        List<LendingEntity> lendings = lending_service.getAllLendingsFromProduct(product);
+        List<LendingEntity> lendings = ILending_.getAllLendingsFromProduct(product);
         boolean ok = false; // Produkt ist im anegegeben Zeitraum verfuegbar
         int totalcost = product.getCost() + product.getSurety();
-        boolean ok2 = payment_service.UserHasAmount(actingUser, totalcost);
+        boolean ok2 = IPayment_.UserHasAmount(actingUser, totalcost);
         if(ok && ok2) {
             LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, actingUser, product);
-            lending_service.addLending(lending);
-            boolean ok3 =payment_service.reservateAmount(actingUser, totalcost);
+            ILending_.addLending(lending);
+            boolean ok3 = IPayment_.reservateAmount(actingUser, totalcost);
             if(!ok3) {
                 return false;
             }
@@ -56,33 +56,33 @@ public class LogicModel {
     // Anfrage einer Buchung beantworten
     public void AcceptLending(UserEntity actingUser, LendingEntity lending) {
         lending.setStatus(Lendingstatus.confirmt);
-        lending_service.update(lending);
+        ILending_.update(lending);
         UserEntity productowner = lending.getProduct().getOwner();
         int cost = lending.getProduct().getCost();
-        payment_service.tranferReservatedMoney(actingUser, productowner, cost);
+        IPayment_.tranferReservatedMoney(actingUser, productowner, cost);
     }
 
     // Artikel zurueckgeben
     public void ReturnProduct(LendingEntity lending) {
         lending.setStatus(Lendingstatus.returned);
-        lending_service.update(lending);
+        ILending_.update(lending);
     }
 
     // Artikel zurueckgeben alternative
     public void ReturnProduct(UserEntity actingUser, ProductEntity product) {
-        LendingEntity lending = lending_service.getLendingByProductAndUser(product, actingUser);
+        LendingEntity lending = ILending_.getLendingByProductAndUser(product, actingUser);
         lending.setStatus(Lendingstatus.returned);
-        lending_service.update(lending);
+        ILending_.update(lending);
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
     public void CheckReturnedProduct(LendingEntity lending, boolean isAcceptable) {
         if(isAcceptable) {
             lending.setStatus(Lendingstatus.done);
-            lending_service.update(lending);
+            ILending_.update(lending);
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            payment_service.returnReservatedMoney(customer, surety);
+            IPayment_.returnReservatedMoney(customer, surety);
         } else {
             lending.setStatus(Lendingstatus.conflict);
         }
@@ -90,13 +90,13 @@ public class LogicModel {
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
     public void CheckReturnedProduct(UserEntity actingUser, ProductEntity product, boolean isAcceptable) {
-        LendingEntity lending = lending_service.getLendingByProductAndUser(product, actingUser);
+        LendingEntity lending = ILending_.getLendingByProductAndUser(product, actingUser);
         if(isAcceptable) {
             lending.setStatus(Lendingstatus.done);
-            lending_service.update(lending);
+            ILending_.update(lending);
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            payment_service.returnReservatedMoney(customer, surety);
+            IPayment_.returnReservatedMoney(customer, surety);
         } else {
             lending.setStatus(Lendingstatus.conflict);
         }
@@ -108,11 +108,11 @@ public class LogicModel {
             UserEntity customer = lending.getBorrower();
             UserEntity owner = lending.getProduct().getOwner();
             int surety = lending.getProduct().getSurety();
-            payment_service.tranferReservatedMoney(customer, owner, surety);
+            IPayment_.tranferReservatedMoney(customer, owner, surety);
         } else {
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            payment_service.reservateAmount(customer, surety);
+            IPayment_.reservateAmount(customer, surety);
         }
     }
 
@@ -120,32 +120,32 @@ public class LogicModel {
 
     // Alle Produkte
     public List<ProductEntity> GetAllProducts() {
-        return product_service.getAllProducts();
+        return IProduct_.getAllProducts();
     }
 
     // Alle eingehenden Anfragen
     public List<LendingEntity> GetRequestForUser(UserEntity actingUser) {
-        return lending_service.getAllRequestsForUser(actingUser);
+        return ILending_.getAllRequestsForUser(actingUser);
     }
 
     // Alle geliehenen Produkte
     public List<LendingEntity> GetLendingForUser(UserEntity actingUser) {
-        return lending_service.getAllLendingsForUser(actingUser);
+        return ILending_.getAllLendingsForUser(actingUser);
     }
 
     // Alle verliehenden Produkte
     public List<LendingEntity> GetLedingsFromUser(UserEntity actingUser) {
-        return lending_service.getAllLendingsFromUser(actingUser);
+        return ILending_.getAllLendingsFromUser(actingUser);
     }
 
     // Alle zurueckgegebene Produkte
     public List<LendingEntity> GetReturnedLendings(UserEntity activeUser) {
-        return lending_service.getReturnedLendingFromUser(activeUser);
+        return ILending_.getReturnedLendingFromUser(activeUser);
     }
 
     // Alle Konflikte
     public List<LendingEntity> GetAllConflicts() {
-        return lending_service.getAllConflicts();
+        return ILending_.getAllConflicts();
     }
 
     // Detais zu Produkte/Abfragen/Konflikten/...

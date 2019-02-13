@@ -4,7 +4,7 @@ import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 
 import java.util.List;
 
-public interface Product_Service {
+public interface IProduct {
     void addProduct(ProductEntity product);
 
     List<ProductEntity> getAllProducts();

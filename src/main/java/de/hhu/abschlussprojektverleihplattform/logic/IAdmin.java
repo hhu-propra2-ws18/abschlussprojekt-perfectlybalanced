@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.logic;
 
-public interface Admin_Service {
+public interface IAdmin {
 
     // die admins sind bis jetzt nur fuer das login relevant, nicht fuer die logik
 }

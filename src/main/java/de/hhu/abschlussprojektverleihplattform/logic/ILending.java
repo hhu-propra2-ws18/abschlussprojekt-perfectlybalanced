@@ -6,7 +6,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 
 import java.util.List;
 
-public interface Lending_Service {
+public interface ILending {
 
     void addLending(LendingEntity lending);
 

@@ -2,7 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.logic;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 
-public interface Payment_Service {
+public interface IPayment {
     boolean UserHasAmount(UserEntity User, int amount);
 
     // kann ggf auch void sein, haengt davon ab ob eine bestaetigung notwendig ist oder nicht
