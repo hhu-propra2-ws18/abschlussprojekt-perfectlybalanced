@@ -38,9 +38,15 @@ public class LogicModel {
     public boolean RequestLending(UserEntity actingUser, ProductEntity product, Timestamp start, Timestamp end) {
         List<LendingEntity> lendings = lending_service.getAllLendingsFromProduct(product);
         boolean ok = false; // Produkt ist im anegegeben Zeitraum verfuegbar
-        if(ok) {
+        int totalcost = product.getCost() + product.getSurety();
+        boolean ok2 = payment_service.UserHasAmount(actingUser, totalcost);
+        if(ok && ok2) {
             LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, actingUser, product);
             lending_service.addLending(lending);
+            boolean ok3 =payment_service.reservateAmount(actingUser, totalcost);
+            if(!ok3) {
+                return false;
+            }
             return true;
         } else {
             return false;
@@ -49,13 +55,38 @@ public class LogicModel {
 
     // Anfrage einer Buchung beantworten
     public void AcceptLending(UserEntity actingUser, LendingEntity lending) {
-        lending.setLendingstatus(Lendingstatus.confirmt);
-        lending_service.Update(lending);
+        lending.setStatus(Lendingstatus.confirmt);
+        lending_service.update(lending);
+        UserEntity productowner = lending.getProduct().getOwner();
+        int cost = lending.getProduct().getCost();
+        payment_service.tranferReservatedMoney(actingUser, productowner, cost);
     }
 
     // Artikel zurueckgeben
+    public void ReturnProduct(LendingEntity lending) {
+        lending.setStatus(Lendingstatus.returned);
+        lending_service.update(lending);
+    }
+
+    // Artikel zurueckgeben alternative
+    public void ReturnProduct(UserEntity actingUser, ProductEntity product) {
+        LendingEntity lending = lending_service.getLendingByProductAndUser(product, actingUser);
+        lending.setStatus(Lendingstatus.returned);
+        lending_service.update(lending);
+    }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
+    public void CheckReturnedProduct(UserEntity actingUser, LendingEntity lending, boolean isAcceptable) {
+        if(isAcceptable) {
+            lending.setStatus(Lendingstatus.done);
+            lending_service.update(lending);
+            UserEntity customer = lending.getBorrower();
+            int surety = lending.getProduct().getSurety();
+            payment_service.returnReservatedMoney(customer, surety);
+        } else {
+            
+        }
+    }
 
     // Konflikt vom Admin loesen
 
