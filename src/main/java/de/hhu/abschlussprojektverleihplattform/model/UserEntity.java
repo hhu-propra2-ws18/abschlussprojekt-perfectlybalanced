@@ -12,7 +12,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Long userId;
     private String firstname;
     private String lastname;
     private String username;

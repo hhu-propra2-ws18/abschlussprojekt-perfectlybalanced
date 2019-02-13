@@ -5,13 +5,11 @@ import org.springframework.data.annotation.Id;
 import javax.persistence.*;
 
 @Data
-//@Entity
 @Embeddable
 public class AddressEntity {
 
-//    @Id
-//    @GeneratedValue
-    private Long id;
+    @Id
+    private Long addressId;
     private String street;
     private int housenumber;
     private int postcode;

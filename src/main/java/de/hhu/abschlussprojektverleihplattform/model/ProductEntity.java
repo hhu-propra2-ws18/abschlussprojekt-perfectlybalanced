@@ -15,10 +15,12 @@ public class ProductEntity {
     private String titel;
     private int surety;
     private int cost;
+
     @Embedded
-//    @OneToOne
     private AddressEntity location;
+
     @OneToOne
+    @Embedded
     private UserEntity owner;
 
     public ProductEntity() {

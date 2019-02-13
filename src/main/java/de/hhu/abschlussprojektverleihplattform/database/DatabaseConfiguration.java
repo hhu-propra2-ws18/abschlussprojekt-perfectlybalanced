@@ -1,3 +1,4 @@
+/*
 package de.hhu.abschlussprojektverleihplattform.database;
 
 import javax.sql.DataSource;
@@ -23,4 +24,4 @@ public class DatabaseConfiguration {
 
         return dataSourceBuilder.build();
     }
-}
+}*/
