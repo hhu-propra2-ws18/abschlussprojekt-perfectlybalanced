@@ -11,6 +11,7 @@ public class AbschlussprojektVerleihplattformApplicationTests {
 
 	@Test
 	public void contextLoads() {
+
 	}
 
 }
