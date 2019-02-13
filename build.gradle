@@ -54,14 +54,13 @@ dependencies {
 
   //javax.xml.bind
 	compile 'javax.xml.bind:jaxb-api:2.3.0'
-	testCompile('javax.xml.bind:jaxb-api')
-  
+	testCompile 'javax.xml.bind:jaxb-api:2.3.0'
   //jpa
-	compile'org.springframework.boot:spring-boot-starter-data-jpa'
+	compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.2.RELEASE'
   //devtools
-	runtime'org.springframework.boot:spring-boot-devtools'
-	compile'mysql:mysql-connector-java'
-	runtimeOnly 'com.h2database:h2'
+	runtime 'org.springframework.boot:spring-boot-devtools:2.1.2.RELEASE'
+	compile 'mysql:mysql-connector-java:8.0.13'
+	runtimeOnly 'com.h2database:h2:1.4.197'
 	
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.1.2.RELEASE'
@@ -73,7 +72,7 @@ dependencies {
 	compile 'org.apache.commons:commons-lang3:3.8.1'
   
   //lombok, annotation processor
-  compileOnly 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.4'
 	annotationProcessor 'org.projectlombok:lombok:1.18.4'
   
   //spring security
