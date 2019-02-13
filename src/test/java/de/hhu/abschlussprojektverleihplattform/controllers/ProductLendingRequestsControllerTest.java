@@ -1,5 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform;
-
+package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,28 +7,24 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @AutoConfigureMockMvc
-public class LoginControllerTest {
+public class ProductLendingRequestsControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @Test
     public void testcontrolleristhere() throws Exception {
-        mockMvc.perform(get("/login"))
+        mockMvc.perform(get("/lendingrequests"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Login")))
-                .andExpect(content().string(containsString("username")))
-                .andExpect(content().string(containsString("password")));
+                .andExpect(content().string(containsString("Leih Anfragen")));
     }
 }
