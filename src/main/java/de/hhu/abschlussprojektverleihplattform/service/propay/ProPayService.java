@@ -1,8 +1,11 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
+import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import org.springframework.web.client.RestTemplate;
 
 public class ProPayService implements IProPayService{
+
+    public static final String baseurl = "propra-propay.herokuapp.com/";
 
     private static ProPayService instance=null;
 
@@ -18,11 +21,14 @@ public class ProPayService implements IProPayService{
     }
 
     @Override
-    public int checkbalance(String username) {
+    public long checkbalance(String username) {
 
-        RestTemplate restTemplate
+        RestTemplate restTemplate = new RestTemplate();
 
-        return 0;
+        String url = baseurl+"account/"+username;
+        Account account = restTemplate.getForObject(url,Account.class);
+
+        return account.amount;
     }
     //TODO: implement service that makes the requests
 }

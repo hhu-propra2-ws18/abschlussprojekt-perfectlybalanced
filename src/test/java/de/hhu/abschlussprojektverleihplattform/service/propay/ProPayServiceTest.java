@@ -10,6 +10,6 @@ public class ProPayServiceTest {
     @Test
     public void testnewuserhaszerobalance(){
 
-        Assert.assertEquals(0,0);
+        Assert.assertEquals(0,ProPayService.getInstance().checkbalance("alice"));
     }
 }
