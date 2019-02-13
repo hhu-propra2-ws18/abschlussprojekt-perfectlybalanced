@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform;
+package de.hhu.abschlussprojektverleihplattform.controllers;
 
 
 import org.junit.Test;
