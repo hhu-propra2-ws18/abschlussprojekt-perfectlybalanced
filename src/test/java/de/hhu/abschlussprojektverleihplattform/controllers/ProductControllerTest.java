@@ -1,5 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform;
-
+package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,30 +7,28 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @AutoConfigureMockMvc
-public class UserProfileControllerTest {
+public class ProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @Test
     public void testcontrolleristhere() throws Exception {
-        mockMvc.perform(get("/profile"))
+        mockMvc.perform(get("/addproduct"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Profile")))
-                .andExpect(content().string(containsString("Email")))
-                .andExpect(content().string(containsString("Benutzername")))
-                .andExpect(content().string(containsString("Transaktionsverlauf")))
-                .andExpect(content().string(containsString("Kontostand")));
+                .andExpect(content().string(containsString("Artikel einstellen")))
+                .andExpect(content().string(containsString("Titel")))
+                .andExpect(content().string(containsString("Beschreibung")))
+                .andExpect(content().string(containsString("Kosten")))
+                .andExpect(content().string(containsString("Kaution")));
     }
 }
