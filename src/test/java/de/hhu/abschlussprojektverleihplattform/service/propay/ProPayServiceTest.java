@@ -12,4 +12,15 @@ public class ProPayServiceTest {
 
         Assert.assertEquals(0,ProPayService.getInstance().checkbalance("alice"));
     }
+
+    @Test
+    public void test_can_create_account(){
+        Assert.fail();
+    }
+
+    @Test
+    public void test_increaseuser_has_positive_balance(){
+        ProPayService.getInstance().
+        Assert.fail();
+    }
 }
