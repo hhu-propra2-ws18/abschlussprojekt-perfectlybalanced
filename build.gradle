@@ -51,10 +51,10 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.1.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.1.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.1.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.1.2.RELEASE'
 
 	compile 'org.apache.commons:commons-lang3:3.8.1'
 
