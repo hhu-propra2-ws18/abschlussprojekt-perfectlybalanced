@@ -3,6 +3,9 @@ package de.hhu.abschlussprojektverleihplattform.service.propay;
 import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,8 +24,23 @@ public class ProPayService implements IProPayService, IPayment {
 
     private ProPayService(){}
 
+    // ------------- implement propay interface methods ------------------
+
     @Override
-    public long checkbalance(String username) throws Exception{
+    public boolean createAccountIfNotExists(String username) throws Exception {
+        //IMPORTANT:
+        //the propay api automatically creates an account if we check the balance of that account
+
+        try{
+            getBalance(username);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    @Override
+    public long getBalance(String username) throws Exception{
         Account account=null;
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -56,12 +74,64 @@ public class ProPayService implements IProPayService, IPayment {
 
     @Override
     public boolean makePayment(String sourceAccount, String targetAccount, long amount) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers=new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+            map.add("amount", ""+amount);
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+            String url = baseurl + "account/" + sourceAccount+"/transfer/"+targetAccount;
+            ResponseEntity<String> response = restTemplate.postForEntity(url,request,String.class);
+
+            return response.getStatusCode().is2xxSuccessful();
+        }catch (HttpClientErrorException ex){
+            if(ex.getStatusCode().is4xxClientError()){
+                return false;
+            }
+        }
         return false;
     }
 
     @Override
+    public boolean changeUserBalanceBy(String username, long delta){
+
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("amount", "" + delta);
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+            String url = baseurl + "account/"+username;
+            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    //------------------- implement methods from Johannes Logic Interfaces ---------------
+
+    @Override
     public boolean UserHasAmount(UserEntity User, int amount) {
-        return checkbalance(User.getUsername())>=amount;
+        try{
+            return getBalance(User.getUsername())>=amount;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
