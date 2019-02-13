@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform;
+package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @AutoConfigureMockMvc
-public class ProductLendingRequestsControllerTest {
+public class ProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -25,8 +25,12 @@ public class ProductLendingRequestsControllerTest {
     @Test
     @WithMockUser
     public void testcontrolleristhere() throws Exception {
-        mockMvc.perform(get("/lendingrequests"))
+        mockMvc.perform(get("/addproduct"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Leih Anfragen")));
+                .andExpect(content().string(containsString("Artikel einstellen")))
+                .andExpect(content().string(containsString("Titel")))
+                .andExpect(content().string(containsString("Beschreibung")))
+                .andExpect(content().string(containsString("Kosten")))
+                .andExpect(content().string(containsString("Kaution")));
     }
 }
