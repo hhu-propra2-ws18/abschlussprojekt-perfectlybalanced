@@ -9,7 +9,7 @@ import java.util.List;
 //      ist dieser false wurde die Operation nicht(erfolgreich) ausgefuehrt,
 //      und auf der Website muss eine entsprechende Fehlermeldung angezeigt werden.
 
-public class LogicModel {
+public class Logic {
 
     private ILending lending_service;
     private IPayment payment_service;
@@ -120,12 +120,19 @@ public class LogicModel {
             UserEntity customer = lending.getBorrower();
             UserEntity owner = lending.getProduct().getOwner();
             int surety = lending.getProduct().getSurety();
-            return payment_service.tranferReservatedMoney(customer, owner, surety);
+            if(!payment_service.tranferReservatedMoney(customer, owner, surety)) {
+                return false;
+            }
         } else {
             UserEntity customer = lending.getBorrower();
             int surety = lending.getProduct().getSurety();
-            return payment_service.reservateAmount(customer, surety);
+            if(!payment_service.reservateAmount(customer, surety)) {
+                return false;
+            }
         }
+        lending.setStatus(Lendingstatus.done);
+        lending_service.update(lending);
+        return true;
     }
 
     //// Abfragen:
