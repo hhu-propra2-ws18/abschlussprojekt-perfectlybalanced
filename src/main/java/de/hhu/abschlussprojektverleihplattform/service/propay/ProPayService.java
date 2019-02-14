@@ -253,8 +253,12 @@ public class ProPayService implements IProPayService, IPayment {
 
     @Override
     public boolean tranferReservatedMoney(String username,Long id) {
-
-        return false;
+        try{
+            punishReservedAmount(username,id);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
