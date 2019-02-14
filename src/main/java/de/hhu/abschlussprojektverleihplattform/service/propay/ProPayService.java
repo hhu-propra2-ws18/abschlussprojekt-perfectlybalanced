@@ -231,7 +231,7 @@ public class ProPayService implements IProPayService, IPayment {
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
 
     @Override
-    public boolean UserHasAmount(UserEntity User, int amount) {
+    public boolean userHasAmount(UserEntity User, int amount) {
         try{
             return getBalance(User.getUsername())>=amount;
         }catch (Exception e){

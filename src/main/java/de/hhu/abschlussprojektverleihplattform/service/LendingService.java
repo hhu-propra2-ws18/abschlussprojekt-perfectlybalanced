@@ -41,7 +41,7 @@ public class LendingService {
             }
         }
         int totalcost = product.getCost() + product.getSurety();
-        boolean MoneyIsOK = payment_service.UserHasAmount(actingUser, totalcost);
+        boolean MoneyIsOK = payment_service.userHasAmount(actingUser, totalcost);
         if (TimeIsOK && MoneyIsOK) {
             Long costID = payment_service.reservateAmount(actingUser, product.getOwner(), product.getCost());
             Long suretyID = payment_service.reservateAmount(actingUser, product.getOwner(), product.getSurety());

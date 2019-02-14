@@ -33,7 +33,7 @@ public class PaymentServiceDummy implements IPayment {
     }
 
     @Override
-    public boolean UserHasAmount(UserEntity User, int amount) {
+    public boolean userHasAmount(UserEntity User, int amount) {
         return usersHaveMoney;
     }
 
