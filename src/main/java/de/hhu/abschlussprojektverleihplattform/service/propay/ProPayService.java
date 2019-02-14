@@ -3,24 +3,32 @@ package de.hhu.abschlussprojektverleihplattform.service.propay;
 import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
+import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+
+@Component
 public class ProPayService implements IProPayService, IPayment {
 
     public static final String baseurl = "http://propra-propay.herokuapp.com/";
 
     private static ProPayService instance=null;
 
+    //jens said we should use dependency injection
+    /*
     public synchronized static ProPayService getInstance(){
         if(instance==null){
             instance=new ProPayService();
         }
         return instance;
     }
+    */
 
     private ProPayService(){}
 
@@ -41,18 +49,7 @@ public class ProPayService implements IProPayService, IPayment {
 
     @Override
     public long getBalance(String username) throws Exception{
-        Account account=null;
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-
-            String url = baseurl + "account/" + username;
-            account = restTemplate.getForObject(url, Account.class);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new Exception("user not exists?");
-        }
-
-        return account.amount;
+        return this.getAccount(username).amount;
     }
 
     @Override
@@ -121,6 +118,40 @@ public class ProPayService implements IProPayService, IPayment {
         }
     }
 
+    @Override
+    public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget, long amount) throws Exception {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String method_url = "reservation/reserve/"+userSource+"/"+userTarget;
+        String url = baseurl + method_url+"?amount="+amount;
+
+        System.out.println("url:"+url);
+
+        ResponseEntity<Reservation> reservation = restTemplate.postForEntity(URI.create(url),null,Reservation.class);
+
+        if(reservation.getStatusCode().is4xxClientError()){
+            throw new Exception("cannot make reservation");
+        }
+        return reservation.getBody();
+    }
+
+    @Override
+    public Account getAccount(String username) throws Exception {
+        Account account=null;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+
+            String url = baseurl + "account/" + username;
+            account = restTemplate.getForObject(url, Account.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception("user not exists?");
+        }
+
+        return account;
+    }
+
 
     //------------------- implement methods from Johannes Logic Interfaces ---------------
 
@@ -135,18 +166,27 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
     @Override
-    public boolean reservateAmount(UserEntity user, int amount) {
-        //TODO: implement
+    public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
+        try {
+            Reservation reservation = makeReservationFromSourceUserToTargetUser(payingUser.getUsername(), recivingUser.getUsername(), amount);
+            return reservation.id;
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
+    @Override
+    public boolean tranferReservatedMoney(Long id) {
+        //TODO
         return false;
     }
 
     @Override
-    public void tranferReservatedMoney(UserEntity payingUser, UserEntity recivingUser, int amount) {
-        //TODO: implement
+    public boolean returnReservatedMoney(Long id) {
+        //TODO
+        return false;
     }
 
-    @Override
-    public void returnReservatedMoney(UserEntity userEntity, int amount) {
-        //TODO: implement
-    }
+
 }
