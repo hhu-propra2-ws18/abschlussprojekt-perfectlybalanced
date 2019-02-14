@@ -19,25 +19,6 @@ public class Logic {
         this.payment_service = payment_service;
     }
 
-    // werden momentan nicht gebraucht
-    //private IAddress address_service;
-    //private IAdmin admin_service;
-    //private IProduct product_service;
-    //private IUser user_service;
-
-//    public void AddUser(String firstname, String lastname, String username, String password, String email) {
-//        UserEntity u = new UserEntity(firstname, lastname, username, password, email);
-//        user_service.addUser(u);
-//    }
-
-//    public void AddProduct(UserEntity actingUser, String description, String titel, int surety, int cost, String street, int housenumber, int postcode, String city) {
-//        AddressEntity location = new AddressEntity(street, housenumber, postcode, city);
-//        ProductEntity p = new ProductEntity(description, titel, surety, cost, location, actingUser);
-//        product_service.addProduct(p);
-//    }
-
-    //// Operationen:
-
     // Verfuegbaren Zeitraum pruefen
     public TempZeitraumModel getTime(ProductEntity product) {
         List<LendingEntity> lendings = lending_service.getAllLendingsFromProduct(product);
@@ -61,7 +42,7 @@ public class Logic {
         if (TimeIsOK && MoneyIsOK) {
             Long costID = payment_service.reservateAmount(actingUser, product.getOwner(), product.getCost());
             Long suretyID = payment_service.reservateAmount(actingUser, product.getOwner(), product.getSurety());
-            if(costID > 0 && suretyID > 0) {
+            if (costID > 0 && suretyID > 0) {
                 LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, actingUser, product, costID, suretyID);
                 lending_service.addLending(lending);
                 return true;
@@ -121,11 +102,11 @@ public class Logic {
     // Konflikt vom Admin loesen
     public boolean ResolveConflict(LendingEntity lending, boolean OwnerRecivesSurety) {
         if (OwnerRecivesSurety) {
-            if(!payment_service.tranferReservatedMoney(lending.getSuretyReservationID())) {
+            if (!payment_service.tranferReservatedMoney(lending.getSuretyReservationID())) {
                 return false;
             }
         } else {
-            if(!payment_service.tranferReservatedMoney(lending.getSuretyReservationID())) {
+            if (!payment_service.tranferReservatedMoney(lending.getSuretyReservationID())) {
                 return false;
             }
         }
@@ -133,37 +114,4 @@ public class Logic {
         lending_service.update(lending);
         return true;
     }
-
-    //// Abfragen:
-
-    // Alle Produkte
-//    public List<ProductEntity> GetAllProducts() {
-//        return product_service.getAllProducts();
-//    }
-
-    // Alle eingehenden Anfragen
-//    public List<LendingEntity> GetRequestForUser(UserEntity actingUser) {
-//        return lending_service.getAllRequestsForUser(actingUser);
-//    }
-
-    // Alle geliehenen Produkte
-//    public List<LendingEntity> GetLendingForUser(UserEntity actingUser) {
-//        return lending_service.getAllLendingsForUser(actingUser);
-//    }
-
-    // Alle verliehenden Produkte
-//    public List<LendingEntity> GetLedingsFromUser(UserEntity actingUser) {
-//        return lending_service.getAllLendingsFromUser(actingUser);
-//    }
-
-    // Alle zurueckgegebene Produkte
-//    public List<LendingEntity> GetReturnedLendings(UserEntity activeUser) {
-//        return lending_service.getReturnedLendingFromUser(activeUser);
-//    }
-
-    // Alle Konflikte
-//    public List<LendingEntity> GetAllConflicts() {
-//        return lending_service.getAllConflicts();
-//    }
-
 }
