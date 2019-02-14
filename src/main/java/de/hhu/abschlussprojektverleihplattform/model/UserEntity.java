@@ -19,9 +19,19 @@ public class UserEntity {
     private String username;
     private String password;
     private String email;
+    private Role role;
 
     public UserEntity() {
 
+    }
+
+    public UserEntity(String firstname, String lastname, String username, String password, String email, Role role) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
     }
 
     public UserEntity(String firstname, String lastname, String username, String password, String email) {
@@ -30,5 +40,7 @@ public class UserEntity {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = Role.user;
     }
 }
+

@@ -6,6 +6,7 @@ nohup.out
 .idea/
 .project
 .vscode/
+*.iml
 
 # Log file
 *.log
