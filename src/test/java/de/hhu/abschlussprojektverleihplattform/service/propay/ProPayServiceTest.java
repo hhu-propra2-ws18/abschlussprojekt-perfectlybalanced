@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ProPayServiceTest {
@@ -18,19 +20,17 @@ public class ProPayServiceTest {
     @Autowired
     private ProPayService proPayService;
 
-    private String make_new_user() {
-        return RandomStringUtils.random(10, true, false);
-    }
+
 
     @Test
     public void testnewuserhaszerobalance() throws Exception {
-        String generated_username = this.make_new_user();
+        String generated_username = make_new_user();
         Assert.assertEquals(0, this.proPayService.getBalance(generated_username));
     }
 
     @Test
     public void test_can_create_account() {
-        String user1 = this.make_new_user();
+        String user1 = make_new_user();
         try {
             this.proPayService.createAccountIfNotExists(user1);
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class ProPayServiceTest {
     @Test
     public void test_can_increase_user_balance() {
         try {
-            String user1 = this.make_new_user();
+            String user1 = make_new_user();
             this.proPayService.createAccountIfNotExists(user1);
             this.proPayService.changeUserBalanceBy(user1, 1);
 
@@ -52,9 +52,21 @@ public class ProPayServiceTest {
     }
 
     @Test
+    public void test_that_system_rejects_decrease_of_account_balance() throws Exception{
+        String user1 = make_new_user();
+        proPayService.createAccountIfNotExists(user1);
+        try{
+            proPayService.changeUserBalanceBy(user1,-1);
+            Assert.fail();
+        }catch (Exception e){
+
+        }
+    }
+
+    @Test
     public void test_can_make_payment() throws Exception {
-        String user1 = this.make_new_user();
-        String user2 = this.make_new_user();
+        String user1 = make_new_user();
+        String user2 = make_new_user();
 
         this.proPayService.createAccountIfNotExists(user1);
         this.proPayService.createAccountIfNotExists(user2);
@@ -71,8 +83,8 @@ public class ProPayServiceTest {
         //propay does not work yet. there is an issue in their repository
 
 
-        String user1 = this.make_new_user();
-        String user2 = this.make_new_user();
+        String user1 = make_new_user();
+        String user2 = make_new_user();
 
         //to create their accounts
         this.proPayService.createAccountIfNotExists(user1);
@@ -82,6 +94,8 @@ public class ProPayServiceTest {
         //which is a property of their Reservation Entity. so we have to make them save both accounts
         //so they can save that reservation
         //the amount has to be not 0
+
+        proPayService.changeUserBalanceBy(user1,10);
 
         this.proPayService.makeReservationFromSourceUserToTargetUser(user1, user2, 1);
 
@@ -133,10 +147,10 @@ public class ProPayServiceTest {
 
         proPayService.punishReservedAmount(user1,reservation.id);
 
-        Assert.assertEquals(9,proPayService.getAccount(user1).amount);
+        //assert that user1 has no reservations anymore
+        Assert.assertEquals(0,proPayService.getAccount(user1).reservations.length);
+
+        //assert that user2 received the reserved amount
         Assert.assertEquals(1,proPayService.getAccount(user2).amount);
     }
-
-    //document that we can only increase an account in propay from outside the system.
-    //TODO: write a test to document that
 }

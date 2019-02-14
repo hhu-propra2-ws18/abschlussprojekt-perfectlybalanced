@@ -13,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
+import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
+
 @Component
 public class ProPayService implements IProPayService, IPayment {
 
@@ -35,8 +37,17 @@ public class ProPayService implements IProPayService, IPayment {
     // ---- implement circumvent() to circumvent inconvenience in live propay api ------
 
     public void circumventForAccount(String username){
-        changeUserBalanceBy(username,1);
-        changeUserBalanceBy(username,-1);
+        try {
+            //give our account 1 Euro
+            changeUserBalanceBy(username, 1);
+
+            //put that amount away to throwaway user
+            String user1 = make_new_user();
+            createAccountIfNotExists(user1);
+            makePayment(username,user1,1);
+        }catch (Exception e){
+
+        }
     }
 
     // ------------- implement propay interface methods ------------------
@@ -102,28 +113,20 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
     @Override
-    public boolean changeUserBalanceBy(String username, long delta){
+    public void changeUserBalanceBy(String username, long delta) throws Exception{
 
         System.out.println("attempt to change balance of "+username+" by "+delta);
 
-        try {
-            RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("amount", "" + delta);
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("amount", "" + delta);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-            String url = baseurl + "account/"+username;
-            ResponseEntity<Account> response = restTemplate.postForEntity(url, request, Account.class);
-
-            return true;
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
+        String url = baseurl + "account/"+username;
+        ResponseEntity<Account> response = restTemplate.postForEntity(url, request, Account.class);
     }
 
     @Override
