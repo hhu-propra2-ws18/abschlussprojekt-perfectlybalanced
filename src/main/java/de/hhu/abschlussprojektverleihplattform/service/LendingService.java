@@ -50,8 +50,8 @@ public class LendingService {
                 lending_service.addLending(lending);
                 return true;
             } else {
-                payment_service.returnReservatedMoney(costID);
-                payment_service.returnReservatedMoney(suretyID);
+                payment_service.returnReservatedMoney(actingUser.getUsername(), costID);
+                payment_service.returnReservatedMoney(actingUser.getUsername(), suretyID);
             }
         }
         return false;
@@ -60,7 +60,7 @@ public class LendingService {
     // Anfrage einer Buchung beantworten
     public boolean AcceptLending(LendingEntity lending, boolean RequestIsAccepted) {
         if(RequestIsAccepted) {
-            if(payment_service.tranferReservatedMoney(lending.getCostReservationID())) {
+            if(payment_service.tranferReservatedMoney(lending.getBorrower().getUsername(), lending.getCostReservationID())) {
                 lending.setStatus(Lendingstatus.confirmt);
                 lending_service.update(lending);
                 return true;
@@ -91,7 +91,7 @@ public class LendingService {
         if (isAcceptable) {
             lending.setStatus(Lendingstatus.done);
             lending_service.update(lending);
-            return payment_service.returnReservatedMoney(lending.getSuretyReservationID());
+            return payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
         } else {
             lending.setStatus(Lendingstatus.conflict);
             return true;
@@ -104,7 +104,7 @@ public class LendingService {
         if (isAcceptable) {
             lending.setStatus(Lendingstatus.done);
             lending_service.update(lending);
-            return payment_service.returnReservatedMoney(lending.getSuretyReservationID());
+            return payment_service.returnReservatedMoney(actingUser.getUsername(), lending.getSuretyReservationID());
         } else {
             lending.setStatus(Lendingstatus.conflict);
             return true;
@@ -114,11 +114,11 @@ public class LendingService {
     // Konflikt vom Admin loesen
     public boolean ResolveConflict(LendingEntity lending, boolean OwnerRecivesSurety) {
         if (OwnerRecivesSurety) {
-            if (!payment_service.tranferReservatedMoney(lending.getSuretyReservationID())) {
+            if (!payment_service.tranferReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID())) {
                 return false;
             }
         } else {
-            if (!payment_service.tranferReservatedMoney(lending.getSuretyReservationID())) {
+            if (!payment_service.tranferReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID())) {
                 return false;
             }
         }
