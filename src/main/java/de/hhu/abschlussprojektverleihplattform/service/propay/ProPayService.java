@@ -32,6 +32,13 @@ public class ProPayService implements IProPayService, IPayment {
 
     private ProPayService(){}
 
+    // ---- implement circumvent() to circumvent inconvenience in live propay api ------
+
+    public void circumventForAccount(String username){
+        changeUserBalanceBy(username,1);
+        changeUserBalanceBy(username,-1);
+    }
+
     // ------------- implement propay interface methods ------------------
 
     @Override
@@ -120,6 +127,10 @@ public class ProPayService implements IProPayService, IPayment {
 
     @Override
     public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget, long amount) throws Exception {
+
+        //temporary, until the api gets fixed
+        circumventForAccount(userSource);
+        circumventForAccount(userTarget);
 
         RestTemplate restTemplate = new RestTemplate();
 

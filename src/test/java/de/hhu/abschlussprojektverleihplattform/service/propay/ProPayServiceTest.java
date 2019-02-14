@@ -83,9 +83,9 @@ public class ProPayServiceTest {
         //so they can save that reservation
         //the amount has to be not 0
 
-        //basically we circumvent an error in their api. 
-        this.proPayService.changeUserBalanceBy(user1,1);
-        this.proPayService.changeUserBalanceBy(user2,1);
+        //basically we circumvent an error in their api.
+        //this.proPayService.changeUserBalanceBy(user1,1);
+        //this.proPayService.changeUserBalanceBy(user2,1);
 
 
 
@@ -99,6 +99,22 @@ public class ProPayServiceTest {
         Assert.assertEquals(reservations.length,1);
         Assert.assertEquals(reservations[0].amount,1);
 
+
+    }
+
+    @Test
+    public void can_release_reservation(){
+        //make users
+
+        //make reservation
+
+        //release reservation
+
+        //check account for reserved money and no reservations present
+    }
+
+    @Test
+    public void can_punish_reservation(){
 
     }
 }
