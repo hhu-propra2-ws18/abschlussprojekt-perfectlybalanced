@@ -41,12 +41,12 @@ public class PaymentServiceDummy implements IPayment {
     }
 
     @Override
-    public boolean tranferReservatedMoney(Long id) {
+    public boolean tranferReservatedMoney(String username, Long id) {
         return transfersAreSuccessfull;
     }
 
     @Override
-    public boolean returnReservatedMoney(Long id) {
+    public boolean returnReservatedMoney(String username, Long id) {
         return returnsAreSuccessfull;
     }
 
