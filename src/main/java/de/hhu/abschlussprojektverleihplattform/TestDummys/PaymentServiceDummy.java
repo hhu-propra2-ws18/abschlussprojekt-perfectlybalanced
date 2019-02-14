@@ -10,6 +10,11 @@ public class PaymentServiceDummy implements IPayment {
 
     private ArrayList<ReservationDummy> payments;
     private Long id;
+
+    private String lastCalledUsername;
+    private Long lastCalledId;
+    private  boolean lastWasTransfer;
+
     private boolean usersHaveMoney;
     private boolean reservationsAreSuccessfull;
     private boolean transfersAreSuccessfull;
@@ -22,6 +27,9 @@ public class PaymentServiceDummy implements IPayment {
         this.reservationsAreSuccessfull = ReservationsAreSuccessfull;
         this.transfersAreSuccessfull = TransfersAreSuccessfull;
         this.returnsAreSuccessfull = ReturnsAreSuccessfull;
+        lastCalledUsername = "";
+        lastCalledId = 0l;
+        lastWasTransfer = false;
     }
 
     @Override
@@ -42,12 +50,30 @@ public class PaymentServiceDummy implements IPayment {
 
     @Override
     public boolean tranferReservatedMoney(String username, Long id) {
+        lastCalledId = id;
+        lastCalledUsername = username;
+        lastWasTransfer = true;
         return transfersAreSuccessfull;
     }
 
     @Override
     public boolean returnReservatedMoney(String username, Long id) {
+        lastCalledId = id;
+        lastCalledUsername = username;
+        lastWasTransfer = false;
         return returnsAreSuccessfull;
+    }
+
+    public Long getLastId() {
+        return  lastCalledId;
+    }
+
+    public String getLastUsername() {
+        return lastCalledUsername;
+    }
+
+    public boolean getLastWasTransfer() {
+        return lastWasTransfer;
     }
 
     public ReservationDummy findReservation(Long id) {

@@ -12,6 +12,9 @@ import java.sql.Timestamp;
 
 public class LendingServiceTest {
 
+    //TODO: 20l --> 20L
+    //TODO: assertEquals(true, ...) --> assertTrue(...)
+
     // Tests for RequestLending
 
     @Test
@@ -214,7 +217,7 @@ public class LendingServiceTest {
         UserEntity borower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 0l, 0l);
+        LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 20l, 0l);
         LendingServiceDummy lending_service = new LendingServiceDummy();
         lending_service.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
@@ -225,9 +228,15 @@ public class LendingServiceTest {
         Assert.assertEquals(true, result);
         Assert.assertEquals(true, lending_service.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
+        Assert.assertEquals(true, payment_service.getLastWasTransfer());
+        Assert.assertEquals(true, payment_service.getLastId() == 20l);
+        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
     }
 
     // Tests for ReturnProduct
+
+    //MARKER: hier gehts weiter mit den Payment-Tests
+    //TODO: Maker ist hier
 
     @Test
     public void ProductGetsReturned() {
