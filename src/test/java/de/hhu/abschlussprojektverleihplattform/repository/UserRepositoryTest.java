@@ -22,12 +22,14 @@ public class UserRepositoryTest {
 
     @Test
     public void saveOneUserToDatabase() {
-        int numberOfUsersatTestStart = userRepository.getNumberOfUsers();
         UserEntity user = new UserEntity("firstName", "LastName", "username", "password", "email");
         userRepository.saveUser(user);
-        int numberOfUsers = userRepository.getNumberOfUsers();
-        Assert.assertEquals(numberOfUsersatTestStart + 1, numberOfUsers);
-
+        UserEntity loadedUser = userRepository.getUserByFirstname(user.getFirstname());
+        Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname()) &&
+                user.getLastname().equals(loadedUser.getLastname()) &&
+                user.getUsername().equals(loadedUser.getUsername()) &&
+                user.getPassword().equals(loadedUser.getPassword()) &&
+                user.getEmail().equals(loadedUser.getEmail()));
     }
 
     @Test
@@ -46,9 +48,9 @@ public class UserRepositoryTest {
     @Test
     public void getAllUsersAfterAddingOneUser() {
         int numberOfUserAtTestStart = userRepository.getNumberOfUsers();
-        UserEntity user = new UserEntity("firstName", "LastName", "username", "password", "email");
+        UserEntity user = new UserEntity("vorname", "LastName", "username", "password", "email");
         userRepository.saveUser(user);
         List<UserEntity> allUser = userRepository.getAllUser();
-        Assert.assertEquals(numberOfUserAtTestStart +1, allUser.size());
+        Assert.assertEquals(numberOfUserAtTestStart + 1, allUser.size());
     }
 }

@@ -10,5 +10,6 @@ public interface IUserRepository {
     void saveUser(UserEntity user);
     int getNumberOfUsers();
     List<UserEntity> getAllUser();
+    UserEntity getUserByFirstname(String firstname);
 
 }

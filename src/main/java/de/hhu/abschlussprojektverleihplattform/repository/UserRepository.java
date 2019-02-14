@@ -2,7 +2,6 @@ package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,8 +13,7 @@ import java.util.List;
 @Repository
 public class UserRepository implements IUserRepository {
 
-    final
-    JdbcTemplate jdbcTemplate;
+    final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public UserRepository(JdbcTemplate jdbcTemplate) {
@@ -26,6 +24,13 @@ public class UserRepository implements IUserRepository {
     public UserEntity findById(Long userId) {
         return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY where user_Id=?",
                 new Object[]{userId},
+                new BeanPropertyRowMapper<>(UserEntity.class));
+    }
+
+    @Override
+    public UserEntity getUserByFirstname(String firstname) {
+        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE firstname=?",
+                new Object[]{firstname},
                 new BeanPropertyRowMapper<UserEntity>(UserEntity.class));
     }
 
