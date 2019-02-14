@@ -70,11 +70,25 @@ public class ProPayServiceTest {
 
         //propay does not work yet. there is an issue in their repository
 
-        /*
+
         String user1 = this.make_new_user();
         String user2 = this.make_new_user();
 
+        //to create their accounts
+        this.proPayService.createAccountIfNotExists(user1);
+        this.proPayService.createAccountIfNotExists(user2);
+
+        //because their hibernate has an exception where a transient instance is not saved
+        //which is a property of their Reservation Entity. so we have to make them save both accounts
+        //so they can save that reservation
+        //the amount has to be not 0
+
+        //basically we circumvent an error in their api. 
         this.proPayService.changeUserBalanceBy(user1,1);
+        this.proPayService.changeUserBalanceBy(user2,1);
+
+
+
 
         this.proPayService.makeReservationFromSourceUserToTargetUser(user1,user2,1);
 
@@ -85,6 +99,6 @@ public class ProPayServiceTest {
         Assert.assertEquals(reservations.length,1);
         Assert.assertEquals(reservations[0].amount,1);
 
-        */
+
     }
 }

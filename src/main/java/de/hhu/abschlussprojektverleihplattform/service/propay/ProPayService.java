@@ -124,11 +124,19 @@ public class ProPayService implements IProPayService, IPayment {
         RestTemplate restTemplate = new RestTemplate();
 
         String method_url = "reservation/reserve/"+userSource+"/"+userTarget;
-        String url = baseurl + method_url+"?amount="+amount;
+        String url = baseurl + method_url;
 
         System.out.println("url:"+url);
 
-        ResponseEntity<Reservation> reservation = restTemplate.postForEntity(URI.create(url),null,Reservation.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("amount", "" + amount);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<Reservation> reservation = restTemplate.postForEntity(URI.create(url),request,Reservation.class);
 
         if(reservation.getStatusCode().is4xxClientError()){
             throw new Exception("cannot make reservation");
