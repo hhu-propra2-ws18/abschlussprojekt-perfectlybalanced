@@ -33,5 +33,14 @@ public class UserEntity {
         this.email = email;
         this.role = role;
     }
+
+    public UserEntity(String firstname, String lastname, String username, String password, String email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = Role.user;
+    }
 }
 
