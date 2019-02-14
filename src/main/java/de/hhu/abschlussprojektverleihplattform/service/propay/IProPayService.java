@@ -18,4 +18,6 @@ public interface IProPayService {
     public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget,long amount) throws Exception;
 
     public Account getAccount(String username) throws Exception;
+
+    public void returnReservedAmount(String username, Long reservationId) throws Exception;
 }

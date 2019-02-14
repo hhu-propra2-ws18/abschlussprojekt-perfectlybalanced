@@ -104,22 +104,23 @@ public class ProPayService implements IProPayService, IPayment {
     @Override
     public boolean changeUserBalanceBy(String username, long delta){
 
+        System.out.println("attempt to change balance of "+username+" by "+delta);
+
         try {
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("amount", "" + delta);
-
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
             String url = baseurl + "account/"+username;
-            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            ResponseEntity<Account> response = restTemplate.postForEntity(url, request, Account.class);
 
             return true;
         }catch (Exception e){
+            System.out.println(e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -127,6 +128,8 @@ public class ProPayService implements IProPayService, IPayment {
 
     @Override
     public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget, long amount) throws Exception {
+
+        System.out.println("attempting to make reservation from "+userSource+" to "+userTarget+" for "+amount+" Euro");
 
         //temporary, until the api gets fixed
         circumventForAccount(userSource);
@@ -141,15 +144,15 @@ public class ProPayService implements IProPayService, IPayment {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("amount", "" + amount);
-
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
 
         ResponseEntity<Reservation> reservation = restTemplate.postForEntity(URI.create(url),request,Reservation.class);
 
         if(reservation.getStatusCode().is4xxClientError()){
+            System.err.println("could not make reservation");
             throw new Exception("cannot make reservation");
         }
         return reservation.getBody();
@@ -169,6 +172,33 @@ public class ProPayService implements IProPayService, IPayment {
         }
 
         return account;
+    }
+
+    @Override
+    public void returnReservedAmount(String username,Long reservationId) throws Exception {
+
+        System.out.println("attempting to return reserved money to "+username+" with reservationId="+reservationId);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String method_url = "reservation/release/"+username;
+        String url = baseurl + method_url;
+
+        System.out.println("url:"+url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("reservationId", "" + reservationId);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<Account> reservation = restTemplate.postForEntity(URI.create(url),request,Account.class);
+
+        if(reservation.getStatusCode().is4xxClientError()){
+            throw new Exception("cannot make reservation");
+        }
     }
 
 
@@ -196,15 +226,20 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
     @Override
-    public boolean tranferReservatedMoney(Long id) {
-        //TODO
+    public boolean tranferReservatedMoney(String username,Long id) {
+
         return false;
     }
 
     @Override
-    public boolean returnReservatedMoney(Long id) {
-        //TODO
-        return false;
+    public boolean returnReservatedMoney(String username,Long id) {
+        try{
+            returnReservedAmount(username,id);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
 

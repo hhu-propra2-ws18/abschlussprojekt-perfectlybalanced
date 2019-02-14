@@ -83,13 +83,6 @@ public class ProPayServiceTest {
         //so they can save that reservation
         //the amount has to be not 0
 
-        //basically we circumvent an error in their api.
-        //this.proPayService.changeUserBalanceBy(user1,1);
-        //this.proPayService.changeUserBalanceBy(user2,1);
-
-
-
-
         this.proPayService.makeReservationFromSourceUserToTargetUser(user1,user2,1);
 
         Account user1_account = this.proPayService.getAccount(user1);
@@ -103,18 +96,31 @@ public class ProPayServiceTest {
     }
 
     @Test
-    public void can_release_reservation(){
+    public void can_release_reservation() throws Exception{
         //make users
+        String user1=make_new_user();
+        String user2=make_new_user();
+        proPayService.createAccountIfNotExists(user1);
+        proPayService.createAccountIfNotExists(user2);
+
+        proPayService.changeUserBalanceBy(user1,10);
 
         //make reservation
+        Reservation reservation = proPayService.makeReservationFromSourceUserToTargetUser(user1,user2,1);
+
+        Assert.assertEquals(proPayService.getAccount(user1).reservations.length,1);
 
         //release reservation
+        proPayService.returnReservedAmount(user1,reservation.id);
 
         //check account for reserved money and no reservations present
+        Account user1_account = proPayService.getAccount(user1);
+
+        Assert.assertEquals(user1_account.reservations.length,0);
     }
 
     @Test
     public void can_punish_reservation(){
-
+        //TODO
     }
 }
