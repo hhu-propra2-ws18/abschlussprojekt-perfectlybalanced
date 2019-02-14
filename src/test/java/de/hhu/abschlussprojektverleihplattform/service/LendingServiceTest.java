@@ -8,7 +8,6 @@ import org.h2.engine.User;
 public class LendingServiceTest {
 
 
-
     // private Methoden um schnell an TestEntities zu kommen
 
     private UserEntity createExampleUser1() {

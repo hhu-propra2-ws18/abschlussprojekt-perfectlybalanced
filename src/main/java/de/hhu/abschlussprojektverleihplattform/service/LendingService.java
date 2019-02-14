@@ -36,7 +36,7 @@ public class LendingService {
         for (LendingEntity lend : lendings) {
             Timestamp lend_start = lend.getStart();
             Timestamp lend_end = lend.getEnd();
-            if ((start.after(lend_start) && start.before(lend_end)) || (end.after(lend_start) && end.before(lend_end))) {
+            if ((start.after(lend_start) && start.before(lend_end)) || (end.after(lend_start) && end.before(lend_end)) || (lend_start.after(start) && lend_start.before(end))) {
                 TimeIsOK = false;
             }
         }
