@@ -227,6 +227,47 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
     }
 
+    // Tests for ReturnProduct
+
+    @Test
+    public void ProductGetsReturned() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        LendingService logic = new LendingService(lending_service, null);
+
+        logic.ReturnProduct(lending);
+
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
+    }
+
+    @Test
+    public void ProductGetsReturnedAlternative() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        lending_service.setLendingByProductAndUser(lending);
+        LendingService logic = new LendingService(lending_service, null);
+
+        logic.ReturnProduct(borower, product);
+
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
+    }
+
+    // Tests for CheckReturnedProduct
+
 
     // private Methoden um schnell an TestEntities zu kommen
 

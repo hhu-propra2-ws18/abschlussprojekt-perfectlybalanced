@@ -12,7 +12,9 @@ public class LendingServiceDummy implements ILending {
 
     private ArrayList<LendingEntity> lendings;
     private LendingEntity lendigToUpdate;
-    private  boolean isUpdated;
+    private boolean isUpdated;
+
+    private LendingEntity lendingByProductAndUser;
 
     public LendingServiceDummy() {
         lendings = new ArrayList<>();
@@ -33,7 +35,7 @@ public class LendingServiceDummy implements ILending {
 
     @Override
     public LendingEntity getLendingByProductAndUser(ProductEntity product, UserEntity user) {
-        return null;
+        return lendingByProductAndUser;
     }
 
     @Override
@@ -85,4 +87,7 @@ public class LendingServiceDummy implements ILending {
         return isUpdated;
     }
 
+    public void setLendingByProductAndUser(LendingEntity lending) {
+        lendingByProductAndUser = lending;
+    }
 }
