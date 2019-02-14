@@ -52,6 +52,8 @@ public class LogicTest {
     private int postcode3 = 13579;
     private String city3 = "Niederhausen";
 
+    /*
+
     @Test
     public void multipleUsersCanBeAdded() {
 
@@ -142,4 +144,6 @@ public class LogicTest {
         Assert.assertEquals(product3.getLocation().getPostcode(), postcode3);
         Assert.assertEquals(product3.getLocation().getCity(), city3);
     }
+
+    */
 }
