@@ -89,11 +89,15 @@ public class LendingService {
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean CheckReturnedProduct(LendingEntity lending, boolean isAcceptable) {
         if (isAcceptable) {
-            lending.setStatus(Lendingstatus.done);
-            lending_service.update(lending);
-            return payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
+            if(payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID())) {
+                lending.setStatus(Lendingstatus.done);
+                lending_service.update(lending);
+                return true;
+            }
+            return false;
         } else {
             lending.setStatus(Lendingstatus.conflict);
+            lending_service.update(lending);
             return true;
         }
     }
@@ -102,11 +106,15 @@ public class LendingService {
     public boolean CheckReturnedProduct(UserEntity actingUser, ProductEntity product, boolean isAcceptable) {
         LendingEntity lending = lending_service.getLendingByProductAndUser(product, actingUser);
         if (isAcceptable) {
-            lending.setStatus(Lendingstatus.done);
-            lending_service.update(lending);
-            return payment_service.returnReservatedMoney(actingUser.getUsername(), lending.getSuretyReservationID());
+            if(payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID())) {
+                lending.setStatus(Lendingstatus.done);
+                lending_service.update(lending);
+                return true;
+            }
+            return false;
         } else {
             lending.setStatus(Lendingstatus.conflict);
+            lending_service.update(lending);
             return true;
         }
     }
@@ -118,7 +126,7 @@ public class LendingService {
                 return false;
             }
         } else {
-            if (!payment_service.tranferReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID())) {
+            if (!payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID())) {
                 return false;
             }
         }

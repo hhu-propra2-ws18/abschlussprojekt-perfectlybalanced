@@ -268,6 +268,209 @@ public class LendingServiceTest {
 
     // Tests for CheckReturnedProduct
 
+    @Test
+    public void ProductGetsReturndInBadCondition() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        LendingService logic = new LendingService(lending_service, null);
+
+        boolean result = logic.CheckReturnedProduct(lending, false);
+
+        Assert.assertEquals(true, result);
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
+    }
+
+    @Test
+    public void ProductGetsReturndInGoodCondition() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.CheckReturnedProduct(lending, true);
+
+        Assert.assertEquals(true, result);
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+    }
+
+    @Test
+    public void ReturnReservationFails() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.CheckReturnedProduct(lending, true);
+
+        Assert.assertEquals(false, result);
+        Assert.assertEquals(false, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
+    }
+
+    @Test
+    public void ProductGetsReturndInBadConditionAlternative() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        lending_service.setLendingByProductAndUser(lending);
+        LendingService logic = new LendingService(lending_service, null);
+
+        boolean result = logic.CheckReturnedProduct(owner, product, false);
+
+        Assert.assertEquals(true, result);
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
+    }
+
+    @Test
+    public void ProductGetsReturndInGoodConditionAlternative() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        lending_service.setLendingByProductAndUser(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.CheckReturnedProduct(owner, product, true);
+
+        Assert.assertEquals(true, result);
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+    }
+
+    @Test
+    public void ReturnReservationFailsAlternative() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        lending_service.setLendingByProductAndUser(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.CheckReturnedProduct(owner, product, true);
+
+        Assert.assertEquals(false, result);
+        Assert.assertEquals(false, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
+    }
+
+    // Tests for ResolveConflict
+
+    @Test
+    public void OwnerRecivesSurety() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.ResolveConflict(lending, true);
+
+        Assert.assertEquals(true, result);
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+    }
+
+    @Test
+    public void BorowerRecivesSurety() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.ResolveConflict(lending, false);
+
+        Assert.assertEquals(true, result);
+        Assert.assertEquals(true, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+    }
+
+    @Test
+    public void OwnerRecivesSuretyButTranferFails() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.ResolveConflict(lending, true);
+
+        Assert.assertEquals(false, result);
+        Assert.assertEquals(false, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
+    }
+
+    @Test
+    public void BorowerRecivesSuretyButTranferFails() {
+        Timestamp start = new Timestamp(300l);
+        Timestamp end = new Timestamp(500l);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
+        LendingService logic = new LendingService(lending_service, payment_service);
+
+        boolean result = logic.ResolveConflict(lending, false);
+
+        Assert.assertEquals(false, result);
+        Assert.assertEquals(false, lending_service.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
+    }
+
 
     // private Methoden um schnell an TestEntities zu kommen
 

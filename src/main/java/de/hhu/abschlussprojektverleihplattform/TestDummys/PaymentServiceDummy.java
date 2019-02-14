@@ -21,7 +21,7 @@ public class PaymentServiceDummy implements IPayment {
         this.usersHaveMoney = UsersHaveMoney;
         this.reservationsAreSuccessfull = ReservationsAreSuccessfull;
         this.transfersAreSuccessfull = TransfersAreSuccessfull;
-        this.reservationsAreSuccessfull = ReservationsAreSuccessfull;
+        this.returnsAreSuccessfull = ReturnsAreSuccessfull;
     }
 
     @Override
