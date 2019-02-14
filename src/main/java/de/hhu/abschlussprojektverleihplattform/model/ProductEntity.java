@@ -9,10 +9,10 @@ import javax.persistence.*;
 public class ProductEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private String titel;
+    private String title;
     private int surety;
     private int cost;
 
@@ -27,9 +27,9 @@ public class ProductEntity {
 
     }
 
-    public ProductEntity(String description, String titel, int surety, int cost, AddressEntity location, UserEntity owner) {
+    public ProductEntity(String description, String title, int surety, int cost, AddressEntity location, UserEntity owner) {
         this.description = description;
-        this.titel = titel;
+        this.title = title;
         this.surety = surety;
         this.cost = cost;
         this.location = location;
