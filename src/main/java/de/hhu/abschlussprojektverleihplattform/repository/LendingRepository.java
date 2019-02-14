@@ -50,22 +50,25 @@ public class LendingRepository implements ILendingRepository {
             public LendingEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
                 LendingEntity lendingEntity=new LendingEntity();
 
-                int colnunm = rs.findColumn("BORROWER_USER_ID");
+                int id = rs.findColumn("ID");
+                int costReservationId = rs.findColumn("COST_RESERVATIONID");
+                int endTime = rs.findColumn("END");
+                int startTime = rs.findColumn("START");
+                int status = rs.findColumn("STATUS");
+                int suretyId = rs.findColumn("SURETY_RESERVATIONID");
+                int borrowerUserId  = rs.findColumn("BORROWER_USER_ID");
+                int productId = rs.findColumn("PRODUCT_ID");
 
-                lendingEntity.setId(rs.getLong(1));
-                //lendingEntity.setStatus(Lendingstatus.valueOf(rs.getString(2)));
 
-                lendingEntity.setStart(rs.getTimestamp(3));
-                lendingEntity.setEnd(rs.getTimestamp(4));
 
-                System.out.println(rs.getLong(colnunm));
-                lendingEntity.setBorrower(userRepository.findById(rs.getLong(colnunm)));
+                lendingEntity.setId(rs.getLong(id));
+                lendingEntity.setCostReservationID((long) costReservationId);
+                lendingEntity.setEnd(rs.getTimestamp(endTime));
+                lendingEntity.setStart(rs.getTimestamp(startTime));
+                lendingEntity.setStatus(Lendingstatus.valueOf(status));
+                lendingEntity.setSuretyReservationID((long) suretyId);
+                lendingEntity.setBorrower(userRepository.findById(rs.getLong(borrowerUserId)));
 
-                //use a productrepository here
-                //lendingEntity.setProduct();
-
-                lendingEntity.setCostReservationID(rs.getLong(7));
-                lendingEntity.setSuretyReservationID(rs.getLong(8));
                 return lendingEntity;
             }
         });
