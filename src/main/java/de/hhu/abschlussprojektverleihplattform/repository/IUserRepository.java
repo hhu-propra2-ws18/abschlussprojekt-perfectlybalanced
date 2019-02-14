@@ -9,6 +9,7 @@ public interface IUserRepository {
     UserEntity findById(Long userId);
     void saveUser(UserEntity user);
     int getNumberOfUsers();
-    List<UserEntity> alleUser();
+    List<UserEntity> getAllUser();
+    UserEntity getUserByFirstname(String firstname);
 
 }

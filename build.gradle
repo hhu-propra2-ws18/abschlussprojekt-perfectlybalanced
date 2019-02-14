@@ -11,13 +11,12 @@ buildscript {
 }
 
 plugins {
-	id "com.github.spotbugs" version "1.6.9"
+	id 'com.github.spotbugs' version '1.6.9'
 	id 'checkstyle'
+	id 'java'
+	id 'org.springframework.boot' version '2.1.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.6.RELEASE'
 }
-
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 
 group = 'de.hhu'
 version = '0.0.1-SNAPSHOT'
@@ -51,17 +50,17 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 dependencies {
-
   //javax.xml.bind
 	compile 'javax.xml.bind:jaxb-api:2.3.0'
 	testCompile 'javax.xml.bind:jaxb-api:2.3.0'
+
   //jpa
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.2.RELEASE'
+
   //devtools
 	runtime 'org.springframework.boot:spring-boot-devtools:2.1.2.RELEASE'
 	compile 'mysql:mysql-connector-java:8.0.13'
 	runtimeOnly 'com.h2database:h2:1.4.197'
-	
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.1.2.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.1.2.RELEASE'
