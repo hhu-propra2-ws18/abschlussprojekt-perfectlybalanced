@@ -35,11 +35,7 @@ public class RegistryController {
         //TODO: check supplied info for duplication with existing user.
         //TODO: insert new user into db
         //TODO: login the new user
-
-        if(username.isEmpty() || password.isEmpty() || vorname.isEmpty() || nachname.isEmpty() ||email.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"some fields are empty");
-        }
-
+	//TODO: throw exception if fields are empty
         //TODO: validate email and other fields
 
         return "redirect:/";

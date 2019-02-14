@@ -1,8 +1,8 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
+import javax.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import javax.persistence.*;
 
 @Data
 @Embeddable

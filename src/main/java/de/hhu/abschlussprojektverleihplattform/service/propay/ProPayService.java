@@ -4,6 +4,7 @@ import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
+import java.net.URI;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -11,7 +12,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 
 @Component
 public class ProPayService implements IProPayService, IPayment {
@@ -106,10 +106,13 @@ public class ProPayService implements IProPayService, IPayment {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("amount", "" + delta);
 
-            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+            HttpEntity<MultiValueMap<String, String>> request
+                = new HttpEntity<>(map, headers);
 
             String url = baseurl + "account/"+username;
-            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                            url, request, String.class
+            );
 
             return true;
         }catch (Exception e){
@@ -119,7 +122,9 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
     @Override
-    public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget, long amount) throws Exception {
+    public Reservation makeReservationFromSourceUserToTargetUser(
+                    String userSource, String userTarget, long amount
+    ) throws Exception {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -128,7 +133,9 @@ public class ProPayService implements IProPayService, IPayment {
 
         System.out.println("url:"+url);
 
-        ResponseEntity<Reservation> reservation = restTemplate.postForEntity(URI.create(url),null,Reservation.class);
+        ResponseEntity<Reservation> reservation = restTemplate.postForEntity(
+			URI.create(url),null,Reservation.class
+	);
 
         if(reservation.getStatusCode().is4xxClientError()){
             throw new Exception("cannot make reservation");
@@ -168,7 +175,10 @@ public class ProPayService implements IProPayService, IPayment {
     @Override
     public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
         try {
-            Reservation reservation = makeReservationFromSourceUserToTargetUser(payingUser.getUsername(), recivingUser.getUsername(), amount);
+            Reservation reservation =
+	        makeReservationFromSourceUserToTargetUser(
+	            payingUser.getUsername(), recivingUser.getUsername(), amount
+	        );
             return reservation.id;
         }catch (Exception e){
             e.printStackTrace();

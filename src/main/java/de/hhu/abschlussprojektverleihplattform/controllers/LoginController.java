@@ -15,7 +15,16 @@ public class LoginController {
 
     /*
     @PostMapping("/login")
-    public String postLogin(@RequestParam(value="username")String username, @RequestParam(value="password")String password){
+    public String postLogin(
+    	@RequestParam(
+		value="username"
+	)
+	String username,
+	@RequestParam(
+		value="password"
+	)
+	String password
+	){
         //TODO: actually check user credentials submitted
         return "redirect:/profile";
     }
