@@ -42,34 +42,12 @@ public class PaymentServiceDummy implements IPayment {
 
     @Override
     public boolean tranferReservatedMoney(Long id) {
-        if (!transfersAreSuccessfull) {
-            return false;
-        }
-        ReservationDummy reservation = findReservation(id);
-        if (reservation == null) {
-            return false;
-        }
-        if (reservation.getStatus() == PaymentStatus.reservated) {
-            reservation.setStatus(PaymentStatus.payed);
-            return true;
-        }
-        return false;
+        return transfersAreSuccessfull;
     }
 
     @Override
     public boolean returnReservatedMoney(Long id) {
-        if (!returnsAreSuccessfull) {
-            return false;
-        }
-        ReservationDummy reservation = findReservation(id);
-        if (reservation == null) {
-            return false;
-        }
-        if (reservation.getStatus() == PaymentStatus.reservated) {
-            reservation.setStatus(PaymentStatus.returned);
-            return true;
-        }
-        return false;
+        return returnsAreSuccessfull;
     }
 
     public ReservationDummy findReservation(Long id) {

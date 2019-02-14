@@ -58,10 +58,19 @@ public class LendingService {
     }
 
     // Anfrage einer Buchung beantworten
-    public boolean AcceptLending(LendingEntity lending) {
-        lending.setStatus(Lendingstatus.confirmt);
-        lending_service.update(lending);
-        return payment_service.tranferReservatedMoney(lending.getCostReservationID());
+    public boolean AcceptLending(LendingEntity lending, boolean RequestIsAccepted) {
+        if(RequestIsAccepted) {
+            if(payment_service.tranferReservatedMoney(lending.getCostReservationID())) {
+                lending.setStatus(Lendingstatus.confirmt);
+                lending_service.update(lending);
+                return true;
+            }
+            return false;
+        } else {
+            lending.setStatus(Lendingstatus.denied);
+            lending_service.update(lending);
+            return true;
+        }
     }
 
     // Artikel zurueckgeben

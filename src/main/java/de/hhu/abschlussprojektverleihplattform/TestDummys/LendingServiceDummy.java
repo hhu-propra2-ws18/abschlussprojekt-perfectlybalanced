@@ -11,6 +11,8 @@ import java.util.List;
 public class LendingServiceDummy implements ILending {
 
     private ArrayList<LendingEntity> lendings;
+    private LendingEntity lendigToUpdate;
+    private  boolean isUpdated;
 
     public LendingServiceDummy() {
         lendings = new ArrayList<>();
@@ -23,7 +25,10 @@ public class LendingServiceDummy implements ILending {
 
     @Override
     public void update(LendingEntity lending) {
-
+        if(lending.getProduct().getTitle().equals(lendigToUpdate.getProduct().getTitle())
+            && lending.getEnd().equals(lendigToUpdate.getEnd())) {
+            isUpdated = true;
+        }
     }
 
     @Override
@@ -70,4 +75,14 @@ public class LendingServiceDummy implements ILending {
     public LendingEntity getFirst() {
         return lendings.get(0);
     }
+
+    public void setLendingToUpdate(LendingEntity lending) {
+        lendigToUpdate = lending;
+        isUpdated = false;
+    }
+
+    public boolean hasBeenUpdated() {
+        return isUpdated;
+    }
+
 }

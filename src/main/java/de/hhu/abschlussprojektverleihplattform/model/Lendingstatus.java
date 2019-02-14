@@ -5,5 +5,6 @@ public enum Lendingstatus {
     confirmt,
     returned,
     conflict,
-    done
+    done,
+    denied
 }
