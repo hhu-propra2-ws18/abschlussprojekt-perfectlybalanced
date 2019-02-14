@@ -20,4 +20,6 @@ public interface IProPayService {
     public Account getAccount(String username) throws Exception;
 
     public void returnReservedAmount(String username, Long reservationId) throws Exception;
+
+    public void punishReservedAmount(String sourceUsername, Long reservationId) throws Exception;
 }

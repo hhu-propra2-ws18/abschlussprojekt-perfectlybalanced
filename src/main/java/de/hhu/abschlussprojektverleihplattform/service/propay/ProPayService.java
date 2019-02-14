@@ -201,6 +201,29 @@ public class ProPayService implements IProPayService, IPayment {
         }
     }
 
+    @Override
+    public void punishReservedAmount(String sourceUsername, Long reservationId) throws Exception {
+        System.out.println("attempting to punish reserved money from "+sourceUsername+" with reservationId="+reservationId);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String method_url = "reservation/punish/"+sourceUsername;
+        String url = baseurl + method_url;
+
+        System.out.println("url:"+url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("reservationId", "" + reservationId);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<Account> punishedAccount = restTemplate.postForEntity(URI.create(url),request,Account.class);
+
+    }
+
 
     //------------------- implement methods from Johannes Logic Interfaces ---------------
 

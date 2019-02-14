@@ -18,19 +18,19 @@ public class ProPayServiceTest {
     @Autowired
     private ProPayService proPayService;
 
-    private String make_new_user(){
-        return RandomStringUtils.random(10,true,false);
+    private String make_new_user() {
+        return RandomStringUtils.random(10, true, false);
     }
 
     @Test
-    public void testnewuserhaszerobalance() throws Exception{
+    public void testnewuserhaszerobalance() throws Exception {
         String generated_username = this.make_new_user();
-        Assert.assertEquals(0,this.proPayService.getBalance(generated_username));
+        Assert.assertEquals(0, this.proPayService.getBalance(generated_username));
     }
 
     @Test
     public void test_can_create_account() {
-        String user1=this.make_new_user();
+        String user1 = this.make_new_user();
         try {
             this.proPayService.createAccountIfNotExists(user1);
         } catch (Exception e) {
@@ -39,34 +39,34 @@ public class ProPayServiceTest {
     }
 
     @Test
-    public void test_can_increase_user_balance(){
+    public void test_can_increase_user_balance() {
         try {
-            String user1=this.make_new_user();
+            String user1 = this.make_new_user();
             this.proPayService.createAccountIfNotExists(user1);
-            this.proPayService.changeUserBalanceBy(user1,1);
+            this.proPayService.changeUserBalanceBy(user1, 1);
 
-            Assert.assertTrue(this.proPayService.getBalance(user1)==1);
-        }catch (Exception e) {
+            Assert.assertTrue(this.proPayService.getBalance(user1) == 1);
+        } catch (Exception e) {
             Assert.fail();
         }
     }
 
     @Test
-    public void test_can_make_payment() throws Exception{
+    public void test_can_make_payment() throws Exception {
         String user1 = this.make_new_user();
         String user2 = this.make_new_user();
 
         this.proPayService.createAccountIfNotExists(user1);
         this.proPayService.createAccountIfNotExists(user2);
 
-        this.proPayService.changeUserBalanceBy(user1,1);
-        this.proPayService.makePayment(user1,user2,1);
+        this.proPayService.changeUserBalanceBy(user1, 1);
+        this.proPayService.makePayment(user1, user2, 1);
 
-        Assert.assertEquals(this.proPayService.getBalance(user2),1);
+        Assert.assertEquals(this.proPayService.getBalance(user2), 1);
     }
 
     @Test
-    public void can_make_reservation() throws Exception{
+    public void can_make_reservation() throws Exception {
 
         //propay does not work yet. there is an issue in their repository
 
@@ -83,44 +83,60 @@ public class ProPayServiceTest {
         //so they can save that reservation
         //the amount has to be not 0
 
-        this.proPayService.makeReservationFromSourceUserToTargetUser(user1,user2,1);
+        this.proPayService.makeReservationFromSourceUserToTargetUser(user1, user2, 1);
 
         Account user1_account = this.proPayService.getAccount(user1);
 
         Reservation[] reservations = user1_account.reservations;
 
-        Assert.assertEquals(reservations.length,1);
-        Assert.assertEquals(reservations[0].amount,1);
+        Assert.assertEquals(reservations.length, 1);
+        Assert.assertEquals(reservations[0].amount, 1);
 
 
     }
 
     @Test
-    public void can_release_reservation() throws Exception{
+    public void can_release_reservation() throws Exception {
         //make users
-        String user1=make_new_user();
-        String user2=make_new_user();
+        String user1 = make_new_user();
+        String user2 = make_new_user();
+        proPayService.createAccountIfNotExists(user1);
+        proPayService.createAccountIfNotExists(user2);
+
+        proPayService.changeUserBalanceBy(user1, 10);
+
+        //make reservation
+        Reservation reservation = proPayService.makeReservationFromSourceUserToTargetUser(user1, user2, 1);
+
+        Assert.assertEquals(proPayService.getAccount(user1).reservations.length, 1);
+
+        //release reservation
+        proPayService.returnReservedAmount(user1, reservation.id);
+
+        //check account for reserved money and no reservations present
+        Account user1_account = proPayService.getAccount(user1);
+
+        Assert.assertEquals(user1_account.reservations.length, 0);
+    }
+
+    @Test
+    public void can_punish_reservation() throws Exception{
+        //make users
+        String user1 = make_new_user();
+        String user2 = make_new_user();
         proPayService.createAccountIfNotExists(user1);
         proPayService.createAccountIfNotExists(user2);
 
         proPayService.changeUserBalanceBy(user1,10);
 
-        //make reservation
-        Reservation reservation = proPayService.makeReservationFromSourceUserToTargetUser(user1,user2,1);
+        Reservation reservation=proPayService.makeReservationFromSourceUserToTargetUser(user1,user2,1);
 
-        Assert.assertEquals(proPayService.getAccount(user1).reservations.length,1);
+        proPayService.punishReservedAmount(user1,reservation.id);
 
-        //release reservation
-        proPayService.returnReservedAmount(user1,reservation.id);
-
-        //check account for reserved money and no reservations present
-        Account user1_account = proPayService.getAccount(user1);
-
-        Assert.assertEquals(user1_account.reservations.length,0);
+        Assert.assertEquals(9,proPayService.getAccount(user1).amount);
+        Assert.assertEquals(1,proPayService.getAccount(user2).amount);
     }
 
-    @Test
-    public void can_punish_reservation(){
-        //TODO
-    }
+    //document that we can only increase an account in propay from outside the system.
+    //TODO: write a test to document that
 }
