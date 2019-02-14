@@ -13,9 +13,13 @@ public interface IProPayService {
 
     public boolean makePayment(String sourceAccount, String targetAccount, long amount);
 
-    public boolean changeUserBalanceBy(String username,long delta);
+    public void changeUserBalanceBy(String username,long delta) throws Exception;
 
     public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget,long amount) throws Exception;
 
     public Account getAccount(String username) throws Exception;
+
+    public void returnReservedAmount(String username, Long reservationId) throws Exception;
+
+    public void punishReservedAmount(String sourceUsername, Long reservationId) throws Exception;
 }

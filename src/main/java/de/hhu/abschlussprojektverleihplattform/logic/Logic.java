@@ -27,6 +27,7 @@ public class Logic {
     //private IAddress address_service;
     //private IAdmin admin_service;
 
+    /*
     public void AddUser(String firstname, String lastname, String username, String password, String email) {
         UserEntity u = new UserEntity(firstname, lastname, username, password, email);
         user_service.addUser(u);
@@ -37,6 +38,7 @@ public class Logic {
         ProductEntity p = new ProductEntity(description, titel, surety, cost, location, actingUser);
         product_service.addProduct(p);
     }
+    */
 
     //// Operationen:
 
