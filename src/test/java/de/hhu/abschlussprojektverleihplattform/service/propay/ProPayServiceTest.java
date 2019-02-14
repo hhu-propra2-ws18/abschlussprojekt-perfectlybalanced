@@ -51,17 +51,7 @@ public class ProPayServiceTest {
         }
     }
 
-    @Test
-    public void test_that_system_rejects_decrease_of_account_balance() throws Exception{
-        String user1 = make_new_user();
-        proPayService.createAccountIfNotExists(user1);
-        try{
-            proPayService.changeUserBalanceBy(user1,-1);
-            Assert.fail();
-        }catch (Exception e){
 
-        }
-    }
 
     @Test
     public void test_can_make_payment() throws Exception {
@@ -76,6 +66,8 @@ public class ProPayServiceTest {
 
         Assert.assertEquals(this.proPayService.getBalance(user2), 1);
     }
+
+
 
     @Test
     public void can_make_reservation() throws Exception {
