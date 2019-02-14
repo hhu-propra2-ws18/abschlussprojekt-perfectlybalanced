@@ -35,6 +35,7 @@ public class PaymentServiceDummy implements IPayment {
             return 0l;
         }
         ReservationDummy reservation = new ReservationDummy(payingUser, recivingUser, amount, id);
+        payments.add(reservation);
         id++;
         return reservation.getId();
     }

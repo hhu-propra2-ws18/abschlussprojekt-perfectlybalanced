@@ -33,7 +33,13 @@ public class LendingServiceDummy implements ILending {
 
     @Override
     public List<LendingEntity> getAllLendingsFromProduct(ProductEntity product) {
-        return null;
+        ArrayList<LendingEntity> ret = new ArrayList<>();
+        for (LendingEntity lend: lendings) {
+            if(lend.getProduct().getTitle().equals(product.getTitle())) {
+                ret.add(lend);
+            }
+        }
+        return ret;
     }
 
     @Override
@@ -59,5 +65,9 @@ public class LendingServiceDummy implements ILending {
     @Override
     public List<LendingEntity> getAllConflicts() {
         return null;
+    }
+
+    public LendingEntity getFirst() {
+        return lendings.get(0);
     }
 }

@@ -33,7 +33,7 @@ public class LendingEntity {
         this.borrower = borrower;
         this.product = product;
         this.costReservationID = costReservationID;
-        this.costReservationID = costReservationID;
+        this.suretyReservationID = suretyReservationID;
     }
 
 }

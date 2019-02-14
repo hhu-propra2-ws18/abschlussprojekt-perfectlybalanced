@@ -1,11 +1,171 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
-import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.TestDummys.LendingServiceDummy;
+import de.hhu.abschlussprojektverleihplattform.TestDummys.PaymentServiceDummy;
+import de.hhu.abschlussprojektverleihplattform.TestDummys.PaymentStatus;
+import de.hhu.abschlussprojektverleihplattform.TestDummys.ReservationDummy;
+import de.hhu.abschlussprojektverleihplattform.logic.ILending;
+import de.hhu.abschlussprojektverleihplattform.model.*;
 import org.h2.engine.User;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.sql.Timestamp;
 
 public class LendingServiceTest {
+
+    // Tests for RequestLending
+
+    @Test
+    public void TimeIsBlocked1() {
+        // start is in reservated Time
+        UserEntity actingUser = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        Timestamp start1 = new Timestamp(1000l);
+        Timestamp end1 = new Timestamp(2000l);
+        LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.addLending(timeBlocker);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService lend = new LendingService(lending_service, payment_service);
+        Timestamp start2 = new Timestamp(1700l);
+        Timestamp end2 = new Timestamp(3000l);
+
+        boolean result = lend.RequestLending(actingUser, product, start2, end2);
+
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void TimeIsBlocked2() {
+        // end is in reservated Time
+        UserEntity actingUser = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        Timestamp start1 = new Timestamp(1000l);
+        Timestamp end1 = new Timestamp(2000l);
+        LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.addLending(timeBlocker);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService lend = new LendingService(lending_service, payment_service);
+        Timestamp start2 = new Timestamp(800l);
+        Timestamp end2 = new Timestamp(1500l);
+
+        boolean result = lend.RequestLending(actingUser, product, start2, end2);
+
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void TimeIsBlocked3() {
+        // both are in reservated Time
+        UserEntity actingUser = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        Timestamp start1 = new Timestamp(1000l);
+        Timestamp end1 = new Timestamp(2000l);
+        LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.addLending(timeBlocker);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService lend = new LendingService(lending_service, payment_service);
+        Timestamp start2 = new Timestamp(1800l);
+        Timestamp end2 = new Timestamp(1900l);
+
+        boolean result = lend.RequestLending(actingUser, product, start2, end2);
+
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void TimeIsBlocked4() {
+        // reservated Time within requested Time
+        UserEntity actingUser = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        Timestamp start1 = new Timestamp(1000l);
+        Timestamp end1 = new Timestamp(2000l);
+        LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0l, 0l);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        lending_service.addLending(timeBlocker);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService lend = new LendingService(lending_service, payment_service);
+        Timestamp start2 = new Timestamp(800l);
+        Timestamp end2 = new Timestamp(3500l);
+
+        boolean result = lend.RequestLending(actingUser, product, start2, end2);
+
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void UserHasNotEnoughMoney() {
+        // reservated Time within requested Time
+        UserEntity actingUser = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(false, true, true, true);
+        LendingService lend = new LendingService(lending_service, payment_service);
+        Timestamp start = new Timestamp(800l);
+        Timestamp end = new Timestamp(3500l);
+
+        boolean result = lend.RequestLending(actingUser, product, start, end);
+
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void ReservationsFail() {
+        // reservated Time within requested Time
+        UserEntity actingUser = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
+        LendingService lend = new LendingService(lending_service, payment_service);
+        Timestamp start = new Timestamp(800l);
+        Timestamp end = new Timestamp(3500l);
+
+        boolean result = lend.RequestLending(actingUser, product, start, end);
+
+        Assert.assertEquals(false, result);
+    }
+
+    @Test
+    public void ReservationSuccess() {
+        // reservated Time within requested Time
+        UserEntity actingUser = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService lend = new LendingService(lending_service, payment_service);
+        Timestamp start = new Timestamp(800l);
+        Timestamp end = new Timestamp(3500l);
+
+        boolean result = lend.RequestLending(actingUser, product, start, end);
+
+        Assert.assertEquals(true, result);
+        LendingEntity created_lending = lending_service.getFirst();
+        Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
+        Assert.assertEquals(true, created_lending.getStart().equals(start));
+        Assert.assertEquals(true, created_lending.getEnd().equals(end));
+        Assert.assertEquals(actingUser.getUsername(), created_lending.getBorrower().getUsername());
+        Assert.assertEquals(product.getTitle(), created_lending.getProduct().getTitle());
+        ReservationDummy cost = payment_service.findReservation(created_lending.getCostReservationID());
+        ReservationDummy surety = payment_service.findReservation(created_lending.getSuretyReservationID());
+        Assert.assertEquals(actingUser.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
+        Assert.assertEquals(product.getCost(), cost.getAmount());
+        Assert.assertEquals(PaymentStatus.reservated, cost.getStatus());
+        Assert.assertEquals(actingUser.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
+        Assert.assertEquals(product.getSurety(), surety.getAmount());
+        Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
+    }
 
 
     // private Methoden um schnell an TestEntities zu kommen
