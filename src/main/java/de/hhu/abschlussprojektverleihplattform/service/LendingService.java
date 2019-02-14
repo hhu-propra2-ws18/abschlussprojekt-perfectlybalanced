@@ -1,5 +1,8 @@
-package de.hhu.abschlussprojektverleihplattform.logic;
+package de.hhu.abschlussprojektverleihplattform.service;
 
+import de.hhu.abschlussprojektverleihplattform.logic.ILending;
+import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
+import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 
 import java.sql.Timestamp;
@@ -9,12 +12,12 @@ import java.util.List;
 //      ist dieser false wurde die Operation nicht(erfolgreich) ausgefuehrt,
 //      und auf der Website muss eine entsprechende Fehlermeldung angezeigt werden.
 
-public class Logic {
+public class LendingService {
 
     private ILending lending_service;
     private IPayment payment_service;
 
-    public Logic(ILending lending_service, IPayment payment_service) {
+    public LendingService(ILending lending_service, IPayment payment_service) {
         this.lending_service = lending_service;
         this.payment_service = payment_service;
     }

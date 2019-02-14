@@ -153,7 +153,7 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
 
-    //------------------- implement methods from Johannes Logic Interfaces ---------------
+    //------------------- implement methods from Johannes LendingService Interfaces ---------------
 
     @Override
     public boolean UserHasAmount(UserEntity User, int amount) {
