@@ -36,5 +36,9 @@ public class LendingEntity {
         this.costReservationID = costReservationID;
     }
 
+    public int getValueFromLendingStatus(Lendingstatus lendingstatus){
+        return Lendingstatus.getLemdingStatusValueFrom(lendingstatus);
+    }
+
 }
 
