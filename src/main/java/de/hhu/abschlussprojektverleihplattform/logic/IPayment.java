@@ -5,13 +5,10 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 public interface IPayment {
     boolean UserHasAmount(UserEntity User, int amount);
 
-    // kann ggf auch void sein, haengt davon ab ob eine bestaetigung notwendig ist oder nicht
-    boolean reservateAmount(UserEntity user, int amount);
+    // gibt die ID zurueck, fals der wert groesser als null ist, sonst ist die reservierung fehlgeschlagen
+    Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount);
 
-    void tranferReservatedMoney(UserEntity payingUser, UserEntity recivingUser, int amount);
+    boolean tranferReservatedMoney(Long id);
 
-    void returnReservatedMoney(UserEntity userEntity, int amount);
-
-
-    // Da ich die genaue funktionsweise des reservierens nicht kenne, kann sich hier noch einiges aendern
+    boolean returnReservatedMoney(Long id);
 }
