@@ -25,13 +25,15 @@ public class LoginController {
 
 
     @GetMapping("/login")
-    public String getLogin(HttpServletRequest httpServletRequest){
+    public String getLogin(HttpServletRequest httpServletRequest,HttpServletResponse response) throws Exception{
+
         try {
-            cookieUserService.getUserFromRequest(httpServletRequest);
-        }catch (Exception e){
-            return "login";
+            cookieUserService.getUserFromRequest(httpServletRequest).getUsername();
+            return "redirect:/";
+        } catch (Exception e){
+
         }
-        return "redirect:/";
+        return "login";
     }
 
     @PostMapping("/login")
@@ -51,7 +53,8 @@ public class LoginController {
                 )
         );
 
-        return "redirect:/profile";
+        //cookies and redirects dont work well together
+        return "profile";
     }
 
 }

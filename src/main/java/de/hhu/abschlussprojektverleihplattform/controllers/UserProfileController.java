@@ -20,7 +20,7 @@ public class UserProfileController {
     CookieUserService cookieUserService;
 
     @GetMapping("/profile")
-    public String getProfile(Model model, HttpServletRequest httpServletRequest){
+    public String getProfile(Model model, HttpServletRequest httpServletRequest) throws Exception{
 
         //this page should only be available to logged in users.
         //otherwise it would redirect to login page
@@ -28,11 +28,9 @@ public class UserProfileController {
         UserEntity user;
 
         //TODO: make it redirect to login page for not logged in users
-        try {
-            user = cookieUserService.getUserFromRequest(httpServletRequest);
-        }catch (Exception e){
-            return "login";
-        }
+
+        user = cookieUserService.getUserFromRequest(httpServletRequest);
+
 
         model.addAttribute("user", user);
 
