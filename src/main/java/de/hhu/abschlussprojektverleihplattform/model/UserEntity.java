@@ -17,8 +17,6 @@ public class UserEntity {
     private String username;
     private String password;
     private String email;
-    @OneToMany
-    private List<ProductEntity> products;
 
     public UserEntity() {
 

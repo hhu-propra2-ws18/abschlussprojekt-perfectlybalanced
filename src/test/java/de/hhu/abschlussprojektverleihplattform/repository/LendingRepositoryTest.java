@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.*;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +20,27 @@ public class LendingRepositoryTest {
 
     @Autowired
     private LendingRepository lendingRepository;
+
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+
     @Test
     public void saveOneLendingToDatabase(){
-        UserEntity user = userRepository.getUserByFirstname("Max");
-        AddressEntity address = new AddressEntity("street", 1, 47809, "city");
-        ProductEntity product = new ProductEntity("description", "title", 100, 10, address, user);
-        Timestamp start = new Timestamp(System.currentTimeMillis());
-        LendingEntity testLending = new LendingEntity(Lendingstatus.done, start, start, user, product, 0L, 0L);
-        lendingRepository.saveLending(testLending);
-        System.out.println(user.toString());
-
-        List<LendingEntity> lendingEntities=lendingRepository.getAllLendings();
-        System.out.println(lendingEntities.toString());
+        UserEntity user1 = RandomTestData.newRandomTestUser();
+        AddressEntity address1 = RandomTestData.newRandomTestAddress();
+        userRepository.saveUser(user1);
+        UserEntity loadedUser1 = userRepository.getUserByFirstname(user1.getFirstname());
+        ProductEntity product1 = RandomTestData.newRandomTestProduct(loadedUser1, address1);
+        productRepository.saveProduct(product1);
+        ProductEntity loadedProduct1 = productRepository.getProductByTitlel(product1.getTitle());
+        LendingEntity lendingEntity = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
+        lendingRepository.saveLending(lendingEntity);
+        List<LendingEntity> allLendings = lendingRepository.getAllLendings();
+        System.out.println(allLendings.toString());
     }
 
 }
