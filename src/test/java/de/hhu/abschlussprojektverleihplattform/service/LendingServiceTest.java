@@ -12,9 +12,6 @@ import java.sql.Timestamp;
 
 public class LendingServiceTest {
 
-    //TODO: 20L --> 20L
-    //TODO: assertTrue(...) --> assertTrue(...)
-
     // Tests for RequestLending
 
     @Test
@@ -235,9 +232,6 @@ public class LendingServiceTest {
 
     // Tests for ReturnProduct
 
-    //MARKER: hier gehts weiter mit den Payment-Tests
-    //TODO: Maker ist hier
-
     @Test
     public void ProductGetsReturned() {
         Timestamp start = new Timestamp(300L);
@@ -278,7 +272,7 @@ public class LendingServiceTest {
     // Tests for CheckReturnedProduct
 
     @Test
-    public void ProductGetsReturndInBadCondition() {
+    public void ProductGetsReturnedInBadCondition() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borower = createExampleUser1();
@@ -297,13 +291,13 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void ProductGetsReturndInGoodCondition() {
+    public void ProductGetsReturnedInGoodCondition() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 0L);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 20L);
         LendingServiceDummy lending_service = new LendingServiceDummy();
         lending_service.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
@@ -314,6 +308,9 @@ public class LendingServiceTest {
         Assert.assertTrue(result);
         Assert.assertTrue(lending_service.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+        Assert.assertFalse(payment_service.getLastWasTransfer());
+        Assert.assertEquals(20L, (long) payment_service.getLastId());
+        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
@@ -337,7 +334,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void ProductGetsReturndInBadConditionAlternative() {
+    public void ProductGetsReturnedInBadConditionAlternative() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borower = createExampleUser1();
@@ -357,13 +354,13 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void ProductGetsReturndInGoodConditionAlternative() {
+    public void ProductGetsReturnedInGoodConditionAlternative() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 0L);
+        LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 20L);
         LendingServiceDummy lending_service = new LendingServiceDummy();
         lending_service.setLendingToUpdate(lending);
         lending_service.setLendingByProductAndUser(lending);
@@ -375,6 +372,9 @@ public class LendingServiceTest {
         Assert.assertTrue(result);
         Assert.assertTrue(lending_service.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+        Assert.assertFalse(payment_service.getLastWasTransfer());
+        Assert.assertEquals(20L, (long) payment_service.getLastId());
+        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
@@ -407,7 +407,7 @@ public class LendingServiceTest {
         UserEntity borower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 0L);
+        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 20L);
         LendingServiceDummy lending_service = new LendingServiceDummy();
         lending_service.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
@@ -418,6 +418,9 @@ public class LendingServiceTest {
         Assert.assertTrue(result);
         Assert.assertTrue(lending_service.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+        Assert.assertTrue(payment_service.getLastWasTransfer());
+        Assert.assertEquals(20L, (long) payment_service.getLastId());
+        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
@@ -427,7 +430,7 @@ public class LendingServiceTest {
         UserEntity borower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 0L);
+        LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 20L);
         LendingServiceDummy lending_service = new LendingServiceDummy();
         lending_service.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
@@ -438,6 +441,9 @@ public class LendingServiceTest {
         Assert.assertTrue(result);
         Assert.assertTrue(lending_service.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
+        Assert.assertFalse(payment_service.getLastWasTransfer());
+        Assert.assertEquals(20L, (long) payment_service.getLastId());
+        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
