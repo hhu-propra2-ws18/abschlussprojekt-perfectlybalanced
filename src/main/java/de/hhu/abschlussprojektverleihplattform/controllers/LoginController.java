@@ -31,9 +31,8 @@ public class LoginController {
             cookieUserService.getUserFromRequest(httpServletRequest).getUsername();
             return "redirect:/";
         } catch (Exception e){
-
+            return "login";
         }
-        return "login";
     }
 
     @PostMapping("/login")
