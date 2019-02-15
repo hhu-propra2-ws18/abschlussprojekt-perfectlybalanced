@@ -84,7 +84,7 @@ public class LendingService {
     }
 
     // Anfrage einer Buchung beantworten
-    public boolean AcceptLending(LendingEntity lending, roolean RequestIsAccepted) {
+    public boolean AcceptLending(LendingEntity lending, boolean requestIsAccepted) {
         if (requestIsAccepted) {
             if (payment_service.tranferReservatedMoney(
                     lending.getBorrower().getUsername(),

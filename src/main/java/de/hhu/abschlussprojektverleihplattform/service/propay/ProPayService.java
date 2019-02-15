@@ -1,5 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
+import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
+
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
