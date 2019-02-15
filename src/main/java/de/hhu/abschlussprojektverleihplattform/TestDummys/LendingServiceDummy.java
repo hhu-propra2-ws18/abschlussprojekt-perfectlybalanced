@@ -8,7 +8,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LendingServiceServiceDummy implements ILendingService {
+public class LendingServiceDummy implements ILendingService {
 
     private ArrayList<LendingEntity> lendings;
     private LendingEntity lendigToUpdate;
@@ -16,7 +16,7 @@ public class LendingServiceServiceDummy implements ILendingService {
 
     private LendingEntity lendingByProductAndUser;
 
-    public LendingServiceServiceDummy() {
+    public LendingServiceDummy() {
         lendings = new ArrayList<>();
     }
 
