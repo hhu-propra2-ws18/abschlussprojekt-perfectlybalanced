@@ -111,7 +111,8 @@ public class LendingService {
 
     // Artikel zurueckgeben alternative
     public void ReturnProduct(UserEntity actingUser, ProductEntity product) {
-        LendingEntity lending = lending_service.getLendingByProductAndUser(product, actingUser);
+        LendingEntity lending 
+	    = lending_service.getLendingByProductAndUser(product, actingUser);
         lending.setStatus(Lendingstatus.returned);
         lending_service.update(lending);
     }
@@ -185,11 +186,13 @@ public class LendingService {
         return true;
     }
 
-    // private Methode die die Differrenz in Tagen zwischen zwei Timestamps berechnet, kann ggf ausgelagert werden
-    // kann hier nicht als private makiert werden, da sie sonst nich getestet werden kann
+    // private Methode die die Differrenz in Tagen zwischen zwei Timestamps
+    // berechnet, kann ggf ausgelagert werden
+    // kann hier nicht als private makiert werden, da sie sonst
+    // nich getestet werden kann
     protected int DaysBetween(Timestamp start, Timestamp end) {
-        long DifferenceInMillis = end.getTime() - start.getTime();
-        long DifferenceInDays = DifferenceInMillis / (1000 * 60 * 60 * 24);
-        return (int) DifferenceInDays;
+        long differenceInMillis = end.getTime() - start.getTime();
+        long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
+        return (int) differenceInDays;
     }
 }

@@ -44,7 +44,7 @@ public class UserRepository implements IUserRepository {
             user.getUsername(),
             user.getPassword(),
             user.getEmail()
-	    );
+        );
     }
 
     @Override
