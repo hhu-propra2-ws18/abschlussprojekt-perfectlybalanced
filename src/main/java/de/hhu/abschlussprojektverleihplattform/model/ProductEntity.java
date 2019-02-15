@@ -19,7 +19,7 @@ public class ProductEntity {
     @Embedded
     private AddressEntity location;
 
-    @OneToOne
+    @ManyToOne
     @Embedded
     private UserEntity owner;
 

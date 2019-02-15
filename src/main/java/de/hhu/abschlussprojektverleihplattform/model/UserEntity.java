@@ -2,10 +2,8 @@ package de.hhu.abschlussprojektverleihplattform.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -41,6 +39,14 @@ public class UserEntity {
         this.password = password;
         this.email = email;
         this.role = Role.user;
+    }
+
+    public UserEntity(Long id){
+        this.firstname = null;
+        this.lastname = null;
+        this.username = null;
+        this.password = null;
+        this.email = null;
     }
 }
 
