@@ -1,7 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.logic.ILending;
-import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
+import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 
@@ -14,10 +13,10 @@ import java.util.List;
 
 public class LendingService {
 
-    private ILending lending_service;
-    private IPayment payment_service;
+    private ILendingService lending_service;
+    private IPaymentService payment_service;
 
-    public LendingService(ILending lending_service, IPayment payment_service) {
+    public LendingService(ILendingService lending_service, IPaymentService payment_service) {
         this.lending_service = lending_service;
         this.payment_service = payment_service;
     }
