@@ -5,7 +5,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 
 import java.util.ArrayList;
 
-public class PaymentServiceServiceDummy implements IPaymentService {
+public class PaymentServiceDummy implements IPaymentService {
 
     private ArrayList<ReservationDummy> payments;
     private Long id;
@@ -19,7 +19,7 @@ public class PaymentServiceServiceDummy implements IPaymentService {
     private boolean transfersAreSuccessfull;
     private boolean returnsAreSuccessfull;
 
-    public PaymentServiceServiceDummy(boolean UsersHaveMoney, boolean ReservationsAreSuccessfull, boolean TransfersAreSuccessfull, boolean ReturnsAreSuccessfull) {
+    public PaymentServiceDummy(boolean UsersHaveMoney, boolean ReservationsAreSuccessfull, boolean TransfersAreSuccessfull, boolean ReturnsAreSuccessfull) {
         payments = new ArrayList<>();
         id = 1l;
         this.usersHaveMoney = UsersHaveMoney;
