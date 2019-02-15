@@ -27,8 +27,8 @@ public class LendingServiceDummy implements ILending {
 
     @Override
     public void update(LendingEntity lending) {
-        if(lending.getProduct().getTitle().equals(lendigToUpdate.getProduct().getTitle())
-            && lending.getEnd().equals(lendigToUpdate.getEnd())) {
+        if (lending.getProduct().getTitle().equals(lendigToUpdate.getProduct().getTitle())
+                && lending.getEnd().equals(lendigToUpdate.getEnd())) {
             isUpdated = true;
         }
     }
@@ -41,8 +41,8 @@ public class LendingServiceDummy implements ILending {
     @Override
     public List<LendingEntity> getAllLendingsFromProduct(ProductEntity product) {
         ArrayList<LendingEntity> ret = new ArrayList<>();
-        for (LendingEntity lend: lendings) {
-            if(lend.getProduct().getTitle().equals(product.getTitle())) {
+        for (LendingEntity lend : lendings) {
+            if (lend.getProduct().getTitle().equals(product.getTitle())) {
                 ret.add(lend);
             }
         }

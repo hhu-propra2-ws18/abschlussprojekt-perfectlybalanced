@@ -13,7 +13,7 @@ public class PaymentServiceDummy implements IPayment {
 
     private String lastCalledUsername;
     private Long lastCalledId;
-    private  boolean lastWasTransfer;
+    private boolean lastWasTransfer;
 
     private boolean usersHaveMoney;
     private boolean reservationsAreSuccessfull;
@@ -65,7 +65,7 @@ public class PaymentServiceDummy implements IPayment {
     }
 
     public Long getLastId() {
-        return  lastCalledId;
+        return lastCalledId;
     }
 
     public String getLastUsername() {
