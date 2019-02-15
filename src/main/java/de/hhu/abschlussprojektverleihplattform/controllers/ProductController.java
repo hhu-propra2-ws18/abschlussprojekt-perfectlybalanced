@@ -1,6 +1,8 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
+import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.service.CookieUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class ProductController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @Autowired
     CookieUserService cookieUserService;
@@ -61,8 +66,8 @@ public class ProductController {
         return "removeproduct";
     }
 
-    @GetMapping("/productdetail")
-    public String getProductDetails(Model model, HttpServletRequest httpServletRequest) {
+    @GetMapping("/productdetail/{id}")
+    public String getProductDetails(Model model, Long id, HttpServletRequest httpServletRequest) {
         UserEntity user;
 
         try {
@@ -70,6 +75,9 @@ public class ProductController {
         }catch (Exception e){
             return "login";
         }
+
+        ProductEntity product = productRepository.getProductById(id);
+        model.addAttribute("product", product);
 
         return "productdetailedview";
     }
