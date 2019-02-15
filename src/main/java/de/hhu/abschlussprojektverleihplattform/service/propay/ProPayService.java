@@ -1,5 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
+import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
+
 import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
@@ -11,9 +13,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-
-
-import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
 
 @Component
 public class ProPayService implements IProPayService, IPayment {
@@ -134,7 +133,15 @@ public class ProPayService implements IProPayService, IPayment {
                     String userSource, String userTarget, long amount
     ) throws Exception {
 
-        System.out.println("attempting to make reservation from "+userSource+" to "+userTarget+" for "+amount+" Euro");
+        System.out.println(
+	    "attempting to make reservation from "
+	    +userSource
+	    +" to "
+	    +userTarget
+	    +" for "
+	    +amount
+	    +" Euro"
+	);
 
         //temporary, until the api gets fixed
         circumventForAccount(userSource);
@@ -249,9 +256,9 @@ public class ProPayService implements IProPayService, IPayment {
     //------------------- implement methods from Johannes Logic Interfaces ---------------
 
     @Override
-    public boolean userHasAmount(UserEntity User, int amount) {
+    public boolean userHasAmount(UserEntity user, int amount) {
         try{
-            return getBalance(User.getUsername())>=amount;
+            return getBalance(user.getUsername())>=amount;
         }catch (Exception e){
             e.printStackTrace();
             return false;
