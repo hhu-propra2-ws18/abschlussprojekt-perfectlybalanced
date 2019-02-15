@@ -1,12 +1,11 @@
 package de.hhu.abschlussprojektverleihplattform.TestDummys;
 
-import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
+import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 
 import java.util.ArrayList;
 
-public class PaymentServiceDummy implements IPayment {
+public class PaymentServiceDummy implements IPaymentService {
 
     private ArrayList<ReservationDummy> payments;
     private Long id;

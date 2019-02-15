@@ -38,13 +38,13 @@ public class UserRepository implements IUserRepository {
     public void saveUser(UserEntity user) {
         jdbcTemplate.update(
             "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL)"
-	    + "VALUES (?,?,?,?,?)",
+	        + "VALUES (?,?,?,?,?)",
             user.getFirstname(),
             user.getLastname(),
             user.getUsername(),
             user.getPassword(),
             user.getEmail()
-	);
+	    );
     }
 
     @Override

@@ -1,9 +1,9 @@
-package de.hhu.abschlussprojektverleihplattform.logic;
+package de.hhu.abschlussprojektverleihplattform.service.propay;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 
-public interface IPayment {
-    boolean userHasAmount(UserEntity user, int amount);
+public interface IPaymentService {
+    boolean userHasAmount(UserEntity User, int amount);
 
     // gibt die ID zurueck, fals der wert groesser als null ist,
     // sonst ist die reservierung fehlgeschlagen
