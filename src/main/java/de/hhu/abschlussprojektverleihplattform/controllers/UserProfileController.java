@@ -31,7 +31,6 @@ public class UserProfileController {
 
         user = cookieUserService.getUserFromRequest(httpServletRequest);
 
-
         model.addAttribute("user", user);
 
         return "profile";
