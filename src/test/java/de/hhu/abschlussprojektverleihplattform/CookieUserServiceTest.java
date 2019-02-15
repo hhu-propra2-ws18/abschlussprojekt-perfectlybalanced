@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform;
 
 import de.hhu.abschlussprojektverleihplattform.model.Role;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.service.CookieUserService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import org.junit.Assert;
@@ -31,7 +32,7 @@ public class CookieUserServiceTest {
     CookieUserService cookieUserService;
 
     @Autowired
-    UserService userService;
+    UserRepository userService;
 
     @Test
     public void can_get_user_from_cookie() throws Exception{
@@ -43,13 +44,23 @@ public class CookieUserServiceTest {
         user1.setPassword("password");
         user1.setEmail("me@hello.de");
         user1.setRole(Role.user);
-        userService.addUser(user1);
+        userService.saveUser(user1);
+
+        //make a query to try to commit our change
+        try {
+            userService.findById(1L);
+        }catch (Exception e){}
+
+
+        Long userId = userService.getUserByFirstname("thomas").getUserId();
+
+        System.out.println(userId);
 
         HttpServletRequest request = new MockHttpServletRequest();
-        ((MockHttpServletRequest) request).setCookies(new Cookie("username","user1"));
+        ((MockHttpServletRequest) request).setCookies(new Cookie(CookieUserService.cookieName,""+userId));
 
         UserEntity user2 = cookieUserService.getUserFromRequest(request);
 
-        Assert.assertEquals(user2.getFirstname().equals("thomas"));
+        Assert.assertEquals(user2.getFirstname(),"thomas");
     }
 }
