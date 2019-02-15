@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.TestDummys;
 
-import de.hhu.abschlussprojektverleihplattform.logic.ILending;
+import de.hhu.abschlussprojektverleihplattform.service.ILendingService;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
@@ -8,7 +8,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LendingServiceDummy implements ILending {
+public class LendingServiceServiceDummy implements ILendingService {
 
     private ArrayList<LendingEntity> lendings;
     private LendingEntity lendigToUpdate;
@@ -16,7 +16,7 @@ public class LendingServiceDummy implements ILending {
 
     private LendingEntity lendingByProductAndUser;
 
-    public LendingServiceDummy() {
+    public LendingServiceServiceDummy() {
         lendings = new ArrayList<>();
     }
 
