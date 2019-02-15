@@ -24,7 +24,10 @@ public class UserLoginFilter implements Filter {
 
         System.out.println(request1.getRequestURL().toString());
 
-        if(request1.getRequestURL().toString().contains("login") || request1.getRequestURL().toString().contains("logout")){
+        if(request1.getRequestURL().toString().contains("login")
+                || request1.getRequestURL().toString().contains("logout")
+                || request1.getRequestURL().toString().contains("register")
+        ){
             chain.doFilter(request,response);
             return;
         }
