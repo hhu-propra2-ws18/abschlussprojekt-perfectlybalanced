@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
-import de.hhu.abschlussprojektverleihplattform.logic.IPayment;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
@@ -16,7 +15,7 @@ import java.net.URI;
 import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
 
 @Component
-public class ProPayService implements IProPayService, IPayment {
+public class ProPayService implements IProPayService, IPaymentService {
 
     public static final String baseurl = "http://propra-propay.herokuapp.com/";
 
