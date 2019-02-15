@@ -29,7 +29,7 @@ public class LendingService {
     }
 
     // Anfrage einer Buchung eintragen
-    public boolean RequestLending(
+    public boolean requestLending(
 	UserEntity actingUser,
 	ProductEntity product,
 	Timestamp start,
@@ -48,7 +48,7 @@ public class LendingService {
                 timeIsOK = false;
             }
         }
-        int totalCost = product.getCost() * DaysBetween(start, end);
+        int totalCost = product.getCost() * daysBetween(start, end);
         int totalMoney = totalCost + product.getSurety();
         boolean moneyIsOK = payment_service.userHasAmount(actingUser, totalMoney);
         if (timeIsOK && moneyIsOK) {
@@ -84,7 +84,7 @@ public class LendingService {
     }
 
     // Anfrage einer Buchung beantworten
-    public boolean AcceptLending(LendingEntity lending, boolean requestIsAccepted) {
+    public boolean acceptLending(LendingEntity lending, boolean requestIsAccepted) {
         if (requestIsAccepted) {
             if (payment_service.tranferReservatedMoney(
                     lending.getBorrower().getUsername(),
@@ -104,13 +104,13 @@ public class LendingService {
     }
 
     // Artikel zurueckgeben
-    public void ReturnProduct(LendingEntity lending) {
+    public void returnProduct(LendingEntity lending) {
         lending.setStatus(Lendingstatus.returned);
         lending_service.update(lending);
     }
 
     // Artikel zurueckgeben alternative
-    public void ReturnProduct(UserEntity actingUser, ProductEntity product) {
+    public void returnProduct(UserEntity actingUser, ProductEntity product) {
         LendingEntity lending 
 	    = lending_service.getLendingByProductAndUser(product, actingUser);
         lending.setStatus(Lendingstatus.returned);
@@ -118,7 +118,7 @@ public class LendingService {
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
-    public boolean CheckReturnedProduct(LendingEntity lending, boolean isAcceptable) {
+    public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable) {
         if (isAcceptable) {
             if (payment_service.returnReservatedMoney(
                     lending.getBorrower().getUsername(),
@@ -138,7 +138,7 @@ public class LendingService {
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
-    public boolean CheckReturnedProduct(
+    public boolean checkReturnedProduct(
 	UserEntity actingUser,
 	ProductEntity product,
 	boolean isAcceptable
@@ -164,7 +164,7 @@ public class LendingService {
     }
 
     // Konflikt vom Admin loesen
-    public boolean ResolveConflict(LendingEntity lending, boolean ownerRecivesSurety) {
+    public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety) {
         if (ownerRecivesSurety) {
             if (!payment_service.tranferReservatedMoney(
 		lending.getBorrower().getUsername(),
@@ -190,7 +190,7 @@ public class LendingService {
     // berechnet, kann ggf ausgelagert werden
     // kann hier nicht als private makiert werden, da sie sonst
     // nich getestet werden kann
-    protected int DaysBetween(Timestamp start, Timestamp end) {
+    protected int daysBetween(Timestamp start, Timestamp end) {
         long differenceInMillis = end.getTime() - start.getTime();
         long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
         return (int) differenceInDays;
