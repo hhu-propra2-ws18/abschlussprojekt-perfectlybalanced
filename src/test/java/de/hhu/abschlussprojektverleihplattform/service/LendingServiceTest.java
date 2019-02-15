@@ -507,15 +507,6 @@ public class LendingServiceTest {
         return new UserEntity(firstname, lastname, username, password, email);
     }
 
-    private UserEntity createExampleUser3() {
-        String firstname = "Dieter";
-        String lastname = "Schulz";
-        String username = "VollCoolerName";
-        String password = "123456";
-        String email = "Frank.Meier@Example.com";
-        return new UserEntity(firstname, lastname, username, password, email);
-    }
-
     private ProductEntity createExampleProduct1(UserEntity owner) {
         String description = "Ein toller Rasemäher";
         String title = "Rasemäher";
@@ -528,31 +519,4 @@ public class LendingServiceTest {
         AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
         return new ProductEntity(description, title, surety, cost, a, owner);
     }
-
-    private ProductEntity createExampleProduct2(UserEntity owner) {
-        String description = "Eine Heckenschere";
-        String title = "Heckenschere";
-        int surety = 60;
-        int cost = 5;
-        String street = "Talstrasse";
-        int housenumber = 44;
-        int postcode = 67890;
-        String city = "Bad Salzbug";
-        AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
-        return new ProductEntity(description, title, surety, cost, a, owner);
-    }
-
-    private ProductEntity createExampleProduct3(UserEntity owner) {
-        String description = "Ein richtig fetter Kohle-Grill";
-        String title = "Grill";
-        int surety = 3000;
-        int cost = 800;
-        String street = "Lilienpfad";
-        int housenumber = 6;
-        int postcode = 13579;
-        String city = "Niederhausen";
-        AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
-        return new ProductEntity(description, title, surety, cost, a, owner);
-    }
-
 }
