@@ -8,7 +8,8 @@ public enum Lendingstatus {
     confirmt(1),
     returned(2),
     conflict(3),
-    done(4);
+    done(4),
+    denied(5);
 
     private final int value;
     private static Map map = new HashMap<>();
