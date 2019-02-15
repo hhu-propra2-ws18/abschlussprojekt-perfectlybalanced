@@ -13,6 +13,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 
+import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
+
 @Component
 public class ProPayService implements IProPayService, IPayment {
 
@@ -31,6 +33,22 @@ public class ProPayService implements IProPayService, IPayment {
     */
 
     private ProPayService(){}
+
+    // ---- implement circumvent() to circumvent inconvenience in live propay api ------
+
+    public void circumventForAccount(String username){
+        try {
+            //give our account 1 Euro
+            changeUserBalanceBy(username, 1);
+
+            //put that amount away to throwaway user
+            String user1 = make_new_user();
+            createAccountIfNotExists(user1);
+            makePayment(username,user1,1);
+        }catch (Exception e){
+
+        }
+    }
 
     // ------------- implement propay interface methods ------------------
 
@@ -95,30 +113,20 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
     @Override
-    public boolean changeUserBalanceBy(String username, long delta){
+    public void changeUserBalanceBy(String username, long delta) throws Exception{
 
-        try {
-            RestTemplate restTemplate = new RestTemplate();
+        System.out.println("attempt to change balance of "+username+" by "+delta);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        RestTemplate restTemplate = new RestTemplate();
 
-            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-            map.add("amount", "" + delta);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("amount", "" + delta);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-            HttpEntity<MultiValueMap<String, String>> request
-                = new HttpEntity<>(map, headers);
-
-            String url = baseurl + "account/"+username;
-            ResponseEntity<String> response = restTemplate.postForEntity(
-                            url, request, String.class
-            );
-
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        String url = baseurl + "account/"+username;
+        ResponseEntity<Account> response = restTemplate.postForEntity(url, request, Account.class);
     }
 
     @Override
@@ -126,18 +134,33 @@ public class ProPayService implements IProPayService, IPayment {
                     String userSource, String userTarget, long amount
     ) throws Exception {
 
+        System.out.println("attempting to make reservation from "+userSource+" to "+userTarget+" for "+amount+" Euro");
+
+        //temporary, until the api gets fixed
+        circumventForAccount(userSource);
+        circumventForAccount(userTarget);
+
         RestTemplate restTemplate = new RestTemplate();
 
         String method_url = "reservation/reserve/"+userSource+"/"+userTarget;
-        String url = baseurl + method_url+"?amount="+amount;
+        String url = baseurl + method_url;
 
         System.out.println("url:"+url);
 
-        ResponseEntity<Reservation> reservation = restTemplate.postForEntity(
-			URI.create(url),null,Reservation.class
-	);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("amount", "" + amount);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+
+        ResponseEntity<Reservation> reservation 
+            = restTemplate.postForEntity(
+                URI.create(url),request,Reservation.class
+        );
 
         if(reservation.getStatusCode().is4xxClientError()){
+            System.err.println("could not make reservation");
             throw new Exception("cannot make reservation");
         }
         return reservation.getBody();
@@ -159,11 +182,74 @@ public class ProPayService implements IProPayService, IPayment {
         return account;
     }
 
+    @Override
+    public void returnReservedAmount(String username,Long reservationId) throws Exception {
+
+        System.out.println(
+            "attempting to return reserved money to "
+            +username
+            +" with reservationId="
+            +reservationId);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String method_url = "reservation/release/"+username;
+        String url = baseurl + method_url;
+
+        System.out.println("url:"+url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("reservationId", "" + reservationId);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<Account> reservation 
+            = restTemplate.postForEntity(
+            URI.create(url),request,Account.class
+        );
+
+        if(reservation.getStatusCode().is4xxClientError()){
+            throw new Exception("cannot make reservation");
+        }
+    }
+
+    @Override
+    public void punishReservedAmount(String sourceUsername, Long reservationId) throws Exception {
+        System.out.println(
+            "attempting to punish reserved money from "
+            +sourceUsername
+            +" with reservationId="
+            +reservationId
+        );
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String method_url = "reservation/punish/"+sourceUsername;
+        String url = baseurl + method_url;
+
+        System.out.println("url:"+url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("reservationId", "" + reservationId);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<Account> punishedAccount 
+            = restTemplate.postForEntity(
+            URI.create(url),request,Account.class
+        );
+    }
 
     //------------------- implement methods from Johannes Logic Interfaces ---------------
 
     @Override
-    public boolean UserHasAmount(UserEntity User, int amount) {
+    public boolean userHasAmount(UserEntity User, int amount) {
         try{
             return getBalance(User.getUsername())>=amount;
         }catch (Exception e){
@@ -187,16 +273,23 @@ public class ProPayService implements IProPayService, IPayment {
     }
 
     @Override
-    public boolean tranferReservatedMoney(Long id) {
-        //TODO
-        return false;
+    public boolean tranferReservatedMoney(String username,Long id) {
+        try{
+            punishReservedAmount(username,id);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean returnReservatedMoney(Long id) {
-        //TODO
-        return false;
+    public boolean returnReservatedMoney(String username,Long id) {
+        try{
+            returnReservedAmount(username,id);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
-
-
 }

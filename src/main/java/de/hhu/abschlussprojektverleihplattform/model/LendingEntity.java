@@ -40,7 +40,11 @@ public class LendingEntity {
         this.borrower = borrower;
         this.product = product;
         this.costReservationID = costReservationID;
-        this.costReservationID = costReservationID;
+        this.suretyReservationID = suretyReservationID;
+    }
+
+    public int getValueFromLendingStatus(Lendingstatus lendingstatus){
+        return Lendingstatus.getLemdingStatusValueFrom(lendingstatus);
     }
 
 }
