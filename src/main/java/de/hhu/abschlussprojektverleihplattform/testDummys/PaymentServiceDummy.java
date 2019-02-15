@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.TestDummys;
+package de.hhu.abschlussprojektverleihplattform.testdummys;
 
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;

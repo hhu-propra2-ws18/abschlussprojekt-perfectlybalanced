@@ -1,9 +1,9 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.TestDummys.LendingServiceDummy;
-import de.hhu.abschlussprojektverleihplattform.TestDummys.PaymentServiceDummy;
-import de.hhu.abschlussprojektverleihplattform.TestDummys.PaymentStatus;
-import de.hhu.abschlussprojektverleihplattform.TestDummys.ReservationDummy;
+import de.hhu.abschlussprojektverleihplattform.testdummys.LendingServiceDummy;
+import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
+import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentStatus;
+import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import org.junit.Assert;
 import org.junit.Test;
