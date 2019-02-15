@@ -519,6 +519,30 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
+    // Tests for DaysBetween
+
+    @Test
+    public void DifferenceIs3() {
+        Timestamp first = new Timestamp(1557266400000L);
+        Timestamp second = new Timestamp(1557525600000L);
+        LendingService logic = new LendingService(null, null);
+
+        int result = logic.DaysBetween(first, second);
+
+        Assert.assertEquals(3, result);
+    }
+
+    @Test
+    public void DifferenceIs2() {
+        Timestamp first = new Timestamp(1557266400000L);
+        Timestamp second = new Timestamp(1557525599900L);
+        LendingService logic = new LendingService(null, null);
+
+        int result = logic.DaysBetween(first, second);
+
+        Assert.assertEquals(2, result);
+    }
+
 
     // private Methoden um schnell an TestEntities zu kommen
 
