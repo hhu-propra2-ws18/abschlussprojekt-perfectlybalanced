@@ -15,7 +15,7 @@ public class LendingServiceTest {
     // Tests for RequestLending
 
     @Test
-    public void TimeIsBlocked1() {
+    public void timeIsBlocked1() {
         // start is in reservated Time
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();
@@ -36,7 +36,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void TimeIsBlocked2() {
+    public void timeIsBlocked2() {
         // end is in reservated Time
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();
@@ -57,7 +57,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void TimeIsBlocked3() {
+    public void timeIsBlocked3() {
         // both are in reservated Time
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();
@@ -78,7 +78,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void TimeIsBlocked4() {
+    public void timeIsBlocked4() {
         // reservated Time within requested Time
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();

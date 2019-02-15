@@ -37,7 +37,8 @@ public class LendingRepositoryTest {
         ProductEntity product1 = RandomTestData.newRandomTestProduct(loadedUser1, address1);
         productRepository.saveProduct(product1);
         ProductEntity loadedProduct1 = productRepository.getProductByTitlel(product1.getTitle());
-        LendingEntity lendingEntity = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
+        LendingEntity lendingEntity 
+	    = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
         lendingRepository.saveLending(lendingEntity);
         List<LendingEntity> allLendings = lendingRepository.getAllLendings();
         System.out.println(allLendings.toString());

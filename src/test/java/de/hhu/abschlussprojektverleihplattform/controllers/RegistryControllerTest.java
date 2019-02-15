@@ -43,15 +43,28 @@ public class RegistryControllerTest {
 
     @Test
     public void testredirectoncorrectparameters() throws Exception{
-        mockMvc.perform(post("/register?vorname=dennis&nachname=peterson&username=dennisp&password=dennis324&email=dennis@gmail.com"))
-                //.andExpect(status().is3xxRedirection());
-            .andExpect(status().isForbidden());
+        mockMvc.perform(post("/register?vorname=dennis"
+	    +"&nachname=peterson"
+	    +"&username=dennisp"
+	    +"&password=dennis324"
+	    +"&email=dennis@gmail.com"
+	    ))
+            //.andExpect(status().is3xxRedirection());
+            .andExpect(status().isForbidden()
+	    );
     }
 
     @Test
     public void throwsbadrequestonemptyfield() throws Exception{
-        mockMvc.perform(post("/register?vorname=&nachname=peterson&username=dennisp&password=dennis324&email=dennis@gmail.com"))
-                //.andExpect(status().isBadRequest());
-            .andExpect(status().isForbidden());
+        mockMvc.perform(post(
+	    "/register?vorname="
+	    +"&nachname=peterson"
+	    +"&username=dennisp"
+	    +"&password=dennis324"
+	    +"&email=dennis@gmail.com"
+	    ))
+            //.andExpect(status().isBadRequest());
+            .andExpect(status().isForbidden()
+	    );
     }
 }

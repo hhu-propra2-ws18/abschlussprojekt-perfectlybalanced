@@ -49,15 +49,18 @@ public class CookieUserServiceTest {
         //make a query to try to commit our change
         try {
             userService.findById(1L);
-        }catch (Exception e){}
-
+        }catch (Exception e){
+	//TODO
+	}
 
         Long userId = userService.getUserByFirstname("thomas").getUserId();
 
         System.out.println(userId);
 
         HttpServletRequest request = new MockHttpServletRequest();
-        ((MockHttpServletRequest) request).setCookies(new Cookie(CookieUserService.cookieName,""+userId));
+        ((MockHttpServletRequest) request).setCookies(
+	    new Cookie(CookieUserService.cookieName,""+userId)
+	);
 
         UserEntity user2 = cookieUserService.getUserFromRequest(request);
 
