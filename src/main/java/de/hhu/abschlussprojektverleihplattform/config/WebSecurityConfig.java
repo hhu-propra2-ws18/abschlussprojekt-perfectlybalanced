@@ -2,14 +2,18 @@ package de.hhu.abschlussprojektverleihplattform.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@ComponentScan(basePackageClasses = AuthenticatedUserService.class)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -20,6 +24,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .password("{noop}password")
                 .roles("USER");
     }
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
 
     @Override
@@ -41,7 +48,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sameOrigin()
                     .and()
                 .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/")
                     .permitAll();
+    }
+
+    @Autowired
+    public void globalSecurityConfiguration(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
     }
 
     /*
@@ -52,6 +66,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     *   - Controller-Anpassung (Aktuell: Weiterleitung zu Startseite ("/")
     *   - evtl Password-Handling
     *   - Zugriffsrechte (ADMIN, USER) oder getrennte Bereiche (User für Plattform, Admin für Konflikt)
-    *   - Logout einrichten (Beispiel im Login-Layout)
     */
 }
