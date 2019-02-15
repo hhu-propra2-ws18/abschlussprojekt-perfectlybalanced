@@ -22,7 +22,14 @@ public class UserEntity {
 
     }
 
-    public UserEntity(String firstname, String lastname, String username, String password, String email, Role role) {
+    public UserEntity(
+	String firstname,
+	String lastname,
+	String username,
+	String password,
+	String email,
+	Role role
+    ) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
@@ -31,7 +38,13 @@ public class UserEntity {
         this.role = role;
     }
 
-    public UserEntity(String firstname, String lastname, String username, String password, String email) {
+    public UserEntity(
+	String firstname,
+	String lastname,
+	String username,
+	String password,
+	String email
+    ) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;

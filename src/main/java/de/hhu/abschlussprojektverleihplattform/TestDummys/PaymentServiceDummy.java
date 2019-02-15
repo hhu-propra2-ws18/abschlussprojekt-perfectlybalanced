@@ -20,27 +20,32 @@ public class PaymentServiceDummy implements IPayment {
     private boolean transfersAreSuccessfull;
     private boolean returnsAreSuccessfull;
 
-    public PaymentServiceDummy(boolean UsersHaveMoney, boolean ReservationsAreSuccessfull, boolean TransfersAreSuccessfull, boolean ReturnsAreSuccessfull) {
+    public PaymentServiceDummy(
+        boolean usersHaveMoney,
+	boolean reservationsAreSuccessfull,
+	boolean transfersAreSuccessfull,
+	boolean returnsAreSuccessfull
+    ) {
         payments = new ArrayList<>();
-        id = 1l;
-        this.usersHaveMoney = UsersHaveMoney;
-        this.reservationsAreSuccessfull = ReservationsAreSuccessfull;
-        this.transfersAreSuccessfull = TransfersAreSuccessfull;
-        this.returnsAreSuccessfull = ReturnsAreSuccessfull;
+        id = 1L;
+        this.usersHaveMoney = usersHaveMoney;
+        this.reservationsAreSuccessfull = reservationsAreSuccessfull;
+        this.transfersAreSuccessfull = transfersAreSuccessfull;
+        this.returnsAreSuccessfull = returnsAreSuccessfull;
         lastCalledUsername = "";
-        lastCalledId = 0l;
+        lastCalledId = 0L;
         lastWasTransfer = false;
     }
 
     @Override
-    public boolean userHasAmount(UserEntity User, int amount) {
+    public boolean userHasAmount(UserEntity user, int amount) {
         return usersHaveMoney;
     }
 
     @Override
     public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
         if (!reservationsAreSuccessfull) {
-            return 0l;
+            return 0L;
         }
         ReservationDummy reservation = new ReservationDummy(payingUser, recivingUser, amount, id);
         payments.add(reservation);

@@ -7,5 +7,6 @@ import java.util.List;
 public interface ILendingRepository {
 
     void saveLending(LendingEntity lending);
+
     List<LendingEntity> getAllLendings();
 }
