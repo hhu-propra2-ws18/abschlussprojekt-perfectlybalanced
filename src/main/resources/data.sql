@@ -4,6 +4,13 @@ VALUES('Max','Mustermann','MMustermann','MaxMuster223','Max@Mustermann.de',0);
 INSERT INTO USER_ENTITY(firstname,lastname,username,password,email,role)
 VALUES('Jan','Wellem','JanW','JanWellem','Jan@Wellem.de',0);
 
+INSERT INTO USER_ENTITY(firstname,lastname,username,password,email,role)
+VALUES('Tom','Wellem','tom','tom','tom@wellem.de',0);
+
+INSERT INTO USER_ENTITY(firstname,lastname,username,password,email,role)
+VALUES('Sarah','Bock','sarah','sarah','sarah@ddllem.de',0);
+
+
 INSERT INTO PRODUCT_ENTITY(title,description,cost,street,housenumber,postcode,city,surety,owner_user_id)
 VALUES('Rasenmäher','Mäht den Rasen',30,'Universiätsstraße',1,40225,'Düsseldorf',10,1);
 
