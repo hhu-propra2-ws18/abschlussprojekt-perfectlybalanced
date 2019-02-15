@@ -133,7 +133,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void ReservationSuccess() {
+    public void ReservationSuccess1() {
         // reservated Time within requested Time
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();
@@ -141,8 +141,8 @@ public class LendingServiceTest {
         LendingServiceDummy lending_service = new LendingServiceDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_service, payment_service);
-        Timestamp start = new Timestamp(800L);
-        Timestamp end = new Timestamp(3500L);
+        Timestamp start = new Timestamp(1557543600000L);
+        Timestamp end = new Timestamp(1557900000000L);
 
         boolean result = logic.RequestLending(actingUser, product, start, end);
 
@@ -157,7 +157,40 @@ public class LendingServiceTest {
         ReservationDummy surety = payment_service.findReservation(created_lending.getSuretyReservationID());
         Assert.assertEquals(actingUser.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
-        Assert.assertEquals(product.getCost(), cost.getAmount());
+        Assert.assertEquals(product.getCost() * 4, cost.getAmount());   //the Timedifference is 4 Days
+        Assert.assertEquals(PaymentStatus.reservated, cost.getStatus());
+        Assert.assertEquals(actingUser.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
+        Assert.assertEquals(product.getSurety(), surety.getAmount());
+        Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
+    }
+
+    @Test
+    public void ReservationSuccess2() {
+        // reservated Time within requested Time
+        UserEntity actingUser = createExampleUser2();
+        UserEntity owner = createExampleUser1();
+        ProductEntity product = createExampleProduct2(owner);
+        LendingServiceDummy lending_service = new LendingServiceDummy();
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService logic = new LendingService(lending_service, payment_service);
+        Timestamp start = new Timestamp(1521811800000L);
+        Timestamp end = new Timestamp(1522326000000L);
+
+        boolean result = logic.RequestLending(actingUser, product, start, end);
+
+        Assert.assertTrue(result);
+        LendingEntity created_lending = lending_service.getFirst();
+        Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
+        Assert.assertTrue(created_lending.getStart().equals(start));
+        Assert.assertTrue(created_lending.getEnd().equals(end));
+        Assert.assertEquals(actingUser.getUsername(), created_lending.getBorrower().getUsername());
+        Assert.assertEquals(product.getTitle(), created_lending.getProduct().getTitle());
+        ReservationDummy cost = payment_service.findReservation(created_lending.getCostReservationID());
+        ReservationDummy surety = payment_service.findReservation(created_lending.getSuretyReservationID());
+        Assert.assertEquals(actingUser.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
+        Assert.assertEquals(product.getCost() * 5, cost.getAmount());   //the Timedifference is 5 Days
         Assert.assertEquals(PaymentStatus.reservated, cost.getStatus());
         Assert.assertEquals(actingUser.getUsername(), surety.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
@@ -516,6 +549,19 @@ public class LendingServiceTest {
         int housenumber = 33;
         int postcode = 12345;
         String city = "Heidelberg";
+        AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
+        return new ProductEntity(description, title, surety, cost, a, owner);
+    }
+
+    private ProductEntity createExampleProduct2(UserEntity owner) {
+        String description = "Eine Heckenschere";
+        String title = "Heckenschere";
+        int surety = 60;
+        int cost = 5;
+        String street = "Talstrasse";
+        int housenumber = 44;
+        int postcode = 67890;
+        String city = "Bad Salzbug";
         AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
         return new ProductEntity(description, title, surety, cost, a, owner);
     }
