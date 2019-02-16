@@ -8,13 +8,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class AuthenticatedUser extends UserEntity implements UserDetails {
+
+    private UserEntity user;
+
     protected AuthenticatedUser(UserEntity user) {
-        super(user.getUsername(), user.getPassword());
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("ROLE_USER");
+        return AuthorityUtils.createAuthorityList(user.getRole().toString());
     }
 
     @Override
@@ -35,5 +38,10 @@ public class AuthenticatedUser extends UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
     }
 }
