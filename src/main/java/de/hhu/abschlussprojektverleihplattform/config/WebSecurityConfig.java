@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,16 +24,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticatedUserService userDetailsService;
 
-
     @Override
-    protected void configure (HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/register**")
+                .antMatchers("/", "/register**")
                     .permitAll()
-                    .antMatchers("/h2-console/**")
+                .antMatchers("/h2-console/**")
                     .hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                .anyRequest()
+                    .authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/login")
@@ -41,14 +42,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                     .ignoringAntMatchers("/h2-console/**")//don't apply CSRF protection to /h2-console
                     .and()
-                .headers().
-                    frameOptions()
+                .headers()
+                    .frameOptions()
                     .sameOrigin()
                     .and()
                 .logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/")
                     .permitAll();
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "**/favicon.ico");
     }
 
     @Autowired

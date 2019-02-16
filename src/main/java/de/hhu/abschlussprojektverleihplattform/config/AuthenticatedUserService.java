@@ -20,7 +20,6 @@ public class AuthenticatedUserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Der User " + username + " existiert nicht!");
         }
-        System.out.println(user.getUsername());
         return new AuthenticatedUser(user);
     }
 
