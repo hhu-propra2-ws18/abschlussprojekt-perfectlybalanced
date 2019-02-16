@@ -36,6 +36,11 @@
                     <a class="nav-link" href="/logout" th:href="@{/login}">Login</a>
                 </li>
             </ul>
+            <ul class="ml-auto navbar-nav" th:case="*">
+                <li class="nav-item float-right">
+                    <a class="nav-link" href="/register" th:href="@{/register}">Registrierung</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
