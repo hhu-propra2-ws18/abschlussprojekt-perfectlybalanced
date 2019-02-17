@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.utils;
+package de.hhu.abschlussprojektverleihplattform.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
