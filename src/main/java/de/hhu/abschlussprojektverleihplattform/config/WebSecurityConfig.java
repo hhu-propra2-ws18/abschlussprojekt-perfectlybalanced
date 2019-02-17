@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
@@ -28,8 +27,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                // hier werden Seiten alle Seiten ausser Login eingetragen, die für jeden Besucher sichtbar sind
                 .antMatchers("/", "/register**")
                     .permitAll()
+                // nur Admin-Berechtigung
                 .antMatchers("/h2-console/**")
                     .hasRole("ADMIN")
                 .anyRequest()
@@ -41,14 +42,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .and()
                 .csrf()
-                    .ignoringAntMatchers("/h2-console/**")//don't apply CSRF protection to /h2-console
+                // hebelt Schutzfunktion fuer die H2-Konsole aus
+                    .ignoringAntMatchers("/h2-console/**")
                     .and()
                 .headers()
                     .frameOptions()
                     .sameOrigin()
                     .and()
                 .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .logoutSuccessUrl("/")
                     .permitAll();
     }
