@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.config;
+package de.hhu.abschlussprojektverleihplattform.security;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;

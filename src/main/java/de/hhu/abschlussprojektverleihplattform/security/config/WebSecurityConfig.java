@@ -1,6 +1,6 @@
-package de.hhu.abschlussprojektverleihplattform.config;
+package de.hhu.abschlussprojektverleihplattform.security.config;
 
-
+import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
