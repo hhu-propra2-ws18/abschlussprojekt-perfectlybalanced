@@ -24,22 +24,22 @@ public class ProductController {
 
 
     @GetMapping("/addproduct")
-    public String getAddProduct(Model model, HttpServletRequest httpServletRequest) {
+    public String getAddProduct(Model model) {
         return "addproduct";
     }
 
     @GetMapping("/editproduct")
-    public String getEditProduct(Model model, HttpServletRequest httpServletRequest) {
+    public String getEditProduct(Model model) {
         return "editproduct";
     }
 
     @GetMapping("/removeproduct")
-    public String getRemoveProduct(Model model, HttpServletRequest httpServletRequest) {
+    public String getRemoveProduct(Model model) {
         return "removeproduct";
     }
 
     @GetMapping("/productdetail/{id}")
-    public String getProductDetails(Model model, Long id, HttpServletRequest httpServletRequest) {
+    public String getProductDetails(Model model, Long id) {
         ProductEntity product = productRepository.getProductById(id);
         model.addAttribute("product", product);
         return "productdetailedview";
