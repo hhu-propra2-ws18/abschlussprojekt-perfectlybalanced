@@ -12,5 +12,6 @@ public interface IUserRepository {
     int getNumberOfUsers();
     List<UserEntity> getAllUser();
     UserEntity getUserByFirstname(String firstname);
+    UserEntity getUserByUsername(String username);
 
 }

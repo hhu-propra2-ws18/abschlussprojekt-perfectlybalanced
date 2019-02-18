@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Verleihplattform Profile</title>
@@ -12,9 +13,9 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h3> Profile </h3>
-            <span>Benutzername: </span>
+            <span>Benutzername: <strong th:text="${user.username}">User</strong></span>
             <br>
-            <span>Email: </span>
+            <span>Email: <span th:text="${user.email}">test@mail.com</span></span>
         </div>
         <div class="col-md-6">
             <h3>ProPay</h3>

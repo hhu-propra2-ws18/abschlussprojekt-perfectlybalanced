@@ -3,7 +3,6 @@ package de.hhu.abschlussprojektverleihplattform.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity
@@ -39,7 +38,7 @@ public class UserEntity {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = Role.user;
+        this.role = Role.ROLE_USER;
     }
 
     public UserEntity(Long id){

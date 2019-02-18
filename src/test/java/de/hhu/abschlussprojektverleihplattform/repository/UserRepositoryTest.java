@@ -15,10 +15,8 @@ import java.util.List;
 @SpringBootTest
 public class UserRepositoryTest {
 
-
     @Autowired
     private UserRepository userRepository;
-
 
     @Test
     public void saveOneUserToDatabase() {
@@ -45,7 +43,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getUserByUsername() {
+    public void findUserByUsername() {
 
         UserEntity user = new UserEntity("Max", "Mustermann", "MMustermann", "MaxMuster223", "Max@Mustermann.de");
         UserEntity loadedUser = userRepository.findByUsername("MMustermann");
