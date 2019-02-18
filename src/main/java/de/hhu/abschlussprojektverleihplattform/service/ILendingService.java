@@ -41,4 +41,3 @@ public interface ILendingService {
 
     // An admin resolves a conflict and decides who gets the surety
     public boolean ResolveConflict(LendingEntity lending, boolean OwnerRecivesSurety);
-}
