@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.TestDummys.LendingServiceDummy;
+import de.hhu.abschlussprojektverleihplattform.TestDummys.LendingRepositoryDummy;
 import de.hhu.abschlussprojektverleihplattform.TestDummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.TestDummys.PaymentStatus;
 import de.hhu.abschlussprojektverleihplattform.TestDummys.ReservationDummy;
@@ -23,10 +23,10 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.addLending(timeBlocker);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(3000L);
 
@@ -44,10 +44,10 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.addLending(timeBlocker);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(1500L);
 
@@ -65,10 +65,10 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.addLending(timeBlocker);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start2 = new Timestamp(1800L);
         Timestamp end2 = new Timestamp(1900L);
 
@@ -86,10 +86,10 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(Lendingstatus.confirmt, start1, end1, actingUser, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.addLending(timeBlocker);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(3500L);
 
@@ -104,9 +104,9 @@ public class LendingServiceTest {
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(false, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start = new Timestamp(800L);
         Timestamp end = new Timestamp(3500L);
 
@@ -121,9 +121,9 @@ public class LendingServiceTest {
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start = new Timestamp(800L);
         Timestamp end = new Timestamp(3500L);
 
@@ -138,16 +138,16 @@ public class LendingServiceTest {
         UserEntity actingUser = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start = new Timestamp(1557543600000L);
         Timestamp end = new Timestamp(1557900000000L);
 
         boolean result = logic.RequestLending(actingUser, product, start, end);
 
         Assert.assertTrue(result);
-        LendingEntity created_lending = lending_service.getFirst();
+        LendingEntity created_lending = lending_repository.getFirst();
         Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
         Assert.assertTrue(created_lending.getStart().equals(start));
         Assert.assertTrue(created_lending.getEnd().equals(end));
@@ -171,16 +171,16 @@ public class LendingServiceTest {
         UserEntity actingUser = createExampleUser2();
         UserEntity owner = createExampleUser1();
         ProductEntity product = createExampleProduct2(owner);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
 
         boolean result = logic.RequestLending(actingUser, product, start, end);
 
         Assert.assertTrue(result);
-        LendingEntity created_lending = lending_service.getFirst();
+        LendingEntity created_lending = lending_repository.getFirst();
         Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
         Assert.assertTrue(created_lending.getStart().equals(start));
         Assert.assertTrue(created_lending.getEnd().equals(end));
@@ -208,15 +208,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.AcceptLending(lending, false);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.denied, lending.getStatus());
     }
 
@@ -228,15 +228,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.AcceptLending(lending, true);
 
         Assert.assertFalse(result);
-        Assert.assertFalse(lending_service.hasBeenUpdated());
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
     }
 
@@ -248,15 +248,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 20L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.AcceptLending(lending, true);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
@@ -273,13 +273,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_service, null);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        LendingService logic = new LendingService(lending_repository, null);
 
         logic.ReturnProduct(lending);
 
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
     }
 
@@ -291,14 +291,14 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.requested, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
-        lending_service.setLendingByProductAndUser(lending);
-        LendingService logic = new LendingService(lending_service, null);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        lending_repository.setLendingByProductAndUser(lending);
+        LendingService logic = new LendingService(lending_repository, null);
 
         logic.ReturnProduct(borower, product);
 
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
     }
 
@@ -312,14 +312,14 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_service, null);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        LendingService logic = new LendingService(lending_repository, null);
 
         boolean result = logic.CheckReturnedProduct(lending, false);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
@@ -331,15 +331,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 20L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.CheckReturnedProduct(lending, true);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
@@ -354,15 +354,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.CheckReturnedProduct(lending, true);
 
         Assert.assertFalse(result);
-        Assert.assertFalse(lending_service.hasBeenUpdated());
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
     }
 
@@ -374,15 +374,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
-        lending_service.setLendingByProductAndUser(lending);
-        LendingService logic = new LendingService(lending_service, null);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        lending_repository.setLendingByProductAndUser(lending);
+        LendingService logic = new LendingService(lending_repository, null);
 
         boolean result = logic.CheckReturnedProduct(owner, product, false);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
@@ -394,16 +394,16 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 20L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
-        lending_service.setLendingByProductAndUser(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        lending_repository.setLendingByProductAndUser(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.CheckReturnedProduct(owner, product, true);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
@@ -418,16 +418,16 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.returned, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
-        lending_service.setLendingByProductAndUser(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        lending_repository.setLendingByProductAndUser(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.CheckReturnedProduct(owner, product, true);
 
         Assert.assertFalse(result);
-        Assert.assertFalse(lending_service.hasBeenUpdated());
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
     }
 
@@ -441,15 +441,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 20L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.ResolveConflict(lending, true);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
@@ -464,15 +464,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 20L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.ResolveConflict(lending, false);
 
         Assert.assertTrue(result);
-        Assert.assertTrue(lending_service.hasBeenUpdated());
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
@@ -487,15 +487,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.ResolveConflict(lending, true);
 
         Assert.assertFalse(result);
-        Assert.assertFalse(lending_service.hasBeenUpdated());
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
@@ -507,15 +507,15 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(Lendingstatus.conflict, start, end, borower, product, 0L, 0L);
-        LendingServiceDummy lending_service = new LendingServiceDummy();
-        lending_service.setLendingToUpdate(lending);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
-        LendingService logic = new LendingService(lending_service, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service);
 
         boolean result = logic.ResolveConflict(lending, false);
 
         Assert.assertFalse(result);
-        Assert.assertFalse(lending_service.hasBeenUpdated());
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
