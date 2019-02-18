@@ -42,6 +42,13 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
+    public UserEntity getUserByUsername(String username) {
+        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE username=?",
+                new Object[]{username},
+                new BeanPropertyRowMapper<>(UserEntity.class));
+    }
+
+    @Override
     public void saveUser(UserEntity user) {
         jdbcTemplate.update(
             "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL)"

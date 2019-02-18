@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
 public enum Role{
-    user,
-    admin
+    ROLE_USER,
+    ROLE_ADMIN
 }
