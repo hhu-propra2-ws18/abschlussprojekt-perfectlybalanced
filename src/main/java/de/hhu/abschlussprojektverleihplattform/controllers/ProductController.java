@@ -62,15 +62,10 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail")
-    public String getProductDetails(Model model, HttpServletRequest httpServletRequest) {
-        UserEntity user;
+    public String getProductDetails(Model model, HttpServletRequest httpServletRequest) throws Exception{
+        UserEntity user = cookieUserService.getUserFromRequest(httpServletRequest);
 
-        try {
-            cookieUserService.getUserFromRequest(httpServletRequest);
-        }catch (Exception e){
-            return "login";
-        }
-
+        model.addAttribute("user",user);
         return "productdetailedview";
     }
 }
