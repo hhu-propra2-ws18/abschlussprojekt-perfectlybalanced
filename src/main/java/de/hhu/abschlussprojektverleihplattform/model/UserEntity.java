@@ -1,7 +1,11 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Data
 @Entity
@@ -10,11 +14,20 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+    @NotEmpty
+    @Size(min=2, max=32)
     private String firstname;
+    @NotEmpty
+    @Size(min=2,max=32)
     private String lastname;
     @Column(unique = true)
+    @NotEmpty
+    @Size(min=3, max=32)
     private String username;
+    @NotEmpty
     private String password;
+    @NotEmpty
+    @Email
     private String email;
     private Role role;
 
