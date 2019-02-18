@@ -139,18 +139,13 @@ public class LendingService implements ILendingService {
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
-    public boolean checkReturnedProduct(
-	UserEntity actingUser,
-	ProductEntity product,
-	boolean isAcceptable
-    ) {
-        LendingEntity lending 
-	    = lending_service.getLendingByProductAndUser(product, actingUser);
+    public boolean CheckReturnedProduct(LendingEntity lending, boolean isAcceptable) {
         if (isAcceptable) {
-            if (payment_service.returnReservatedMoney(
+            if (
+                payment_service.returnReservatedMoney(
                     lending.getBorrower().getUsername(),
                     lending.getSuretyReservationID()
-                    )
+                )
             ) {
                 lending.setStatus(Lendingstatus.done);
                 lending_repository.update(lending);
@@ -191,7 +186,7 @@ public class LendingService implements ILendingService {
     // berechnet, kann ggf ausgelagert werden
     // kann hier nicht als private makiert werden, da sie sonst
     // nich getestet werden kann
-    protected int DaysBetween(Timestamp start, Timestamp end) {
+    protected int daysBetween(Timestamp start, Timestamp end) {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);
