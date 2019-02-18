@@ -14,6 +14,7 @@ public class UserEntity {
     private Long userId;
     private String firstname;
     private String lastname;
+    @Column(unique = true)
     private String username;
     private String password;
     private String email;
