@@ -34,10 +34,9 @@ public enum Lendingstatus {
     }
 
     public int getValue(){
+
         return value;
     }
 }
-
-
 
 
