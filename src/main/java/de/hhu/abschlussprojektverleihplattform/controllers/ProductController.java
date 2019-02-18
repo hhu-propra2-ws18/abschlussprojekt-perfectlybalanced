@@ -1,13 +1,26 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
+import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
+import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProductController {
 
     // PostMapping fehlt noch
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    ProductRepository productRepository;
+
 
     @GetMapping("/addproduct")
     public String getAddProduct(Model model) {
@@ -16,7 +29,6 @@ public class ProductController {
 
     @GetMapping("/editproduct")
     public String getEditProduct(Model model) {
-        // Was noch fehlt: Einträge vom Produkt in den Formularfeldern anzeigen lassen
         return "editproduct";
     }
 
@@ -25,8 +37,12 @@ public class ProductController {
         return "removeproduct";
     }
 
-    @GetMapping("/productdetail")
-    public String getProductDetails(Model model) {
+    @GetMapping("/productdetail/{id}")
+    public String getProductDetails(Model model, Long id) {
+        ProductEntity product = productRepository.getProductById(id);
+        if(product != null) {
+            model.addAttribute("product", product);
+        }
         return "productdetailedview";
     }
 }

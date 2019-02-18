@@ -1,5 +1,6 @@
-package de.hhu.abschlussprojektverleihplattform.TestDummys;
+package de.hhu.abschlussprojektverleihplattform.testdummys;
 
+import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.ILendingService;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
@@ -8,7 +9,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LendingServiceDummy implements ILendingService {
+public class LendingRepositoryDummy implements ILendingRepository {
 
     private ArrayList<LendingEntity> lendings;
     private LendingEntity lendigToUpdate;
@@ -16,7 +17,7 @@ public class LendingServiceDummy implements ILendingService {
 
     private LendingEntity lendingByProductAndUser;
 
-    public LendingServiceDummy() {
+    public LendingRepositoryDummy() {
         lendings = new ArrayList<>();
     }
 
@@ -49,6 +50,32 @@ public class LendingServiceDummy implements ILendingService {
         return ret;
     }
 
+    // Methodes for Testing
+
+    public LendingEntity getFirst() {
+        return lendings.get(0);
+    }
+
+    public void setLendingToUpdate(LendingEntity lending) {
+        lendigToUpdate = lending;
+        isUpdated = false;
+    }
+
+    public boolean hasBeenUpdated() {
+        return isUpdated;
+    }
+
+    public void setLendingByProductAndUser(LendingEntity lending) {
+        lendingByProductAndUser = lending;
+    }
+
+    // Methodes from the Inertface that are not needed for Testing
+
+    @Override
+    public List<LendingEntity> getAllLendings() {
+        return null;
+    }
+
     @Override
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
         return null;
@@ -74,20 +101,5 @@ public class LendingServiceDummy implements ILendingService {
         return null;
     }
 
-    public LendingEntity getFirst() {
-        return lendings.get(0);
-    }
 
-    public void setLendingToUpdate(LendingEntity lending) {
-        lendigToUpdate = lending;
-        isUpdated = false;
-    }
-
-    public boolean hasBeenUpdated() {
-        return isUpdated;
-    }
-
-    public void setLendingByProductAndUser(LendingEntity lending) {
-        lendingByProductAndUser = lending;
-    }
 }

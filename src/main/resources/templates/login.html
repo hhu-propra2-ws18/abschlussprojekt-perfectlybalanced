@@ -14,18 +14,22 @@
         <span>Ungültige Login-Daten</span>
     </div>
     <div th:if="${param.logout}" class="alert alert-success" role="alert">
-        <span>Sie haben sich abgemeldet.</span>
+        <span>Sie haben sich erfolgreich abgemeldet.</span>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-6">
 
                 <div class="form-group">
+<<<<<<< HEAD
                     <input type="text" name="username" placeholder="username">
                     <form name="login" th:action="@{/login}" method="post">
+=======
+                    <input type="text" name="username" placeholder="username" value="sarah">
+>>>>>>> 7a62398853506f86ac26bf7172b65253e32d7542
                 </div>
 
                 <div class="form-group">
-                    <input type="password" name="password" placeholder="password">
+                    <input type="password" name="password" placeholder="password" value="sarah">
                 </div>
 
                 <button class="btn btn-primary" type="submit">Login</button>

@@ -14,7 +14,6 @@ import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils
 @SpringBootTest
 public class ProPayAPIBehaviorDocumentation {
 
-
     @Autowired
     private ProPayService proPayService;
 
@@ -26,7 +25,7 @@ public class ProPayAPIBehaviorDocumentation {
             proPayService.changeUserBalanceBy(user1,-1);
             Assert.fail();
         }catch (Exception e){
-
+            //TODO
         }
     }
 

@@ -2,6 +2,9 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,16 +17,16 @@ public class RegistryController {
 
     @GetMapping("/register")
     public String getRegisterPage(Model model){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(!(auth instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/profile";
+        }
+
         model.addAttribute("user", new UserEntity());
         return "registry";
     }
 
-    @PostMapping("/register")
-    public String setUser(UserEntity user) {
-        // TODO: Logik saveUser
-        return "redirect:/";
-    }
-    /*
     @PostMapping("/register")
     public String postRegisterUser(
             @RequestParam(value="username")String username,
@@ -35,14 +38,9 @@ public class RegistryController {
         //TODO: check supplied info for duplication with existing user.
         //TODO: insert new user into db
         //TODO: login the new user
-
-        if(username.isEmpty() || password.isEmpty() || vorname.isEmpty() || nachname.isEmpty() ||email.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"some fields are empty");
-        }
-
+        //TODO: throw exception if fields are empty
         //TODO: validate email and other fields
 
         return "redirect:/";
     }
-    */
 }

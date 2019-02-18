@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.TestDummys;
+package de.hhu.abschlussprojektverleihplattform.testdummys;
 
 public enum PaymentStatus {
     reservated,
