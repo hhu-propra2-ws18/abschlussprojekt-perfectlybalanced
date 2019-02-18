@@ -139,7 +139,13 @@ public class LendingService implements ILendingService {
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
-    public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable) {
+    public boolean checkReturnedProduct(
+        UserEntity actingUser,
+        ProductEntity product,
+        boolean isAcceptable
+    ) {
+        LendingEntity lending 
+            = lending_repository.getLendingByProductAndUser(product, actingUser);
         if (isAcceptable) {
             if (
                 payment_service.returnReservatedMoney(
@@ -157,7 +163,7 @@ public class LendingService implements ILendingService {
             lending_repository.update(lending);
             return true;
         }
-    }
+}
 
     // Konflikt vom Admin loesen
     public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety) {
