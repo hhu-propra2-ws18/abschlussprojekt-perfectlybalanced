@@ -31,10 +31,10 @@ public class LendingService implements ILendingService {
 
     // Anfrage einer Buchung eintragen
     public boolean requestLending(
-        UserEntity actingUser,
-        ProductEntity product,
-        Timestamp start,
-        Timestamp end
+            UserEntity actingUser,
+            ProductEntity product,
+            Timestamp start,
+            Timestamp end
     ) {
         List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
         boolean timeIsOK = true;
@@ -42,10 +42,10 @@ public class LendingService implements ILendingService {
             Timestamp lend_start = lend.getStart();
             Timestamp lend_end = lend.getEnd();
             if (
-		(start.after(lend_start) && start.before(lend_end))
-		    || (end.after(lend_start) && end.before(lend_end))
-		    || (lend_start.after(start) && lend_start.before(end))
-	    ) {
+                    (start.after(lend_start) && start.before(lend_end))
+                            || (end.after(lend_start) && end.before(lend_end))
+                            || (lend_start.after(start) && lend_start.before(end))
+            ) {
                 timeIsOK = false;
             }
         }
@@ -54,25 +54,25 @@ public class LendingService implements ILendingService {
         boolean moneyIsOK = payment_service.userHasAmount(actingUser, totalMoney);
         if (timeIsOK && moneyIsOK) {
             Long costID = payment_service.reservateAmount(
-                actingUser,
-                product.getOwner(),
-                totalCost
+                    actingUser,
+                    product.getOwner(),
+                    totalCost
             );
             Long suretyID = payment_service.reservateAmount(
-                actingUser,
-                product.getOwner(),
-                product.getSurety()
+                    actingUser,
+                    product.getOwner(),
+                    product.getSurety()
             );
             if (costID > 0 && suretyID > 0) {
-                LendingEntity lending 
-                    = new LendingEntity(
-                    Lendingstatus.requested,
-                    start,
-                    end,
-                    actingUser,
-                    product,
-                    costID,
-                    suretyID
+                LendingEntity lending
+                        = new LendingEntity(
+                        Lendingstatus.requested,
+                        start,
+                        end,
+                        actingUser,
+                        product,
+                        costID,
+                        suretyID
                 );
                 lending_repository.addLending(lending);
                 return true;
@@ -90,7 +90,7 @@ public class LendingService implements ILendingService {
             if (payment_service.tranferReservatedMoney(
                     lending.getBorrower().getUsername(),
                     lending.getCostReservationID()
-                )
+            )
             ) {
                 lending.setStatus(Lendingstatus.confirmt);
                 lending_repository.update(lending);
@@ -113,7 +113,7 @@ public class LendingService implements ILendingService {
     // Artikel zurueckgeben alternative
     public void returnProduct(UserEntity actingUser, ProductEntity product) {
         LendingEntity lending
-            = lending_repository.getLendingByProductAndUser(product, actingUser);
+                = lending_repository.getLendingByProductAndUser(product, actingUser);
         lending.setStatus(Lendingstatus.returned);
         lending_repository.update(lending);
     }
@@ -124,7 +124,7 @@ public class LendingService implements ILendingService {
             if (payment_service.returnReservatedMoney(
                     lending.getBorrower().getUsername(),
                     lending.getSuretyReservationID()
-                )
+            )
             ) {
                 lending.setStatus(Lendingstatus.done);
                 lending_repository.update(lending);
@@ -140,18 +140,18 @@ public class LendingService implements ILendingService {
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
     public boolean checkReturnedProduct(
-        UserEntity actingUser,
-        ProductEntity product,
-        boolean isAcceptable
+            UserEntity actingUser,
+            ProductEntity product,
+            boolean isAcceptable
     ) {
-        LendingEntity lending 
-            = lending_repository.getLendingByProductAndUser(product, actingUser);
+        LendingEntity lending
+                = lending_repository.getLendingByProductAndUser(product, actingUser);
         if (isAcceptable) {
             if (
-                payment_service.returnReservatedMoney(
-                    lending.getBorrower().getUsername(),
-                    lending.getSuretyReservationID()
-                )
+                    payment_service.returnReservatedMoney(
+                            lending.getBorrower().getUsername(),
+                            lending.getSuretyReservationID()
+                    )
             ) {
                 lending.setStatus(Lendingstatus.done);
                 lending_repository.update(lending);
@@ -169,23 +169,50 @@ public class LendingService implements ILendingService {
     public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety) {
         if (ownerRecivesSurety) {
             if (!payment_service.tranferReservatedMoney(
-		lending.getBorrower().getUsername(),
-		lending.getSuretyReservationID()
-		)) {
+                    lending.getBorrower().getUsername(),
+                    lending.getSuretyReservationID()
+            )) {
                 return false;
             }
         } else {
             if (!payment_service.returnReservatedMoney(
-		lending.getBorrower().getUsername(),
-		lending.getSuretyReservationID()
-	        )
-	    ) {
+                    lending.getBorrower().getUsername(),
+                    lending.getSuretyReservationID()
+            )
+            ) {
                 return false;
             }
         }
         lending.setStatus(Lendingstatus.done);
         lending_repository.update(lending);
         return true;
+    }
+
+    // Methoden um die Daten fuer die Views anzuzeigen
+
+    // return all Lendings, that are owned by the user and have the status requested
+    public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
+        return lending_repository.getAllRequestsForUser(user);
+    }
+
+    // return all Lendings, that are owned by the user
+    public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
+        return lending_repository.getAllLendingsFromUser(user);
+    }
+
+    // return all Lendings, that are borrowed by the user
+    public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
+        return lending_repository.getAllLendingsForUser(user);
+    }
+
+    // return all Lendings, that are owned by the user and have the status returned
+    public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
+        return lending_repository.getReturnedLendingFromUser(user);
+    }
+
+    // return all Lendings, that have the status conflict
+    public List<LendingEntity> getAllConflicts() {
+        return lending_repository.getAllConflicts();
     }
 
     // private Methode die die Differrenz in Tagen zwischen zwei Timestamps
