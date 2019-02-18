@@ -37,7 +37,7 @@ public class LendingRepository implements ILendingRepository {
         jdbcTemplate.update(
                 "INSERT INTO LENDING_ENTITY (STATUS, START, END, BORROWER_USER_ID, PRODUCT_ID, COST_RESERVATIONID, SURETY_RESERVATIONID)" +
                         "VALUES (?,?,?,?,?,?,?)",
-                Lendingstatus.getLemdingStatusValueFrom(lending.getStatus()),
+                lending.getStatus().ordinal(),
                 lending.getStart(),
                 lending.getEnd(),
                 lending.getBorrower().getUserId(),
@@ -95,8 +95,11 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
-        //TODO
-        return null;
+        return
+                (List<LendingEntity>)jdbcTemplate
+                        .query("SELECT * FROM LENDING_ENTITY WHERE BORROWER_USER_ID='"+user.getUserId()+"';",
+                                new Object[]{},
+                                new LendingEntityRowMapper(userRepository,productRepository));
     }
 
     @Override
@@ -107,7 +110,10 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllConflicts() {
-        //TODO
-        return null;
+        return
+                (List<LendingEntity>)jdbcTemplate
+                        .query("SELECT * FROM LENDING_ENTITY WHERE STATUS='"+Lendingstatus.conflict.ordinal()+"';",
+                                new Object[]{},
+                                new LendingEntityRowMapper(userRepository,productRepository));
     }
 }

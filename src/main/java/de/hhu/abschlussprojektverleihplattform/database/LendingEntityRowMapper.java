@@ -38,7 +38,7 @@ public class LendingEntityRowMapper implements RowMapper {
         lendingEntity.setCostReservationID((long) costReservationId);
         lendingEntity.setEnd(rs.getTimestamp(endTime));
         lendingEntity.setStart(rs.getTimestamp(startTime));
-        lendingEntity.setStatus(Lendingstatus.valueOf(status));
+        lendingEntity.setStatus(Lendingstatus.values()[status]);
         lendingEntity.setSuretyReservationID((long) suretyId);
         lendingEntity.setBorrower(userRepository.findById(rs.getLong(borrowerUserId)));
         lendingEntity.setProduct(productRepository.getProductById(rs.getLong(productId)));
