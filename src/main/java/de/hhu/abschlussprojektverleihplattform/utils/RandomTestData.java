@@ -2,10 +2,9 @@ package de.hhu.abschlussprojektverleihplattform.utils;
 
 import com.mysql.cj.xdevapi.AddResult;
 import de.hhu.abschlussprojektverleihplattform.model.*;
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.sql.Timestamp;
 import java.util.Random;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class RandomTestData {
 
@@ -35,14 +34,17 @@ public class RandomTestData {
                 owner);
     }
 
-    public static LendingEntity newRandomLendingStausDone(UserEntity borrower, ProductEntity product) {
+    public static LendingEntity newRandomLendingStausDone(
+		    UserEntity borrower, ProductEntity product
+    ) {
         return new LendingEntity(Lendingstatus.done,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis() + 86400000),
                 borrower,
                 product,
                 0L,
-                0L);
+                0L
+	);
     }
 
 }
