@@ -49,8 +49,7 @@ public class RegistryControllerTest {
 	    +"&email=dennis@gmail.com"
 	    ))
             .andExpect(status().is3xxRedirection());
-            //.andExpect(status().isForbidden()
-	    );
+            //.andExpect(status().isForbidden());
     }
 
     @Test
@@ -63,7 +62,6 @@ public class RegistryControllerTest {
 	    +"&email=dennis@gmail.com"
 	    ))
             .andExpect(status().isBadRequest());
-            //.andExpect(status().isForbidden()
-	    );
+            //.andExpect(status().isForbidden());
     }
 }
