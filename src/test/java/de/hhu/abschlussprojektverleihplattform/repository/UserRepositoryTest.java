@@ -15,10 +15,8 @@ import java.util.List;
 @SpringBootTest
 public class UserRepositoryTest {
 
-
     @Autowired
     private UserRepository userRepository;
-
 
     @Test
     public void saveOneUserToDatabase() {
@@ -45,7 +43,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getUserByUsername() {
+    public void findUserByUsername() {
 
         UserEntity user = new UserEntity("Max", "Mustermann", "MMustermann", "MaxMuster223", "Max@Mustermann.de");
         UserEntity loadedUser = userRepository.findByUsername("MMustermann");
@@ -60,7 +58,7 @@ public class UserRepositoryTest {
     @Test
     public void getAllUsersAfterAddingOneUser() {
         int numberOfUserAtTestStart = userRepository.getNumberOfUsers();
-        UserEntity user = new UserEntity("vorname", "LastName", "username", "password", "email");
+        UserEntity user = new UserEntity("vorname", "LastName", "username2", "password", "email");
         userRepository.saveUser(user);
         List<UserEntity> allUser = userRepository.getAllUser();
         Assert.assertEquals(numberOfUserAtTestStart + 1, allUser.size());

@@ -1,8 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
-import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.service.CookieUserService;
 import org.springframework.beans.factory.annotation.Autowired;
