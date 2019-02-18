@@ -1,4 +1,12 @@
 language: java
 
-script:
-  - ./gradlew test
+jobs:
+  include:
+    - stage: compile
+      script: ./gradlew compileJava
+    - stage: test
+      script: ./gradlew test
+    - stage: checkstyleMain
+      script: ./gradlew checkstyleMain
+    - stage: checkstyleTest
+      script: ./gradlew checkstyleTest
