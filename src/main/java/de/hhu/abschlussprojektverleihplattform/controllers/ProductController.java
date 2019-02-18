@@ -1,5 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
+import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,10 @@ public class ProductController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    ProductRepository productRepository;
+
+
     @GetMapping("/addproduct")
     public String getAddProduct(Model model, HttpServletRequest httpServletRequest) {
         return "addproduct";
@@ -31,11 +37,12 @@ public class ProductController {
         return "removeproduct";
     }
 
-    @GetMapping("/productdetail")
-    public String getProductDetails(
-        Model model,
-        HttpServletRequest httpServletRequest
-    ) throws Exception{
+    @GetMapping("/productdetail/{id}")
+    public String getProductDetails(Model model, Long id, HttpServletRequest httpServletRequest) {
+        ProductEntity product = productRepository.getProductById(id);
+        if(product != null) {
+            model.addAttribute("product", product);
+        }
         return "productdetailedview";
     }
 }

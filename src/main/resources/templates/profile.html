@@ -13,9 +13,13 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h3> Profile </h3>
-            <span>Benutzername: <strong th:text="${user.username}">User</strong></span>
+            <p>Benutzername: <span th:text="${user.username}"></span></p>
             <br>
-            <span>Email: <span th:text="${user.email}">test@mail.com</span></span>
+            <p>Vorname: <span th:text="${user.firstname}"></span></p>
+            <br>
+            <p>Nachname: <span th:text="${user.lastname}"></span></p>
+            <br>
+            <p>Email: <span th:text="${user.email}"></span></p>
         </div>
         <div class="col-md-6">
             <h3>ProPay</h3>
