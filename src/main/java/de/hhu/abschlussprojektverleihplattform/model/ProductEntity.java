@@ -1,8 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 @Data
 @Entity
@@ -27,7 +26,14 @@ public class ProductEntity {
 
     }
 
-    public ProductEntity(String description, String title, int surety, int cost, AddressEntity location, UserEntity owner) {
+    public ProductEntity(
+	String description,
+	String title,
+	int surety,
+	int cost,
+	AddressEntity location,
+	UserEntity owner
+    ) {
         this.description = description;
         this.title = title;
         this.surety = surety;

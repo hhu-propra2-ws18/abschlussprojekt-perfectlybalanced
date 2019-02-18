@@ -32,7 +32,10 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail")
-    public String getProductDetails(Model model, HttpServletRequest httpServletRequest) throws Exception{
+    public String getProductDetails(
+        Model model,
+        HttpServletRequest httpServletRequest
+    ) throws Exception{
         return "productdetailedview";
     }
 }

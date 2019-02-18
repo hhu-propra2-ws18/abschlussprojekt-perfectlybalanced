@@ -9,7 +9,8 @@ import java.util.List;
 public interface ILendingRepository {
 
 
-    // Mit lendings owned by user meine ich, das der user der owner des Produktes ist, welches verliehen wird
+    // Mit lendings owned by user meine ich, das der user der owner des
+    // Produktes ist, welches verliehen wird
 
 
     void addLending(LendingEntity lending);
