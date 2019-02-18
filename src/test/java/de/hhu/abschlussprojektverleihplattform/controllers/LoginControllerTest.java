@@ -38,6 +38,6 @@ public class LoginControllerTest {
     public void testCookieAfterLogin() throws Exception {
         mockMvc.perform(post("/login?username=sarah&password=sarah"))
                 .andExpect(MockMvcResultMatchers.cookie().exists(CookieUserService.cookieName))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isOk());
     }
 }

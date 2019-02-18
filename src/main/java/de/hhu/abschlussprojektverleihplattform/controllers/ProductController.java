@@ -78,7 +78,6 @@ public class ProductController {
 
         ProductEntity product = productRepository.getProductById(id);
         model.addAttribute("product", product);
-
         return "productdetailedview";
     }
 }
