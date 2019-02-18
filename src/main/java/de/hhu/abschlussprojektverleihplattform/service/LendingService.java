@@ -4,6 +4,7 @@ import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
 import de.hhu.abschlussprojektverleihplattform.model.*;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 //      ist dieser false wurde die Operation nicht(erfolgreich) ausgefuehrt,
 //      und auf der Website muss eine entsprechende Fehlermeldung angezeigt werden.
 
+@Service
 public class LendingService implements ILendingService {
 
     private ILendingRepository lending_repository;
