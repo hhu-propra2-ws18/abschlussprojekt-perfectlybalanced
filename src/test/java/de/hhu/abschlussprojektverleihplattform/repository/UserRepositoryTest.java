@@ -71,7 +71,7 @@ public class UserRepositoryTest {
     @Test
     public void getAllUsersAfterAddingOneUser() {
         int numberOfUserAtTestStart = userRepository.getNumberOfUsers();
-        UserEntity user = new UserEntity("vorname", "LastName", "username", "password", "email");
+        UserEntity user = new UserEntity("vorname", "LastName", "username2", "password", "email");
         userRepository.saveUser(user);
         List<UserEntity> allUser = userRepository.getAllUser();
         Assert.assertEquals(numberOfUserAtTestStart + 1, allUser.size());
