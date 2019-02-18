@@ -39,6 +39,5 @@ public class LendingEntity {
     public int getValueFromLendingStatus(Lendingstatus lendingstatus){
         return Lendingstatus.getLemdingStatusValueFrom(lendingstatus);
     }
-
 }
 

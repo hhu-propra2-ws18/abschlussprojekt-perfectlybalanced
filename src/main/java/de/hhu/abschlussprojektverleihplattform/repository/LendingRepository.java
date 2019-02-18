@@ -48,17 +48,20 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public void addLending(LendingEntity lending) {
-
+        //make new lending object which is not in the database
+        //TODO
     }
 
     @Override
     public void update(LendingEntity lending) {
-
+        //update a lending entity
+        //TODO
     }
 
     @Override
     public LendingEntity getLendingByProductAndUser(ProductEntity product, UserEntity user) {
-        return null;
+        String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID="+product.getId()+" AND BORROWER_USER_ID="+user.getUserId()+";";
+        return (LendingEntity) jdbcTemplate.queryForObject(sql,new LendingEntityRowMapper(userRepository,productRepository));
     }
 
     @Override
@@ -71,31 +74,40 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllLendingsFromProduct(ProductEntity product) {
-        return null;
+        return
+                (List<LendingEntity>)jdbcTemplate
+                        .query("SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID='"+product.getId()+"';",
+                                new Object[]{},
+                                new LendingEntityRowMapper(userRepository,productRepository));
     }
 
     @Override
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
+        //TODO
         return null;
     }
 
     @Override
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
+        //TODO
         return null;
     }
 
     @Override
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
+        //TODO
         return null;
     }
 
     @Override
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
+        //TODO
         return null;
     }
 
     @Override
     public List<LendingEntity> getAllConflicts() {
+        //TODO
         return null;
     }
 }
