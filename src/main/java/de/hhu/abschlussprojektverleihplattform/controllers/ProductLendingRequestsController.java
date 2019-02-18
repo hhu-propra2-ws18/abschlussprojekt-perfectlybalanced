@@ -35,4 +35,14 @@ public class ProductLendingRequestsController {
         model.addAttribute(lendings);
         return "productlendingrequests";
     }
+
+    /*TODO:
+    PostMapping accept/deny request
+    Get/Post Mappings to create a request
+    GetMapping to show all Products the user has borrowed
+    (Get/)Post Mappings to return Products
+    GetMapping to Check returned Prdoduct
+    (Get/)Post Mappings to accept a retuned product or create a conflict
+    All the Views for the Mappings
+     */
 }

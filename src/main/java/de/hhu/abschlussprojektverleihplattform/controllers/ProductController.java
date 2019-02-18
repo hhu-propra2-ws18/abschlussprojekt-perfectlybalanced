@@ -45,5 +45,8 @@ public class ProductController {
         }
         return "productdetailedview";
     }
+
+    //TODO: GetMappings+Views to see all Product and start a request
+    // (Request itself is in ProductLendingRequestController)
 }
 
