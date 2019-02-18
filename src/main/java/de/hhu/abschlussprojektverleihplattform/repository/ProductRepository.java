@@ -4,9 +4,11 @@ import de.hhu.abschlussprojektverleihplattform.database.ProductEntityRowMapper;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import java.util.List;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Data
@@ -25,11 +27,13 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public ProductEntity getProductById(Long id) {
-        return (ProductEntity) jdbcTemplate.queryForObject(
-	    "SELECT * FROM PRODUCT_ENTITY WHERE id=?",
-            new Object[]{id},
-            new ProductEntityRowMapper(userRepository)
-	);
+        try {
+            return (ProductEntity) jdbcTemplate.queryForObject("SELECT * FROM PRODUCT_ENTITY WHERE id=?",
+                    new Object[]{id},
+                    new ProductEntityRowMapper(userRepository));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

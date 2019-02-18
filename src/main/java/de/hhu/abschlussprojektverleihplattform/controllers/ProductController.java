@@ -1,7 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,9 @@ public class ProductController {
     @GetMapping("/productdetail/{id}")
     public String getProductDetails(Model model, Long id) {
         ProductEntity product = productRepository.getProductById(id);
-        model.addAttribute("product", product);
+        if(product != null) {
+            model.addAttribute("product", product);
+        }
         return "productdetailedview";
     }
 }
