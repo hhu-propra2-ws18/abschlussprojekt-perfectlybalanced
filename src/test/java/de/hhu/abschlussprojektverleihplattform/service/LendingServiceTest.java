@@ -157,7 +157,7 @@ public class LendingServiceTest {
         ReservationDummy surety = payment_service.findReservation(created_lending.getSuretyReservationID());
         Assert.assertEquals(actingUser.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
-        Assert.assertEquals(product.getCost() * 4, cost.getAmount());   //the Timedifference is 4 Days
+        Assert.assertEquals(product.getCost() * 5, cost.getAmount());   //the Timedifference is between 4 and 5 Days
         Assert.assertEquals(PaymentStatus.reservated, cost.getStatus());
         Assert.assertEquals(actingUser.getUsername(), surety.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
@@ -190,7 +190,7 @@ public class LendingServiceTest {
         ReservationDummy surety = payment_service.findReservation(created_lending.getSuretyReservationID());
         Assert.assertEquals(actingUser.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
-        Assert.assertEquals(product.getCost() * 5, cost.getAmount());   //the Timedifference is 5 Days
+        Assert.assertEquals(product.getCost() * 6, cost.getAmount());   //the Timedifference is between 5 and 6 Days
         Assert.assertEquals(PaymentStatus.reservated, cost.getStatus());
         Assert.assertEquals(actingUser.getUsername(), surety.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
@@ -533,14 +533,14 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void DifferenceIs2() {
+    public void DifferenceIs4() {
         Timestamp first = new Timestamp(1557266400000L);
-        Timestamp second = new Timestamp(1557525599900L);
+        Timestamp second = new Timestamp(1557525600010L);
         LendingService logic = new LendingService(null, null);
 
         int result = logic.DaysBetween(first, second);
 
-        Assert.assertEquals(2, result);
+        Assert.assertEquals(4, result);
     }
 
 

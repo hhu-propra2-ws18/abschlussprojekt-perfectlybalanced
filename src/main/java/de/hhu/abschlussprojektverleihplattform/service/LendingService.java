@@ -139,7 +139,7 @@ public class LendingService {
     // kann hier nicht als private makiert werden, da sie sonst nich getestet werden kann
     protected int DaysBetween(Timestamp start, Timestamp end) {
         long DifferenceInMillis = end.getTime() - start.getTime();
-        long DifferenceInDays = DifferenceInMillis / (1000 * 60 * 60 * 24);
-        return (int) DifferenceInDays;
+        double DifferenceInDays = DifferenceInMillis / (1000.0 * 60 * 60 * 24);
+        return (int) Math.ceil(DifferenceInDays);
     }
 }
