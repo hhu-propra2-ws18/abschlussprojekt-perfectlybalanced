@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
+
 import de.hhu.abschlussprojektverleihplattform.service.CookieUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,31 +9,30 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.servlet.http.Cookie;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProductControllerTest {
+public class LogoutControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    //@WithMockUser
     public void testcontrolleristhere() throws Exception {
-        mockMvc.perform(get("/addproduct").cookie(new Cookie(CookieUserService.cookieName,"1")))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Artikel einstellen")))
-                .andExpect(content().string(containsString("Titel")))
-                .andExpect(content().string(containsString("Beschreibung")))
-                .andExpect(content().string(containsString("Kosten")))
-                .andExpect(content().string(containsString("Kaution")));
+        mockMvc.perform(get("/logout"))
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void cookieOverwrite() throws Exception{
+        mockMvc.perform(get("/logout").cookie(new Cookie(CookieUserService.cookieName,"1")))
+                .andExpect(MockMvcResultMatchers.cookie().value(CookieUserService.cookieName,LogoutController.logoutid));
     }
 }

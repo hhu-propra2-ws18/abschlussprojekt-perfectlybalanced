@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.util.List;
 
@@ -54,6 +53,18 @@ public class UserRepositoryTest {
             && user.getLastname().equals(loadedUser.getLastname())
             && user.getUsername().equals(loadedUser.getUsername())
             && user.getEmail().equals(loadedUser.getEmail()));
+    }
+
+    @Test
+    public void getUserByUsername() {
+
+        UserEntity user = new UserEntity("Max", "Mustermann", "MMustermann", "MaxMuster223", "Max@Mustermann.de");
+        UserEntity loadedUser = userRepository.findByUsername("MMustermann");
+        Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname()) &&
+                user.getLastname().equals(loadedUser.getLastname()) &&
+                user.getUsername().equals(loadedUser.getUsername()) &&
+                user.getEmail().equals(loadedUser.getEmail()));
+
     }
 
 

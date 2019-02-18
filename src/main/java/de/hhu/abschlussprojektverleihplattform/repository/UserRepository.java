@@ -28,6 +28,13 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
+    public UserEntity findByUsername(String username) {
+        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE username=?",
+                new Object[]{username},
+                new BeanPropertyRowMapper<>(UserEntity.class));
+    }
+
+    @Override
     public UserEntity getUserByFirstname(String firstname) {
         return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE firstname=?",
                 new Object[]{firstname},

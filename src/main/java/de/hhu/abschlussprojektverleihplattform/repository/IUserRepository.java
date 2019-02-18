@@ -8,6 +8,8 @@ public interface IUserRepository {
 
     UserEntity findById(Long userId);
 
+    UserEntity findByUsername(String username);
+
     void saveUser(UserEntity user);
 
     int getNumberOfUsers();

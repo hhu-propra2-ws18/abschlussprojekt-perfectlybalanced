@@ -19,12 +19,6 @@ public class RegistryController {
     }
 
     @PostMapping("/register")
-    public String setUser(UserEntity user) {
-        // TODO: Logik saveUser
-        return "redirect:/";
-    }
-    /*
-    @PostMapping("/register")
     public String postRegisterUser(
             @RequestParam(value="username")String username,
             @RequestParam(value = "password") String password,
@@ -40,5 +34,4 @@ public class RegistryController {
 
         return "redirect:/";
     }
-    */
 }
