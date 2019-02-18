@@ -24,21 +24,21 @@ public interface ILendingService {
     );
 
     // Accept/Deny a Request
-    public boolean acceptLending(LendingEntity lending, boolean RequestIsAccepted);
+    public boolean acceptLending(LendingEntity lending, boolean requestIsAccepted);
 
     // the second Versions from the following Methodes are not jet safe to use,
     // if the Controllers/Views dont need them they get deleted completly
 
     // Return a Product (two Versions, depending on View/Controller)
     public void returnProduct(LendingEntity lending);
-//    public void ReturnProduct(UserEntity actingUser, ProductEntity product);
+    // public void ReturnProduct(UserEntity actingUser, ProductEntity product);
 
     // Decide wether a returned product is in acceptable condition or
     // not (two Versions, depending on View/Controller)
     public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable);
-    // public boolean CheckReturnedProduct(UserEntity actingUser,
+    // public boolean checkReturnedProduct(UserEntity actingUser,
     // ProductEntity product, boolean isAcceptable);
 
     // An admin resolves a conflict and decides who gets the surety
-    public boolean resolveConflict(LendingEntity lending, boolean OwnerRecivesSurety);
+    public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety);
 }

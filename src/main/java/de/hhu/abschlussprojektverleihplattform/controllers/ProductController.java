@@ -62,7 +62,10 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail")
-    public String getProductDetails(Model model, HttpServletRequest httpServletRequest) throws Exception{
+    public String getProductDetails(
+        Model model,
+        HttpServletRequest httpServletRequest
+    ) throws Exception{
         UserEntity user = cookieUserService.getUserFromRequest(httpServletRequest);
 
         model.addAttribute("user",user);

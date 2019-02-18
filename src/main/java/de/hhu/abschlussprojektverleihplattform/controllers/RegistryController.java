@@ -29,7 +29,7 @@ public class RegistryController {
         //TODO: check supplied info for duplication with existing user.
         //TODO: insert new user into db
         //TODO: login the new user
-	//TODO: throw exception if fields are empty
+	    //TODO: throw exception if fields are empty
         //TODO: validate email and other fields
 
         return "redirect:/";

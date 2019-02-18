@@ -15,7 +15,10 @@ public class ProductLendingRequestsController {
     CookieUserService cookieUserService;
 
     @GetMapping("/lendingrequests")
-    public String getLendingRequestsOverview(Model model, HttpServletRequest httpServletRequest)throws Exception{
+    public String getLendingRequestsOverview(
+        Model model,
+        HttpServletRequest httpServletRequest
+    )throws Exception{
         //TODO: determine logged in user,
         //otherwise redirect to login page
 

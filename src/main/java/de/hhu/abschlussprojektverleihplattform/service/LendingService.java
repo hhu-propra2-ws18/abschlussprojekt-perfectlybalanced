@@ -113,7 +113,7 @@ public class LendingService implements ILendingService {
     // Artikel zurueckgeben alternative
     public void returnProduct(UserEntity actingUser, ProductEntity product) {
         LendingEntity lending
-        = lending_repository.getLendingByProductAndUser(product, actingUser);
+            = lending_repository.getLendingByProductAndUser(product, actingUser);
         lending.setStatus(Lendingstatus.returned);
         lending_repository.update(lending);
     }
@@ -139,7 +139,7 @@ public class LendingService implements ILendingService {
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
-    public boolean CheckReturnedProduct(LendingEntity lending, boolean isAcceptable) {
+    public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable) {
         if (isAcceptable) {
             if (
                 payment_service.returnReservatedMoney(
