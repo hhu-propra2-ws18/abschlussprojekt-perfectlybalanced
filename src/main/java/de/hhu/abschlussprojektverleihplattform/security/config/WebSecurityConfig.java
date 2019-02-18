@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 // hier werden Seiten alle Seiten ausser Login eingetragen, die für jeden Besucher sichtbar sind
-                .antMatchers("/", "/register**")
+                .antMatchers("/", "/register**", "/h2-console/**")
                     .permitAll()
                 // nur Admin-Berechtigung
                 .antMatchers("/h2-console/**")

@@ -5,5 +5,5 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 public interface IUserService {
     void addUser(UserEntity userEntity);
     UserEntity showUserById(Long userId);
-    UserEntity findUserByUsername(String username);
+    UserEntity findByUsername(String username);
 }
