@@ -27,7 +27,6 @@ public class ProductLendingRequestsController {
     @GetMapping("/lendingrequests")
     public String getLendingRequestsOverview(
             Model model,
-            HttpServletRequest httpServletRequest,
             Authentication auth
     ) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
