@@ -15,7 +15,9 @@ public interface IProPayService {
 
     public void changeUserBalanceBy(String username,long delta) throws Exception;
 
-    public Reservation makeReservationFromSourceUserToTargetUser(String userSource, String userTarget,long amount) throws Exception;
+    public Reservation makeReservationFromSourceUserToTargetUser(
+		    String userSource, String userTarget,long amount
+    ) throws Exception;
 
     public Account getAccount(String username) throws Exception;
 

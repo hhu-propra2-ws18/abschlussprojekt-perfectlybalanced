@@ -14,22 +14,31 @@ public interface ILendingService {
     public TempZeitraumModel getTime(ProductEntity product);
 
     // Request a new Lending
-    public boolean RequestLending(UserEntity actingUser, ProductEntity product, Timestamp start, Timestamp end);
+    public boolean requestLending(
+        UserEntity actingUser,
+        ProductEntity
+        product,
+        Timestamp
+        start,
+        Timestamp end
+    );
 
     // Accept/Deny a Request
-    public boolean AcceptLending(LendingEntity lending, boolean RequestIsAccepted);
+    public boolean acceptLending(LendingEntity lending, boolean requestIsAccepted);
 
     // the second Versions from the following Methodes are not jet safe to use,
     // if the Controllers/Views dont need them they get deleted completly
 
     // Return a Product (two Versions, depending on View/Controller)
-    public void ReturnProduct(LendingEntity lending);
-//    public void ReturnProduct(UserEntity actingUser, ProductEntity product);
+    public void returnProduct(LendingEntity lending);
+    // public void ReturnProduct(UserEntity actingUser, ProductEntity product);
 
-    // Decide wether a returned product is in acceptable condition or not (two Versions, depending on View/Controller)
-    public boolean CheckReturnedProduct(LendingEntity lending, boolean isAcceptable);
-//    public boolean CheckReturnedProduct(UserEntity actingUser, ProductEntity product, boolean isAcceptable);
+    // Decide wether a returned product is in acceptable condition or
+    // not (two Versions, depending on View/Controller)
+    public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable);
+    // public boolean checkReturnedProduct(UserEntity actingUser,
+    // ProductEntity product, boolean isAcceptable);
 
     // An admin resolves a conflict and decides who gets the surety
-    public boolean ResolveConflict(LendingEntity lending, boolean OwnerRecivesSurety);
+    public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety);
 }

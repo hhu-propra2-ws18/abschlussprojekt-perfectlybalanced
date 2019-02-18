@@ -20,8 +20,6 @@ public class ProPayServiceTest {
     @Autowired
     private ProPayService proPayService;
 
-
-
     @Test
     public void testnewuserhaszerobalance() throws Exception {
         String generated_username = make_new_user();
@@ -74,7 +72,6 @@ public class ProPayServiceTest {
 
         //propay does not work yet. there is an issue in their repository
 
-
         String user1 = make_new_user();
         String user2 = make_new_user();
 
@@ -83,7 +80,8 @@ public class ProPayServiceTest {
         this.proPayService.createAccountIfNotExists(user2);
 
         //because their hibernate has an exception where a transient instance is not saved
-        //which is a property of their Reservation Entity. so we have to make them save both accounts
+        //which is a property of their Reservation Entity.
+        //so we have to make them save both accounts
         //so they can save that reservation
         //the amount has to be not 0
 
@@ -112,7 +110,8 @@ public class ProPayServiceTest {
         proPayService.changeUserBalanceBy(user1, 10);
 
         //make reservation
-        Reservation reservation = proPayService.makeReservationFromSourceUserToTargetUser(user1, user2, 1);
+        Reservation reservation
+            = proPayService.makeReservationFromSourceUserToTargetUser(user1, user2, 1);
 
         Assert.assertEquals(proPayService.getAccount(user1).reservations.length, 1);
 
@@ -135,7 +134,8 @@ public class ProPayServiceTest {
 
         proPayService.changeUserBalanceBy(user1,10);
 
-        Reservation reservation=proPayService.makeReservationFromSourceUserToTargetUser(user1,user2,1);
+        Reservation reservation=proPayService
+            .makeReservationFromSourceUserToTargetUser(user1,user2,1);
 
         proPayService.punishReservedAmount(user1,reservation.id);
 
