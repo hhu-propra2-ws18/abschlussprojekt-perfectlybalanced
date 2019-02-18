@@ -163,7 +163,7 @@ public class LendingService implements ILendingService {
             lending_repository.update(lending);
             return true;
         }
-}
+    }
 
     // Konflikt vom Admin loesen
     public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety) {
