@@ -10,8 +10,7 @@ public class ProductLendingRequestsController {
 
     @GetMapping("/lendingrequests")
     public String getLendingRequestsOverview(
-        Model model,
-        HttpServletRequest httpServletRequest
+        Model model
     )throws Exception{
         return "productlendingrequests";
     }
