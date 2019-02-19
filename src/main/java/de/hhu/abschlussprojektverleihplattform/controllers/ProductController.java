@@ -50,5 +50,8 @@ public class ProductController {
         return "redirect:/";
 
     }
+
+    //TODO: GetMappings+Views to see all Product and start a request
+    // (Request itself is in ProductLendingRequestController)
 }
 
