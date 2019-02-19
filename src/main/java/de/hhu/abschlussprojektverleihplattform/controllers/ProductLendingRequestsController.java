@@ -21,7 +21,11 @@ public class ProductLendingRequestsController {
     private final UserService userService;
 
     @Autowired
-    public ProductLendingRequestsController(ProductService productService, LendingService lendingService, UserService userService) {
+    public ProductLendingRequestsController(
+            ProductService productService,
+            LendingService lendingService,
+            UserService userService
+    ) {
         this.productService = productService;
         this.lendingService = lendingService;
         this.userService = userService;

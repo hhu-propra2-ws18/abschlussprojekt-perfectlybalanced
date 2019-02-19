@@ -17,7 +17,10 @@ public class ConflictResolutionController {
     private final ProductService productService;
 
     @Autowired
-    public ConflictResolutionController(LendingService lendingService, ProductService productService) {
+    public ConflictResolutionController(
+            LendingService lendingService,
+            ProductService productService
+    ) {
         this.lendingService = lendingService;
         this.productService = productService;
     }
