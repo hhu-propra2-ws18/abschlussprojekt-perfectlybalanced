@@ -67,13 +67,5 @@ public class UserEntity {
         this.email = email;
         this.role = Role.ROLE_USER;
     }
-
-    public UserEntity(Long id){
-        this.firstname = null;
-        this.lastname = null;
-        this.username = null;
-        this.password = null;
-        this.email = null;
-    }
 }
 
