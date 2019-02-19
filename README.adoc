@@ -1,117 +1,20 @@
 = Softwareentwicklung im Team: Blockpraktikum
-WS18/19
-:icons: font
-:icon-set: octicon
 
-== Änderung an der `gruppe.json`-Datei
+== Team perfectlybalanced
+- mailto:sam.rassaei@hhu.de[Sam Rassaei]
+- mailto:jan.rahman@hhu.de[Jan Rahman]
+- mailto:hungu105@hhu.de[Huyen Chantal Nguyen]
+- [Liane]
+- [Johannes]
+- [Tobias]
+- mailto:alexander.hansen@hhu.de[Alexander Hansen]
+- [Thomas]
 
-Wir haben nur beschränkt Plätze zur Verfügung. Daher ist es notwendig, dass
-einige Gruppen mit ihren eigenen Notebooks arbeiten und so keine Plätze in den
-Praktikumsräumen der HHU benötigen. Sie bekommen dann einen Seminarraum als
-Arbeitsraum zur Verfügung gestellt.
+=== Raumplanung
+25.41.U1.22 +
+Ausnahme am 21.02.2019: 25.13.U1.24
 
-[IMPORTANT]
-====
-Bitte fügen Sie zur `gruppe.json` folgenden Key mit hinzu und setzen
-Sie den Wert auf `true`, wenn Ihre Gruppe vollständig mit eigenen Geräten
-auskommt. Andernfalls setzen Sie bitte `false`.
+== Proleih
+- https://github.com/hhu-propra2/abschlussprojekt-perfectlybalanced[Github Repository]
+- https://propra-proleih.herokuapp.com/[Testversion der App]
 
-Beispiel:
-
-[source,json]
-----
-{
-    // ...
-    "isNotebookGroup": true,
-    // ...
-}
-----
-====
-
-== Termine
-
-Das Praktikum findet in der Zeit vom 11.02.2019 bis 01.03.2019 statt. In dieser
-Zeit werden Sie täglich in der Zeit von 9:30 Uhr bis 15:30 Uhr in Gruppen an
-einer Webanwendung mit Datenbankanbindung arbeiten. Es besteht
-Anwesenheitspflicht für *alle* Tage.
-
-== Verhaltenscodex
-
-=== Umgang miteinander
-
-Wir erwarten von Ihnen, dass Sie einen höflichen und respektvollen Umgang
-miteinander pflegen. Meinungsverschiedenheiten (besonders in einem Team) können
-vorkommen, sollten aber nicht in einen Streit ausufern, sondern konstruktiv
-gelöst werden.
-
-Das Praktikum soll eine freundliche, sichere und einladende Umgebung sein,
-unabhängig von Geschlecht, Aussehen, sexueller Orientierung, Herkunft, Religion
-oder gesellschaftlichem und wirtschaftlichem Status.
-
-Wir erwarten von Ihnen,
-
-* dass Sie ein respektvolles Verhalten an den Tag legen und respektvoll
-  miteinander kommunizieren. Insbesondere erniedrigendes, diskriminierendes oder
-  belästigendes Verhalten oder Sprache wird nicht geduldet.
-* dass Sie Rücksicht auf Andere nehmen.
-* dass Sie auf Andere aufpassen. Machen Sie uns darauf aufmerksam, wenn Sie
-  Verletzungen dieses Verhaltenskodexes bemerken, selbst wenn sie zunächst
-  belanglos erscheinen.
-
-=== Verhalten in den Räumlichkeiten
-
-Während des Praktikums müssen Sie (sowohl innerhalb der Gruppe als auch zwischen
-Gruppen) aufeinander Rücksicht nehmen und niemanden bei der Arbeit stören. Neben
-der
-https://www.uni-duesseldorf.de/home/fileadmin/redaktion/Oeffentliche_Medien/ZUV/Dezernat_6/Hausordnung/16-12-06_Hausordnung_HHU_A4.pdf[Hausordnung
-der Universität] gelten insbesondere folgende Regeln:
-
-* In den Praktikumsräumen ist das Essen verboten.
-* Sie dürfen Getränke zu sich nehmen, aber nicht in der Nähe von Computern.
-* Musik darf nur leise per Kopfhörer gehört werden, sofern niemand belästigt 
-  wird.
-* Den Anweisungen der Aufsicht ist Folge zu leisten.
-
-IMPORTANT: Verstöße gegen die Verhaltens- oder Praktikumsregeln können zum
-Ausschluss von der Veranstaltung führen. Sie können dann den Schein in diesem
-Semester nicht mehr bekommen.
-
-== Regeln für Fehlzeiten
-
-=== Urlaub
-
-Für die Teilnahme an den Umfragen während des Semesters können Sie Urlaub
-bekommen. Insgesamt haben Sie einen Urlaubstag. Sie können den Urlaub
-stundenweise (mind. eine Stunde) nehmen oder auch am Stück einen Tag frei
-machen. Sie müssen den Urlaub mit Ihrem Team absprechen und bei der Aufsicht
-vorher anmelden.
-
-=== Krankheit
-
-Bei krankheitsbedingtem Fehlen müssen Sie ein ärztliches Attest vorlegen.
-Sollten Sie länger als 3 Tage in der gesamten Zeit fehlen, ist ein Bestehen des
-Praktikums nur noch in sehr gut begründbaren Ausnahmen möglich. Ein Beispiel:
-Sie fehlen in der letzten Woche, das Projekt hat Ihre Gruppe aber schon nach der
-Woche praktisch fertiggestellt und es fehlt nur noch der Feinschliff.
-
-Wenn Sie sichtbar krank zum Praktikum erscheinen, behalten wir uns vor, Sie zu
-Ihrem eigenen und dem Schutz der anderen TeilnehmerInnen auszuschließen.
-
-=== Prüfungstermine
-
-Wenn Sie Prüfungstermine in den Praktikumszeiten haben, sind Sie bei vorheriger
-Ankündigung (mind. ein Tag vor der Prüfung) für die Dauer der Prüfung Entschuldigt.
-
-=== Pünktlichkeit
-
-Wir erwarten von Ihnen, dass Sie pünktlich um 9:30 Uhr da sind. Wir werden
-Verspätungen dokumentieren. Falls Sie sich deutlich verspäten oder häufig
-fehlen, werden wir die Verspätungen von Ihrem Urlaub abziehen. Falls Sie keinen
-Urlaub mehr haben, kann es passieren, dass wir Sie vom Praktikum ausschließen.
-
-== Gruppenbildung
-
-Am Praktikum dürfen nur Studierende teilnehmen, die alle Projekte im Semester
-bestanden haben. Die Gruppengröße soll 6 nicht unterschreiten und darf 8 nicht
-überschreiten. Die Bildung der Gruppen erfolgt durch die Studierenden selbst, es
-gibt keine Zuweisungen. Das Ilias Forum kann zur Gruppenfindung benutzt werden.
