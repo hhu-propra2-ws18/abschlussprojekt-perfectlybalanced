@@ -81,8 +81,8 @@ public class LendingService implements ILendingService {
             Long costID = payment_service.reservateAmount(
                     lending.getBorrower(),
                     lending.getProduct().getOwner(),
-                    lending.getProduct().getCost() *
-                            daysBetween(lending.getStart(), lending.getEnd())
+                    lending.getProduct().getCost()
+                            * daysBetween(lending.getStart(), lending.getEnd())
             );
             Long suretyID = payment_service.reservateAmount(
                     lending.getBorrower(),
