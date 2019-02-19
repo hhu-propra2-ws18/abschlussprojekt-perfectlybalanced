@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Verleihplattform Produkt Detailansicht</title>
@@ -11,19 +11,32 @@
         <div class="m-3"></div>
         <div class="row">
             <div class="col-md-6">
-                <h1>Produkt 1</h1>
-
+                <h1><span th:text="${product.title}"></span></h1>
                 <ul class="list-group">
-                    <li class="list-group-item">Beschreibung</li>
-                    <li class="list-group-item">Verfügbarkeit</li>
-                    <li class="list-group-item">Kosten</li>
-                    <li class="list-group-item">Kautionswert</li>
-                    <li class="list-group-item">Standort</li>
-                    <li class="list-group-item">Verleihende Person</li>
+                    <li class="list-group-item">Beschreibung:
+                        <span th:text="${product.description}"></span>
+                    </li>
+                    <li class="list-group-item">Kosten:
+                        <span th:text="${product.cost}"></span>€
+                    </li>
+                    <li class="list-group-item">Kautionswert:
+                        <span th:text="${product.surety}"></span>€
+                    </li>
+                    <li class="list-group-item">Standort:
+                        <span th:text="${product.location.street}"></span>,
+                        <span th:text="${product.location.housenumber}"></span>,
+                        <span th:text="${product.location.postcode}"></span>
+                        <span th:text="${product.location.city}"></span>
+                    </li>
+                    <li class="list-group-item">Verleihende Person:
+                        <span th:text="${product.owner.username}"></span>,
+                        <span th:text="${product.owner.email}"></span>
+                    </li>
                 </ul>
 
                 <button class="btn btn-primary" type="submit">Ausleihen</button>
             </div>
         </div>
+    </div>
 </body>
 </html>
