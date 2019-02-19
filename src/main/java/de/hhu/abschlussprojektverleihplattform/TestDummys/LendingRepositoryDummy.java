@@ -100,6 +100,4 @@ public class LendingRepositoryDummy implements ILendingRepository {
     public List<LendingEntity> getAllConflicts() {
         return null;
     }
-
-
 }

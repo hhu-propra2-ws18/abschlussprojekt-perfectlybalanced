@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -30,7 +31,8 @@ public class LendingRepository implements ILendingRepository {
     }
 
     //TODO: saveLanding in Update und Add aufteilen
-    public void saveLending(LendingEntity lending) {
+    @Override
+    public void addLending(LendingEntity lending) {
         jdbcTemplate.update(
                 "INSERT INTO LENDING_ENTITY (STATUS, START, END, BORROWER_USER_ID, PRODUCT_ID, COST_RESERVATIONID, SURETY_RESERVATIONID)" +
                         "VALUES (?,?,?,?,?,?,?)",
@@ -44,15 +46,8 @@ public class LendingRepository implements ILendingRepository {
     }
 
     @Override
-    public void addLending(LendingEntity lending) {
-        //make new lending object which is not in the database
-        //TODO
-    }
-
-    @Override
     public void update(LendingEntity lending) {
-        //update a lending entity
-        //TODO
+        addLending(lending);
     }
 
     @Override
@@ -80,29 +75,43 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        //TODO
-        return null;
+        //SELECT *
+        // FROM LENDING_ENTITY l 
+        //WHERE EXISTS(
+        //SELECT p.ID
+        // FROM PRODUCT_ENTITY p
+        //WHERE p.OWNER_USER_ID = 1  AND l.STATUS = 0);
+        String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS(SELECT p.ID FROM PRODUCT_ENTITY p WHERE P.OWNER_USER_ID =" + user.getUserId() + "AND l.STATUS=0"+ Lendingstatus.requested.ordinal() + ")";
+        return (List<LendingEntity>)jdbcTemplate.query(query,
+                new Object[]{},
+                new LendingEntityRowMapper(userRepository, productRepository));
     }
 
     @Override
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
-        //TODO
-        return null;
+        String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS (SELECT p.id FROM PRODUCT_ENTITY p WHERE l.product_id = p.id AND p.OWNER_USER_ID=" + user.getUserId() +")";
+        return (List<LendingEntity>)jdbcTemplate.query(query,
+                new Object[]{},
+                new LendingEntityRowMapper(userRepository, productRepository));
     }
 
     @Override
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
+        String query = "SELECT * FROM LENDING_ENTITY WHERE BORROWER_USER_ID=" + user.getUserId();
         return
                 (List<LendingEntity>)jdbcTemplate
-                        .query("SELECT * FROM LENDING_ENTITY WHERE BORROWER_USER_ID='"+user.getUserId()+"';",
+                        .query(query,
                                 new Object[]{},
                                 new LendingEntityRowMapper(userRepository,productRepository));
     }
 
     @Override
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
-        //TODO
-        return null;
+        String query = "SELECT * FROM LENDING_ENTITY l WHERE (EXISTS (SELECT p.id FROM PRODUCT_ENTITY p WHERE l.product_id = p.id AND p.OWNER_USER_ID=" + user.getUserId() +")"
+                + "AND STATUS=" + Lendingstatus.returned.ordinal() +")";
+        return (List<LendingEntity>)jdbcTemplate.query(query,
+                new Object[]{},
+                new LendingEntityRowMapper(userRepository, productRepository));
     }
 
     @Override
