@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.database.ProductEntityRowMapper;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -97,4 +98,11 @@ public class ProductRepository implements IProductRepository {
 	);
     }
 
+    @Override
+    public List<ProductEntity> getAllProductsFromUser(UserEntity user) {
+        String query = "SELECT * FROM PRODUCT_ENTITY WHERE OWNER_USER_ID=" + user.getUserId();
+        return (List<ProductEntity>)jdbcTemplate.query(query,
+                new Object[]{},
+                new ProductEntityRowMapper(userRepository));
+    }
 }
