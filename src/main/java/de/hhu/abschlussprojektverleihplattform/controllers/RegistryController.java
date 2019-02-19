@@ -41,8 +41,14 @@ public class RegistryController {
 
     @PostMapping("/register")
     public String postRegisterUser(@ModelAttribute("user") @Valid UserEntity userEntity,
-                                   BindingResult bindingResult) {
+                                   BindingResult bindingResult,
+                                   Model model) {
         if(bindingResult.hasErrors()) {
+            return "registry";
+        }
+
+        if(userService.uniqueUsername(userEntity)) {
+            model.addAttribute("errorUniqueUser", "Der Benutzer existiert schon.");
             return "registry";
         }
 

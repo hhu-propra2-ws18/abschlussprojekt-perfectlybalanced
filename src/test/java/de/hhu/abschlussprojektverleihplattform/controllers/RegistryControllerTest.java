@@ -61,7 +61,7 @@ public class RegistryControllerTest {
                 .param("password", "password")
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("E-Mail ist ung")));
+                .andExpect(content().string(containsString("E-Mail ist nicht korrekt.")));
     }
 
 }

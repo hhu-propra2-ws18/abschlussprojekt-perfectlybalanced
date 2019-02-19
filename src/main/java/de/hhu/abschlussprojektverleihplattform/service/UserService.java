@@ -62,4 +62,10 @@ public class UserService implements IUserService {
         }
     }
 
+    @Override
+    public boolean uniqueUsername(UserEntity user) {
+        UserEntity userInDatabase = findByUsername(user.getUsername());
+        return userInDatabase != null;
+    }
+
 }

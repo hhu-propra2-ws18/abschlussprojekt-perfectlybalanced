@@ -10,4 +10,6 @@ public interface IUserService {
     UserEntity findByUsername(String username);
 
     void autoLogin(String username, String plainPassword);
+
+    boolean uniqueUsername(UserEntity user);
 }
