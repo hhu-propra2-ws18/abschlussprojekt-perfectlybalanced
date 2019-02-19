@@ -11,18 +11,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
 public class ProductLendingRequestsController {
 
+    private final ProductService productService;
+    private final LendingService lendingService;
+    private final UserService userService;
+
     @Autowired
-    private ProductService productService;
-    @Autowired
-    private LendingService lendingService;
-    @Autowired
-    private UserService userService;
+    public ProductLendingRequestsController(ProductService productService, LendingService lendingService, UserService userService) {
+        this.productService = productService;
+        this.lendingService = lendingService;
+        this.userService = userService;
+    }
 
     @GetMapping("/lendingrequests")
     public String getLendingRequestsOverview(

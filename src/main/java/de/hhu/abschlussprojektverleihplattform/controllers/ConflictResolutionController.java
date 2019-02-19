@@ -2,7 +2,6 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,14 @@ import java.util.List;
 //@Controller
 public class ConflictResolutionController {
 
+    private final LendingService lendingService;
+    private final ProductService productService;
+
     @Autowired
-    private LendingService lendingService;
-    @Autowired
-    private ProductService productService;
+    public ConflictResolutionController(LendingService lendingService, ProductService productService) {
+        this.lendingService = lendingService;
+        this.productService = productService;
+    }
 
     @GetMapping("/conflictcenter")
     public String showConflictCenter(Model model) {
