@@ -75,16 +75,16 @@ public class ProductRepository implements IProductRepository {
     public void saveProduct(ProductEntity product) {
         jdbcTemplate.update(
             "INSERT INTO PRODUCT_ENTITY ("
-	    +"COST,"
-	    +" DESCRIPTION,"
-	    +" CITY,"
-	    +" HOUSENUMBER,"
-	    +" POSTCODE,"
-	    +" STREET,"
-	    +" SURETY,"
-	    +" TITLE,"
-	    +" OWNER_USER_ID)"
-	    +"VALUES (?,?,?,?,?,?,?,?,?)",
+	        +"COST,"
+	        +" DESCRIPTION,"
+	        +" CITY,"
+	        +" HOUSENUMBER,"
+	        +" POSTCODE,"
+	        +" STREET,"
+	        +" SURETY,"
+	        +" TITLE,"
+	        +" OWNER_USER_ID)"
+	        +"VALUES (?,?,?,?,?,?,?,?,?)",
             product.getCost(),
             product.getDescription(),
             product.getLocation().getCity(),
@@ -94,7 +94,33 @@ public class ProductRepository implements IProductRepository {
             product.getSurety(),
             product.getTitle(),
             product.getOwner().getUserId()
-	);
+        );
+    }
+
+    @Override
+    public void editProduct(ProductEntity productEntity){
+        jdbcTemplate.update("UPDATE PRODUCT_ENTITY "
+                + "SET COST = ?, "
+                + "DESCRIPTION = ?, "
+                + "CITY = ?, "
+                + "HOUSENUMBER = ?, "
+                + "POSTCODE = ?, "
+                + "STREET = ?, "
+                + "SURETY = ?, "
+                + "TITLE = ?, "
+                + "OWNER_USER_ID = ? "
+                + "WHERE ID = ?",
+                productEntity.getCost(),
+                productEntity.getDescription(),
+                productEntity.getLocation().getCity(),
+                productEntity.getLocation().getHousenumber(),
+                productEntity.getLocation().getPostcode(),
+                productEntity.getLocation().getStreet(),
+                productEntity.getSurety(),
+                productEntity.getTitle(),
+                productEntity.getOwner().getUserId(),
+                productEntity.getId()
+        );
     }
 
 }

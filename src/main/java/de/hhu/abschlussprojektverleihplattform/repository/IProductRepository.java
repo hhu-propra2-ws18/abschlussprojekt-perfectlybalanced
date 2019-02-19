@@ -12,6 +12,8 @@ public interface IProductRepository {
 
     void saveProduct(ProductEntity productEntity);
 
+    void editProduct(ProductEntity productEntity);
+
     ProductEntity getProductById(Long id);
 
     ProductEntity getProductByTitlel(String title);
