@@ -5,16 +5,11 @@ import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Data
@@ -44,7 +39,7 @@ public class LendingRepository implements ILendingRepository {
         jdbcTemplate.update(
                 "INSERT INTO LENDING_ENTITY (STATUS, START, END, BORROWER_USER_ID, PRODUCT_ID, COST_RESERVATIONID, SURETY_RESERVATIONID)" +
                         "VALUES (?,?,?,?,?,?,?)",
-                Lendingstatus.getLemdingStatusValueFrom(lending.getStatus()),
+                lending.getStatus().ordinal(),
                 lending.getStart(),
                 lending.getEnd(),
                 lending.getBorrower().getUserId(),
@@ -83,12 +78,6 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        //SELECT *
-        // FROM LENDING_ENTITY l 
-        //WHERE EXISTS(
-        //SELECT p.ID
-        // FROM PRODUCT_ENTITY p
-        //WHERE p.OWNER_USER_ID = 1  AND l.STATUS = 0);
         String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS(SELECT p.ID FROM PRODUCT_ENTITY p WHERE P.OWNER_USER_ID =" + user.getUserId() + "AND l.STATUS=0"+ Lendingstatus.requested.ordinal() + ")";
         return (List<LendingEntity>)jdbcTemplate.query(query,
                 new Object[]{},
