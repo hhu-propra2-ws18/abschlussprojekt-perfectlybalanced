@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginController {
 
     @GetMapping("/login")
-    public String getLogin(){
+    public String getLogin() {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(!(auth instanceof AnonymousAuthenticationToken)) {
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
             return "redirect:/profile";
         }
 
