@@ -56,12 +56,18 @@ public class UserRepositoryTest {
     @Test
     public void findUserByUsername() {
 
-        UserEntity user = new UserEntity("Max", "Mustermann", "MMustermann", "MaxMuster223", "Max@Mustermann.de");
+        UserEntity user = new UserEntity(
+            "Max",
+            "Mustermann",
+            "MMustermann",
+            "MaxMuster223",
+            "Max@Mustermann.de"
+        );
         UserEntity loadedUser = userRepository.findByUsername("MMustermann");
-        Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname()) &&
-                user.getLastname().equals(loadedUser.getLastname()) &&
-                user.getUsername().equals(loadedUser.getUsername()) &&
-                user.getEmail().equals(loadedUser.getEmail()));
+        Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname())
+            && user.getLastname().equals(loadedUser.getLastname())
+            && user.getUsername().equals(loadedUser.getUsername())
+            && user.getEmail().equals(loadedUser.getEmail()));
 
     }
 
