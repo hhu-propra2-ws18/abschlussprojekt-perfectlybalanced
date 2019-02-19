@@ -69,4 +69,31 @@ public class ProductRepositoryTest {
         Assert.assertSame(loadedProductViaTitle.getId(), loadedProductViaId.getId());
         Assert.assertSame(product.getTitle(), loadedProductViaId.getTitle());
     }
+
+    @Test
+    public void getAllAvailableProducts(){
+        boolean savedProductsExists = false;
+        AddressEntity address3 = RandomTestData.newRandomTestAddress();
+        UserEntity user3 = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(user3);
+        UserEntity loadedUser = userRepository.getUserByFirstname(user3.getFirstname());
+        ProductEntity product = RandomTestData.newRandomTestProduct(loadedUser, address3);
+        productRepository.saveProduct(product);
+        List<ProductEntity> availableProducts = productRepository.getAvailableProducts();
+
+        for (ProductEntity productElement : availableProducts) {
+            if (productElement.getTitle().equals(product.getTitle())
+                    && productElement.getDescription().equals(product.getDescription())
+                    && productElement.getSurety() == product.getSurety()
+                    && productElement.getCost() == product.getCost()
+                    && productElement.getLocation().getStreet()
+                    .equals(product.getLocation().getStreet())
+            ) {
+                savedProductsExists = true;
+            }
+        }
+
+        Assert.assertTrue(savedProductsExists);
+
+    }
 }

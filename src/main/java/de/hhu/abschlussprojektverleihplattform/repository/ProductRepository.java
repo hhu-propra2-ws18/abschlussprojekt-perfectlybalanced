@@ -28,9 +28,11 @@ public class ProductRepository implements IProductRepository {
     @Override
     public ProductEntity getProductById(Long id) {
         try {
-            return (ProductEntity) jdbcTemplate.queryForObject("SELECT * FROM PRODUCT_ENTITY WHERE id=?",
-                    new Object[]{id},
-                    new ProductEntityRowMapper(userRepository));
+            return (ProductEntity) jdbcTemplate.queryForObject(
+                "SELECT * FROM PRODUCT_ENTITY WHERE id=?",
+                new Object[]{id},
+                new ProductEntityRowMapper(userRepository)
+            );
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -53,6 +55,20 @@ public class ProductRepository implements IProductRepository {
             new ProductEntityRowMapper(userRepository)
 	);
 
+    }
+
+    @Override
+    public List<ProductEntity> getAvailableProducts() {
+        return (List<ProductEntity>) jdbcTemplate.query(
+                "SELECT * "
+                +"FROM PRODUCT_ENTITY "
+                +"WHERE EXISTS ( "
+                +"SELECT PRODUCT_ID "
+                +"FROM LENDING_ENTITY "
+                +"WHERE PRODUCT_ID <> PRODUCT_ENTITY.ID)",
+                new Object[]{},
+                new ProductEntityRowMapper(userRepository)
+        );
     }
 
     @Override

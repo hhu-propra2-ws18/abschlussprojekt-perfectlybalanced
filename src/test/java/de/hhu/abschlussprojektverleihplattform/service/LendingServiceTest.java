@@ -691,7 +691,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void DifferenceIs4() {
+    public void differenceIs4() {
         Timestamp first = new Timestamp(1557266400000L);
         Timestamp second = new Timestamp(1557525600010L);
         LendingService logic = new LendingService(null, null);

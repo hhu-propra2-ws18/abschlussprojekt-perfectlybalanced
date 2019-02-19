@@ -7,19 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class ProductController {
 
     // PostMapping fehlt noch
 
-    @Autowired
-    UserRepository userRepository;
+    final UserRepository userRepository;
+
+    final ProductRepository productRepository;
 
     @Autowired
-    ProductRepository productRepository;
+    public ProductController(ProductRepository productRepository, UserRepository userRepository) {
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+    }
 
 
     @GetMapping("/addproduct")
@@ -38,12 +41,17 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail/{id}")
-    public String getProductDetails(Model model, Long id) {
+    public String getProductDetails(Model model, @PathVariable Long id) {
         ProductEntity product = productRepository.getProductById(id);
         if(product != null) {
             model.addAttribute("product", product);
+            return "productdetailedview";
         }
-        return "productdetailedview";
+        return "redirect:/";
+
     }
+
+    //TODO: GetMappings+Views to see all Product and start a request
+    // (Request itself is in ProductLendingRequestController)
 }
 
