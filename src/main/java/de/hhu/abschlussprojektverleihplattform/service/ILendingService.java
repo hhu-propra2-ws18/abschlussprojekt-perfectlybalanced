@@ -15,12 +15,10 @@ public interface ILendingService {
 
     // Request a new Lending
     public boolean requestLending(
-        UserEntity actingUser,
-        ProductEntity
-        product,
-        Timestamp
-        start,
-        Timestamp end
+            UserEntity actingUser,
+            ProductEntity product,
+            Timestamp start,
+            Timestamp end
     );
 
     // Accept/Deny a Request
@@ -41,4 +39,22 @@ public interface ILendingService {
 
     // An admin resolves a conflict and decides who gets the surety
     public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety);
+
+    // The following Methodes are just for the views,
+    // calling them doesnt change anything in the database
+
+    // return all Lendings, that are owned by the user and have the status requested
+    List<LendingEntity> getAllRequestsForUser(UserEntity user);
+
+    // return all Lendings, that are owned by the user
+    List<LendingEntity> getAllLendingsFromUser(UserEntity user);
+
+    // return all Lendings, that are borrowed by the user
+    List<LendingEntity> getAllLendingsForUser(UserEntity user);
+
+    // return all Lendings, that are owned by the user and have the status returned
+    List<LendingEntity> getReturnedLendingFromUser(UserEntity user);
+
+    // return all Lendings, that have the status conflict
+    List<LendingEntity> getAllConflicts();
 }

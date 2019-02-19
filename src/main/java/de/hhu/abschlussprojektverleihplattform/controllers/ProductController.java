@@ -14,9 +14,9 @@ public class ProductController {
 
     // PostMapping fehlt noch
 
-    final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    final ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
     public ProductController(ProductRepository productRepository, UserRepository userRepository) {
@@ -41,9 +41,9 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail/{id}")
-    public String getProductDetails( Model model, @PathVariable Long id) {
+    public String getProductDetails(Model model, @PathVariable Long id) {
         ProductEntity product = productRepository.getProductById(id);
-        if(product != null) {
+        if (product != null) {
             model.addAttribute("product", product);
             return "productdetailedview";
         }
@@ -54,5 +54,8 @@ public class ProductController {
     public String getMyProducts(Model model) {
         return "myproducts";
     }
+
+    //TODO: GetMappings+Views to see all Product and start a request
+    // (Request itself is in ProductLendingRequestController)
 }
 
