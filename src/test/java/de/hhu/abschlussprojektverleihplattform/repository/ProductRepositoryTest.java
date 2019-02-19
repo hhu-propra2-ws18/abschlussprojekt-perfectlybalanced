@@ -113,4 +113,22 @@ public class ProductRepositoryTest {
         List<ProductEntity> allProducts = productRepository.getAllProducts();
         Assert.assertTrue(allProducts.contains(savedProduct));
     }
+  
+    @Test
+    public void getAllProductsFromOneUser(){
+        UserEntity user = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(user);
+        UserEntity testUser = userRepository.getUserByFirstname(user.getFirstname());
+
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+
+        ProductEntity productEntity = RandomTestData.newRandomTestProduct(testUser, address);
+        productRepository.saveProduct(productEntity);
+        ProductEntity testProduct = productRepository.getProductByTitlel(productEntity.getTitle());
+
+        List<ProductEntity> allProductsFromUser
+                = productRepository.getAllProductsFromUser(testUser);
+
+        Assert.assertEquals(1, allProductsFromUser.size());
+    }
 }
