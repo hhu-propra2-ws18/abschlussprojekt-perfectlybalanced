@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Verleihplattform Products Overview</title>
@@ -10,18 +10,14 @@
     <div class="container">
         <div class="m-3"></div>
         <div class="row">
-            <div class="card">
+            <div class="card" th:each="product : ${products}">
                 <div class="card-header">
-                    Produkt 1
+                    <p th:text="${product.title}"></p>
                 </div>
                 <div class="card-body">
-                    <div class="card-text">
-                        Beispielprodukt
-                        <hr>
-                        <a href="/produkt?id=1">
-                            zur Detailansicht
-                        </a>
+                    <div class="card-text" th:text="${product.description}">
                     </div>
+                    <a class="card-footer-item" title="" href="#" th:href="@{|~/productdetail/${product.id}|}">Details</a>
                 </div>
             </div>
         </div>

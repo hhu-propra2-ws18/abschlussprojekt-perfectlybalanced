@@ -14,7 +14,10 @@ public class LendingEntityRowMapper implements RowMapper {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    public LendingEntityRowMapper(UserRepository userRepository, ProductRepository productRepository) {
+    public LendingEntityRowMapper(
+	UserRepository userRepository,
+	ProductRepository productRepository
+    ) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
     }

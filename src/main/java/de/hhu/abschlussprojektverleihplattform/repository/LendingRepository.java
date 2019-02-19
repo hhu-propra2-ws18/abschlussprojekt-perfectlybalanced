@@ -5,12 +5,16 @@ import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Data
@@ -24,7 +28,11 @@ public class LendingRepository implements ILendingRepository {
     final ProductRepository productRepository;
 
     @Autowired
-    public LendingRepository(JdbcTemplate jdbcTemplate, UserRepository userRepository, ProductRepository productRepository) {
+    public LendingRepository(
+        JdbcTemplate jdbcTemplate,
+	UserRepository userRepository,
+	ProductRepository productRepository
+    ) {
         this.jdbcTemplate = jdbcTemplate;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
@@ -36,7 +44,7 @@ public class LendingRepository implements ILendingRepository {
         jdbcTemplate.update(
                 "INSERT INTO LENDING_ENTITY (STATUS, START, END, BORROWER_USER_ID, PRODUCT_ID, COST_RESERVATIONID, SURETY_RESERVATIONID)" +
                         "VALUES (?,?,?,?,?,?,?)",
-                lending.getStatus().ordinal(),
+                Lendingstatus.getLemdingStatusValueFrom(lending.getStatus()),
                 lending.getStart(),
                 lending.getEnd(),
                 lending.getBorrower().getUserId(),

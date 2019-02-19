@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.TestDummys;
+package de.hhu.abschlussprojektverleihplattform.testdummys;
 
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.ILendingService;

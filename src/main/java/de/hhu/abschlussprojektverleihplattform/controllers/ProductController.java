@@ -1,8 +1,8 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
-import de.hhu.abschlussprojektverleihplattform.service.CookieUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,53 +19,30 @@ public class ProductController {
     UserRepository userRepository;
 
     @Autowired
-    CookieUserService cookieUserService;
+    ProductRepository productRepository;
+
 
     @GetMapping("/addproduct")
-    public String getAddProduct(Model model, HttpServletRequest httpServletRequest) {
-        UserEntity user;
-
-        try {
-            user = cookieUserService.getUserFromRequest(httpServletRequest);
-        }catch (Exception e){
-            return "login";
-        }
-
+    public String getAddProduct(Model model) {
         return "addproduct";
     }
 
     @GetMapping("/editproduct")
-    public String getEditProduct(Model model, HttpServletRequest httpServletRequest) {
-
-        UserEntity user;
-
-        try {
-            cookieUserService.getUserFromRequest(httpServletRequest);
-        }catch (Exception e){
-            return "login";
-        }
-
+    public String getEditProduct(Model model) {
         return "editproduct";
     }
 
     @GetMapping("/removeproduct")
-    public String getRemoveProduct(Model model, HttpServletRequest httpServletRequest) {
-        UserEntity user;
-
-        try {
-            cookieUserService.getUserFromRequest(httpServletRequest);
-        }catch (Exception e){
-            return "login";
-        }
-
+    public String getRemoveProduct(Model model) {
         return "removeproduct";
     }
 
-    @GetMapping("/productdetail")
-    public String getProductDetails(Model model, HttpServletRequest httpServletRequest) throws Exception{
-        UserEntity user = cookieUserService.getUserFromRequest(httpServletRequest);
-
-        model.addAttribute("user",user);
+    @GetMapping("/productdetail/{id}")
+    public String getProductDetails(Model model, Long id) {
+        ProductEntity product = productRepository.getProductById(id);
+        if(product != null) {
+            model.addAttribute("product", product);
+        }
         return "productdetailedview";
     }
 }
