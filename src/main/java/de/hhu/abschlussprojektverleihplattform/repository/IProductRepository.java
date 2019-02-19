@@ -8,6 +8,8 @@ public interface IProductRepository {
 
     List<ProductEntity> getAllProducts();
 
+    List<ProductEntity> getAvailableProducts();
+
     void saveProduct(ProductEntity productEntity);
 
     ProductEntity getProductById(Long id);
