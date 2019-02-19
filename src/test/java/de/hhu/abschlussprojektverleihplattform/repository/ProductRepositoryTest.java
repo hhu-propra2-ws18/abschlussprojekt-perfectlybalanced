@@ -69,7 +69,6 @@ public class ProductRepositoryTest {
         Assert.assertSame(loadedProductViaTitle.getId(), loadedProductViaId.getId());
         Assert.assertSame(product.getTitle(), loadedProductViaId.getTitle());
     }
-}
 
     @Test
     public void getAllProductsFromOneUser(){
