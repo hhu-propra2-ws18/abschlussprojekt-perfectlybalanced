@@ -8,4 +8,6 @@ public interface IUserService {
     UserEntity showUserById(Long userId);
     
     UserEntity findByUsername(String username);
+
+    void autoLogin(String username, String plainPassword);
 }
