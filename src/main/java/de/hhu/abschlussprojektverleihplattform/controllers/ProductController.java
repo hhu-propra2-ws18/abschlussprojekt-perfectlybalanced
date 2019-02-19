@@ -41,7 +41,7 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail/{id}")
-    public String getProductDetails( Model model, @PathVariable Long id) {
+    public String getProductDetails(Model model, @PathVariable Long id) {
         ProductEntity product = productRepository.getProductById(id);
         if(product != null) {
             model.addAttribute("product", product);
