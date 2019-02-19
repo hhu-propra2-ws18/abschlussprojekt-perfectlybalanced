@@ -1,12 +1,13 @@
 package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import java.util.List;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Data
@@ -51,13 +52,14 @@ public class UserRepository implements IUserRepository {
     @Override
     public void saveUser(UserEntity user) {
         jdbcTemplate.update(
-            "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL)"
-	        + "VALUES (?,?,?,?,?)",
-            user.getFirstname(),
-            user.getLastname(),
-            user.getUsername(),
-            user.getPassword(),
-            user.getEmail()
+                "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
+                        + "VALUES (?,?,?,?,?,?)",
+                user.getFirstname(),
+                user.getLastname(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getRole().ordinal()
         );
     }
 
@@ -69,8 +71,8 @@ public class UserRepository implements IUserRepository {
     @Override
     public List<UserEntity> getAllUser() {
         return jdbcTemplate.query(
-	    "SELECT * FROM USER_ENTITY",
-	    new BeanPropertyRowMapper<>(UserEntity.class)
-	);
+                "SELECT * FROM USER_ENTITY",
+                new BeanPropertyRowMapper<>(UserEntity.class)
+        );
     }
 }

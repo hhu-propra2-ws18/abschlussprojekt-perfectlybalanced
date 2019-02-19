@@ -38,6 +38,7 @@ public class RegistryController {
         if(bindingResult.hasErrors()) {
             return "registry";
         }
-        return "forward:/login";
+        userService.addUser(userEntity);
+        return "redirect:/login";
     }
 }
