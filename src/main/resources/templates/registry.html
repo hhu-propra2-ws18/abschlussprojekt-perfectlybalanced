@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <label for="firstname">Vorname</label>
                         <input type="text" class="form-control" id="firstname" placeholder="Vorname" required th:field="${user.firstname}">
-                        <small class="form-text text-muted"></small>
+                        <small class="form-text text-muted" th:if="${#fields.hasErrors('user.firstname')}" th:errors="${user.firstname}">Error</small>
                     </div>
                     <div class="form-group">
                         <label for="lastname">Name</label>

@@ -16,7 +16,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     @NotBlank
-    @Size(min=2, max=32, message = "{user.string.size}")
+    @Size(min=2, max=32, message = "Test")
     private String firstname;
     @NotBlank
     @Size(min=2,max=32)
