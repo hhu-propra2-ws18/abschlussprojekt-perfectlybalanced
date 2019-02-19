@@ -44,7 +44,7 @@ public class ProPayService implements IProPayService, IPaymentService {
             createAccountIfNotExists(user1);
             makePayment(username,user1,1);
         }catch (Exception e){
-
+            System.out.println(e);
         }
     }
 

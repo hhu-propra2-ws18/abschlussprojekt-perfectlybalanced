@@ -27,7 +27,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                // hier werden Seiten alle Seiten ausser Login eingetragen, die für jeden Besucher sichtbar sind
+                // hier werden Seiten alle Seiten ausser Login
+                // eingetragen, die für jeden Besucher sichtbar sind
                 .antMatchers("/", "/register**", "/h2-console/**")
                     .permitAll()
                 // nur Admin-Berechtigung
@@ -42,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .and()
                 .csrf()
-                // hebelt Schutzfunktion fuer die H2-Konsole aus
+                    // hebelt Schutzfunktion fuer die H2-Konsole aus
                     .ignoringAntMatchers("/h2-console/**")
                     .and()
                 .headers()
