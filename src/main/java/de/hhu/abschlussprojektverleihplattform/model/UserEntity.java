@@ -29,7 +29,7 @@ public class UserEntity {
     @Size(min=6, message = "{user.password.error}")
     private String password;
     @NotEmpty
-    @Email
+    @Email(message = "{email.error}")
     private String email;
     private Role role;
 

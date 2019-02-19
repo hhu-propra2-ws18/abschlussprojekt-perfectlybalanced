@@ -18,8 +18,12 @@ import javax.validation.Valid;
 @Controller
 public class RegistryController {
 
+    private final IUserService userService;
+
     @Autowired
-    private IUserService userService;
+    public RegistryController(IUserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/register")
     public String getRegisterPage(Model model){
