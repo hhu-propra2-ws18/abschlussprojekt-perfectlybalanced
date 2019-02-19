@@ -24,7 +24,9 @@ public class RegistryController {
     @GetMapping("/register")
     public String getRegisterPage(Model model){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
         if(!(auth instanceof AnonymousAuthenticationToken)) {
             return "redirect:/profile";
         }
@@ -34,7 +36,8 @@ public class RegistryController {
     }
 
     @PostMapping("/register")
-    public String postRegisterUser(@ModelAttribute("user") @Valid UserEntity userEntity, BindingResult bindingResult) {
+    public String postRegisterUser(@ModelAttribute("user") @Valid UserEntity userEntity,
+                                   BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "registry";
         }
