@@ -48,7 +48,11 @@ public class ProductController {
             return "productdetailedview";
         }
         return "redirect:/";
+    }
 
+    @GetMapping("/myproducts")
+    public String getMyProducts(Model model) {
+        return "myproducts";
     }
 }
 
