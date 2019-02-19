@@ -12,12 +12,15 @@ import java.util.List;
 @Controller
 public class DefaultRouteController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
+    @Autowired
+    public DefaultRouteController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping("/")
-    public String getDefaultRouteOverviewOfProducts(Model model){
+    public String getDefaultRouteOverviewOfProducts(Model model) {
 
         //TODO: redirect if user is not logged in
         // Startseite für alle

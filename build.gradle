@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-	id 'com.github.spotbugs' version '1.6.9'
+//	id 'com.github.spotbugs' version '1.6.9'
 	id 'checkstyle'
 	id 'java'
 	id 'org.springframework.boot' version '2.1.2.RELEASE'
@@ -39,15 +39,15 @@ checkstyleTest {
 	source ='src/test/java'
 }
 
-spotbugs {
-	toolVersion = '3.1.11'
-}
+//spotbugs {
+//	toolVersion = '3.1.11'
+//}
 
 // To generate an HTML report instead of XML
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-	reports.xml.enabled = false
-	reports.html.enabled = true
-}
+//tasks.withType(com.github.spotbugs.SpotBugsTask) {
+//	reports.xml.enabled = false
+//	reports.html.enabled = true
+//}
 
 dependencies {
   //javax.xml.bind

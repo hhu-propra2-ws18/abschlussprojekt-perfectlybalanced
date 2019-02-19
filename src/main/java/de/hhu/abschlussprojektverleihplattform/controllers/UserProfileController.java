@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserProfileController {
 
     @GetMapping("/profile")
-    public String getProfile(Model model, Authentication auth){
+    public String getProfile(Model model, Authentication auth) {
 
         //this page should only be available to logged in users.
         //otherwise it would redirect to login page

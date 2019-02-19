@@ -4,7 +4,6 @@ import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
 import de.hhu.abschlussprojektverleihplattform.model.*;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -199,7 +198,7 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user and have the status requested
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        if(ReturnExampleLendings) {
+        if (ReturnExampleLendings) {
             List<LendingEntity> list = new ArrayList<>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
@@ -210,7 +209,7 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
-        if(ReturnExampleLendings) {
+        if (ReturnExampleLendings) {
             List<LendingEntity> list = new ArrayList<>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.confirmt, user, borrower));
@@ -221,7 +220,7 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are borrowed by the user
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
-        if(ReturnExampleLendings) {
+        if (ReturnExampleLendings) {
             List<LendingEntity> list = new ArrayList<>();
             UserEntity owner = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.confirmt, owner, user));
@@ -232,7 +231,7 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user and have the status returned
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
-        if(ReturnExampleLendings) {
+        if (ReturnExampleLendings) {
             List<LendingEntity> list = new ArrayList<>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.returned, user, borrower));
@@ -243,7 +242,7 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that have the status conflict
     public List<LendingEntity> getAllConflicts() {
-        if(ReturnExampleLendings) {
+        if (ReturnExampleLendings) {
             List<LendingEntity> list = new ArrayList<>();
             UserEntity owner = createExampleUser1();
             UserEntity borrower = createExampleUser2();
@@ -265,13 +264,24 @@ public class LendingService implements ILendingService {
 
     // private Methodes for the Develop-Mode
 
-    private LendingEntity createExampleLending1(Lendingstatus status, UserEntity owner, UserEntity borrower) {
+    private LendingEntity createExampleLending1(
+            Lendingstatus status,
+            UserEntity owner, UserEntity borrower
+    ) {
         Timestamp start = new Timestamp(1549368000000L); //3d+2h difference
         Timestamp end = new Timestamp(1549634400000L);
         ProductEntity product = createExampleProduct1(owner);
         Long costReervationID = 1L;
         Long suretyReservationID = 2L;
-        return new LendingEntity(status, start, end, borrower, product, costReervationID, suretyReservationID);
+        return new LendingEntity(
+                status,
+                start,
+                end,
+                borrower,
+                product,
+                costReervationID,
+                suretyReservationID
+        );
     }
 
     private UserEntity createExampleUser1() {
