@@ -9,7 +9,14 @@ import java.util.Collection;
 
 public class AuthenticatedUser extends UserEntity implements UserDetails {
     protected AuthenticatedUser(UserEntity user) {
-        super(user.getFirstname(), user.getLastname(), user.getUsername(), user.getPassword(),user.getEmail(), user.getRole());
+        super(
+            user.getFirstname(),
+            user.getLastname(),
+            user.getUsername(),
+            user.getPassword(),
+            user.getEmail(),
+            user.getRole()
+        );
     }
 
     @Override
