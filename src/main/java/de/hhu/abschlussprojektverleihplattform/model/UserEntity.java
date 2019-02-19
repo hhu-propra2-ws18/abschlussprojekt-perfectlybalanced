@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -14,17 +15,18 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    @NotEmpty
-    @Size(min=2, max=32)
+    @NotBlank
+    @Size(min=2, max=32, message = "{user.string.size}")
     private String firstname;
-    @NotEmpty
+    @NotBlank
     @Size(min=2,max=32)
     private String lastname;
     @Column(unique = true)
-    @NotEmpty
+    @NotBlank
     @Size(min=3, max=32)
     private String username;
-    @NotEmpty
+    @NotBlank
+    @Size(min=6)
     private String password;
     @NotEmpty
     @Email
