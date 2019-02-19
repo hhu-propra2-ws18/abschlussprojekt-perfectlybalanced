@@ -16,17 +16,17 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     @NotBlank
-    @Size(min=2, max=32, message = "{string.size}")
+    @Size(min=2, max=32, message = "Vorname {string.size.error}")
     private String firstname;
     @NotBlank
-    @Size(min=2,max=32, message = "Nachname muss zwischen 2 und 32 Zeichen lang sein")
+    @Size(min=2,max=32, message = "Nachname {string.size.error}")
     private String lastname;
     @Column(unique = true)
     @NotBlank
-    @Size(min=3, max=32, message = "Username muss zwischen 3 und 32 Zeichen lang sein")
+    @Size(min=3, max=32, message = "Username {string.size.error}")
     private String username;
     @NotBlank
-    @Size(min=6, message = "Passwort muss mindestens 6 Zeichen lang sein")
+    @Size(min=6, message = "{user.password.error}")
     private String password;
     @NotEmpty
     @Email
