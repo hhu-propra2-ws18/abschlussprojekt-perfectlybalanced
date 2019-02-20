@@ -26,7 +26,10 @@ public class ProductController {
     private final IProductService productService;
     private final IProductRepository productRepository;
 
-    public ProductController(IUserService userService, IProductService productService, IProductRepository productRepository) {
+    public ProductController(IUserService userService,
+        IProductService productService,
+        IProductRepository productRepository
+    ) {
         this.userService = userService;
         this.productService = productService;
         this.productRepository = productRepository;
