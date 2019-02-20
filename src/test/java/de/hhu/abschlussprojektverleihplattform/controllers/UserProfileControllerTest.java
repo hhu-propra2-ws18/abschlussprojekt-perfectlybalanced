@@ -55,23 +55,19 @@ public class UserProfileControllerTest {
     @Test
     public void test_sarah_can_deposit_money_and_see_her_balance() throws Exception{
 
-        //(new UserDetails("test","test"))
         UserEntity user= RandomTestData.newRandomTestUser();
         userService.addUser(user);
 
-        Principal p=new Principal() {
-            @Override
-            public String getName() {
-                return "test";
-            }
-        };
-
         String username=user.getUsername();
+        int amount=100;
 
-
-        mockMvc.perform(post("/profile/deposit?amount=100")
+        mockMvc.perform(post("/profile/deposit?amount="+amount)
                 .with(user(authenticatedUserService.loadUserByUsername(username)))
         )
             .andExpect(status().is3xxRedirection());
+
+        mockMvc.perform(get("/profile")
+            .with(user(authenticatedUserService.loadUserByUsername(username)))
+        ).andExpect(content().string(containsString(""+amount)));
     }
 }
