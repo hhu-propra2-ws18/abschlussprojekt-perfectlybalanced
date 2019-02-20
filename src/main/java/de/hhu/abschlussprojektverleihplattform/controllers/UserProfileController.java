@@ -17,7 +17,7 @@ public class UserProfileController {
     public ProPayService proPayService;
 
     @GetMapping("/profile")
-    public String getProfile(Model model, Authentication auth) {
+    public String getProfile(Model model, Authentication auth) throws Exception{
 
         //this page should only be available to logged in users.
         //otherwise it would redirect to login page
@@ -32,7 +32,7 @@ public class UserProfileController {
     }
 
     @PostMapping("/profile/deposit")
-    public String depositAmountIntoPropay(@RequestParam Long amount, Authentication auth){
+    public String depositAmountIntoPropay(@RequestParam Long amount, Authentication auth) throws Exception{
         if(amount<=0){
             return "redirect:/profile";
         }
