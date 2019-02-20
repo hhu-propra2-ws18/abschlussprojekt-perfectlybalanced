@@ -22,7 +22,9 @@ public interface ILendingService {
     );
 
     // Accept/Deny a Request
-    public boolean acceptLending(LendingEntity lending, boolean requestIsAccepted);
+    public boolean acceptLendingRequest(LendingEntity lending);
+
+    public boolean denyLendingRequest(LendingEntity lending);
 
     // the second Versions from the following Methodes are not jet safe to use,
     // if the Controllers/Views dont need them they get deleted completly
@@ -57,8 +59,6 @@ public interface ILendingService {
 
     // return all Lendings, that have the status conflict
     List<LendingEntity> getAllConflicts();
-
-    void rejectLending(LendingEntity lending);
 
     LendingEntity getLendingById(Long id);
 }

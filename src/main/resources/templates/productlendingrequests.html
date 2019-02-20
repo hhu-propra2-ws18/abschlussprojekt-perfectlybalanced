@@ -21,8 +21,8 @@
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <form action="/lendingrequests" method="post">
-                                <button type="submit" class="btn btn-success">Approve</button>
+                            <form th:action="@{/lendingrequests/accept(id=${lending.getId()})}" method="post">
+                                <a><button type="submit" class="btn btn-success">Approve</button></a>
                             </form>
                             <div class="m-3"></div>
                             <form th:action="@{/lendingrequests/reject(id=${lending.getId()})}"  method="post">
