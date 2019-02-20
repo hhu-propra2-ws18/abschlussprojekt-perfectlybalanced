@@ -29,8 +29,8 @@ public class ProductController {
     public ProductController(
         IUserService userService,
         IProductService productService,
-        IProductRepository productRepository) {
-
+        IProductRepository productRepository
+    ) {
         this.userService = userService;
         this.productService = productService;
         this.productRepository = productRepository;
