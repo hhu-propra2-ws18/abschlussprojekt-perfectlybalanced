@@ -26,21 +26,20 @@ public interface ILendingService {
 
     public boolean denyLendingRequest(LendingEntity lending);
 
-    // the second Versions from the following Methodes are not jet safe to use,
-    // if the Controllers/Views dont need them they get deleted completly
-
     // Return a Product (two Versions, depending on View/Controller)
     public void returnProduct(LendingEntity lending);
     // public void ReturnProduct(UserEntity actingUser, ProductEntity product);
 
-    // Decide wether a returned product is in acceptable condition or
-    // not (two Versions, depending on View/Controller)
-    public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable);
-    // public boolean checkReturnedProduct(UserEntity actingUser,
-    // ProductEntity product, boolean isAcceptable);
+    // Decide wether a returned product is in acceptable condition or not
+    public boolean acceptReturnedProduct(LendingEntity lending);
+
+    public boolean denyRetunedProduct(LendingEntity lending);
+
 
     // An admin resolves a conflict and decides who gets the surety
-    public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety);
+    public boolean ownerRecivesSurety(LendingEntity lending);
+
+    public boolean borrowerRecivesSurety(LendingEntity lending);
 
     // The following Methodes are just for the views,
     // calling them doesnt change anything in the database
