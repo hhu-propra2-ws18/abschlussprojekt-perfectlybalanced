@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -33,5 +34,15 @@ public class UserProfileControllerTest {
                 .andExpect(content().string(containsString("Benutzername")))
                 .andExpect(content().string(containsString("Transaktionsverlauf")))
                 .andExpect(content().string(containsString("Kontostand")));
+    }
+
+    @Test
+    @WithUserDetails("sarah")
+    public void test_sarah_can_deposit_money_and_see_her_balance() throws Exception{
+        mockMvc.perform(post("/profile/deposit?amount=100"))
+            .andExpect(status().is3xxRedirection());
+
+        mockMvc.perform(get("/profile"))
+                .andExpect(content().string(containsString("Kontostand:")));
     }
 }
