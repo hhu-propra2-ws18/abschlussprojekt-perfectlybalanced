@@ -99,19 +99,6 @@ public class ProductRepository implements IProductRepository {
         );
     }
 
-//    @Override
-//    public List<ProductEntity> getProductsWhereOwnerEqualsUser(Long id) {
-//        try {
-//            return (List<ProductEntity>) jdbcTemplate.query(
-//                    "SELECT * FROM PRODUCT_ENTITY WHERE OWNER_USER_ID=?",
-//                    new Object[]{id},
-//                    new ProductEntityRowMapper(userRepository)
-//            );
-//        } catch (EmptyResultDataAccessException e) {
-//            return null;
-//        }
-//    }
-
     @Override
     public void editProduct(ProductEntity productEntity){
         jdbcTemplate.update("UPDATE PRODUCT_ENTITY "
