@@ -9,13 +9,15 @@
     <nav th:replace="nav-fragment"></nav>
     <div class="container">
         <div class="m-3"></div>
+        <h1>Meine Produkte</h1>
         <div class="row">
-            <div class="card">
+            <p th:if="${gotNoProducts} == true">Keine Produkte vorhanden.</p>
+            <div class="card" th:each="product : ${myProducts}">
                 <div class="card-header">
-                    <p>Mein Produkt Titel</p>
+                    <p th:text="${product.title}">Mein Produkt Titel</p>
                 </div>
                 <div class="card-body">
-                    <div class="card-text">Produktbeschreibung</div>
+                    <div class="card-text" th:text="${product.description}">Produktbeschreibung</div>
                     <a class="card-footer-item" title="" href="#">Details</a>
                 </div>
             </div>

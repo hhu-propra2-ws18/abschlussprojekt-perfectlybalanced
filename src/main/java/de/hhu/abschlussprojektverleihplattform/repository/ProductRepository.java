@@ -2,10 +2,12 @@ package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.database.ProductEntityRowMapper;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -95,6 +97,37 @@ public class ProductRepository implements IProductRepository {
             product.getTitle(),
             product.getOwner().getUserId()
 	);
+    }
+
+    // wird für myproducts view benötigt, damit nur die Produkte
+    // angezeigt werden, die einem gehören
+    /*@Override
+    public List<ProductEntity> getProductsWhereOwnerEqualsUser() {
+        try {
+            return (List<ProductEntity>) jdbcTemplate.query(
+                    "SELECT * "
+                    + "FROM PRODUCT_ENTITY "
+                    + "WHERE OWNER_USER_ID "
+                    + "IN (SELECT USER_ID FROM USER_ENTITY)",
+                    new Object[]{},
+                    new ProductEntityRowMapper(userRepository)
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }*/
+
+    @Override
+    public List<ProductEntity> getProductsWhereOwnerEqualsUser(Long id) {
+        try {
+            return (List<ProductEntity>) jdbcTemplate.query(
+                    "SELECT * FROM PRODUCT_ENTITY WHERE OWNER_USER_ID=?",
+                    new Object[]{id},
+                    new ProductEntityRowMapper(userRepository)
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
 }
