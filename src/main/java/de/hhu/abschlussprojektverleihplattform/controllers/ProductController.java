@@ -3,9 +3,7 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
-import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
 import org.springframework.security.core.Authentication;
@@ -26,10 +24,12 @@ public class ProductController {
 
     private final IUserService userService;
     private final IProductService productService;
+    private final IProductRepository productRepository;
 
-    public ProductController(IUserService userService, IProductService productService) {
+    public ProductController(IUserService userService, IProductService productService, IProductRepository productRepository) {
         this.userService = userService;
         this.productService = productService;
+        this.productRepository = productRepository;
     }
 
 
@@ -116,8 +116,7 @@ public class ProductController {
     @GetMapping("/myproducts")
     public String getMyProducts(Model model, Authentication auth) {
         UserEntity user = (UserEntity) auth.getPrincipal();
-        Long id = user.getUserId();
-        List<ProductEntity> myProducts = productRepository.getProductsWhereOwnerEqualsUser(id);
+        List<ProductEntity> myProducts = productRepository.getAllProductsFromUser(user);
         boolean gotNoProducts = myProducts.isEmpty();
         model.addAttribute("myProducts", myProducts);
         model.addAttribute("gotNoProducts", gotNoProducts);
