@@ -51,7 +51,10 @@ public class ProductLendingRequestsController {
     }
 
     @PostMapping("/lendingrequests/reject")
-    public String handleRejection(Model model, @RequestParam Long id, Authentication auth) throws Exception{
+    public String handleRejection(Model model, @RequestParam Long id,
+                                  Authentication auth)
+            throws Exception{
+
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);

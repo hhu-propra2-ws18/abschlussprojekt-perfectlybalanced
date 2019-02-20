@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .csrf()
                     // hebelt Schutzfunktion fuer die H2-Konsole aus
-                //TODO: Jan fragen -> Revert
+
                     .ignoringAntMatchers("/h2-console/**", "/lendingrequests/**")
                     .and()
                 .headers()

@@ -37,15 +37,15 @@ public class LendingRepository implements ILendingRepository {
     @Override
     public void addLending(LendingEntity lending) {
         jdbcTemplate.update(
-                "INSERT INTO LENDING_ENTITY " +
-                        "(STATUS," +
-                        "START," +
-                        "END," +
-                        "BORROWER_USER_ID," +
-                        "PRODUCT_ID," +
-                        "COST_RESERVATIONID," +
-                        "SURETY_RESERVATIONID)" +
-                        "VALUES (?,?,?,?,?,?,?)",
+                "INSERT INTO LENDING_ENTITY "
+                        + "(STATUS,"
+                        + "START,"
+                        + "END,"
+                        + "BORROWER_USER_ID,"
+                        + "PRODUCT_ID,"
+                        + "COST_RESERVATIONID,"
+                        + "SURETY_RESERVATIONID)"
+                        + "VALUES (?,?,?,?,?,?,?)",
                 lending.getStatus().ordinal(),
                 lending.getStart(),
                 lending.getEnd(),
@@ -57,16 +57,16 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public void update(LendingEntity lending) {
-        String query = "UPDATE LENDING_ENTITY " +
-                "SET " +
-                "STATUS=?," +
-                "START=?," +
-                "END=?," +
-                "BORROWER_USER_ID=?," +
-                "PRODUCT_ID=?," +
-                "COST_RESERVATIONID=?," +
-                "SURETY_RESERVATIONID=?" +
-                " WHERE ID=?";
+        String query = "UPDATE LENDING_ENTITY "
+                + "SET "
+                + "STATUS=?,"
+                + "START=?,"
+                + "END=?,"
+                + "BORROWER_USER_ID=?,"
+                + "PRODUCT_ID=?,"
+                + "COST_RESERVATIONID=?,"
+                + "SURETY_RESERVATIONID=?"
+                + " WHERE ID=?";
 
         jdbcTemplate.update(query,
                 lending.getStatus().ordinal(),
@@ -88,8 +88,8 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public LendingEntity getLendingByProductAndUser(ProductEntity product, UserEntity user) {
-        String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId() +
-                " AND BORROWER_USER_ID=" + user.getUserId() + ";";
+        String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()
+                + " AND BORROWER_USER_ID=" + user.getUserId() + ";";
 
         return (LendingEntity) jdbcTemplate.queryForObject(sql,
                 new LendingEntityRowMapper(userRepository, productRepository));
@@ -115,9 +115,9 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS " +
-                "(SELECT p.ID FROM PRODUCT_ENTITY p WHERE P.OWNER_USER_ID =" + user.getUserId() +
-                " AND l.STATUS=" + Lendingstatus.requested.ordinal() + ")";
+        String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS "
+                + "(SELECT p.ID FROM PRODUCT_ENTITY p WHERE P.OWNER_USER_ID =" + user.getUserId()
+                + " AND l.STATUS=" + Lendingstatus.requested.ordinal() + ")";
 
         return (List<LendingEntity>) jdbcTemplate.query(query,
                 new Object[]{},
@@ -126,9 +126,9 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
-        String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS " +
-                "(SELECT p.id FROM PRODUCT_ENTITY p WHERE l.product_id = p.id " +
-                "AND p.OWNER_USER_ID=" + user.getUserId() + ")";
+        String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS "
+                + "(SELECT p.id FROM PRODUCT_ENTITY p WHERE l.product_id = p.id "
+                + "AND p.OWNER_USER_ID=" + user.getUserId() + ")";
 
         return (List<LendingEntity>) jdbcTemplate.query(query,
                 new Object[]{},
@@ -148,9 +148,9 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
-        String query = "SELECT * FROM LENDING_ENTITY l WHERE " +
-                "(EXISTS (SELECT p.id FROM PRODUCT_ENTITY p WHERE l.product_id = p.id " +
-                "AND p.OWNER_USER_ID=" + user.getUserId() + ")"
+        String query = "SELECT * FROM LENDING_ENTITY l WHERE "
+                + "(EXISTS (SELECT p.id FROM PRODUCT_ENTITY p WHERE l.product_id = p.id "
+                + "AND p.OWNER_USER_ID=" + user.getUserId() + ")"
                 + "AND STATUS=" + Lendingstatus.returned.ordinal() + ")";
 
         return (List<LendingEntity>) jdbcTemplate.query(query,
