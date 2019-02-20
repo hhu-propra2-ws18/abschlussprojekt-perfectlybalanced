@@ -85,8 +85,3 @@ dependencies {
 	//spotbugs
 	spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1'
 }
-
-tasks.register("checkstyle") {
-    dependsOn 'checkstyleMain'
-		dependsOn 'checkstyleTest'
-}
