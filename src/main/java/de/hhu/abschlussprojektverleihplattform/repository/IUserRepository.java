@@ -18,5 +18,4 @@ public interface IUserRepository {
 
     UserEntity getUserByFirstname(String firstname);
     
-    UserEntity getUserByUsername(String username);
 }

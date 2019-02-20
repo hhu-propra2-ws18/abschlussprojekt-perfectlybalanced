@@ -200,7 +200,7 @@ public class LendingService implements ILendingService {
     // return all Lendings, that are owned by the user and have the status requested
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
         if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<>();
+            List<LendingEntity> list = new ArrayList<LendingEntity>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
             return list;
@@ -211,7 +211,7 @@ public class LendingService implements ILendingService {
     // return all Lendings, that are owned by the user
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
         if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<>();
+            List<LendingEntity> list = new ArrayList<LendingEntity>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.confirmt, user, borrower));
             return list;
@@ -222,7 +222,7 @@ public class LendingService implements ILendingService {
     // return all Lendings, that are borrowed by the user
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
         if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<>();
+            List<LendingEntity> list = new ArrayList<LendingEntity>();
             UserEntity owner = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.confirmt, owner, user));
             return list;
@@ -233,7 +233,7 @@ public class LendingService implements ILendingService {
     // return all Lendings, that are owned by the user and have the status returned
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
         if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<>();
+            List<LendingEntity> list = new ArrayList<LendingEntity>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.returned, user, borrower));
             return list;
@@ -244,7 +244,7 @@ public class LendingService implements ILendingService {
     // return all Lendings, that have the status conflict
     public List<LendingEntity> getAllConflicts() {
         if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<>();
+            List<LendingEntity> list = new ArrayList<LendingEntity>();
             UserEntity owner = createExampleUser1();
             UserEntity borrower = createExampleUser2();
             list.add(createExampleLending1(Lendingstatus.conflict, owner, borrower));
