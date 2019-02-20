@@ -25,7 +25,7 @@ public class UserRepositoryTest {
 	    "LastName",
 	    "username",
 	    "password",
-	    "email"
+	    "email@mail.com"
 	);
         userRepository.saveUser(user);
         UserEntity loadedUser = userRepository.getUserByFirstname(user.getFirstname());
@@ -63,7 +63,9 @@ public class UserRepositoryTest {
             "MaxMuster223",
             "Max@Mustermann.de"
         );
+
         UserEntity loadedUser = userRepository.findByUsername("MMustermann");
+
         Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname())
             && user.getLastname().equals(loadedUser.getLastname())
             && user.getUsername().equals(loadedUser.getUsername())
@@ -71,6 +73,59 @@ public class UserRepositoryTest {
 
     }
 
+    @Test
+    public void findByEmail() {
+        // Arrange
+        UserEntity user = new UserEntity(
+                "Markus",
+                "Mueller",
+                "muellerTest",
+                "mueller",
+                "mueller@test.de");
+        userRepository.saveUser(user);
+
+        // Act
+        UserEntity loadedUser = userRepository.findByEmail("mueller@test.de");
+
+        // Assert
+        Assert.assertTrue(user.getEmail().equals(loadedUser.getEmail())
+            && user.getUsername().equals(loadedUser.getUsername()));
+
+
+    }
+
+    @Test
+    public void findByIdExpectNull() {
+        // Arrange
+
+        // Act
+        UserEntity loadedUser = userRepository.findById((long) -9999);
+
+        // Assert
+        Assert.assertNull(loadedUser);
+    }
+
+    @Test
+    public void findByUsernameExpectNull() {
+        // Arrange
+
+        // Act
+        UserEntity loadedUser = userRepository.findByUsername("");
+
+        // Assert
+        Assert.assertNull(loadedUser);
+    }
+
+    @Test
+    public void findByEmailExpectNull() {
+        // Arrange
+
+        // Act
+        UserEntity loadedUser = userRepository.findByEmail("");
+
+        // Assert
+        Assert.assertNull(loadedUser);
+    }
 
     @Test
     public void getAllUsersAfterAddingOneUser() {
