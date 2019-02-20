@@ -13,7 +13,8 @@ public class RandomTestData {
                 RandomStringUtils.randomAlphabetic(10),
                 RandomStringUtils.randomAlphabetic(10),
                 RandomStringUtils.randomAlphabetic(10),
-                RandomStringUtils.randomAlphabetic(10));
+                RandomStringUtils.randomAlphabetic(10),
+                Role.ROLE_USER);
     }
 
     public static AddressEntity newRandomTestAddress() {
