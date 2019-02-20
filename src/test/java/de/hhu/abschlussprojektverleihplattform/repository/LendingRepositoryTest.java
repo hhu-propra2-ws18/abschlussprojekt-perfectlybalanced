@@ -194,7 +194,7 @@ public class LendingRepositoryTest {
         List<LendingEntity> allReturnedLendingsFromOwner
                 = lendingRepository.getAllRequestsForUser(testOwner1);
 
-        Assert.assertEquals(1, allReturnedLendingsFromOwner.size());
+        Assert.assertEquals(2, allReturnedLendingsFromOwner.size());
     }
 
     @Test
@@ -220,7 +220,7 @@ public class LendingRepositoryTest {
         testLending.setStatus(Lendingstatus.denied);
         lendingRepository.update(testLending);
         testLending = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower2);
-        Assert.assertTrue(Lendingstatus.denied.equals(testLending.getStatus()));
+        assertEquals(Lendingstatus.denied, testLending.getStatus());
     }
 
     @Test

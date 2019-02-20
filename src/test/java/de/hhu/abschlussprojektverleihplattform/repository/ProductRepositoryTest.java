@@ -109,7 +109,8 @@ public class ProductRepositoryTest {
         productRepository.saveProduct(productEntity);
         ProductEntity testProduct = productRepository.getProductByTitlel(productEntity.getTitle());
 
-        List<ProductEntity> allProductsFromUser = productRepository.getAllProductsFromUser(testUser);
+        List<ProductEntity> allProductsFromUser
+                = productRepository.getAllProductsFromUser(testUser);
 
         Assert.assertEquals(1, allProductsFromUser.size());
     }
