@@ -23,21 +23,14 @@
         </div>
         <div class="col-md-6">
             <h3>ProPay</h3>
-            <p>
-                Kontostand:
-            </p>
-            <a href="/propay/ueberweisen?id=3">
-                Geld auf dieses Konto ueberweisen
-            </a>
-            <p>
-                Transaktionsverlauf:
-            </p>
-            <ul class="list-group">
-                <li class="list-group-item">Einzahlung: 1 Euro</li>
-                <li class="list-group-item">Peter hat 300 Euro Kaution ueberwiesen</li>
-                <li class="list-group-item">Olaf hat 3 Euro Ausleihgebuer fuer Rasenmaeher gezahlt</li>
-                <li class="list-group-item">Olaf hat 100 Euro Kaution fuer Rasenmaeher gezahlt</li>
-            </ul>
+            <div>
+                <span>Kontostand:</span>
+                <span th:text="${user_balance}"></span>
+            </div>
+            <form action="/profile/deposit?amount=100" method="post">
+                <span>100 Euro auf dieses Konto einzahlen</span>
+                <button type="submit">Einzahlen</button>
+            </form>
         </div>
     </div>
 </div>

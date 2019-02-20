@@ -25,7 +25,7 @@ public class PaymentServiceDummy implements IPaymentService {
 	boolean transfersAreSuccessfull,
 	boolean returnsAreSuccessfull
     ) {
-        payments = new ArrayList<>();
+        payments = new ArrayList<ReservationDummy>();
         id = 1L;
         this.usersHaveMoney = usersHaveMoney;
         this.reservationsAreSuccessfull = reservationsAreSuccessfull;

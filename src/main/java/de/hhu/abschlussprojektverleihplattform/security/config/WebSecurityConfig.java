@@ -31,6 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // eingetragen, die für jeden Besucher sichtbar sind
                 .antMatchers("/", "/register**", "/h2-console/**")
                     .permitAll()
+                .antMatchers("/profile/deposit**")
+                    .hasRole("USER")
                 // nur Admin-Berechtigung
                 /*.antMatchers("/admin")
                     .hasRole("ADMIN")*/

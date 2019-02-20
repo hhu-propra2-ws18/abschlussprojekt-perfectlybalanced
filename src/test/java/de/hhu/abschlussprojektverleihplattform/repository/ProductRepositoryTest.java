@@ -98,6 +98,23 @@ public class ProductRepositoryTest {
     }
 
     @Test
+    public void editProduct(){
+        AddressEntity address4 = RandomTestData.newRandomTestAddress();
+        UserEntity user4 = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(user4);
+        UserEntity loadedUser = userRepository.getUserByFirstname(user4.getFirstname());
+        ProductEntity product = RandomTestData.newRandomTestProduct(loadedUser, address4);
+        productRepository.saveProduct(product);
+        ProductEntity savedProduct = productRepository.getProductByTitlel(product.getTitle());
+        savedProduct.setSurety(10);
+        savedProduct.setCost(30);
+        savedProduct.setTitle("Schraubendreher");
+        productRepository.editProduct(savedProduct);
+        List<ProductEntity> allProducts = productRepository.getAllProducts();
+        Assert.assertTrue(allProducts.contains(savedProduct));
+    }
+  
+    @Test
     public void getAllProductsFromOneUser(){
         UserEntity user = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user);
@@ -114,6 +131,5 @@ public class ProductRepositoryTest {
 
         Assert.assertEquals(1, allProductsFromUser.size());
     }
-
 }
 
