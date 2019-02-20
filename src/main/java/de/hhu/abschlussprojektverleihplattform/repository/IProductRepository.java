@@ -20,4 +20,5 @@ public interface IProductRepository {
     ProductEntity getProductByTitlel(String title);
     
     List<ProductEntity> getAllProductsFromUser(UserEntity user);
+
 }
