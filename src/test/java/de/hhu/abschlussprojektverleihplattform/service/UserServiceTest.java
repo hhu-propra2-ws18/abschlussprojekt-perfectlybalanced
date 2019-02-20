@@ -41,4 +41,10 @@ public class UserServiceTest {
 
         Assert.assertEquals(test, expected);
     }
+
+    @Test
+    public void cannotFindUserById(){
+        UserEntity test = userService.showUserById(48329L);
+        Assert.assertNull(test);
+    }
 }
