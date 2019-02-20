@@ -1,23 +1,33 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.validation.Valid;
 
 @Controller
 public class RegistryController {
 
-    @GetMapping("/register")
-    public String getRegisterPage(Model model) {
+    @Autowired
+    IUserService userService;
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (!(auth instanceof AnonymousAuthenticationToken)) {
+    @GetMapping("/register")
+    public String getRegisterPage(Model model){
+
+        Authentication auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+        if(!(auth instanceof AnonymousAuthenticationToken)) {
             return "redirect:/profile";
         }
 
@@ -26,19 +36,12 @@ public class RegistryController {
     }
 
     @PostMapping("/register")
-    public String postRegisterUser(
-            @RequestParam(value = "username") String username,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "vorname") String vorname,
-            @RequestParam(value = "nachname") String nachname,
-            @RequestParam(value = "email") String email
-    ) {
-        //TODO: check supplied info for duplication with existing user.
-        //TODO: insert new user into db
-        //TODO: login the new user
-        //TODO: throw exception if fields are empty
-        //TODO: validate email and other fields
-
-        return "redirect:/";
+    public String postRegisterUser(@ModelAttribute("user") @Valid UserEntity userEntity,
+                                   BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "registry";
+        }
+        userService.addUser(userEntity);
+        return "redirect:/login";
     }
 }
