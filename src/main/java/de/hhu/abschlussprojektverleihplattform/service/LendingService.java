@@ -30,7 +30,6 @@ public class LendingService implements ILendingService {
 
     // Verfuegbaren Zeitraum pruefen
     public TempZeitraumModel getTime(ProductEntity product) {
-        List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
         //TODO: Irgendwie in ein Format umwandeln, was die Viwes anzeigen koennen
         return new TempZeitraumModel();
     }
