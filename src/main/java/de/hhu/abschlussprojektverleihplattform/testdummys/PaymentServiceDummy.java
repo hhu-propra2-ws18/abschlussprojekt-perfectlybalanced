@@ -88,7 +88,7 @@ public class PaymentServiceDummy implements IPaymentService {
 
     public ReservationDummy findReservation(Long id) {
         for (ReservationDummy reservation : payments) {
-            if (reservation.getId() == id) {
+            if (reservation.getId().equals(id)) {
                 return reservation;
             }
         }
