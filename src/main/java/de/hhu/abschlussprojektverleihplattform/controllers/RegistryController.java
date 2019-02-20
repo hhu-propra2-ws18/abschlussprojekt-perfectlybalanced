@@ -18,8 +18,12 @@ import javax.validation.Valid;
 @Controller
 public class RegistryController {
 
+    private final IUserService userService;
+
     @Autowired
-    IUserService userService;
+    public RegistryController(IUserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/register")
     public String getRegisterPage(Model model){
@@ -41,7 +45,13 @@ public class RegistryController {
         if(bindingResult.hasErrors()) {
             return "registry";
         }
+
+        String username = userEntity.getUsername();
+        String password = userEntity.getPassword();
+
         userService.addUser(userEntity);
-        return "redirect:/login";
+        userService.autoLogin(username, password);
+
+        return "redirect:/profile";
     }
 }

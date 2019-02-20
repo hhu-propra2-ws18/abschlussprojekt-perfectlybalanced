@@ -10,10 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,11 +32,36 @@ public class RegistryControllerTest {
                 .andExpect(content().string(containsString("password")));
     }
 
-    // TODO: Error Handling Spring Security
-
     @Test
     public void test404onwrongparameters() throws Exception{
         mockMvc.perform(post("/register"))
                 .andExpect(status().is4xxClientError());
     }
+
+    @Test
+    public void testPostValidUser() throws Exception {
+        mockMvc.perform(post("/register")
+                .param("firstname","Vorname")
+                .param("lastname", "Name")
+                .param("email", "mail@test.com")
+                .param("username", "testValid")
+                .param("password", "password")
+                .with(csrf()))
+                .andExpect(redirectedUrl("/profile"))
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    public void testPostWrongEmail() throws Exception {
+        mockMvc.perform(post("/register")
+                .param("firstname","Vorname")
+                .param("lastname", "Name")
+                .param("email", "mail")
+                .param("username", "username")
+                .param("password", "password")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("E-Mail ist nicht korrekt.")));
+    }
+
 }

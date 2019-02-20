@@ -53,12 +53,24 @@ public class ProductLendingRequestsController {
     @PostMapping("/lendingrequests/reject")
     public String handleRejection(Model model, @RequestParam Long id,
                                   Authentication auth)
-            throws Exception{
+            throws Exception {
 
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
-        lendingService.rejectLending(requestedLending);
+        lendingService.denyLendingRequest(requestedLending);
+        return "redirect:/lendingrequests";
+    }
+
+    @PostMapping("/lendingrequests/accept")
+    public String handleAccept(Model model, @RequestParam Long id,
+                               Authentication auth)
+            throws Exception {
+
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity loadedUser = userService.findByUsername("sarah");
+        LendingEntity requestedLending = lendingService.getLendingById(id);
+        lendingService.acceptLendingRequest(requestedLending);
         return "redirect:/lendingrequests";
     }
 

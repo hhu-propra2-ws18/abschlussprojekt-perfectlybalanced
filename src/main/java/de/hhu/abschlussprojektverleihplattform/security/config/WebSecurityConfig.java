@@ -2,8 +2,11 @@ package de.hhu.abschlussprojektverleihplattform.security.config;
 
 import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -47,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                     // hebelt Schutzfunktion fuer die H2-Konsole aus
 
-                    .ignoringAntMatchers("/h2-console/**", "/lendingrequests/**")
+                    .ignoringAntMatchers("/h2-console/**")
                     .and()
                 .headers()
                     .frameOptions()
@@ -66,5 +69,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void globalSecurityConfiguration(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
+    }
+
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

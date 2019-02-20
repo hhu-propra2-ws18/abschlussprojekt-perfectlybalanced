@@ -4,6 +4,7 @@ import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
 import de.hhu.abschlussprojektverleihplattform.model.*;
+import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -18,7 +19,9 @@ import java.util.List;
 public class LendingService implements ILendingService {
 
     //For the development of the Controllers/Views
-    private static boolean ReturnExampleLendings = true;
+    //cant be private, since i have to disable them for the tests
+    protected static boolean ReturnExampleLendings = true;
+    protected static boolean UseDummyProPay = true;
 
     private ILendingRepository lending_repository;
     private IPaymentService payment_service;
@@ -26,6 +29,9 @@ public class LendingService implements ILendingService {
     public LendingService(ILendingRepository lending_repository, IPaymentService payment_service) {
         this.lending_repository = lending_repository;
         this.payment_service = payment_service;
+        if (UseDummyProPay) {
+            this.payment_service = new PaymentServiceDummy(true, true, true, true);
+        }
     }
 
     // Verfuegbaren Zeitraum pruefen
@@ -73,8 +79,18 @@ public class LendingService implements ILendingService {
         return false;
     }
 
+    public boolean acceptLendingRequest(LendingEntity lending) {
+        return decideLendingRequest(lending, true);
+    }
+
+    public boolean denyLendingRequest(LendingEntity lending) {
+        return decideLendingRequest(lending, false);
+    }
+
+
     // Anfrage einer Buchung beantworten
-    public boolean acceptLending(LendingEntity lending, boolean requestIsAccepted) {
+    // protected statt private fürs Testen
+    protected boolean decideLendingRequest(LendingEntity lending, boolean requestIsAccepted) {
         if (requestIsAccepted) {
             Long costID = payment_service.reservateAmount(
                     lending.getBorrower(),
@@ -252,13 +268,6 @@ public class LendingService implements ILendingService {
         return lending_repository.getAllConflicts();
     }
 
-    @Override
-    public void rejectLending(LendingEntity lending) {
-        lending.setStatus(Lendingstatus.denied);
-        lending_repository.update(lending);
-    }
-
-    @Override
     public LendingEntity getLendingById(Long id) {
         return lending_repository.getLendingById(id);
     }
