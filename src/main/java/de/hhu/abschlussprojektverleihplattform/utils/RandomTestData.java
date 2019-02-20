@@ -1,10 +1,9 @@
 package de.hhu.abschlussprojektverleihplattform.utils;
 
-import com.mysql.cj.xdevapi.AddResult;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import java.sql.Timestamp;
-import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
+import java.security.SecureRandom;
 
 public class RandomTestData {
 
@@ -17,7 +16,7 @@ public class RandomTestData {
     }
 
     public static AddressEntity newRandomTestAddress() {
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         return new AddressEntity(RandomStringUtils.randomAlphabetic(10),
                 random.nextInt(),
                 random.nextInt(10000) + 9999,
@@ -25,7 +24,7 @@ public class RandomTestData {
     }
 
     public static ProductEntity newRandomTestProduct(UserEntity owner, AddressEntity address) {
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         return new ProductEntity(RandomStringUtils.randomAlphabetic(255),
                 RandomStringUtils.randomAlphabetic(50),
                 random.nextInt(),
