@@ -54,16 +54,19 @@ public class UserService implements IUserService {
     @Override
     public void autoLogin(String username, String plainPassword) {
         UserDetails userDetails = authenticatedUserService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
-                plainPassword,
-                userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken
+            (
+            userDetails,
+            plainPassword,
+            userDetails.getAuthorities()
+            );
 
         Authentication auth = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         if (auth.isAuthenticated()) {
             SecurityContextHolder
-                    .getContext()
-                    .setAuthentication(auth);
+                .getContext()
+                .setAuthentication(auth);
         }
     }
 
