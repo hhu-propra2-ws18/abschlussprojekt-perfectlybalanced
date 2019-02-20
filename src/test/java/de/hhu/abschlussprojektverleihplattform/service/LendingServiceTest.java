@@ -227,7 +227,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.decideLendingRequest(lending, false);
+        boolean result = logic.denyLendingRequest(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -255,7 +255,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.decideLendingRequest(lending, true);
+        boolean result = logic.acceptLendingRequest(lending);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -283,7 +283,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.decideLendingRequest(lending, true);
+        boolean result = logic.acceptLendingRequest(lending);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -324,7 +324,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.decideLendingRequest(lending, true);
+        boolean result = logic.acceptLendingRequest(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -369,7 +369,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.decideLendingRequest(lending, true);
+        boolean result = logic.acceptLendingRequest(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -470,7 +470,7 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         LendingService logic = new LendingService(lending_repository, null);
 
-        boolean result = logic.checkReturnedProduct(lending, false);
+        boolean result = logic.denyRetunedProduct(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -498,7 +498,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.checkReturnedProduct(lending, true);
+        boolean result = logic.acceptReturnedProduct(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -529,7 +529,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.checkReturnedProduct(lending, true);
+        boolean result = logic.acceptReturnedProduct(lending);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -648,7 +648,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.resolveConflict(lending, true);
+        boolean result = logic.ownerRecivesSurety(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -679,7 +679,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.resolveConflict(lending, false);
+        boolean result = logic.borrowerRecivesSurety(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -710,7 +710,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.resolveConflict(lending, true);
+        boolean result = logic.ownerRecivesSurety(lending);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -738,7 +738,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.resolveConflict(lending, false);
+        boolean result = logic.borrowerRecivesSurety(lending);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
