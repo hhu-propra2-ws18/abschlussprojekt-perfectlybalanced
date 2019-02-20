@@ -168,8 +168,8 @@ public class LendingServiceTest {
         Assert.assertTrue(created_lending.getEnd().equals(end));
         Assert.assertEquals(actingUser.getUsername(), created_lending.getBorrower().getUsername());
         Assert.assertEquals(product.getTitle(), created_lending.getProduct().getTitle());
-        Assert.assertTrue(0L == (long) created_lending.getCostReservationID());
-        Assert.assertTrue(0L == (long) created_lending.getSuretyReservationID());
+        Assert.assertEquals(0L, (long) created_lending.getCostReservationID());
+        Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
     @Test
@@ -193,8 +193,8 @@ public class LendingServiceTest {
         Assert.assertTrue(created_lending.getEnd().equals(end));
         Assert.assertEquals(actingUser.getUsername(), created_lending.getBorrower().getUsername());
         Assert.assertEquals(product.getTitle(), created_lending.getProduct().getTitle());
-        Assert.assertTrue(0L == (long) created_lending.getCostReservationID());
-        Assert.assertTrue(0L == (long) created_lending.getSuretyReservationID());
+        Assert.assertEquals(0L, (long) created_lending.getCostReservationID());
+        Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
     // Tests for acceptLending
@@ -323,8 +323,7 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
-        Assert.assertTrue((long) lending.getCostReservationID()
-                == (long) payment_service.getLastId());
+        Assert.assertEquals((long) lending.getCostReservationID(), (long) payment_service.getLastId());
         Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
                 = payment_service.findReservation(lending.getCostReservationID());
@@ -368,8 +367,7 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
-        Assert.assertTrue((long) lending.getCostReservationID()
-                == (long) payment_service.getLastId());
+        Assert.assertEquals((long) lending.getCostReservationID(), (long) payment_service.getLastId());
         Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
                 = payment_service.findReservation(lending.getCostReservationID());
