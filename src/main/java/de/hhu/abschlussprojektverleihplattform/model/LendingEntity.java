@@ -26,13 +26,13 @@ public class LendingEntity {
     }
 
     public LendingEntity(
-	Lendingstatus status,
-	Timestamp start,
-	Timestamp end,
-	UserEntity borrower,
-	ProductEntity product,
-	Long costReservationID,
-	Long suretyReservationID
+        Lendingstatus status,
+        Timestamp start,
+        Timestamp end,
+        UserEntity borrower,
+        ProductEntity product,
+        Long costReservationID,
+        Long suretyReservationID
     ) {
         this.status = status;
         this.start = start;
