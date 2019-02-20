@@ -38,4 +38,6 @@ public interface ILendingRepository {
 
     // return all Lendings, that have the status conflict
     List<LendingEntity> getAllConflicts();
+
+    LendingEntity getLendingById(Long id);
 }
