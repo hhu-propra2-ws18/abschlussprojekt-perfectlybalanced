@@ -35,9 +35,14 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public UserEntity findByUsername(String username) {
-        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE username=?",
-                new Object[]{username},
-                new BeanPropertyRowMapper<>(UserEntity.class));
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE username=?",
+                    new Object[]{username},
+                    new BeanPropertyRowMapper<>(UserEntity.class));
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     @Override
@@ -48,10 +53,14 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public UserEntity getUserByUsername(String username) {
-        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE username=?",
-                new Object[]{username},
-                new BeanPropertyRowMapper<>(UserEntity.class));
+    public UserEntity findByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE email=?",
+                    new Object[]{email},
+                    new BeanPropertyRowMapper<>(UserEntity.class));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

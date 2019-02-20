@@ -1,5 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
+import de.hhu.abschlussprojektverleihplattform.model.validation.UniqueEmail;
+import de.hhu.abschlussprojektverleihplattform.model.validation.UniqueUsername;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,13 +24,15 @@ public class UserEntity {
     @Size(min=2,max=32, message = "Nachname {string.size.error}")
     private String lastname;
     @Column(unique = true)
-    @NotBlank
+    @UniqueUsername
     @Size(min=3, max=32, message = "Username {string.size.error}")
     private String username;
     @NotBlank
     @Size(min=6, message = "{user.password.error}")
     private String password;
+    @Column(unique = true)
     @NotEmpty
+    @UniqueEmail
     @Email(message = "{email.error}")
     private String email;
     private Role role;

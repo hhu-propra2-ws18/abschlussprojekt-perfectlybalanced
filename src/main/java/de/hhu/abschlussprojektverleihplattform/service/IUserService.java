@@ -9,7 +9,8 @@ public interface IUserService {
     
     UserEntity findByUsername(String username);
 
+    UserEntity findByEmail(String email);
+
     void autoLogin(String username, String plainPassword);
 
-    boolean uniqueUsername(UserEntity user);
 }

@@ -47,6 +47,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public UserEntity findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public void autoLogin(String username, String plainPassword) {
         UserDetails userDetails = authenticatedUserService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
@@ -62,10 +67,5 @@ public class UserService implements IUserService {
         }
     }
 
-    @Override
-    public boolean uniqueUsername(UserEntity user) {
-        UserEntity userInDatabase = findByUsername(user.getUsername());
-        return userInDatabase != null;
-    }
 
 }
