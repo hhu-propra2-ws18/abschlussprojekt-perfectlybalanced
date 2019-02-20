@@ -19,7 +19,9 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void editProduct(ProductEntity product) { productRepository.editProduct(product);}
+    public void editProduct(ProductEntity product) {
+        productRepository.editProduct(product);
+    }
 
     @Override
     public List<ProductEntity> showAll(){

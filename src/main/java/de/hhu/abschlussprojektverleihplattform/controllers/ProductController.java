@@ -50,10 +50,10 @@ public class ProductController {
 
     @PostMapping("/addproduct")
     public String postAddProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
-                                 BindingResult bindingResultProduct,
-                                 @ModelAttribute("address") @Valid AddressEntity addressEntity,
-                                 BindingResult bindingResultAddress,
-                                 @ModelAttribute("user") UserEntity userEntity){
+        BindingResult bindingResultProduct,
+        @ModelAttribute("address") @Valid AddressEntity addressEntity,
+        BindingResult bindingResultAddress,
+        @ModelAttribute("user") UserEntity userEntity){
 
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "addproduct";
@@ -77,17 +77,17 @@ public class ProductController {
     }
 
     @PostMapping("/editproduct/{id}")
-    public String postEditProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
-                                  BindingResult bindingResultProduct,
-                                  @ModelAttribute("address") @Valid AddressEntity addressEntity,
-                                  BindingResult bindingResultAddress,
-                                  @ModelAttribute("user") UserEntity userEntity,
-                                  @PathVariable Long id){
-
+    public String postEditProduct(
+        @ModelAttribute("product") @Valid ProductEntity productEntity,
+        BindingResult bindingResultProduct,
+        @ModelAttribute("address") @Valid AddressEntity addressEntity,
+        BindingResult bindingResultAddress,
+        @ModelAttribute("user") UserEntity userEntity,
+        @PathVariable Long id
+    ){
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "editproduct";
         }
-
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
         productService.editProduct(productEntity);
