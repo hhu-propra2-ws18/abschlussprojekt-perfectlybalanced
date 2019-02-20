@@ -77,16 +77,16 @@ public class ProductRepository implements IProductRepository {
     public void saveProduct(ProductEntity product) {
         jdbcTemplate.update(
             "INSERT INTO PRODUCT_ENTITY ("
-	    +"COST,"
-	    +" DESCRIPTION,"
-	    +" CITY,"
-	    +" HOUSENUMBER,"
-	    +" POSTCODE,"
-	    +" STREET,"
-	    +" SURETY,"
-	    +" TITLE,"
-	    +" OWNER_USER_ID)"
-	    +"VALUES (?,?,?,?,?,?,?,?,?)",
+	        +"COST,"
+	        +" DESCRIPTION,"
+	        +" CITY,"
+	        +" HOUSENUMBER,"
+	        +" POSTCODE,"
+	        +" STREET,"
+	        +" SURETY,"
+	        +" TITLE,"
+	        +" OWNER_USER_ID)"
+	        +"VALUES (?,?,?,?,?,?,?,?,?)",
             product.getCost(),
             product.getDescription(),
             product.getLocation().getCity(),
@@ -96,26 +96,8 @@ public class ProductRepository implements IProductRepository {
             product.getSurety(),
             product.getTitle(),
             product.getOwner().getUserId()
-	);
+        );
     }
-
-    // wird für myproducts view benötigt, damit nur die Produkte
-    // angezeigt werden, die einem gehören
-    /*@Override
-    public List<ProductEntity> getProductsWhereOwnerEqualsUser() {
-        try {
-            return (List<ProductEntity>) jdbcTemplate.query(
-                    "SELECT * "
-                    + "FROM PRODUCT_ENTITY "
-                    + "WHERE OWNER_USER_ID "
-                    + "IN (SELECT USER_ID FROM USER_ENTITY)",
-                    new Object[]{},
-                    new ProductEntityRowMapper(userRepository)
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }*/
 
     @Override
     public List<ProductEntity> getProductsWhereOwnerEqualsUser(Long id) {
@@ -128,6 +110,40 @@ public class ProductRepository implements IProductRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    @Override
+    public void editProduct(ProductEntity productEntity){
+        jdbcTemplate.update("UPDATE PRODUCT_ENTITY "
+                + "SET COST = ?, "
+                + "DESCRIPTION = ?, "
+                + "CITY = ?, "
+                + "HOUSENUMBER = ?, "
+                + "POSTCODE = ?, "
+                + "STREET = ?, "
+                + "SURETY = ?, "
+                + "TITLE = ?, "
+                + "OWNER_USER_ID = ? "
+                + "WHERE ID = ?",
+                productEntity.getCost(),
+                productEntity.getDescription(),
+                productEntity.getLocation().getCity(),
+                productEntity.getLocation().getHousenumber(),
+                productEntity.getLocation().getPostcode(),
+                productEntity.getLocation().getStreet(),
+                productEntity.getSurety(),
+                productEntity.getTitle(),
+                productEntity.getOwner().getUserId(),
+                productEntity.getId()
+        );
+    }
+
+    @Override
+    public List<ProductEntity> getAllProductsFromUser(UserEntity user) {
+        String query = "SELECT * FROM PRODUCT_ENTITY WHERE OWNER_USER_ID=" + user.getUserId();
+        return (List<ProductEntity>)jdbcTemplate.query(query,
+                new Object[]{},
+                new ProductEntityRowMapper(userRepository));
     }
 
 }

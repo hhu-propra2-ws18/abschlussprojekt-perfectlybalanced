@@ -13,7 +13,8 @@ public class RandomTestData {
                 RandomStringUtils.randomAlphabetic(10),
                 RandomStringUtils.randomAlphabetic(10),
                 RandomStringUtils.randomAlphabetic(10),
-                RandomStringUtils.randomAlphabetic(10));
+                RandomStringUtils.randomAlphabetic(10),
+                Role.ROLE_USER);
     }
 
     public static AddressEntity newRandomTestAddress() {
@@ -28,8 +29,8 @@ public class RandomTestData {
         Random random = new Random();
         return new ProductEntity(RandomStringUtils.randomAlphabetic(255),
                 RandomStringUtils.randomAlphabetic(50),
-                random.nextInt(),
-                random.nextInt(),
+                random.nextInt(1000),
+                random.nextInt(1000),
                 address,
                 owner);
     }
@@ -45,6 +46,15 @@ public class RandomTestData {
                 0L,
                 0L
 	);
+    }
+
+    public static LendingEntity newRandomLendingStatusConflict(
+        UserEntity borrower,
+        ProductEntity productEntity
+    ){
+        LendingEntity result=newRandomLendingStausDone(borrower,productEntity);
+        result.setStatus(Lendingstatus.conflict);
+        return result;
     }
 
 }
