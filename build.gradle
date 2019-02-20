@@ -41,6 +41,7 @@ checkstyleTest {
 
 spotbugs {
   toolVersion = '3.1.11'
+	sourceSets = []
 }
 
 // To generate an HTML report instead of XML
