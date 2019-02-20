@@ -10,23 +10,45 @@
     <div class="container">
         <div class="m-3"></div>
         <h3>Leih Anfragen</h3>
-        <ul class="list-group">
-            <li class="list-group-item">
-
+            <div class="card" th:each="lending : ${lendings}">
                 <div class="row">
                     <div class="col-md-8">
-                        <span>Ariane will Rasenmaeher ab 1.3.2019 fuer 3 Wochen leihen</span>
+                        <span th:text="${lending.getBorrower().getUsername()}"></span>
+                        <span> möchte das Produkt </span>
+                        <span th:text="${lending.getProduct().getTitle()}"></span>
+                        <span> von dir ausleihen </span>
+                        <span th:text="${lending.getId()}"></span>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
-                            <button class="btn btn-success">Approve</button>
+                            <form action="/lendingrequests" method="post">
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
                             <div class="m-3"></div>
-                            <button class="btn btn-warning">Reject</button>
+                            <form th:action="@{/lendingrequests/reject(id=${lending.getId()})}"  method="post">
+                                <a><button type="submit" class="btn btn-warning">Reject</button></a>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </li>
-        </ul>
+            </div>
     </div>
+
+    <div class="container">
+        <div class="m-3"></div>
+        <h3>History</h3>
+        <div class="card" th:each="oldlending : ${oldLendings}">
+            <div class="row">
+                <div class="col-md-8">
+                    <span th:text="${oldlending.getBorrower().getUsername()}"></span>
+                    <span> wollte das Produkt </span>
+                    <span th:text="${oldlending.getProduct().getTitle()}"></span>
+                    <span> von dir ausleihen --> Status: </span>
+                    <span th:text="${oldlending.getStatus()}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

@@ -55,37 +55,21 @@ public class LendingService implements ILendingService {
                 timeIsOK = false;
             }
         }
-        int totalCost = product.getCost() * daysBetween(start, end);
-        int totalMoney = totalCost + product.getSurety();
+        int totalMoney = product.getSurety() + product.getCost() * daysBetween(start, end);
         boolean moneyIsOK = payment_service.userHasAmount(actingUser, totalMoney);
         if (timeIsOK && moneyIsOK) {
-            Long costID = payment_service.reservateAmount(
+            LendingEntity lending = new LendingEntity(
+                    Lendingstatus.requested,
+                    start,
+                    end,
                     actingUser,
-                    product.getOwner(),
-                    totalCost
+                    product,
+                    0L,
+                    0L
             );
-            Long suretyID = payment_service.reservateAmount(
-                    actingUser,
-                    product.getOwner(),
-                    product.getSurety()
-            );
-            if (costID > 0 && suretyID > 0) {
-                LendingEntity lending
-                        = new LendingEntity(
-                        Lendingstatus.requested,
-                        start,
-                        end,
-                        actingUser,
-                        product,
-                        costID,
-                        suretyID
-                );
-                lending_repository.addLending(lending);
-                return true;
-            } else {
-                payment_service.returnReservatedMoney(actingUser.getUsername(), costID);
-                payment_service.returnReservatedMoney(actingUser.getUsername(), suretyID);
-            }
+            // TODO: check if 0L realy is unused in ProPay
+            lending_repository.addLending(lending);
+            return true;
         }
         return false;
     }
@@ -93,15 +77,32 @@ public class LendingService implements ILendingService {
     // Anfrage einer Buchung beantworten
     public boolean acceptLending(LendingEntity lending, boolean requestIsAccepted) {
         if (requestIsAccepted) {
-            if (payment_service.tranferReservatedMoney(
-                    lending.getBorrower().getUsername(),
-                    lending.getCostReservationID()
-            )
-            ) {
-                lending.setStatus(Lendingstatus.confirmt);
-                lending_repository.update(lending);
-                return true;
+            Long costID = payment_service.reservateAmount(
+                    lending.getBorrower(),
+                    lending.getProduct().getOwner(),
+                    lending.getProduct().getCost()
+                            * daysBetween(lending.getStart(), lending.getEnd())
+            );
+            Long suretyID = payment_service.reservateAmount(
+                    lending.getBorrower(),
+                    lending.getProduct().getOwner(),
+                    lending.getProduct().getSurety()
+            );
+            if (costID > 0 && suretyID > 0) {
+                if (payment_service.tranferReservatedMoney(
+                        lending.getBorrower().getUsername(),
+                        costID
+                )
+                ) {
+                    lending.setStatus(Lendingstatus.confirmt);
+                    lending.setCostReservationID(costID);
+                    lending.setSuretyReservationID(suretyID);
+                    lending_repository.update(lending);
+                    return true;
+                }
             }
+            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
+            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
             return false;
         } else {
             lending.setStatus(Lendingstatus.denied);
@@ -198,12 +199,12 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user and have the status requested
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
+        /*if (ReturnExampleLendings) {
+            List<LendingEntity> list = new ArrayList<>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
             return list;
-        }
+        }*/
         return lending_repository.getAllRequestsForUser(user);
     }
 
@@ -250,6 +251,17 @@ public class LendingService implements ILendingService {
             return list;
         }
         return lending_repository.getAllConflicts();
+    }
+
+    @Override
+    public void rejectLending(LendingEntity lending) {
+        lending.setStatus(Lendingstatus.denied);
+        lending_repository.update(lending);
+    }
+
+    @Override
+    public LendingEntity getLendingById(Long id) {
+        return lending_repository.getLendingById(id);
     }
 
     // private Methode die die Differrenz in Tagen zwischen zwei Timestamps

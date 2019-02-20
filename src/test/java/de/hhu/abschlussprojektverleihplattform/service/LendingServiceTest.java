@@ -148,23 +148,6 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void reservationsFail() {
-        // reservated Time within requested Time
-        UserEntity actingUser = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
-        Timestamp start = new Timestamp(800L);
-        Timestamp end = new Timestamp(3500L);
-
-        boolean result = logic.requestLending(actingUser, product, start, end);
-
-        Assert.assertFalse(result);
-    }
-
-    @Test
     public void reservationSuccess1() {
         // reservated Time within requested Time
         UserEntity actingUser = createExampleUser1();
@@ -185,19 +168,8 @@ public class LendingServiceTest {
         Assert.assertTrue(created_lending.getEnd().equals(end));
         Assert.assertEquals(actingUser.getUsername(), created_lending.getBorrower().getUsername());
         Assert.assertEquals(product.getTitle(), created_lending.getProduct().getTitle());
-        ReservationDummy cost
-                = payment_service.findReservation(created_lending.getCostReservationID());
-        ReservationDummy surety
-                = payment_service.findReservation(created_lending.getSuretyReservationID());
-        Assert.assertEquals(actingUser.getUsername(), cost.getFrom().getUsername());
-        Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
-        //Timedifference between 4 and 5 Days
-        Assert.assertEquals(product.getCost() * 5, cost.getAmount());
-        Assert.assertEquals(PaymentStatus.reservated, cost.getStatus());
-        Assert.assertEquals(actingUser.getUsername(), surety.getFrom().getUsername());
-        Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
-        Assert.assertEquals(product.getSurety(), surety.getAmount());
-        Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
+        Assert.assertEquals(0L, (long) created_lending.getCostReservationID());
+        Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
     @Test
@@ -221,19 +193,8 @@ public class LendingServiceTest {
         Assert.assertTrue(created_lending.getEnd().equals(end));
         Assert.assertEquals(actingUser.getUsername(), created_lending.getBorrower().getUsername());
         Assert.assertEquals(product.getTitle(), created_lending.getProduct().getTitle());
-        ReservationDummy cost
-                = payment_service.findReservation(created_lending.getCostReservationID());
-        ReservationDummy surety
-                = payment_service.findReservation(created_lending.getSuretyReservationID());
-        Assert.assertEquals(actingUser.getUsername(), cost.getFrom().getUsername());
-        Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
-        //Timedifference is between 5 and 6 Days
-        Assert.assertEquals(product.getCost() * 6, cost.getAmount());
-        Assert.assertEquals(PaymentStatus.reservated, cost.getStatus());
-        Assert.assertEquals(actingUser.getUsername(), surety.getFrom().getUsername());
-        Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
-        Assert.assertEquals(product.getSurety(), surety.getAmount());
-        Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
+        Assert.assertEquals(0L, (long) created_lending.getCostReservationID());
+        Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
     // Tests for acceptLending
@@ -267,9 +228,37 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void paymentFails() {
+    public void reservationFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
+        UserEntity borower = createExampleUser1();
+        UserEntity owner = createExampleUser2();
+        ProductEntity product = createExampleProduct1(owner);
+        LendingEntity lending = new LendingEntity(
+                Lendingstatus.requested,
+                start,
+                end,
+                borower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
+        LendingService logic = new LendingService(lending_repository, payment_service);
+
+        boolean result = logic.acceptLending(lending, true);
+
+        Assert.assertFalse(result);
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
+    }
+
+    @Test
+    public void paymentFails() {
+        Timestamp start = new Timestamp(1521811800000L);
+        Timestamp end = new Timestamp(1522326000000L);
         UserEntity borower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
@@ -292,12 +281,25 @@ public class LendingServiceTest {
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
+        ReservationDummy cost
+                = payment_service.findReservation(1L);
+        ReservationDummy surety
+                = payment_service.findReservation(2L);
+        Assert.assertEquals(borower.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
+        //Timedifference is between 5 and 6 Days
+        Assert.assertEquals(product.getCost() * 6, cost.getAmount());
+        Assert.assertEquals(PaymentStatus.returned, cost.getStatus());
+        Assert.assertEquals(borower.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
+        Assert.assertEquals(product.getSurety(), surety.getAmount());
+        Assert.assertEquals(PaymentStatus.returned, surety.getStatus());
     }
 
     @Test
-    public void requestGetsAccepted() {
-        Timestamp start = new Timestamp(300L);
-        Timestamp end = new Timestamp(500L);
+    public void requestGetsAccepted1() {
+        Timestamp start = new Timestamp(1521811800000L);
+        Timestamp end = new Timestamp(1522326000000L);
         UserEntity borower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
@@ -307,7 +309,7 @@ public class LendingServiceTest {
                 end,
                 borower,
                 product,
-                20L,
+                0L,
                 0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
@@ -321,8 +323,67 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
-        Assert.assertEquals(20L, (long) payment_service.getLastId());
+        Assert.assertEquals((long) lending.getCostReservationID(),
+                (long) payment_service.getLastId());
         Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        ReservationDummy cost
+                = payment_service.findReservation(lending.getCostReservationID());
+        ReservationDummy surety
+                = payment_service.findReservation(lending.getSuretyReservationID());
+        Assert.assertEquals(borower.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
+        //Timedifference is between 5 and 6 Days
+        Assert.assertEquals(product.getCost() * 6, cost.getAmount());
+        Assert.assertEquals(PaymentStatus.payed, cost.getStatus());
+        Assert.assertEquals(borower.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
+        Assert.assertEquals(product.getSurety(), surety.getAmount());
+        Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
+    }
+
+    @Test
+    public void requestGetsAccepted2() {
+        Timestamp start = new Timestamp(1546804200000L);
+        Timestamp end = new Timestamp(1547148600000L);
+        UserEntity borower = createExampleUser2();
+        UserEntity owner = createExampleUser1();
+        ProductEntity product = createExampleProduct2(owner);
+        LendingEntity lending = new LendingEntity(
+                Lendingstatus.requested,
+                start,
+                end,
+                borower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
+        LendingService logic = new LendingService(lending_repository, payment_service);
+
+        boolean result = logic.acceptLending(lending, true);
+
+        Assert.assertTrue(result);
+        Assert.assertTrue(lending_repository.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
+        Assert.assertTrue(payment_service.getLastWasTransfer());
+        Assert.assertEquals((long) lending.getCostReservationID(),
+                (long) payment_service.getLastId());
+        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        ReservationDummy cost
+                = payment_service.findReservation(lending.getCostReservationID());
+        ReservationDummy surety
+                = payment_service.findReservation(lending.getSuretyReservationID());
+        Assert.assertEquals(borower.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
+        //Timedifference is between 3 and 4 Days
+        Assert.assertEquals(product.getCost() * 4, cost.getAmount());
+        Assert.assertEquals(PaymentStatus.payed, cost.getStatus());
+        Assert.assertEquals(borower.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
+        Assert.assertEquals(product.getSurety(), surety.getAmount());
+        Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
     }
 
     // Tests for returnProduct
