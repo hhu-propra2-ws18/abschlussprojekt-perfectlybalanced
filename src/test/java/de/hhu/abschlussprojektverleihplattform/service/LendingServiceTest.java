@@ -15,7 +15,7 @@ public class LendingServiceTest {
 
 
     @Before
-    public void UnsetDevelopFlags() {
+    public void unsetDevelopFlags() {
         LendingService.UseDummyProPay = false;
         LendingService.ReturnExampleLendings = false;
     }
