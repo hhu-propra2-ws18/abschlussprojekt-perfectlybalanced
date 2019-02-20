@@ -45,14 +45,15 @@ public class UserRepository implements IUserRepository {
     @Override
     public void saveUser(UserEntity user) {
         jdbcTemplate.update(
-                "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
-                        + "VALUES (?,?,?,?,?,?)",
-                user.getFirstname(),
-                user.getLastname(),
-                user.getUsername(),
-                user.getPassword(),
-                user.getEmail(),
-                user.getRole().ordinal()
+
+            "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
+	        + "VALUES (?,?,?,?,?,?)",
+            user.getFirstname(),
+            user.getLastname(),
+            user.getUsername(),
+            user.getPassword(),
+            user.getEmail(),
+            user.getRole().ordinal()
         );
     }
 
