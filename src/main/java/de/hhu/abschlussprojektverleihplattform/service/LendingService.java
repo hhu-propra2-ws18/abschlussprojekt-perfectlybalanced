@@ -141,6 +141,14 @@ public class LendingService implements ILendingService {
         lending_repository.update(lending);
     }
 
+    public boolean acceptReturnedProduct(LendingEntity lending) {
+        return checkReturnedProduct(lending, true);
+    }
+
+    public boolean denyRetunedProduct(LendingEntity lending) {
+        return checkReturnedProduct(lending, false);
+    }
+
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable) {
         if (isAcceptable) {
@@ -186,6 +194,14 @@ public class LendingService implements ILendingService {
             lending_repository.update(lending);
             return true;
         }
+    }
+
+    public boolean ownerRecivesSurety(LendingEntity lending) {
+        return resolveConflict(lending, true);
+    }
+
+    public boolean borrowerRecivesSurety(LendingEntity lending) {
+        return resolveConflict(lending, false);
     }
 
     // Konflikt vom Admin loesen
