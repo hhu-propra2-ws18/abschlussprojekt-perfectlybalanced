@@ -18,11 +18,12 @@ public class UserServiceTest {
 
     @Test
     public void saveOneUser() {
-        UserEntity test = new UserEntity("Max",
-                "Mustermann",
-                "maxmustermann",
-                "password",
-                "test@mailtest.test");
+        UserEntity test = new UserEntity(
+	    "Max",
+	    "Mustermann",
+	    "maxmustermann",
+	    "password",
+	    "test@mailtest.test");
 
         userService.addUser(test);
         UserEntity expected = userService.findByUsername(test.getUsername());
@@ -33,7 +34,13 @@ public class UserServiceTest {
 
     @Test
     public void findUserById() {
-        UserEntity newUser = new UserEntity("Moritz", "Mustermann", "moritzmustermann", "password", "moritz@tester.com");
+        UserEntity newUser = new UserEntity(
+            "Moritz",
+            "Mustermann",
+            "moritzmustermann",
+            "password",
+            "moritz@tester.com");
+
         userService.addUser(newUser);
         UserEntity expected = userService.findByUsername("moritzmustermann");
 

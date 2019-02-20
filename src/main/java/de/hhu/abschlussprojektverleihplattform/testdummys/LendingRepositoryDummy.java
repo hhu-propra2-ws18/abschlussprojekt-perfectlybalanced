@@ -18,7 +18,7 @@ public class LendingRepositoryDummy implements ILendingRepository {
     private LendingEntity lendingByProductAndUser;
 
     public LendingRepositoryDummy() {
-        lendings = new ArrayList<>();
+        lendings = new ArrayList<LendingEntity>();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class LendingRepositoryDummy implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllLendingsFromProduct(ProductEntity product) {
-        ArrayList<LendingEntity> ret = new ArrayList<>();
+        ArrayList<LendingEntity> ret = new ArrayList<LendingEntity>();
         for (LendingEntity lend : lendings) {
             if (lend.getProduct().getTitle().equals(product.getTitle())) {
                 ret.add(lend);
@@ -98,6 +98,11 @@ public class LendingRepositoryDummy implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllConflicts() {
+        return null;
+    }
+
+    @Override
+    public LendingEntity getLendingById(Long id) {
         return null;
     }
 }

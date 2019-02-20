@@ -34,6 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // eingetragen, die für jeden Besucher sichtbar sind
                 .antMatchers("/", "/register**", "/h2-console/**")
                     .permitAll()
+                .antMatchers("/profile/deposit**")
+                    .hasRole("USER")
                 // nur Admin-Berechtigung
                 /*.antMatchers("/admin")
                     .hasRole("ADMIN")*/
@@ -47,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .csrf()
                     // hebelt Schutzfunktion fuer die H2-Konsole aus
+
                     .ignoringAntMatchers("/h2-console/**")
                     .and()
                 .headers()

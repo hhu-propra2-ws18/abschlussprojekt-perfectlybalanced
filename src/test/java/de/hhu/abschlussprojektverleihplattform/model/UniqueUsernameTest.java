@@ -27,11 +27,21 @@ public class UniqueUsernameTest {
     public void validateDuplicatedUsername() throws Exception {
         // Arrange
         String login = "Duplo";
-        UserEntity user = new UserEntity("Max", "Mock", login, "mocking", "mock@test.com");
+        UserEntity user = new UserEntity(
+            "Max",
+            "Mock",
+            login,
+            "mocking",
+            "mock@test.com");
         userService.addUser(user);
 
         // Act
-        UserEntity newUser = new UserEntity("Moritz", "Mock2", login, "mocking", "mock2@test.com");
+        UserEntity newUser = new UserEntity(
+            "Moritz", 
+            "Mock2", 
+            login, 
+            "mocking", 
+            "mock2@test.com");
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(newUser);
 
         // Assert
@@ -44,7 +54,12 @@ public class UniqueUsernameTest {
         String login = " ";
 
         // Act
-        UserEntity newUser = new UserEntity("Moritz", "Mock2", login, "mocking", "mock2@test.com");
+        UserEntity newUser = new UserEntity(
+            "Moritz", 
+            "Mock2", 
+            login, 
+            "mocking", 
+            "mock2@test.com");
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(newUser);
 
         // Assert
@@ -57,7 +72,13 @@ public class UniqueUsernameTest {
         String username = "test space";
 
         // Act
-        UserEntity newUser = new UserEntity("Moritz", "Mock2", username, "mocking", "mock2@test.com");
+        UserEntity newUser = new UserEntity(
+            "Moritz",
+            "Mock2",
+            username,
+            "mocking",
+            "mock2@test.com");
+
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(newUser);
 
         // Assert
@@ -70,7 +91,12 @@ public class UniqueUsernameTest {
         String username = "  test    space  ";
 
         // Act
-        UserEntity newUser = new UserEntity("Moritz", "Mock2", username, "mocking", "mock2@test.com");
+        UserEntity newUser = new UserEntity(
+            "Moritz",
+            "Mock2",
+            username,
+            "mocking",
+            "mock2@test.com");
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(newUser);
 
         // Assert
