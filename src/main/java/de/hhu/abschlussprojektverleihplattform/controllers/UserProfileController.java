@@ -32,7 +32,10 @@ public class UserProfileController {
     }
 
     @PostMapping("/profile/deposit")
-    public String depositAmountIntoPropay(@RequestParam Long amount, Authentication auth) throws Exception{
+    public String depositAmountIntoPropay(
+        @RequestParam Long amount,
+        Authentication auth
+    ) throws Exception{
         if(amount<=0){
             return "redirect:/profile";
         }
