@@ -197,7 +197,7 @@ public class LendingServiceTest {
         Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
-    // Tests for acceptLending
+    // Tests for decideLendingRequest
 
     @Test
     public void requestGetsDenied() {
@@ -220,7 +220,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLending(lending, false);
+        boolean result = logic.decideLendingRequest(lending, false);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -248,7 +248,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLending(lending, true);
+        boolean result = logic.decideLendingRequest(lending, true);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -276,7 +276,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLending(lending, true);
+        boolean result = logic.decideLendingRequest(lending, true);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -317,7 +317,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLending(lending, true);
+        boolean result = logic.decideLendingRequest(lending, true);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -362,7 +362,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLending(lending, true);
+        boolean result = logic.decideLendingRequest(lending, true);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());

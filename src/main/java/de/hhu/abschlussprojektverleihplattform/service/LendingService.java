@@ -74,8 +74,18 @@ public class LendingService implements ILendingService {
         return false;
     }
 
+    public boolean acceptLendingRequest(LendingEntity lending) {
+        return decideLendingRequest(lending, true);
+    }
+
+    public boolean denyLendingRequest(LendingEntity lending) {
+        return decideLendingRequest(lending, false);
+    }
+
+
     // Anfrage einer Buchung beantworten
-    public boolean acceptLending(LendingEntity lending, boolean requestIsAccepted) {
+    // protected statt private fürs Testen
+    protected boolean decideLendingRequest(LendingEntity lending, boolean requestIsAccepted) {
         if (requestIsAccepted) {
             Long costID = payment_service.reservateAmount(
                     lending.getBorrower(),
@@ -253,13 +263,6 @@ public class LendingService implements ILendingService {
         return lending_repository.getAllConflicts();
     }
 
-    @Override
-    public void rejectLending(LendingEntity lending) {
-        lending.setStatus(Lendingstatus.denied);
-        lending_repository.update(lending);
-    }
-
-    @Override
     public LendingEntity getLendingById(Long id) {
         return lending_repository.getLendingById(id);
     }
