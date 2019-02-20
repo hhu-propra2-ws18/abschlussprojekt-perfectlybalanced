@@ -5,7 +5,6 @@ import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
-import org.apache.catalina.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +19,9 @@ import javax.validation.Valid;
 @Controller
 public class ProductController {
 
-    final IUserService userService;
+    final private IUserService userService;
 
-    final IProductService productService;
+    final private IProductService productService;
 
     public ProductController(IUserService userService, IProductService productService) {
         this.userService = userService;
@@ -66,11 +65,34 @@ public class ProductController {
         return "redirect:/";
     }
 
-    @GetMapping("/editproduct")
-    public String getEditProduct(Model model) {
-        return "editproduct";
+    @GetMapping("/editproduct/{id}")
+    public String getEditProduct(Model model, @PathVariable Long id) {
+        ProductEntity product = productService.getById(id);
+        if(product != null) {
+            model.addAttribute("product", product);
+            model.addAttribute("address", product.getLocation());
+            return "editproduct";
+        }
+        return "redirect:/";
     }
 
+    @PostMapping("/editproduct/{id}")
+    public String postEditProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
+                                  BindingResult bindingResultProduct,
+                                  @ModelAttribute("address") @Valid AddressEntity addressEntity,
+                                  BindingResult bindingResultAddress,
+                                  @ModelAttribute("user") UserEntity userEntity,
+                                  @PathVariable Long id){
+
+        if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
+            return "editproduct";
+        }
+
+        productEntity.setLocation(addressEntity);
+        productEntity.setOwner(userEntity);
+        productService.editProduct(productEntity);
+        return "redirect:/";
+    }
 
     @GetMapping("/removeproduct")
     public String getRemoveProduct(Model model) {
