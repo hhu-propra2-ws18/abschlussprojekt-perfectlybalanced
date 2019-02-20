@@ -3,14 +3,11 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-<<<<<<< HEAD
 import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-=======
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
->>>>>>> develop
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
