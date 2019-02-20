@@ -196,4 +196,55 @@ public class LendingRepositoryTest {
 
         Assert.assertEquals(1, allReturnedLendingsFromOwner.size());
     }
+
+    @Test
+    public void updateLendingStatus(){
+        UserEntity owner2 = RandomTestData.newRandomTestUser();
+        UserEntity borrower2 = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner2);
+        userRepository.saveUser(borrower2);
+        UserEntity testOwner2 = userRepository.getUserByFirstname(owner2.getFirstname());
+        UserEntity testBorrower2 = userRepository.getUserByFirstname(borrower2.getFirstname());
+
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+
+        ProductEntity productEntity = RandomTestData.newRandomTestProduct(testOwner2, address);
+        productRepository.saveProduct(productEntity);
+        ProductEntity testProduct = productRepository.getProductByTitlel(productEntity.getTitle());
+
+        LendingEntity lendingEntity
+                = RandomTestData.newRandomLendingStausDone(testBorrower2, testProduct);
+        lendingRepository.addLending(lendingEntity);
+        LendingEntity testLending
+                = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower2);
+        testLending.setStatus(Lendingstatus.denied);
+        lendingRepository.update(testLending);
+        testLending = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower2);
+        Assert.assertTrue(Lendingstatus.denied.equals(testLending.getStatus()));
+    }
+
+    @Test
+    public void getLendingById(){
+        UserEntity owner3 = RandomTestData.newRandomTestUser();
+        UserEntity borrower3 = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner3);
+        userRepository.saveUser(borrower3);
+        UserEntity testOwner3 = userRepository.getUserByFirstname(owner3.getFirstname());
+        UserEntity testBorrower3 = userRepository.getUserByFirstname(borrower3.getFirstname());
+
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+
+        ProductEntity productEntity = RandomTestData.newRandomTestProduct(testOwner3, address);
+        productRepository.saveProduct(productEntity);
+        ProductEntity testProduct = productRepository.getProductByTitlel(productEntity.getTitle());
+
+        LendingEntity lendingEntity
+                = RandomTestData.newRandomLendingStausDone(testBorrower3, testProduct);
+        lendingRepository.addLending(lendingEntity);
+        LendingEntity testLending
+                = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower3);
+        LendingEntity testLendingLoadedById = lendingRepository.getLendingById(testLending.getId());
+
+        Assert.assertEquals(testLending, testLendingLoadedById);
+    }
 }

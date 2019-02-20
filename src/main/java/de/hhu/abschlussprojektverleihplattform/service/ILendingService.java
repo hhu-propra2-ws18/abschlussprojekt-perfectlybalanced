@@ -57,4 +57,8 @@ public interface ILendingService {
 
     // return all Lendings, that have the status conflict
     List<LendingEntity> getAllConflicts();
+
+    void rejectLending(LendingEntity lending);
+
+    LendingEntity getLendingById(Long id);
 }

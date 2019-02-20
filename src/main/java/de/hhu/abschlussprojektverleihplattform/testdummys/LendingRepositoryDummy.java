@@ -100,4 +100,9 @@ public class LendingRepositoryDummy implements ILendingRepository {
     public List<LendingEntity> getAllConflicts() {
         return null;
     }
+
+    @Override
+    public LendingEntity getLendingById(Long id) {
+        return null;
+    }
 }

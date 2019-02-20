@@ -198,12 +198,12 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user and have the status requested
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        if (ReturnExampleLendings) {
+        /*if (ReturnExampleLendings) {
             List<LendingEntity> list = new ArrayList<>();
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
             return list;
-        }
+        }*/
         return lending_repository.getAllRequestsForUser(user);
     }
 
@@ -250,6 +250,17 @@ public class LendingService implements ILendingService {
             return list;
         }
         return lending_repository.getAllConflicts();
+    }
+
+    @Override
+    public void rejectLending(LendingEntity lending) {
+        lending.setStatus(Lendingstatus.denied);
+        lending_repository.update(lending);
+    }
+
+    @Override
+    public LendingEntity getLendingById(Long id) {
+        return lending_repository.getLendingById(id);
     }
 
     // private Methode die die Differrenz in Tagen zwischen zwei Timestamps
