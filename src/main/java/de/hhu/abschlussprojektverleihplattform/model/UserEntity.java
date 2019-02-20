@@ -37,7 +37,7 @@ public class UserEntity {
 
     }
 
-    public UserEntity(
+/*    public UserEntity(
 	String firstname,
 	String lastname,
 	String username,
@@ -51,7 +51,7 @@ public class UserEntity {
         this.password = password;
         this.email = email;
         this.role = role;
-    }
+    }*/
 
     public UserEntity(
 	String firstname,
@@ -74,6 +74,22 @@ public class UserEntity {
         this.username = null;
         this.password = null;
         this.email = null;
+    }
+
+    public UserEntity(Long userId,
+                      String firstname,
+                      String lastname,
+                      String username,
+                      String password,
+                      String email,
+                      Role role) {
+        this.userId = userId;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
     }
 }
 

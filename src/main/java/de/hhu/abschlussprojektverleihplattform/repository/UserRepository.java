@@ -23,9 +23,14 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public UserEntity findById(Long userId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY where user_Id=?",
-                new Object[]{userId},
-                new BeanPropertyRowMapper<>(UserEntity.class));
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY where user_Id=? limit 1",
+                    new Object[]{userId},
+                    new BeanPropertyRowMapper<>(UserEntity.class));
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     @Override
