@@ -26,7 +26,8 @@ public class ProductController {
     private final IProductService productService;
     private final IProductRepository productRepository;
 
-    public ProductController(IUserService userService,
+    public ProductController(
+        IUserService userService,
         IProductService productService,
         IProductRepository productRepository
     ) {
