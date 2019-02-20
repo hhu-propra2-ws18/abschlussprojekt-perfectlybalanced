@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -131,4 +132,5 @@ public class ProductRepository implements IProductRepository {
                 new Object[]{},
                 new ProductEntityRowMapper(userRepository));
     }
+
 }

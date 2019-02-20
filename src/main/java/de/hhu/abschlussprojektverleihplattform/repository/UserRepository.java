@@ -23,16 +23,26 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public UserEntity findById(Long userId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY where user_Id=?",
-                new Object[]{userId},
-                new BeanPropertyRowMapper<>(UserEntity.class));
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY where user_Id=? limit 1",
+                    new Object[]{userId},
+                    new BeanPropertyRowMapper<>(UserEntity.class));
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     @Override
     public UserEntity findByUsername(String username) {
-        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE username=?",
-                new Object[]{username},
-                new BeanPropertyRowMapper<>(UserEntity.class));
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE username=?",
+                    new Object[]{username},
+                    new BeanPropertyRowMapper<>(UserEntity.class));
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
     @Override
@@ -43,17 +53,27 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
+    public UserEntity findByEmail(String email) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE email=?",
+                    new Object[]{email},
+                    new BeanPropertyRowMapper<>(UserEntity.class));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
     public void saveUser(UserEntity user) {
         jdbcTemplate.update(
-
-            "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
-	        + "VALUES (?,?,?,?,?,?)",
-            user.getFirstname(),
-            user.getLastname(),
-            user.getUsername(),
-            user.getPassword(),
-            user.getEmail(),
-            user.getRole().ordinal()
+                "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
+                        + "VALUES (?,?,?,?,?,?)",
+                user.getFirstname(),
+                user.getLastname(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getRole().ordinal()
         );
     }
 

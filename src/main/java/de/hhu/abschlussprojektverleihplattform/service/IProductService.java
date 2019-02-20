@@ -14,4 +14,5 @@ public interface IProductService {
     ProductEntity getById(Long productId);
 
     ProductEntity getByTitle(String productTitle);
+
 }

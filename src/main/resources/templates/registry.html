@@ -1,6 +1,6 @@
 <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-
 <head>
     <meta charset="UTF-8">
     <title>Verleihplattform Registrierung</title>
@@ -15,6 +15,9 @@
         <h3>User Registrierung</h3>
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <div class="alert alert-danger" role="alert" th:if="${errorUniqueUser != null}" th:text="${errorUniqueUser}">
+                    Der Benutzer existiert schon.
+                </div>
                 <form action="/register" th:action="@{/register}" method="post">
                     <div class="form-group">
                         <label for="firstname">Vorname</label>

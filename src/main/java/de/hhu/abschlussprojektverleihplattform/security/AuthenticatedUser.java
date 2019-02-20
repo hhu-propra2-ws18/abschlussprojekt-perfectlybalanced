@@ -10,6 +10,7 @@ import java.util.Collection;
 public class AuthenticatedUser extends UserEntity implements UserDetails {
     protected AuthenticatedUser(UserEntity user) {
         super(
+            user.getUserId(),
             user.getFirstname(),
             user.getLastname(),
             user.getUsername(),
