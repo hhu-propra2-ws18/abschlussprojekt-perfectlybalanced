@@ -71,7 +71,10 @@ public class ProPayService implements IProPayService, IPaymentService {
     @Override
     public boolean accountExists(String username) {
         try {
+            RestTemplate restTemplate = new RestTemplate();
 
+            String url = baseurl + "account/" + username;
+            Account account = restTemplate.getForObject(url, Account.class);
 
             return true;
         }catch (HttpClientErrorException ex){
@@ -112,12 +115,16 @@ public class ProPayService implements IProPayService, IPaymentService {
 
         System.out.println("attempt to change balance of "+username+" by "+delta);
 
+        RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("amount", "" + delta);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
+        String url = baseurl + "account/"+username;
+        ResponseEntity<Account> response = restTemplate.postForEntity(url, request, Account.class);
     }
 
     @Override
@@ -175,7 +182,7 @@ public class ProPayService implements IProPayService, IPaymentService {
             account = restTemplate.getForObject(url, Account.class);
         }catch (Exception e){
             e.printStackTrace();
-            throw new Exception("user not exists?");
+            throw new Exception("user doesnt exists?");
         }
 
         return account;
@@ -224,6 +231,7 @@ public class ProPayService implements IProPayService, IPaymentService {
             +reservationId
         );
 
+        RestTemplate restTemplate = new RestTemplate();
 
         String method_url = "reservation/punish/"+sourceUsername;
         String url = baseurl + method_url;
@@ -236,6 +244,12 @@ public class ProPayService implements IProPayService, IPaymentService {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("reservationId", "" + reservationId);
 
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<Account> punishedAccount 
+            = restTemplate.postForEntity(
+            URI.create(url),request,Account.class
+        );
     }
 
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
