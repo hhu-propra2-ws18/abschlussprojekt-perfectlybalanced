@@ -35,11 +35,8 @@ public class ProductController {
 
     @ModelAttribute
     public void addAttributes(Model model, Authentication auth) {
-        // ID wird nicht geladen wenn man nur auth.getPrincipal aufruft, deshalb der Weg
-        // über den loadedUser - ggf. fixen @Jan
         UserEntity authUser = (UserEntity) auth.getPrincipal();
-        UserEntity loadUser = userService.findByUsername(authUser.getUsername());
-        model.addAttribute("user", loadUser);
+        model.addAttribute("user", authUser);
     }
 
 
@@ -123,7 +120,5 @@ public class ProductController {
         return "myproducts";
     }
 
-    //TODO: GetMappings+Views to see all Product and start a request
-    // (Request itself is in ProductLendingRequestController)
 }
 
