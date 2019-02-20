@@ -55,8 +55,7 @@ public class LendingService implements ILendingService {
                 timeIsOK = false;
             }
         }
-        int totalCost = product.getCost() * daysBetween(start, end);
-        int totalMoney = totalCost + product.getSurety();
+        int totalMoney = product.getSurety() + product.getCost() * daysBetween(start, end);
         boolean moneyIsOK = payment_service.userHasAmount(actingUser, totalMoney);
         if (timeIsOK && moneyIsOK) {
             LendingEntity lending = new LendingEntity(
@@ -92,10 +91,12 @@ public class LendingService implements ILendingService {
             if (costID > 0 && suretyID > 0) {
                 if (payment_service.tranferReservatedMoney(
                         lending.getBorrower().getUsername(),
-                        lending.getCostReservationID()
+                        costID
                 )
                 ) {
                     lending.setStatus(Lendingstatus.confirmt);
+                    lending.setCostReservationID(costID);
+                    lending.setSuretyReservationID(suretyID);
                     lending_repository.update(lending);
                     return true;
                 }
