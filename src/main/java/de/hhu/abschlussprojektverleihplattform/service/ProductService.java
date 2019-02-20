@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,4 +39,8 @@ public class ProductService implements IProductService {
         return productRepository.getProductByTitlel(productTitle);
     }
 
+    @Override
+    public List<ProductEntity> getAllProductsFromUser(UserEntity user) {
+        return productRepository.getAllProductsFromUser(user);
+    }
 }

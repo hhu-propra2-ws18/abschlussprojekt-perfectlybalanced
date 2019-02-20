@@ -24,12 +24,10 @@ public class ProductController {
 
     private final IUserService userService;
     private final IProductService productService;
-    private final IProductRepository productRepository;
 
-    public ProductController(IUserService userService, IProductService productService, IProductRepository productRepository) {
+    public ProductController(IUserService userService, IProductService productService) {
         this.userService = userService;
         this.productService = productService;
-        this.productRepository = productRepository;
     }
 
 
@@ -116,7 +114,7 @@ public class ProductController {
     @GetMapping("/myproducts")
     public String getMyProducts(Model model, Authentication auth) {
         UserEntity user = (UserEntity) auth.getPrincipal();
-        List<ProductEntity> myProducts = productRepository.getAllProductsFromUser(user);
+        List<ProductEntity> myProducts = productService.getAllProductsFromUser(user);
         boolean gotNoProducts = myProducts.isEmpty();
         model.addAttribute("myProducts", myProducts);
         model.addAttribute("gotNoProducts", gotNoProducts);

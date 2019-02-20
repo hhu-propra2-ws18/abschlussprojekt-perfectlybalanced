@@ -132,5 +132,4 @@ public class ProductRepository implements IProductRepository {
                 new Object[]{},
                 new ProductEntityRowMapper(userRepository));
     }
-
 }
