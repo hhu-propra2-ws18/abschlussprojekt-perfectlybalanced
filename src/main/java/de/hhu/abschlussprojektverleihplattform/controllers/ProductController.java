@@ -19,9 +19,8 @@ import javax.validation.Valid;
 @Controller
 public class ProductController {
 
-    final private IUserService userService;
-
-    final private IProductService productService;
+    private final IUserService userService;
+    private final IProductService productService;
 
     public ProductController(IUserService userService, IProductService productService) {
         this.userService = userService;
