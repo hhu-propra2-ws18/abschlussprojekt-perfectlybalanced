@@ -47,7 +47,10 @@ public class RandomTestData {
 	);
     }
 
-    public static LendingEntity newRandomLendingStatusConflict(UserEntity borrower, ProductEntity productEntity){
+    public static LendingEntity newRandomLendingStatusConflict(
+        UserEntity borrower,
+        ProductEntity productEntity
+    ){
         LendingEntity result=newRandomLendingStausDone(borrower,productEntity);
         result.setStatus(Lendingstatus.conflict);
         return result;
