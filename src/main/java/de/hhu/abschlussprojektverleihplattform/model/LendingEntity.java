@@ -42,10 +42,5 @@ public class LendingEntity {
         this.costReservationID = costReservationID;
         this.suretyReservationID = suretyReservationID;
     }
-
-    public int getValueFromLendingStatus(Lendingstatus lendingstatus){
-        return Lendingstatus.getLemdingStatusValueFrom(lendingstatus);
-    }
-
 }
 

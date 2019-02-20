@@ -40,7 +40,8 @@ public interface ILendingService {
     // An admin resolves a conflict and decides who gets the surety
     public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety);
 
-    // The following Methodes are just for the views, calling them doesnt change anything in the database
+    // The following Methodes are just for the views,
+    // calling them doesnt change anything in the database
 
     // return all Lendings, that are owned by the user and have the status requested
     List<LendingEntity> getAllRequestsForUser(UserEntity user);

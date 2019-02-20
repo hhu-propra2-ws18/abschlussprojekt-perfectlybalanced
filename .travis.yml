@@ -1,4 +1,9 @@
 language: java
-
 script:
-  - ./gradlew checkstyle
+- "./gradlew checkstyle"
+deploy:
+  provider: heroku
+  api_key:
+    secure: iHw3eqzgH4HQRG/lq52tY7ngGJcpArBGnD6mc77WXImWsWyRZ+ya2xZai3ZoUY85ukbRh0ezr5WWBE/h2OfofRXXISh2MslWOEMhXUjJuRgTMfbGwyuezzptnnPhlNdShQJ6MZo2+iqD0DhIqEkYRa7KsVwMW/d2K1JjU/Cq94jcIbmPf0mT43IgA7k2dQanfUW02R5z957scJs4yjCmEVkMlpq7VEOMKy3IENiQOzwOX3uBv1FhPm01s3hXZ0KmFlOWFIqmAz+lpDJdq6Q0/TXraBYYbuDWw+p6QNq/5q94NP4uJmIzfU8wCIkZyWWQM1s4DTt6YBEiER580TxDcnOgaA6Sma6JU1WhAFs7pbVmtjOLqrRO8GITfy1CmUxvyhC05eydGVMdMCxvHbGTMeYAr77ekSwQtYuwROOu4VAUrp+KUsKqvui55lIb/v6GhKKr/VRVLa8PyXSd04RxY9ODy6fxL/I5ifXhq128m1EbG9cxXeT/a9FALnVj7x8yo2NwE8aAOU7bZv7UAko454In0RbDqkyqiB3nK83v1k4vypNIIc2bDHhXTEhiY0Dg/j74vaYJbkV32wDM/7JfMaxCcC9XtS9IrIipR4gvCSq1Fqxrx2CcQ+PysTURfJ4S5SMIPQlNL3w1K48/UVgBRK8iuGk+BVju0jZPJLNPadI=
+  app: propra-proleih
+  on: develop
