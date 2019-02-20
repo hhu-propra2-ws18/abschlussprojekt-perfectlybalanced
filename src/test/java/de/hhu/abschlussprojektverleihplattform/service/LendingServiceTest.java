@@ -323,7 +323,8 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
-        Assert.assertEquals((long) lending.getCostReservationID(), (long) payment_service.getLastId());
+        Assert.assertEquals((long) lending.getCostReservationID(),
+                (long) payment_service.getLastId());
         Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
                 = payment_service.findReservation(lending.getCostReservationID());
@@ -367,7 +368,8 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
-        Assert.assertEquals((long) lending.getCostReservationID(), (long) payment_service.getLastId());
+        Assert.assertEquals((long) lending.getCostReservationID(),
+                (long) payment_service.getLastId());
         Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
                 = payment_service.findReservation(lending.getCostReservationID());
