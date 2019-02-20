@@ -65,7 +65,22 @@ public class ProductLendingRequestsControllerTest {
                 .andExpect(handler().handlerType(ProductLendingRequestsController.class));
 
         verify(lendingService).getLendingById(2L);
-        verify(lendingService).rejectLending(null);
+        verify(lendingService).denyLendingRequest(null);
+    }
+
+    @Test
+    @WithUserDetails("sarah")
+    public void acceptRequest() throws Exception {
+        LendingEntity lending = new LendingEntity();
+        lending.setId(2L);
+        lending.setStatus(Lendingstatus.requested);
+
+        mockMvc.perform(post("/lendingrequests/accept?id=2"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(handler().handlerType(ProductLendingRequestsController.class));
+
+        verify(lendingService).getLendingById(2L);
+        verify(lendingService).acceptLendingRequest(null);
     }
 
 }
