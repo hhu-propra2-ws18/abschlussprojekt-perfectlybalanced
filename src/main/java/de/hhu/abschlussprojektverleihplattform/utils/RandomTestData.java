@@ -29,8 +29,8 @@ public class RandomTestData {
         Random random = new Random();
         return new ProductEntity(RandomStringUtils.randomAlphabetic(255),
                 RandomStringUtils.randomAlphabetic(50),
-                random.nextInt(),
-                random.nextInt(),
+                random.nextInt(1000),
+                random.nextInt(1000),
                 address,
                 owner);
     }
