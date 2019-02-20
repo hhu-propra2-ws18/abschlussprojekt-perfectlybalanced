@@ -19,8 +19,9 @@ import java.util.List;
 public class LendingService implements ILendingService {
 
     //For the development of the Controllers/Views
-    private static boolean ReturnExampleLendings = true;
-    private static boolean UseDummyProPay = true;
+    //cant be private, since i have to disable them for the tests
+    protected static boolean ReturnExampleLendings = true;
+    protected static boolean UseDummyProPay = true;
 
     private ILendingRepository lending_repository;
     private IPaymentService payment_service;

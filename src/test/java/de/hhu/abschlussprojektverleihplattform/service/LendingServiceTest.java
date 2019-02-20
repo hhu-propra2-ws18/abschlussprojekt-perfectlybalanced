@@ -6,12 +6,19 @@ import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentStatus;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Timestamp;
 
 public class LendingServiceTest {
 
+
+    @Before
+    public void UnsetDevelopFlags() {
+        LendingService.UseDummyProPay = false;
+        LendingService.ReturnExampleLendings = false;
+    }
     // Tests for requestLending
 
     @Test
