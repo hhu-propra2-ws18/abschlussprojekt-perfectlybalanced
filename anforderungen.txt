@@ -1,0 +1,66 @@
+Dies Dokument beschreibt welche Anforderungen an das System
+bestehen und welche davon implementiert sind.
+
+Man kann es benutzen um Fortschritt zu sehen und 
+User Stories manuell zu testen.
+
+--- Anforderungen ---
+Implementiert? | Anforderung
+ja  Datenbank soll in einem Container laufen koennen.
+ja  Sinnvoll getestet. 
+ja  hat Travis CI Configuration
+kp  mit docker-compose startbar
+kp  ist nur unter port 8080 erreichbar
+ne  dokumentation, die grundlegende funktionen beschreibt
+ja  mit der propay REST-schnittstelle interagieren
+
+
+--- Meta Anforderungen ---
+Implementiert? | Anforderung
+ja  Jeder Pull Request geht durch ein Code review
+ja  Codeformatierungsrichtlinie mit checkstyle
+
+
+- Minimalanforderungen -
+Implementiert? | Anforderung
+-- Benutzerverwaltung
+ja  unterschiedliche benutzerkonten
+ja  Benutzer anmelden, abmelden
+ne  fuer alle interaktionen ausser anmelden, regristrieren muss man eingeloggt sein
+ja  Benutzer kann mit username,email angelegt werden
+ja  mehrere benutzer koennen die Anwendung gleichzeitig nutzen
+-- Detailansicht
+ja  Titel,Beschreibung
+ne  (optional) Fotos
+ne  Angaben zur Verfuegbarkeit
+ja  Kaution,Kosten der Ausleihe
+ja  Angaben zum standort
+ne  (optional) Karte zum Standort
+ja  Angaben zur verleihenden Person
+ja  Button um den Ausleihprozess zu starten
+-- Uebersicht der Artikel
+ja  uebersicht mit links zur detailansicht der artikel
+-- Einstellen eines Artikels
+ja  Titel
+ja  beschreibung
+ne  (optional) Fotos
+ja  Kautionswert
+ja  Kosten fuer Ausleihen
+ja  Standort des Artikels
+-- Ausleihprozess
+TODO
+-- Bezahlvorgang
+TODO
+-- Benutzerkontenverwaltung
+ja  Profil einsehen, mit Anzeige vom Propay Konto
+ne  (optional) Profil bearbeiten
+ne  Geld auf das Propay Konto einzahlen
+ne  Verlauf der Transaktionen einsehen
+-- Konfliktloesungsstelle
+ne  Admin soll Kaution im Streitfall zuweisen koennen.
+-- ProPay
+ja Propay muss per docker als service eingebunden sein
+
+- Optionale Erweiterungen -
+-- Suche bzw. Filter um Artikel zu suchen
+-- Karte anzeigen mit Artikeln um zu sehen was es in der Naehe zum leihen gibt.
