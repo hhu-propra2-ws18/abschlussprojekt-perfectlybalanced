@@ -210,14 +210,14 @@ public class LendingServiceTest {
     public void requestGetsDenied() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -238,14 +238,14 @@ public class LendingServiceTest {
     public void reservationFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -266,14 +266,14 @@ public class LendingServiceTest {
     public void paymentFails() {
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -292,12 +292,12 @@ public class LendingServiceTest {
                 = payment_service.findReservation(1L);
         ReservationDummy surety
                 = payment_service.findReservation(2L);
-        Assert.assertEquals(borower.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(borrower.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
         //Timedifference is between 5 and 6 Days
         Assert.assertEquals(product.getCost() * 6, cost.getAmount());
         Assert.assertEquals(PaymentStatus.returned, cost.getStatus());
-        Assert.assertEquals(borower.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(borrower.getUsername(), surety.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
         Assert.assertEquals(product.getSurety(), surety.getAmount());
         Assert.assertEquals(PaymentStatus.returned, surety.getStatus());
@@ -307,14 +307,14 @@ public class LendingServiceTest {
     public void requestGetsAccepted1() {
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -332,17 +332,17 @@ public class LendingServiceTest {
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals((long) lending.getCostReservationID(),
                 (long) payment_service.getLastId());
-        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
                 = payment_service.findReservation(lending.getCostReservationID());
         ReservationDummy surety
                 = payment_service.findReservation(lending.getSuretyReservationID());
-        Assert.assertEquals(borower.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(borrower.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
         //Timedifference is between 5 and 6 Days
         Assert.assertEquals(product.getCost() * 6, cost.getAmount());
         Assert.assertEquals(PaymentStatus.payed, cost.getStatus());
-        Assert.assertEquals(borower.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(borrower.getUsername(), surety.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
         Assert.assertEquals(product.getSurety(), surety.getAmount());
         Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
@@ -352,14 +352,14 @@ public class LendingServiceTest {
     public void requestGetsAccepted2() {
         Timestamp start = new Timestamp(1546804200000L);
         Timestamp end = new Timestamp(1547148600000L);
-        UserEntity borower = createExampleUser2();
+        UserEntity borrower = createExampleUser2();
         UserEntity owner = createExampleUser1();
         ProductEntity product = createExampleProduct2(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -377,17 +377,17 @@ public class LendingServiceTest {
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals((long) lending.getCostReservationID(),
                 (long) payment_service.getLastId());
-        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
                 = payment_service.findReservation(lending.getCostReservationID());
         ReservationDummy surety
                 = payment_service.findReservation(lending.getSuretyReservationID());
-        Assert.assertEquals(borower.getUsername(), cost.getFrom().getUsername());
+        Assert.assertEquals(borrower.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
         //Timedifference is between 3 and 4 Days
         Assert.assertEquals(product.getCost() * 4, cost.getAmount());
         Assert.assertEquals(PaymentStatus.payed, cost.getStatus());
-        Assert.assertEquals(borower.getUsername(), surety.getFrom().getUsername());
+        Assert.assertEquals(borrower.getUsername(), surety.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), surety.getTo().getUsername());
         Assert.assertEquals(product.getSurety(), surety.getAmount());
         Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
@@ -399,14 +399,14 @@ public class LendingServiceTest {
     public void productGetsReturned() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -425,14 +425,14 @@ public class LendingServiceTest {
     public void productGetsReturnedAlternative() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -442,7 +442,7 @@ public class LendingServiceTest {
         lending_repository.setLendingByProductAndUser(lending);
         LendingService logic = new LendingService(lending_repository, null);
 
-        logic.returnProduct(borower, product);
+        logic.returnProduct(borrower, product);
 
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
@@ -454,14 +454,14 @@ public class LendingServiceTest {
     public void productGetsReturnedInBadCondition() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.returned,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -481,14 +481,14 @@ public class LendingServiceTest {
     public void productGetsReturnedInGoodCondition() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.returned,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 20L
@@ -505,21 +505,21 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
-        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
     public void returnReservationFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.returned,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -540,14 +540,14 @@ public class LendingServiceTest {
     public void productGetsReturnedInBadConditionAlternative() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.returned,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -568,14 +568,14 @@ public class LendingServiceTest {
     public void productGetsReturnedInGoodConditionAlternative() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.returned,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 20L
@@ -593,21 +593,21 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
-        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
     public void returnReservationFailsAlternative() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.returned,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -631,14 +631,14 @@ public class LendingServiceTest {
     public void ownerRecivesSurety() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.conflict,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 20L
@@ -655,21 +655,21 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
-        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
-    public void borowerRecivesSurety() {
+    public void borrowerRecivesSurety() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.conflict,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 20L
@@ -686,21 +686,21 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
         Assert.assertEquals(20L, (long) payment_service.getLastId());
-        Assert.assertEquals(borower.getUsername(), payment_service.getLastUsername());
+        Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
 
     @Test
     public void ownerRecivesSuretyButTranferFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.conflict,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
@@ -718,17 +718,17 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void borowerRecivesSuretyButTranferFails() {
+    public void borrowerRecivesSuretyButTranferFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borower = createExampleUser1();
+        UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
                 Lendingstatus.conflict,
                 start,
                 end,
-                borower,
+                borrower,
                 product,
                 0L,
                 0L
