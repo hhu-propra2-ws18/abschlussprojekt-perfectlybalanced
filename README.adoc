@@ -5,7 +5,7 @@
 - mailto:jan.rahman@hhu.de[Jan Rahman]
 - mailto:hungu105@hhu.de[Huyen Chantal Nguyen]
 - [Liane]
-- [Johannes]
+- mailto:jofus100@hhu.de[Johannes]
 - [Tobias]
 - mailto:alexander.hansen@hhu.de[Alexander Hansen]
 - [Thomas]
@@ -17,4 +17,3 @@ Ausnahme am 21.02.2019: 25.13.U1.24
 == Proleih
 - https://github.com/hhu-propra2/abschlussprojekt-perfectlybalanced[Github Repository]
 - https://propra-proleih.herokuapp.com/[Testversion der App]
-
