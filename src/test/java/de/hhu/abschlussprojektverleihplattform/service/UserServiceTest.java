@@ -33,7 +33,9 @@ public class UserServiceTest {
 
     @Test
     public void findUserById() {
-        UserEntity expected = userService.findByUsername("maxmustermann");
+        UserEntity newUser = new UserEntity("Moritz", "Mustermann", "moritzmustermann", "password", "moritz@tester.com");
+        userService.addUser(newUser);
+        UserEntity expected = userService.findByUsername("moritzmustermann");
 
         UserEntity test = userService.showUserById(expected.getUserId());
 
