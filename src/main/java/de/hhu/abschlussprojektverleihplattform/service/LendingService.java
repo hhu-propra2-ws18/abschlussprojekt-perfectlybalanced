@@ -80,12 +80,42 @@ public class LendingService implements ILendingService {
         return false;
     }
 
+    // Anfrage einer Buchung beantworten
     public boolean acceptLendingRequest(LendingEntity lending) {
-        return decideLendingRequest(lending, true);
+        Long costID = payment_service.reservateAmount(
+                lending.getBorrower(),
+                lending.getProduct().getOwner(),
+                lending.getProduct().getCost()
+                        * daysBetween(lending.getStart(), lending.getEnd())
+        );
+        Long suretyID = payment_service.reservateAmount(
+                lending.getBorrower(),
+                lending.getProduct().getOwner(),
+                lending.getProduct().getSurety()
+        );
+        if (costID > 0 && suretyID > 0) {
+            if (payment_service.tranferReservatedMoney(
+                    lending.getBorrower().getUsername(),
+                    costID
+            )
+            ) {
+                lending.setStatus(Lendingstatus.confirmt);
+                lending.setCostReservationID(costID);
+                lending.setSuretyReservationID(suretyID);
+                lending_repository.update(lending);
+                return true;
+            }
+        }
+        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
+        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
+        return false;
     }
 
+    // Anfrage einer Buchung beantworten
     public boolean denyLendingRequest(LendingEntity lending) {
-        return decideLendingRequest(lending, false);
+        lending.setStatus(Lendingstatus.denied);
+        lending_repository.update(lending);
+        return true;
     }
 
 
@@ -141,12 +171,25 @@ public class LendingService implements ILendingService {
         lending_repository.update(lending);
     }
 
+    // Angeben dass ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean acceptReturnedProduct(LendingEntity lending) {
-        return checkReturnedProduct(lending, true);
+        if (payment_service.returnReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+        )
+        ) {
+            lending.setStatus(Lendingstatus.done);
+            lending_repository.update(lending);
+            return true;
+        }
+        return false;
     }
 
+    // Angeben dass ein Artikel in schlechtem Zustand zurueckgegeben wurde
     public boolean denyRetunedProduct(LendingEntity lending) {
-        return checkReturnedProduct(lending, false);
+        lending.setStatus(Lendingstatus.conflict);
+        lending_repository.update(lending);
+        return true;
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
@@ -196,12 +239,31 @@ public class LendingService implements ILendingService {
         }
     }
 
+    // Konflikt vom Admin loesen
     public boolean ownerRecivesSurety(LendingEntity lending) {
-        return resolveConflict(lending, true);
+        if (payment_service.tranferReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+        )) {
+            lending.setStatus(Lendingstatus.done);
+            lending_repository.update(lending);
+            return true;
+        }
+        return false;
     }
 
+    // Konflikt vom Admin loesen
     public boolean borrowerRecivesSurety(LendingEntity lending) {
-        return resolveConflict(lending, false);
+        if (payment_service.returnReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+        )
+        ) {
+            lending.setStatus(Lendingstatus.done);
+            lending_repository.update(lending);
+            return true;
+        }
+        return false;
     }
 
     // Konflikt vom Admin loesen
