@@ -44,15 +44,6 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public ProductEntity getProductByTitlel(String title) {
-        return (ProductEntity) jdbcTemplate.queryForObject(
-	    "SELECT * FROM PRODUCT_ENTITY WHERE TITLE=?",
-            new Object[]{title},
-            new ProductEntityRowMapper(userRepository)
-	);
-    }
-
-    @Override
     public List<ProductEntity> getAllProducts() {
         return (List<ProductEntity>)jdbcTemplate.query(
 	    "SELECT * FROM PRODUCT_ENTITY",
