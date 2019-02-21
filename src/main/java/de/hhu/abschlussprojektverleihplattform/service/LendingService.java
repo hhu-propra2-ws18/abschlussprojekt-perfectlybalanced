@@ -106,13 +106,14 @@ public class LendingService implements ILendingService {
                 lending.setSuretyReservationID(suretyID);
                 lending_repository.update(lending);
                 return true;
+            } else {
+                return false;
             }
         } else {
             payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
             payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
             return false;
         }
-        
     }
 
     // Anfrage einer Buchung beantworten
@@ -190,7 +191,7 @@ public class LendingService implements ILendingService {
         //     list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
         //     return list;
         // } else {
-            return lending_repository.getAllRequestsForUser(user);
+        return lending_repository.getAllRequestsForUser(user);
         // }
     }
 
