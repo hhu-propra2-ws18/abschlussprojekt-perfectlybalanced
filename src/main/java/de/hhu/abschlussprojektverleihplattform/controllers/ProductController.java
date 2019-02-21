@@ -65,7 +65,9 @@ public class ProductController {
     }
 
     @GetMapping("/editproduct/{id}")
-    public String getEditProduct(Model model, @PathVariable Long id, @ModelAttribute("user") UserEntity userEntity) {
+    public String getEditProduct(Model model,
+            @PathVariable Long id,
+            @ModelAttribute("user") UserEntity userEntity) {
         ProductEntity product = productService.getById(id);
         if(product != null && product.getOwner().getUserId().equals(userEntity.getUserId())) {
             model.addAttribute("product", product);
