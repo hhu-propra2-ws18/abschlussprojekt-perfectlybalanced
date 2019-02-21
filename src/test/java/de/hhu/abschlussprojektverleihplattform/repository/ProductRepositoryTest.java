@@ -112,15 +112,14 @@ public class ProductRepositoryTest {
     public void getAllProductsFromOneUser(){
         UserEntity user = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user);
-        UserEntity testUser = userRepository.getUserByFirstname(user.getFirstname());
 
         AddressEntity address = RandomTestData.newRandomTestAddress();
 
-        ProductEntity productEntity = RandomTestData.newRandomTestProduct(testUser, address);
+        ProductEntity productEntity = RandomTestData.newRandomTestProduct(user, address);
         productRepository.saveProduct(productEntity);
 
         List<ProductEntity> allProductsFromUser
-                = productRepository.getAllProductsFromUser(testUser);
+                = productRepository.getAllProductsFromUser(user);
 
         Assert.assertEquals(1, allProductsFromUser.size());
     }
