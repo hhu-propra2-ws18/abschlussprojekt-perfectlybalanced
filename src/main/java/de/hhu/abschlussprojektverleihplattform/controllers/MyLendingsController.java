@@ -2,8 +2,8 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.service.LendingService;
-import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
+import de.hhu.abschlussprojektverleihplattform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -18,11 +18,14 @@ public class MyLendingsController {
     //this can be extended to also show past lendings.
     //this is benefit for people who want to lend things multiple times so they can find those products
 
-    @Autowired
-    UserService userService;
+    private final IUserService userService;
+    private final ILendingService lendingService;
 
     @Autowired
-    LendingService lendingService;
+    public MyLendingsController(IUserService userService, ILendingService lendingService) {
+        this.userService = userService;
+        this.lendingService = lendingService;
+    }
 
     @GetMapping("/mylendings")
     public String getMyCurrentLendings(Model model, Authentication auth){
