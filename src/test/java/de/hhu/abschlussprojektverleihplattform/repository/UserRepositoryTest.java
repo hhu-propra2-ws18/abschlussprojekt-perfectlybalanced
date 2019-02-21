@@ -40,7 +40,7 @@ public class UserRepositoryTest {
 	    "email@mail.com"
 	);
         userRepository.saveUser(user);
-        UserEntity loadedUser = userRepository.getUserByFirstname(user.getFirstname());
+        UserEntity loadedUser = userRepository.findById(user.getUserId());
         Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname())
             && user.getLastname().equals(loadedUser.getLastname())
             && user.getUsername().equals(loadedUser.getUsername())
