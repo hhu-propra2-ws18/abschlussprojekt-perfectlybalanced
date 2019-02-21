@@ -3,6 +3,7 @@ package de.hhu.abschlussprojektverleihplattform.utils;
 import com.mysql.cj.xdevapi.AddResult;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -57,4 +58,11 @@ public class RandomTestData {
         return result;
     }
 
+    public static Timestamp[] new2SuccessiveTimestamps(){
+
+        Timestamp t1 = new Timestamp(new Date().getTime());
+        Timestamp t2 = new Timestamp(t1.getTime()+100);
+
+        return new Timestamp[]{t1,t2};
+    }
 }
