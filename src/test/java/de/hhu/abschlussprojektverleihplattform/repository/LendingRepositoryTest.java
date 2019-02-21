@@ -51,7 +51,12 @@ public class LendingRepositoryTest {
                 = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
 
-        Assert.assertEquals(lendingEntity.getId(),lendingRepository.getLendingById(lendingEntity.getId()).getId());
+        Assert.assertEquals(
+            lendingEntity.getId(),
+            lendingRepository.getLendingById(
+                lendingEntity.getId()
+            ).getId()
+        );
     }
 
     @Test
