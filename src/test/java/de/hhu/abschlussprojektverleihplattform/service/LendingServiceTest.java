@@ -227,9 +227,8 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.denyLendingRequest(lending);
+        logic.denyLendingRequest(lending);
 
-        Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.denied, lending.getStatus());
     }
@@ -443,9 +442,8 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         LendingService logic = new LendingService(lending_repository, null);
 
-        boolean result = logic.denyRetunedProduct(lending);
+        logic.denyRetunedProduct(lending);
 
-        Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
@@ -604,7 +602,6 @@ public class LendingServiceTest {
         Assert.assertEquals(20L, (long) payment_service.getLastId());
         Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
-
 
 
     @Test

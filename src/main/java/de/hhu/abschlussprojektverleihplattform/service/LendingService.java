@@ -112,10 +112,9 @@ public class LendingService implements ILendingService {
     }
 
     // Anfrage einer Buchung beantworten
-    public boolean denyLendingRequest(LendingEntity lending) {
+    public void denyLendingRequest(LendingEntity lending) {
         lending.setStatus(Lendingstatus.denied);
         lending_repository.update(lending);
-        return true;
     }
 
     // Artikel zurueckgeben
@@ -139,10 +138,9 @@ public class LendingService implements ILendingService {
     }
 
     // Angeben dass ein Artikel in schlechtem Zustand zurueckgegeben wurde
-    public boolean denyRetunedProduct(LendingEntity lending) {
+    public void denyRetunedProduct(LendingEntity lending) {
         lending.setStatus(Lendingstatus.conflict);
         lending_repository.update(lending);
-        return true;
     }
 
     // Konflikt vom Admin loesen
