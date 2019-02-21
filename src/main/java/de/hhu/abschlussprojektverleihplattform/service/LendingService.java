@@ -20,7 +20,6 @@ public class LendingService implements ILendingService {
 
     //For the development of the Controllers/Views
     //cant be private, since i have to disable them for the tests
-    protected static boolean ReturnExampleLendings = false;
     protected static boolean UseDummyProPay = true;
 
     private ILendingRepository lending_repository;
@@ -185,46 +184,21 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity borrower = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.confirmt, user, borrower));
-            return list;
-        }
         return lending_repository.getAllLendingsFromUser(user);
     }
 
     // return all Lendings, that are borrowed by the user
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity owner = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.confirmt, owner, user));
-            return list;
-        }
         return lending_repository.getAllLendingsForUser(user);
     }
 
     // return all Lendings, that are owned by the user and have the status returned
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity borrower = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.returned, user, borrower));
-            return list;
-        }
         return lending_repository.getReturnedLendingFromUser(user);
     }
 
     // return all Lendings, that have the status conflict
     public List<LendingEntity> getAllConflicts() {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity owner = createExampleUser1();
-            UserEntity borrower = createExampleUser2();
-            list.add(createExampleLending1(Lendingstatus.conflict, owner, borrower));
-            return list;
-        }
         return lending_repository.getAllConflicts();
     }
 
