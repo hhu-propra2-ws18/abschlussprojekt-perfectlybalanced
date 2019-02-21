@@ -1,4 +1,5 @@
 = Softwareentwicklung im Team: Blockpraktikum
+:icons: font
 
 == Team perfectlybalanced
 - mailto:sam.rassaei@hhu.de[Sam Rassaei]
@@ -23,7 +24,7 @@ Im folgenden sieht man eine Übersicht darüber, welche Anforderungen an das Sys
 und welche davon implementiert bzw. noch nicht implementiert sind.
 
 
-.Wichtige Anforderungen
+=== Wichtige Anforderungen
 * [x] Datenbank soll in einem Container laufen können
 * [x] Sinnvoll getestet.
 * [x] Travis CI Configuration
@@ -33,20 +34,19 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 * [x] Mit der ProPay REST-Schnittstelle interagieren
 
 
-.Meta Anforderungen
+=== Meter Anforderungen
 * [x] Jeder Pull Request geht durch ein Code Review
 * [x] Codeformatierungsrichtlinie mit Checkstyle
 
 
-.Minimalanforderungen
-* Benutzerverwaltung
+=== Minimalanforderungen
+* [ ] Benutzerverwaltung
 ** [x] Unterschiedliche Benutzerkonten
 ** [x] Benutzer anmelden, abmelden
 ** [ ] Für alle Interaktionen außer anmelden und registrieren muss man eingeloggt sein
 ** [x] Benutzer kann mit username und email angelegt werden
 ** [x] Mehrere Benutzer können die Anwendung gleichzeitig nutzen
-
-* Detailansicht
+* [ ] Detailansicht
 ** [x] Titel,Beschreibung
 ** [ ] (optional) Fotos
 ** [ ] Angaben zur Verfügbarkeit
@@ -55,11 +55,9 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 ** [ ] (optional) Karte zum Standort
 ** [x] Angaben zur verleihenden Person
 ** [x] Button um den Ausleihprozess zu starten
-
-* Übersicht der Artikel:
+* [ ] Übersicht der Artikel
 ** [x] Übersicht mit Links zur Detailansicht der Artikel
-
-* Einstellen eines Artikels:
+* [ ] Einstellen eines Artikels
 ** [x] Titel
 ** [x] Beschreibung
 ** [ ] (optional) Fotos
@@ -69,20 +67,18 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 
 
 === TODO
-* Ausleihprozess
-* Bezahlvorgang
-* Benutzerkontenverwaltung:
+* [ ] Ausleihprozess
+* [ ] Bezahlvorgang
+* [ ] Benutzerkontenverwaltung:
 ** [x] Profil einsehen, mit Anzeige vom Propay Konto
 ** [ ] (optional) Profil bearbeiten
 ** [ ] Geld auf das Propay Konto einzahlen
 ** [ ] Verlauf der Transaktionen einsehen
-
-* Konfliktloesungsstelle:
+* [ ] Konfliktloesungsstelle:
 ** [ ] Admin soll Kaution im Streitfall zuweisen können
-
-* ProPay:
+* [ ] ProPay
 ** [x] ProPay muss per Docker als Service eingebunden sein
 
-* Optionale Erweiterungen
-** Suche bzw. Filter um Artikel zu suchen
-** Karte anzeigen mit Artikeln um zu sehen was es in der Naehe zum leihen gibt.
+==== Optionale Erweiterungen
+** [ ] Suche bzw. Filter um Artikel zu suchen
+** [ ] Karte anzeigen mit Artikeln um zu sehen was es in der Naehe zum leihen gibt.
