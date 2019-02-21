@@ -59,11 +59,8 @@ public class ProductControllerTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
 
         productRepository.saveProduct(product);
-        ProductEntity loadedProduct = productRepository.getProductByTitlel(product.getTitle());
 
-        Long productId = loadedProduct.getId();
-
-        mockMvc.perform(get("/editproduct/" + productId.toString()))
+        mockMvc.perform(get("/editproduct/" + product.getId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Artikel bearbeiten")))
                 .andExpect(content().string(containsString("Titel")))
