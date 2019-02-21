@@ -42,9 +42,10 @@ public class ProductLendingRequestsController {
     @GetMapping("/lendingrequests")
     public String getLendingRequestsOverview(Model model, Authentication auth) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
-        UserEntity loadedUser = userService.findByUsername("sarah");
-        List<LendingEntity> lendings = lendingService.getAllRequestsForUser(loadedUser);
+        List<LendingEntity> lendings = lendingService.getAllRequestsForUser(user);
         List<LendingEntity> oldLendings = lendingRepository.getAllLendings();
+        boolean checkMyLendings = lendings.isEmpty();
+        model.addAttribute("checkMyLendings", checkMyLendings);
         model.addAttribute("lendings", lendings);
         model.addAttribute("oldLendings", oldLendings);
         return "productlendingrequests";
