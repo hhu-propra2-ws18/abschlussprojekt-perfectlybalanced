@@ -51,5 +51,23 @@ public class ProductEntity {
         this.location = location;
         this.owner = owner;
     }
+
+    public ProductEntity(
+            Long id,
+            String description,
+            String title,
+            int surety,
+            int cost,
+            AddressEntity location,
+            UserEntity owner
+    ) {
+        this.id = id;
+        this.description = description;
+        this.title = title;
+        this.surety = surety;
+        this.cost = cost;
+        this.location = location;
+        this.owner = owner;
+    }
     
 }

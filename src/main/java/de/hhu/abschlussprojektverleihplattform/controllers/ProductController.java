@@ -3,21 +3,16 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
-import de.hhu.abschlussprojektverleihplattform.service.IProductService;
-import de.hhu.abschlussprojektverleihplattform.service.IUserService;
+import de.hhu.abschlussprojektverleihplattform.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
@@ -25,11 +20,13 @@ public class ProductController {
 
     private final IUserService userService;
     private final IProductService productService;
+    private final ILendingService lendingService;
 
     @Autowired
-    public ProductController(IUserService userService, IProductService productService) {
+    public ProductController(IUserService userService, IProductService productService, ILendingService lendingService) {
         this.userService = userService;
         this.productService = productService;
+        this.lendingService = lendingService;
     }
 
 
@@ -123,6 +120,19 @@ public class ProductController {
         model.addAttribute("myProducts", myProducts);
         model.addAttribute("gotNoProducts", gotNoProducts);
         return "myproducts";
+    }
+
+    @PostMapping("/request")
+    public String handleLendingRequest(@RequestParam Long id, Authentication auth){
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+
+        lendingService.requestLending(user,
+                product,
+                new Timestamp(System.currentTimeMillis()),
+                new Timestamp(System.currentTimeMillis() + 86400000));
+
+        return "redirect:/";
     }
 
 }

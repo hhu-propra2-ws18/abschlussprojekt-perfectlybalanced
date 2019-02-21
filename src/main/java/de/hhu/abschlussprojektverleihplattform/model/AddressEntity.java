@@ -9,7 +9,8 @@ import org.hibernate.validator.constraints.Range;
 
 @Data
 @Embeddable
-public class AddressEntity {
+public class
+AddressEntity {
 
     @NotBlank
     @Size(min=5, message = "Adresse {address.size.error}")
