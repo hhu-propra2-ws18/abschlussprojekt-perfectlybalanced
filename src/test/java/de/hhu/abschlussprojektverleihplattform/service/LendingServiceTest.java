@@ -30,13 +30,13 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            actingUser,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -59,13 +59,13 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            actingUser,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -88,13 +88,13 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            actingUser,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -117,13 +117,13 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            actingUser,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -214,13 +214,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -241,13 +241,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -269,13 +269,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -310,13 +310,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -355,13 +355,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser1();
         ProductEntity product = createExampleProduct2(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -375,12 +375,12 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals((long) lending.getCostReservationID(),
-                (long) payment_service.getLastId());
+            (long) payment_service.getLastId());
         Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
-                = payment_service.findReservation(lending.getCostReservationID());
+            = payment_service.findReservation(lending.getCostReservationID());
         ReservationDummy surety
-                = payment_service.findReservation(lending.getSuretyReservationID());
+            = payment_service.findReservation(lending.getSuretyReservationID());
         Assert.assertEquals(borrower.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
         //Timedifference is between 3 and 4 Days
@@ -402,13 +402,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -430,13 +430,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.returned,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.returned,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -458,13 +458,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.returned,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                20L
+            Lendingstatus.returned,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            20L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -489,13 +489,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.returned,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.returned,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -519,13 +519,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.conflict,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                20L
+            Lendingstatus.conflict,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            20L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -550,13 +550,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.conflict,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.conflict,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -580,13 +580,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.conflict,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                20L
+            Lendingstatus.conflict,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            20L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -612,13 +612,13 @@ public class LendingServiceTest {
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.conflict,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.conflict,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
