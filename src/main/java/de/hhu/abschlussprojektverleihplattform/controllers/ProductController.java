@@ -103,7 +103,10 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail/{id}")
-    public String getProductDetails(Model model, @PathVariable Long id) {
+    public String getProductDetails(
+            Model model,
+            @PathVariable Long id,
+            @ModelAttribute("user") UserEntity userEntity) {
         ProductEntity product = productService.getById(id);
         if(product != null) {
             model.addAttribute("product", product);
