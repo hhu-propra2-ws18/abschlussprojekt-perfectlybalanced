@@ -53,7 +53,11 @@ public class LendingRepository implements ILendingRepository {
                 lending.getCostReservationID(),
                 lending.getSuretyReservationID());
 
-        lending.setId(getLendingByProductAndBorrower(lending.getProduct(),lending.getBorrower()).getId());
+        lending.setId(
+                getLendingByProductAndBorrower(
+                        lending.getProduct(),lending.getBorrower()
+                ).getId()
+        );
     }
 
     @Override

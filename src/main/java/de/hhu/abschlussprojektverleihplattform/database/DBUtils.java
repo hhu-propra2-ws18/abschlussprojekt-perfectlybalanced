@@ -8,9 +8,11 @@ import java.util.Date;
 public class DBUtils {
     public static PreparedStatementCreator psc(String sql, Object... objects){
         PreparedStatementCreator mypsc= new PreparedStatementCreator() {
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+            public PreparedStatement createPreparedStatement(Connection connection)
+                    throws SQLException {
                 PreparedStatement ps =
-                        connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //set the objects here
+                        connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                //set the objects here
                 mapParams(ps,objects);
 
                 return ps;
@@ -20,7 +22,8 @@ public class DBUtils {
         return mypsc;
     }
 
-    //source: https://stackoverflow.com/questions/11777103/set-parameters-dynamically-to-prepared-statement-in-jdbc
+    //source:
+    //https://stackoverflow.com/questions/11777103/set-parameters-dynamically-to-prepared-statement-in-jdbc
     public static void mapParams(PreparedStatement ps, Object... args) throws SQLException {
         int i = 1;
         for (Object arg : args) {
