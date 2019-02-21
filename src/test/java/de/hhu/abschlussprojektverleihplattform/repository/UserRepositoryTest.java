@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,17 @@ public class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Test
+    public void test_saving_sets_id(){
+        UserEntity user = RandomTestData.newRandomTestUser();
+
+        userRepository.saveUser(user);
+
+        //fails if id is not set
+        userRepository.findById(user.getUserId());
+    }
 
     @Test
     public void saveOneUserToDatabase() {
