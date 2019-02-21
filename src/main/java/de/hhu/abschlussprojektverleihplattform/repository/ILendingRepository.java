@@ -17,9 +17,6 @@ public interface ILendingRepository {
 
     void update(LendingEntity lending);
 
-    // hier weis ich noch nicht was genau ich brauche, event brauche ich sie garnicht
-    LendingEntity getLendingByProductAndUser(ProductEntity product, UserEntity user);
-
     List<LendingEntity> getAllLendings();
 
     List<LendingEntity> getAllLendingsFromProduct(ProductEntity product);

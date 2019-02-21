@@ -86,8 +86,10 @@ public class LendingRepository implements ILendingRepository {
                 new LendingEntityRowMapper(userRepository, productRepository));
     }
 
-    @Override
-    public LendingEntity getLendingByProductAndUser(ProductEntity product, UserEntity user) {
+    //If there are multiple lendings from on user to one product the result of this methode
+    //will be unprodictable. But since it is only used for Testing without multiple lendings
+    //for on user/product it is allright
+    public LendingEntity getLendingByProductAndBorrower(ProductEntity product, UserEntity user) {
         String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()
                 + " AND BORROWER_USER_ID=" + user.getUserId() + ";";
 
@@ -138,7 +140,7 @@ public class LendingRepository implements ILendingRepository {
     @Override
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
         String query = "SELECT * FROM LENDING_ENTITY WHERE BORROWER_USER_ID="
-            + user.getUserId();
+                + user.getUserId();
         return
                 (List<LendingEntity>) jdbcTemplate
                         .query(query,

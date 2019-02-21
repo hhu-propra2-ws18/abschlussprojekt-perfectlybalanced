@@ -35,11 +35,6 @@ public class LendingRepositoryDummy implements ILendingRepository {
     }
 
     @Override
-    public LendingEntity getLendingByProductAndUser(ProductEntity product, UserEntity user) {
-        return lendingByProductAndUser;
-    }
-
-    @Override
     public List<LendingEntity> getAllLendingsFromProduct(ProductEntity product) {
         ArrayList<LendingEntity> ret = new ArrayList<LendingEntity>();
         for (LendingEntity lend : lendings) {
