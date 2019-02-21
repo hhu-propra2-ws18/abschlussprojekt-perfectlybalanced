@@ -64,8 +64,10 @@ public class CustomEmailTest {
             result.add(violations.size());
         }
 
+        System.out.println(result);
+
         // Assert
-        Assert.assertTrue("Alle Emails sind gültig", result.containsAll(expected));
+        Assert.assertTrue("Alle Emails sind gültig", result.equals(expected));
     }
 
     @Test
@@ -92,6 +94,7 @@ public class CustomEmailTest {
         emails.add("test@test..de");
         emails.add("test@test.d");
         emails.add("test@test.commerce");
+        emails.add("test@test");
 
         List<UserEntity> users = multipleUsers(emails, emails.size());
 
@@ -108,7 +111,7 @@ public class CustomEmailTest {
         }
 
         // Assert
-        Assert.assertTrue("Alle Emails sind ungültig.", result.containsAll(expected));
+        Assert.assertTrue("Alle Emails sind ungültig.", result.equals(expected));
     }
 
     private UserEntity testUser(String email) {

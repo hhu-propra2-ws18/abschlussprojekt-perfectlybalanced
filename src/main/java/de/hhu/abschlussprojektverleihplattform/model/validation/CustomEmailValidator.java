@@ -17,7 +17,7 @@ public class CustomEmailValidator implements ConstraintValidator<CustomEmail, St
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
         String regex
-                = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+                = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,6})$";
         pattern = Pattern.compile(regex);
         matcher = pattern.matcher(email);
         return matcher.matches();
