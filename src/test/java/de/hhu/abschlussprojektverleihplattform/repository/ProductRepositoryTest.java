@@ -124,7 +124,6 @@ public class ProductRepositoryTest {
 
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(testUser, address);
         productRepository.saveProduct(productEntity);
-        ProductEntity testProduct = productRepository.getProductByTitlel(productEntity.getTitle());
 
         List<ProductEntity> allProductsFromUser
                 = productRepository.getAllProductsFromUser(testUser);
