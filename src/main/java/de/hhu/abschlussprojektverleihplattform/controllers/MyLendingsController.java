@@ -15,6 +15,8 @@ import java.util.List;
 @Controller
 public class MyLendingsController {
 
+    public static final String url="/mylendings";
+
     //this can be extended to also show past lendings.
     //this is benefit for people who want to lend things multiple times so they can find those products
 
