@@ -33,7 +33,6 @@ public class LendingRepository implements ILendingRepository {
         this.productRepository = productRepository;
     }
 
-    //TODO: saveLanding in Update und Add aufteilen
     @Override
     public void addLending(LendingEntity lending) {
         jdbcTemplate.update(
@@ -53,6 +52,12 @@ public class LendingRepository implements ILendingRepository {
                 lending.getProduct().getId(),
                 lending.getCostReservationID(),
                 lending.getSuretyReservationID());
+
+        lending.setId(
+                getLendingByProductAndBorrower(
+                        lending.getProduct(),lending.getBorrower()
+                ).getId()
+        );
     }
 
     @Override

@@ -5,9 +5,14 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.plaf.basic.BasicTreeUI;
 import java.util.List;
+
+import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
 
 @Data
@@ -65,7 +70,8 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public void saveUser(UserEntity user) {
-        jdbcTemplate.update(
+        KeyHolder  keyHolder=new GeneratedKeyHolder();
+        jdbcTemplate.update(psc(
                 "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
                         + "VALUES (?,?,?,?,?,?)",
                 user.getFirstname(),
@@ -73,8 +79,11 @@ public class UserRepository implements IUserRepository {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getRole().ordinal()
+                user.getRole().ordinal()),
+                keyHolder
         );
+
+        user.setUserId(keyHolder.getKey().longValue());
     }
 
     @Override
