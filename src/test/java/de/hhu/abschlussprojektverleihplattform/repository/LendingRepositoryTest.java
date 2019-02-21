@@ -118,6 +118,7 @@ public class LendingRepositoryTest {
         assertEquals(loadedProduct1, conflictLendings.get(0).getProduct());
     }
 
+    //What is this test? does it work? TODO
     @Test
     public void lendingStatusTest() {
         UserEntity user = RandomTestData.newRandomTestUser();
@@ -133,8 +134,8 @@ public class LendingRepositoryTest {
         LendingEntity lendingEntity
             = RandomTestData.newRandomLendingStausDone(testUser, testProduct);
         lendingRepository.addLending(lendingEntity);
-        LendingEntity testLending
-            = lendingRepository.getLendingByProductAndBorrower(testProduct, testUser);
+        // LendingEntity testLending
+        //     = lendingRepository.getLendingByProductAndBorrower(testProduct, testUser);
 
         //Assert.assertEquals();
     }
