@@ -94,7 +94,7 @@ public class LendingRepositoryTest {
     @Test
     public void test_getReturnedLendingFromUser() {
         LendingEntity returnedLendingEntity
-                = RandomTestData.newRandomLendingStatusConflict(loadedUser1,loadedProduct1);
+                = RandomTestData.newRandomLendingStatusConflict(loadedUser1, loadedProduct1);
         returnedLendingEntity.setStatus(Lendingstatus.returned);
         lendingRepository.addLending(returnedLendingEntity);
 
@@ -198,7 +198,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void updateLendingStatus(){
+    public void updateLendingStatus() {
         UserEntity owner2 = RandomTestData.newRandomTestUser();
         UserEntity borrower2 = RandomTestData.newRandomTestUser();
         userRepository.saveUser(owner2);
@@ -224,7 +224,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void getLendingById(){
+    public void getLendingById() {
         UserEntity owner3 = RandomTestData.newRandomTestUser();
         UserEntity borrower3 = RandomTestData.newRandomTestUser();
         userRepository.saveUser(owner3);

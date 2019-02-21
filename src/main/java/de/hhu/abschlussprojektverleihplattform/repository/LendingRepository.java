@@ -140,7 +140,7 @@ public class LendingRepository implements ILendingRepository {
     @Override
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
         String query = "SELECT * FROM LENDING_ENTITY WHERE BORROWER_USER_ID="
-            + user.getUserId();
+                + user.getUserId();
         return
                 (List<LendingEntity>) jdbcTemplate
                         .query(query,
