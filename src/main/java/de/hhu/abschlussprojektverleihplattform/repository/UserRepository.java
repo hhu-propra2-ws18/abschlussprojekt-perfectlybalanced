@@ -35,7 +35,6 @@ public class UserRepository implements IUserRepository {
         } catch (Exception e) {
             return null;
         }
-
     }
 
     @Override
@@ -48,13 +47,6 @@ public class UserRepository implements IUserRepository {
             return null;
         }
 
-    }
-
-    @Override
-    public UserEntity getUserByFirstname(String firstname) {
-        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE firstname=?",
-                new Object[]{firstname},
-                new BeanPropertyRowMapper<UserEntity>(UserEntity.class));
     }
 
     @Override

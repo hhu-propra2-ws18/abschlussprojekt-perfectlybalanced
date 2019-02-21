@@ -35,11 +35,6 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductEntity getByTitle(String productTitle) {
-        return productRepository.getProductByTitlel(productTitle);
-    }
-
-    @Override
     public List<ProductEntity> getAllProductsFromUser(UserEntity user) {
         return productRepository.getAllProductsFromUser(user);
     }
