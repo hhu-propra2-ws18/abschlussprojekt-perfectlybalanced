@@ -25,6 +25,19 @@ public class ProductRepositoryTest {
     UserRepository userRepository;
 
 
+    @Test
+    public void test_saving_sets_id(){
+        UserEntity user2 = RandomTestData.newRandomTestUser();
+        AddressEntity address2 = RandomTestData.newRandomTestAddress();
+        userRepository.saveUser(user2);
+
+        ProductEntity product = RandomTestData.newRandomTestProduct(user2, address2);
+
+        productRepository.saveProduct(product);
+
+        //should fail if id is not set
+        productRepository.getProductById(product.getId());
+    }
 
     @Test
     public void getAllProducsFromDatabase() {

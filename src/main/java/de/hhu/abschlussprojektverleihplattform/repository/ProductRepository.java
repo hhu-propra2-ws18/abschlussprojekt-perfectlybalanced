@@ -7,12 +7,20 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+
+import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
 
 @Data
@@ -75,12 +83,15 @@ public class ProductRepository implements IProductRepository {
         );
     }
 
+
+
+
     @Override
     public void saveProduct(ProductEntity product) {
         KeyHolder keyHolder=new GeneratedKeyHolder();
 
 
-        jdbcTemplate.update(
+        jdbcTemplate.update(psc(
             "INSERT INTO PRODUCT_ENTITY ("
 	        +"COST,"
 	        +" DESCRIPTION,"
@@ -100,10 +111,9 @@ public class ProductRepository implements IProductRepository {
             product.getLocation().getStreet(),
             product.getSurety(),
             product.getTitle(),
-            product.getOwner().getUserId(),
+            product.getOwner().getUserId()),
                 keyHolder
         );
-
         product.setId(keyHolder.getKey().longValue());
     }
 

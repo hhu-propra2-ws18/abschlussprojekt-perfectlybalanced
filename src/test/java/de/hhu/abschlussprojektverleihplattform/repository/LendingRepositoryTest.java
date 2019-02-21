@@ -50,6 +50,15 @@ public class LendingRepositoryTest {
     }
 
     @Test
+    public void test_saving_sets_id(){
+        LendingEntity lendingEntity
+                = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
+        lendingRepository.addLending(lendingEntity);
+
+        Assert.assertEquals(lendingEntity.getId(),lendingRepository.getLendingById(lendingEntity.getId()).getId());
+    }
+
+    @Test
     public void saveOneLendingToDatabase() {
         LendingEntity lendingEntity
             = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);

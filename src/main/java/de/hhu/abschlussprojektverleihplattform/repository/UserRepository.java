@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 import javax.swing.plaf.basic.BasicTreeUI;
 import java.util.List;
 
+import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
+
 
 @Data
 @Repository
@@ -69,7 +71,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public void saveUser(UserEntity user) {
         KeyHolder  keyHolder=new GeneratedKeyHolder();
-        jdbcTemplate.update(
+        jdbcTemplate.update(psc(
                 "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
                         + "VALUES (?,?,?,?,?,?)",
                 user.getFirstname(),
@@ -77,7 +79,7 @@ public class UserRepository implements IUserRepository {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getRole().ordinal(),
+                user.getRole().ordinal()),
                 keyHolder
         );
 
