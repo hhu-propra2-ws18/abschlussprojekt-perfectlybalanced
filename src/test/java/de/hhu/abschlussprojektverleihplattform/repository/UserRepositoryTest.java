@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +19,17 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+
+    @Test
+    public void test_saving_sets_id(){
+        UserEntity user = RandomTestData.newRandomTestUser();
+
+        userRepository.saveUser(user);
+
+        //fails if id is not set
+        userRepository.findById(user.getUserId());
+    }
+
     @Test
     public void saveOneUserToDatabase() {
         UserEntity user = new UserEntity(
@@ -28,7 +40,7 @@ public class UserRepositoryTest {
 	    "email@mail.com"
 	);
         userRepository.saveUser(user);
-        UserEntity loadedUser = userRepository.getUserByFirstname(user.getFirstname());
+        UserEntity loadedUser = userRepository.findById(user.getUserId());
         Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname())
             && user.getLastname().equals(loadedUser.getLastname())
             && user.getUsername().equals(loadedUser.getUsername())

@@ -5,9 +5,14 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.plaf.basic.BasicTreeUI;
 import java.util.List;
+
+import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
 
 @Data
@@ -30,7 +35,6 @@ public class UserRepository implements IUserRepository {
         } catch (Exception e) {
             return null;
         }
-
     }
 
     @Override
@@ -46,13 +50,6 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public UserEntity getUserByFirstname(String firstname) {
-        return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE firstname=?",
-                new Object[]{firstname},
-                new BeanPropertyRowMapper<UserEntity>(UserEntity.class));
-    }
-
-    @Override
     public UserEntity findByEmail(String email) {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM USER_ENTITY WHERE email=?",
@@ -65,7 +62,8 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public void saveUser(UserEntity user) {
-        jdbcTemplate.update(
+        KeyHolder  keyHolder=new GeneratedKeyHolder();
+        jdbcTemplate.update(psc(
                 "INSERT INTO USER_ENTITY (FIRSTNAME, LASTNAME, USERNAME, PASSWORD, EMAIL, ROLE)"
                         + "VALUES (?,?,?,?,?,?)",
                 user.getFirstname(),
@@ -73,8 +71,11 @@ public class UserRepository implements IUserRepository {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                user.getRole().ordinal()
+                user.getRole().ordinal()),
+                keyHolder
         );
+
+        user.setUserId(keyHolder.getKey().longValue());
     }
 
     @Override

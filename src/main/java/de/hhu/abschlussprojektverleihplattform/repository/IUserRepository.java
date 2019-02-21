@@ -16,7 +16,5 @@ public interface IUserRepository {
 
     List<UserEntity> getAllUser();
 
-    UserEntity getUserByFirstname(String firstname);
-
     UserEntity findByEmail(String email);
 }
