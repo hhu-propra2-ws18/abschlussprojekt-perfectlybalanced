@@ -43,6 +43,26 @@ public class ProductControllerTest {
 
     @Test
     @WithUserDetails("sarah")
+    public void testdetailscontrolleristhere() throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+
+        productService.addProduct(product);
+        ProductEntity loadedProduct = productService.getByTitle(product.getTitle());
+
+        Long productId = loadedProduct.getId();
+
+        mockMvc.perform(get("/productdetail/" + productId.toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Detailansicht")))
+                .andExpect(content().string(containsString(loadedProduct.getTitle())))
+                .andExpect(content().string(containsString(loadedProduct.getDescription())));
+    }
+
+    @Test
+    @WithUserDetails("sarah")
     public void testaddcontrolleristhere() throws Exception {
         mockMvc.perform(get("/addproduct"))
                 .andExpect(status().isOk())
