@@ -76,8 +76,9 @@ public class LendingService implements ILendingService {
             // TODO: check if 0L realy is unused in ProPay
             lending_repository.addLending(lending);
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     // Anfrage einer Buchung beantworten
@@ -94,10 +95,11 @@ public class LendingService implements ILendingService {
             lending.getProduct().getSurety()
         );
         if (costID > 0 && suretyID > 0) {
-            if (payment_service.tranferReservatedMoney(
-                lending.getBorrower().getUsername(),
-                costID
-            )
+            if (
+                payment_service.tranferReservatedMoney(
+                    lending.getBorrower().getUsername(),
+                    costID
+                )
             ) {
                 lending.setStatus(Lendingstatus.confirmt);
                 lending.setCostReservationID(costID);
@@ -105,10 +107,12 @@ public class LendingService implements ILendingService {
                 lending_repository.update(lending);
                 return true;
             }
+        } else {
+            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
+            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
+            return false;
         }
-        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
-        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-        return false;
+        
     }
 
     // Anfrage einer Buchung beantworten
@@ -133,8 +137,9 @@ public class LendingService implements ILendingService {
             lending.setStatus(Lendingstatus.done);
             lending_repository.update(lending);
             return true;
+        } else {
+            return false
         }
-        return false;
     }
 
     // Angeben dass ein Artikel in schlechtem Zustand zurueckgegeben wurde
@@ -145,42 +150,48 @@ public class LendingService implements ILendingService {
 
     // Konflikt vom Admin loesen
     public boolean ownerRecivesSurety(LendingEntity lending) {
-        if (payment_service.tranferReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )) {
-            lending.setStatus(Lendingstatus.done);
-            lending_repository.update(lending);
-            return true;
-        }
-        return false;
-    }
-
-    // Konflikt vom Admin loesen
-    public boolean borrowerRecivesSurety(LendingEntity lending) {
-        if (payment_service.returnReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )
+        if (
+            payment_service.tranferReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+            )
         ) {
             lending.setStatus(Lendingstatus.done);
             lending_repository.update(lending);
             return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    // Konflikt vom Admin loesen
+    public boolean borrowerRecivesSurety(LendingEntity lending) {
+        if (
+            payment_service.returnReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+            )
+        ) {
+            lending.setStatus(Lendingstatus.done);
+            lending_repository.update(lending);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Methoden um die Daten fuer die Views anzuzeigen
 
     // return all Lendings, that are owned by the user and have the status requested
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        /*if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<>();
-            UserEntity borrower = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
-            return list;
-        }*/
-        return lending_repository.getAllRequestsForUser(user);
+        // if (ReturnExampleLendings) {
+        //     List<LendingEntity> list = new ArrayList<>();
+        //     UserEntity borrower = createExampleUser1();
+        //     list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
+        //     return list;
+        // } else {
+            return lending_repository.getAllRequestsForUser(user);
+        // }
     }
 
     // return all Lendings, that are owned by the user
@@ -190,8 +201,9 @@ public class LendingService implements ILendingService {
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.confirmt, user, borrower));
             return list;
+        } else {
+            return lending_repository.getAllLendingsFromUser(user);
         }
-        return lending_repository.getAllLendingsFromUser(user);
     }
 
     // return all Lendings, that are borrowed by the user
@@ -201,8 +213,9 @@ public class LendingService implements ILendingService {
             UserEntity owner = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.confirmt, owner, user));
             return list;
+        } else {
+            return lending_repository.getAllLendingsForUser(user);
         }
-        return lending_repository.getAllLendingsForUser(user);
     }
 
     // return all Lendings, that are owned by the user and have the status returned
@@ -212,8 +225,9 @@ public class LendingService implements ILendingService {
             UserEntity borrower = createExampleUser1();
             list.add(createExampleLending1(Lendingstatus.returned, user, borrower));
             return list;
+        } else {
+            return lending_repository.getReturnedLendingFromUser(user);
         }
-        return lending_repository.getReturnedLendingFromUser(user);
     }
 
     // return all Lendings, that have the status conflict
@@ -224,8 +238,9 @@ public class LendingService implements ILendingService {
             UserEntity borrower = createExampleUser2();
             list.add(createExampleLending1(Lendingstatus.conflict, owner, borrower));
             return list;
+        } else {
+            return lending_repository.getAllConflicts();
         }
-        return lending_repository.getAllConflicts();
     }
 
     public LendingEntity getLendingById(Long id) {
