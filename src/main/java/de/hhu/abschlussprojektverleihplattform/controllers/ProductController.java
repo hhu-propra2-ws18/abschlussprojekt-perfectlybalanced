@@ -29,7 +29,10 @@ public class ProductController {
     private final ILendingService lendingService;
 
     @Autowired
-    public ProductController(IUserService userService, IProductService productService, ILendingService lendingService) {
+    public ProductController(
+            IUserService userService,
+            IProductService productService,
+            ILendingService lendingService) {
         this.userService = userService;
         this.productService = productService;
         this.lendingService = lendingService;
