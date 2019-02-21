@@ -138,7 +138,7 @@ public class LendingService implements ILendingService {
             lending_repository.update(lending);
             return true;
         } else {
-            return false
+            return false;
         }
     }
 
