@@ -111,8 +111,6 @@ public class LendingRepositoryTest {
             = RandomTestData.newRandomLendingStatusConflict(loadedUser1, loadedProduct1);
 
         lendingRepository.addLending(lendingEntity);
-        LendingEntity loadedLending
-            = lendingRepository.getLendingByProductAndBorrower(loadedProduct1, loadedUser1);
 
         List<LendingEntity> conflictLendings = lendingRepository.getAllConflicts();
 
