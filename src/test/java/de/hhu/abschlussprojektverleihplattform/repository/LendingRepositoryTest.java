@@ -61,7 +61,7 @@ public class LendingRepositoryTest {
         lendingRepository.addLending(lendingEntity);
 
         LendingEntity loadedLending
-            = lendingRepository.getLendingByProductAndBorrower(product1, user1);
+            = lendingRepository.getLendingsByProductAndBorrower(product1, user1).get(0);
 
 
         System.out.println("pre loading " + lendingEntity.getStatus());
@@ -89,7 +89,7 @@ public class LendingRepositoryTest {
 
         lendingRepository.addLending(lendingEntity);
         LendingEntity loadedLending
-            = lendingRepository.getLendingByProductAndBorrower(product1, user1);
+            = lendingRepository.getLendingsByProductAndBorrower(product1, user1).get(0);
 
         assertEquals(loadedLending, lendingEntity);
 
@@ -138,7 +138,7 @@ public class LendingRepositoryTest {
             = RandomTestData.newRandomLendingStausDone(testUser, testProduct);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-            = lendingRepository.getLendingByProductAndBorrower(testProduct, testUser);
+            = lendingRepository.getLendingsByProductAndBorrower(testProduct, testUser).get(0);
 
 
     }
@@ -163,7 +163,7 @@ public class LendingRepositoryTest {
         lendingEntity.setStatus(Lendingstatus.returned);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-            = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower);
+            = lendingRepository.getLendingsByProductAndBorrower(testProduct, testBorrower).get(0);
 
         List<LendingEntity> allReturnedLendingsFromOwner
             = lendingRepository.getReturnedLendingFromUser(testOwner);
@@ -191,7 +191,7 @@ public class LendingRepositoryTest {
         lendingEntity.setStatus(Lendingstatus.requested);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-            = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower1);
+            = lendingRepository.getLendingsByProductAndBorrower(testProduct, testBorrower1).get(0);
 
         List<LendingEntity> allReturnedLendingsFromOwner
             = lendingRepository.getAllRequestsForUser(testOwner1);
@@ -218,10 +218,10 @@ public class LendingRepositoryTest {
             = RandomTestData.newRandomLendingStausDone(testBorrower2, testProduct);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-            = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower2);
+            = lendingRepository.getLendingsByProductAndBorrower(testProduct, testBorrower2).get(0);
         testLending.setStatus(Lendingstatus.denied);
         lendingRepository.update(testLending);
-        testLending = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower2);
+        testLending = lendingRepository.getLendingsByProductAndBorrower(testProduct, testBorrower2).get(0);
         assertEquals(Lendingstatus.denied, testLending.getStatus());
     }
 
@@ -244,7 +244,7 @@ public class LendingRepositoryTest {
             = RandomTestData.newRandomLendingStausDone(testBorrower3, testProduct);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-            = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower3);
+            = lendingRepository.getLendingsByProductAndBorrower(testProduct, testBorrower3).get(0);
         LendingEntity testLendingLoadedById = lendingRepository.getLendingById(testLending.getId());
 
         Assert.assertEquals(testLending, testLendingLoadedById);

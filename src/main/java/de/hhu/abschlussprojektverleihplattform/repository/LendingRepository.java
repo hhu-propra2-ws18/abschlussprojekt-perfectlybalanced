@@ -8,9 +8,13 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
 @Data
 @Repository
@@ -35,7 +39,8 @@ public class LendingRepository implements ILendingRepository {
 
     @Override
     public void addLending(LendingEntity lending) {
-        jdbcTemplate.update(
+        KeyHolder keyHolder=new GeneratedKeyHolder();
+        jdbcTemplate.update(psc(
                 "INSERT INTO LENDING_ENTITY "
                         + "(STATUS,"
                         + "START,"
@@ -51,13 +56,11 @@ public class LendingRepository implements ILendingRepository {
                 lending.getBorrower().getUserId(),
                 lending.getProduct().getId(),
                 lending.getCostReservationID(),
-                lending.getSuretyReservationID());
-
-        lending.setId(
-                getLendingByProductAndBorrower(
-                        lending.getProduct(),lending.getBorrower()
-                ).getId()
+                lending.getSuretyReservationID()),
+                keyHolder
         );
+
+        lending.setId(keyHolder.getKey().longValue());
     }
 
     @Override
@@ -91,14 +94,11 @@ public class LendingRepository implements ILendingRepository {
                 new LendingEntityRowMapper(userRepository, productRepository));
     }
 
-    //If there are multiple lendings from on user to one product the result of this methode
-    //will be unprodictable. But since it is only used for Testing without multiple lendings
-    //for on user/product it is allright
-    public LendingEntity getLendingByProductAndBorrower(ProductEntity product, UserEntity user) {
+    public List<LendingEntity> getLendingsByProductAndBorrower(ProductEntity product, UserEntity user) {
         String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()
                 + " AND BORROWER_USER_ID=" + user.getUserId() + ";";
 
-        return (LendingEntity) jdbcTemplate.queryForObject(sql,
+        return (List<LendingEntity>) jdbcTemplate.query(sql,
                 new LendingEntityRowMapper(userRepository, productRepository));
     }
 
