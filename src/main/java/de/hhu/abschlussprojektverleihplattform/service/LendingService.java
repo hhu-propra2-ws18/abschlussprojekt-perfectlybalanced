@@ -1,9 +1,8 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.logic.Zeitspanne;
+import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
-import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import org.springframework.stereotype.Service;
@@ -36,13 +35,13 @@ public class LendingService implements ILendingService {
     }
 
     // Verfuegbaren Zeitraum pruefen
-    public List<Zeitspanne> getTime(ProductEntity product) {
+    public List<Timespan> getTime(ProductEntity product) {
         List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
-        List<Zeitspanne> list = new ArrayList<Zeitspanne>();
+        List<Timespan> list = new ArrayList<Timespan>();
         for (LendingEntity lend: lendings) {
             if(lend.getStatus()!=Lendingstatus.done && lend.getStatus()!=Lendingstatus.denied) {
-                Zeitspanne z = new Zeitspanne(lend.getStart(), lend.getEnd());
-                list.add(z);
+                Timespan timespan = new Timespan(lend.getStart(), lend.getEnd());
+                list.add(timespan);
             }
         }
         return list;
