@@ -86,8 +86,7 @@ public class LendingRepository implements ILendingRepository {
                 new LendingEntityRowMapper(userRepository, productRepository));
     }
 
-    @Override
-    public LendingEntity getLendingByProductAndUser(ProductEntity product, UserEntity user) {
+    public LendingEntity getLendingByProductAndBorrower(ProductEntity product, UserEntity user) {
         String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()
                 + " AND BORROWER_USER_ID=" + user.getUserId() + ";";
 

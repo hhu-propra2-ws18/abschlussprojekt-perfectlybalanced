@@ -56,7 +56,7 @@ public class LendingRepositoryTest {
         lendingRepository.addLending(lendingEntity);
 
         LendingEntity loadedLending
-                = lendingRepository.getLendingByProductAndUser(loadedProduct1, loadedUser1);
+                = lendingRepository.getLendingByProductAndBorrower(loadedProduct1, loadedUser1);
 
 
         System.out.println("pre loading " + lendingEntity.getStatus());
@@ -84,7 +84,7 @@ public class LendingRepositoryTest {
 
         lendingRepository.addLending(lendingEntity);
         LendingEntity loadedLending
-                = lendingRepository.getLendingByProductAndUser(loadedProduct1, loadedUser1);
+                = lendingRepository.getLendingByProductAndBorrower(loadedProduct1, loadedUser1);
 
         lendingEntity.setId(loadedLending.getId());
         assertEquals(loadedLending, lendingEntity);
@@ -112,7 +112,7 @@ public class LendingRepositoryTest {
 
         lendingRepository.addLending(lendingEntity);
         LendingEntity loadedLending
-                = lendingRepository.getLendingByProductAndUser(loadedProduct1, loadedUser1);
+                = lendingRepository.getLendingByProductAndBorrower(loadedProduct1, loadedUser1);
 
         List<LendingEntity> conflictLendings = lendingRepository.getAllConflicts();
 
@@ -136,7 +136,7 @@ public class LendingRepositoryTest {
                 = RandomTestData.newRandomLendingStausDone(testUser, testProduct);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-                = lendingRepository.getLendingByProductAndUser(testProduct, testUser);
+                = lendingRepository.getLendingByProductAndBorrower(testProduct, testUser);
 
         //Assert.assertEquals();
     }
@@ -161,7 +161,7 @@ public class LendingRepositoryTest {
         lendingEntity.setStatus(Lendingstatus.returned);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-                = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower);
+                = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower);
 
         List<LendingEntity> allReturnedLendingsFromOwner
                 = lendingRepository.getReturnedLendingFromUser(testOwner);
@@ -189,7 +189,7 @@ public class LendingRepositoryTest {
         lendingEntity.setStatus(Lendingstatus.requested);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-                = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower1);
+                = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower1);
 
         List<LendingEntity> allReturnedLendingsFromOwner
                 = lendingRepository.getAllRequestsForUser(testOwner1);
@@ -216,10 +216,10 @@ public class LendingRepositoryTest {
                 = RandomTestData.newRandomLendingStausDone(testBorrower2, testProduct);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-                = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower2);
+                = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower2);
         testLending.setStatus(Lendingstatus.denied);
         lendingRepository.update(testLending);
-        testLending = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower2);
+        testLending = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower2);
         assertEquals(Lendingstatus.denied, testLending.getStatus());
     }
 
@@ -242,7 +242,7 @@ public class LendingRepositoryTest {
                 = RandomTestData.newRandomLendingStausDone(testBorrower3, testProduct);
         lendingRepository.addLending(lendingEntity);
         LendingEntity testLending
-                = lendingRepository.getLendingByProductAndUser(testProduct, testBorrower3);
+                = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower3);
         LendingEntity testLendingLoadedById = lendingRepository.getLendingById(testLending.getId());
 
         Assert.assertEquals(testLending, testLendingLoadedById);
