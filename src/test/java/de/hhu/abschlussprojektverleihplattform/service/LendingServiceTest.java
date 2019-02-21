@@ -17,7 +17,6 @@ public class LendingServiceTest {
     @Before
     public void unsetDevelopFlags() {
         LendingService.UseDummyProPay = false;
-        LendingService.ReturnExampleLendings = false;
     }
     // Tests for requestLending
 
