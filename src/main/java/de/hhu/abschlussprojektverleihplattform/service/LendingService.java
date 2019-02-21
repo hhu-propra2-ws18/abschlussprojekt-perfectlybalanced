@@ -20,7 +20,7 @@ public class LendingService implements ILendingService {
 
     //For the development of the Controllers/Views
     //cant be private, since i have to disable them for the tests
-    protected static boolean ReturnExampleLendings = true;
+    protected static boolean ReturnExampleLendings = false;
     protected static boolean UseDummyProPay = true;
 
     private ILendingRepository lending_repository;

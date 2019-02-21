@@ -8,6 +8,7 @@ import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,23 +52,29 @@ public class MyLendingsControllerTest {
 
         UserEntity user_owner = RandomTestData.newRandomTestUser();
         userService.addUser(user_owner);
+        UserEntity loaded_user_owner = userService.findByUsername(user_owner.getUsername());
 
         UserEntity user2 = RandomTestData.newRandomTestUser();
         userService.addUser(user2);
+        UserEntity loaded_user_2=userService.findByUsername(user2.getUsername());
 
-        ProductEntity productEntity = RandomTestData.newRandomTestProduct(user_owner,RandomTestData.newRandomTestAddress());
+        ProductEntity productEntity = RandomTestData.newRandomTestProduct(loaded_user_owner,RandomTestData.newRandomTestAddress());
         productService.addProduct(productEntity);
 
         Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
 
         //user2 wants to lend
-        lendingService.requestLending(user2,productService.getByTitle(productEntity.getTitle()),timestamps[0],timestamps[1]);
+        boolean bool1= lendingService.requestLending(loaded_user_2,productService.getByTitle(productEntity.getTitle()),timestamps[0],timestamps[1]);
+
+
         //lending request accepted
-        lendingService.acceptLendingRequest(lendingService.getAllRequestsForUser(user_owner).get(0));
+        boolean bool2= lendingService.acceptLendingRequest(lendingService.getAllRequestsForUser(loaded_user_owner).get(0));
+
+        Assert.assertTrue(bool1&&bool2);
 
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)
-                .with(user(authenticatedUserService.loadUserByUsername(user2.getUsername()))))
+                .with(user(authenticatedUserService.loadUserByUsername(loaded_user_2.getUsername()))))
             .andExpect(content()
                     .string(containsString(
                             productEntity.getTitle()
