@@ -55,9 +55,8 @@ public class UserProfileControllerTest {
         userService.addUser(user);
 
         String username=user.getUsername();
-        int amount=100;
 
-        mockMvc.perform(post("/profile/deposit?amount="+amount)
+        mockMvc.perform(post("/profile/deposit")
                 .with(csrf())
                 .with(user(authenticatedUserService.loadUserByUsername(username)))
         )
@@ -65,6 +64,7 @@ public class UserProfileControllerTest {
 
         mockMvc.perform(get("/profile")
             .with(user(authenticatedUserService.loadUserByUsername(username)))
-        ).andExpect(content().string(containsString(""+amount)));
+        ).andExpect(content().string(containsString(""+100)));
+        //because /deposit deposits 100 Euros
     }
 }
