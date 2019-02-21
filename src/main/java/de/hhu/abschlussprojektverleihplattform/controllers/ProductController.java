@@ -65,14 +65,14 @@ public class ProductController {
     }
 
     @GetMapping("/editproduct/{id}")
-    public String getEditProduct(Model model, @PathVariable Long id) {
+    public String getEditProduct(Model model, @PathVariable Long id, @ModelAttribute("user") UserEntity userEntity) {
         ProductEntity product = productService.getById(id);
-        if(product != null) {
+        if(product != null && product.getOwner().getUserId().equals(userEntity.getUserId())) {
             model.addAttribute("product", product);
             model.addAttribute("address", product.getLocation());
             return "editproduct";
         }
-        return "redirect:/";
+        return "redirect:/myproducts";
     }
 
     @PostMapping("/editproduct/{id}")
@@ -90,7 +90,7 @@ public class ProductController {
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
         productService.editProduct(productEntity);
-        return "redirect:/";
+        return "redirect:/myproducts";
     }
 
     @GetMapping("/removeproduct")
