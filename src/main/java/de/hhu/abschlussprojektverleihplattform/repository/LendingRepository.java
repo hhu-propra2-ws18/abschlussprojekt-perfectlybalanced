@@ -86,6 +86,9 @@ public class LendingRepository implements ILendingRepository {
                 new LendingEntityRowMapper(userRepository, productRepository));
     }
 
+    //If there are multiple lendings from on user to one product the result of this methode
+    //will be unprodictable. But since it is only used for Testing without multiple lendings
+    //for on user/product it is allright
     public LendingEntity getLendingByProductAndBorrower(ProductEntity product, UserEntity user) {
         String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()
                 + " AND BORROWER_USER_ID=" + user.getUserId() + ";";
