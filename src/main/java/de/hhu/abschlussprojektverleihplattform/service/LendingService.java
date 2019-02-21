@@ -118,45 +118,6 @@ public class LendingService implements ILendingService {
         return true;
     }
 
-
-    // Anfrage einer Buchung beantworten
-    // protected statt private fürs Testen
-    protected boolean decideLendingRequest(LendingEntity lending, boolean requestIsAccepted) {
-        if (requestIsAccepted) {
-            Long costID = payment_service.reservateAmount(
-                    lending.getBorrower(),
-                    lending.getProduct().getOwner(),
-                    lending.getProduct().getCost()
-                            * daysBetween(lending.getStart(), lending.getEnd())
-            );
-            Long suretyID = payment_service.reservateAmount(
-                    lending.getBorrower(),
-                    lending.getProduct().getOwner(),
-                    lending.getProduct().getSurety()
-            );
-            if (costID > 0 && suretyID > 0) {
-                if (payment_service.tranferReservatedMoney(
-                        lending.getBorrower().getUsername(),
-                        costID
-                )
-                ) {
-                    lending.setStatus(Lendingstatus.confirmt);
-                    lending.setCostReservationID(costID);
-                    lending.setSuretyReservationID(suretyID);
-                    lending_repository.update(lending);
-                    return true;
-                }
-            }
-            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
-            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-            return false;
-        } else {
-            lending.setStatus(Lendingstatus.denied);
-            lending_repository.update(lending);
-            return true;
-        }
-    }
-
     // Artikel zurueckgeben
     public void returnProduct(LendingEntity lending) {
         lending.setStatus(Lendingstatus.returned);
@@ -190,26 +151,6 @@ public class LendingService implements ILendingService {
         lending.setStatus(Lendingstatus.conflict);
         lending_repository.update(lending);
         return true;
-    }
-
-    // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde
-    public boolean checkReturnedProduct(LendingEntity lending, boolean isAcceptable) {
-        if (isAcceptable) {
-            if (payment_service.returnReservatedMoney(
-                    lending.getBorrower().getUsername(),
-                    lending.getSuretyReservationID()
-            )
-            ) {
-                lending.setStatus(Lendingstatus.done);
-                lending_repository.update(lending);
-                return true;
-            }
-            return false;
-        } else {
-            lending.setStatus(Lendingstatus.conflict);
-            lending_repository.update(lending);
-            return true;
-        }
     }
 
     // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
@@ -264,29 +205,6 @@ public class LendingService implements ILendingService {
             return true;
         }
         return false;
-    }
-
-    // Konflikt vom Admin loesen
-    public boolean resolveConflict(LendingEntity lending, boolean ownerRecivesSurety) {
-        if (ownerRecivesSurety) {
-            if (!payment_service.tranferReservatedMoney(
-                    lending.getBorrower().getUsername(),
-                    lending.getSuretyReservationID()
-            )) {
-                return false;
-            }
-        } else {
-            if (!payment_service.returnReservatedMoney(
-                    lending.getBorrower().getUsername(),
-                    lending.getSuretyReservationID()
-            )
-            ) {
-                return false;
-            }
-        }
-        lending.setStatus(Lendingstatus.done);
-        lending_repository.update(lending);
-        return true;
     }
 
     // Methoden um die Daten fuer die Views anzuzeigen
