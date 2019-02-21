@@ -18,19 +18,12 @@ import java.util.List;
 @Service
 public class LendingService implements ILendingService {
 
-    //For the development of the Controllers/Views
-    //cant be private, since i have to disable them for the tests
-    protected static boolean UseDummyProPay = true;
-
     private ILendingRepository lending_repository;
     private IPaymentService payment_service;
 
     public LendingService(ILendingRepository lending_repository, IPaymentService payment_service) {
         this.lending_repository = lending_repository;
         this.payment_service = payment_service;
-        if (UseDummyProPay) {
-            this.payment_service = new PaymentServiceDummy(true, true, true, true);
-        }
     }
 
     // Verfuegbaren Zeitraum pruefen
