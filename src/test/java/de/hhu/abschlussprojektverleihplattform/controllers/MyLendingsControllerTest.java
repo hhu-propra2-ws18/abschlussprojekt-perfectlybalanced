@@ -58,27 +58,39 @@ public class MyLendingsControllerTest {
         userService.addUser(user2);
         UserEntity loaded_user_2=userService.findByUsername(user2.getUsername());
 
-        ProductEntity productEntity = RandomTestData.newRandomTestProduct(loaded_user_owner,RandomTestData.newRandomTestAddress());
+        ProductEntity productEntity = RandomTestData.newRandomTestProduct(
+            loaded_user_owner,
+            RandomTestData.newRandomTestAddress()
+        );
         productService.addProduct(productEntity);
 
         Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
 
         //user2 wants to lend
-        boolean bool1= lendingService.requestLending(loaded_user_2,productService.getByTitle(productEntity.getTitle()),timestamps[0],timestamps[1]);
-
+        boolean bool1 = lendingService.requestLending(
+            loaded_user_2,
+            productService.getByTitle(productEntity.getTitle()),
+            timestamps[0],
+            timestamps[1]
+        );
 
         //lending request accepted
-        boolean bool2= lendingService.acceptLendingRequest(lendingService.getAllRequestsForUser(loaded_user_owner).get(0));
+        boolean bool2 = lendingService.acceptLendingRequest(
+            lendingService.getAllRequestsForUser(loaded_user_owner).get(0)
+        );
 
         Assert.assertTrue(bool1&&bool2);
 
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)
-                .with(user(authenticatedUserService.loadUserByUsername(loaded_user_2.getUsername()))))
+            .with(user(authenticatedUserService.loadUserByUsername(
+                loaded_user_2.getUsername()
+            )))
+        )
             .andExpect(content()
-                    .string(containsString(
-                            productEntity.getTitle()
-                            ))
-                    );
+                .string(containsString(
+                    productEntity.getTitle()
+                ))
+            );
     }
 }
