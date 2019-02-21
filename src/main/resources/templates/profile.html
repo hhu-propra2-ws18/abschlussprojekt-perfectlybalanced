@@ -29,7 +29,7 @@
                 <span>Kontostand:</span>
                 <span th:text="${user_balance}"></span>
             </div>
-            <form action="/profile/deposit?amount=100" method="post">
+            <form action="" th:action="@{|~/profile/deposit|}" method="post">
                 <span>100 Euro auf dieses Konto einzahlen</span>
                 <button type="submit">Einzahlen</button>
             </form>
