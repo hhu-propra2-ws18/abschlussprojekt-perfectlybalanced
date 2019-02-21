@@ -69,7 +69,7 @@ public class MyLendingsControllerTest {
         //user2 wants to lend
         boolean requestIsOk = lendingService.requestLending(
             user2,
-            productService.getByTitle(productEntity.getTitle()),
+            productEntity,
             timestamps[0],
             timestamps[1]
         );
