@@ -14,7 +14,5 @@ public interface IProductService {
 
     ProductEntity getById(Long productId);
 
-    ProductEntity getByTitle(String productTitle);
-
     List<ProductEntity> getAllProductsFromUser(UserEntity user);
 }
