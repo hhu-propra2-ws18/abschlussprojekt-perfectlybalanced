@@ -3,7 +3,6 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;

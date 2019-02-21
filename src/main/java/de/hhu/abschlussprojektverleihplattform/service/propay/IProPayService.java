@@ -5,23 +5,23 @@ import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 
 public interface IProPayService {
 
-    public boolean createAccountIfNotExists(String username) throws Exception;
+    boolean createAccountIfNotExists(String username) throws Exception;
 
-    public long getBalance(String username) throws Exception;
+    long getBalance(String username) throws Exception;
 
-    public boolean accountExists(String username);
+    boolean accountExists(String username);
 
-    public boolean makePayment(String sourceAccount, String targetAccount, long amount);
+    boolean makePayment(String sourceAccount, String targetAccount, long amount);
 
-    public void changeUserBalanceBy(String username,long delta) throws Exception;
+    void changeUserBalanceBy(String username, long delta) throws Exception;
 
-    public Reservation makeReservationFromSourceUserToTargetUser(
-		    String userSource, String userTarget,long amount
+    Reservation makeReservationFromSourceUserToTargetUser(
+        String userSource, String userTarget, long amount
     ) throws Exception;
 
-    public Account getAccount(String username) throws Exception;
+    Account getAccount(String username) throws Exception;
 
-    public void returnReservedAmount(String username, Long reservationId) throws Exception;
+    void returnReservedAmount(String username, Long reservationId) throws Exception;
 
-    public void punishReservedAmount(String sourceUsername, Long reservationId) throws Exception;
+    void punishReservedAmount(String sourceUsername, Long reservationId) throws Exception;
 }
