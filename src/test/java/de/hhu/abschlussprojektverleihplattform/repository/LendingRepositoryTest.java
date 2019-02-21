@@ -51,7 +51,12 @@ public class LendingRepositoryTest {
                 = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
 
-        Assert.assertEquals(lendingEntity.getId(),lendingRepository.getLendingById(lendingEntity.getId()).getId());
+        Assert.assertEquals(
+            lendingEntity.getId(),
+            lendingRepository.getLendingById(
+                lendingEntity.getId()
+            ).getId()
+        );
     }
 
     @Test
@@ -210,7 +215,8 @@ public class LendingRepositoryTest {
             = lendingRepository.getLendingsByProductAndBorrower(productEntity, borrower2).get(0);
         testLending.setStatus(Lendingstatus.denied);
         lendingRepository.update(testLending);
-        testLending = lendingRepository.getLendingsByProductAndBorrower(productEntity, borrower2).get(0);
+        testLending
+            = lendingRepository.getLendingsByProductAndBorrower(productEntity, borrower2).get(0);
         assertEquals(Lendingstatus.denied, testLending.getStatus());
     }
 

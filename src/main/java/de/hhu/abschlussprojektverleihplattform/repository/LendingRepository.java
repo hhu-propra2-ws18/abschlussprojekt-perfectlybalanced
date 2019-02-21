@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
@@ -94,7 +93,9 @@ public class LendingRepository implements ILendingRepository {
                 new LendingEntityRowMapper(userRepository, productRepository));
     }
 
-    public List<LendingEntity> getLendingsByProductAndBorrower(ProductEntity product, UserEntity user) {
+    public List<LendingEntity> getLendingsByProductAndBorrower(
+        ProductEntity product, UserEntity user
+    ) {
         String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()
                 + " AND BORROWER_USER_ID=" + user.getUserId() + ";";
 
