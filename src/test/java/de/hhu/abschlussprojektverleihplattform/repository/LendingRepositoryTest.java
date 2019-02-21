@@ -33,26 +33,22 @@ public class LendingRepositoryTest {
     //this is the user that borrows and also owns the product
     private UserEntity user1 = RandomTestData.newRandomTestUser();
     private AddressEntity address1 = RandomTestData.newRandomTestAddress();
-
-    //the loaded versions
-    private UserEntity loadedUser1;
-    private ProductEntity loadedProduct1;
+    private ProductEntity product1;
 
     @Before
     public void saveSetupEntities() {
         userRepository.saveUser(user1);
-        loadedUser1 = userRepository.getUserByFirstname(user1.getFirstname());
-        ProductEntity product1
-            = RandomTestData.newRandomTestProduct(loadedUser1, address1);
+
+         product1
+            = RandomTestData.newRandomTestProduct(user1, address1);
         productRepository.saveProduct(product1);
-        loadedProduct1
-            = productRepository.getProductByTitlel(product1.getTitle());
+
     }
 
     @Test
     public void test_saving_sets_id(){
         LendingEntity lendingEntity
-                = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
+                = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
 
         Assert.assertEquals(lendingEntity.getId(),lendingRepository.getLendingById(lendingEntity.getId()).getId());
@@ -61,11 +57,11 @@ public class LendingRepositoryTest {
     @Test
     public void saveOneLendingToDatabase() {
         LendingEntity lendingEntity
-            = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
+            = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
 
         LendingEntity loadedLending
-            = lendingRepository.getLendingByProductAndBorrower(loadedProduct1, loadedUser1);
+            = lendingRepository.getLendingByProductAndBorrower(product1, user1);
 
 
         System.out.println("pre loading " + lendingEntity.getStatus());
@@ -78,24 +74,23 @@ public class LendingRepositoryTest {
     @Test
     public void test_get_all_lendings_from_product() {
         LendingEntity lendingEntity
-            = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
+            = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
 
         List<LendingEntity> lendings
-            = lendingRepository.getAllLendingsFromProduct(loadedProduct1);
+            = lendingRepository.getAllLendingsFromProduct(product1);
         assertEquals(1, lendings.size());
     }
 
     @Test
     public void test_getLendingByProductAndUser() {
         LendingEntity lendingEntity
-            = RandomTestData.newRandomLendingStausDone(loadedUser1, loadedProduct1);
+            = RandomTestData.newRandomLendingStausDone(user1, product1);
 
         lendingRepository.addLending(lendingEntity);
         LendingEntity loadedLending
-            = lendingRepository.getLendingByProductAndBorrower(loadedProduct1, loadedUser1);
+            = lendingRepository.getLendingByProductAndBorrower(product1, user1);
 
-        lendingEntity.setId(loadedLending.getId());
         assertEquals(loadedLending, lendingEntity);
 
     }
@@ -103,12 +98,12 @@ public class LendingRepositoryTest {
     @Test
     public void test_getReturnedLendingFromUser() {
         LendingEntity returnedLendingEntity
-            = RandomTestData.newRandomLendingStatusConflict(loadedUser1, loadedProduct1);
+            = RandomTestData.newRandomLendingStatusConflict(user1, product1);
         returnedLendingEntity.setStatus(Lendingstatus.returned);
         lendingRepository.addLending(returnedLendingEntity);
 
         List<LendingEntity> returnedLendings
-            = lendingRepository.getAllLendingsFromUser(loadedUser1);
+            = lendingRepository.getAllLendingsFromUser(user1);
 
 
         Assert.assertEquals(1, returnedLendings.size());
@@ -117,16 +112,14 @@ public class LendingRepositoryTest {
     @Test
     public void test_getAllConflicts() {
         LendingEntity lendingEntity
-            = RandomTestData.newRandomLendingStatusConflict(loadedUser1, loadedProduct1);
+            = RandomTestData.newRandomLendingStatusConflict(user1, product1);
 
         lendingRepository.addLending(lendingEntity);
-        LendingEntity loadedLending
-            = lendingRepository.getLendingByProductAndBorrower(loadedProduct1, loadedUser1);
 
         List<LendingEntity> conflictLendings = lendingRepository.getAllConflicts();
 
         assertEquals(1, conflictLendings.size());
-        assertEquals(loadedProduct1, conflictLendings.get(0).getProduct());
+        assertEquals(product1, conflictLendings.get(0).getProduct());
     }
 
     @Test
@@ -147,7 +140,7 @@ public class LendingRepositoryTest {
         LendingEntity testLending
             = lendingRepository.getLendingByProductAndBorrower(testProduct, testUser);
 
-        //Assert.assertEquals();
+
     }
 
     @Test

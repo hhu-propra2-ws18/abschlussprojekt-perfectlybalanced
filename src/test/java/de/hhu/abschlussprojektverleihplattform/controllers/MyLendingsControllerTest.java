@@ -52,14 +52,14 @@ public class MyLendingsControllerTest {
 
         UserEntity user_owner = RandomTestData.newRandomTestUser();
         userService.addUser(user_owner);
-        UserEntity loaded_user_owner = userService.findByUsername(user_owner.getUsername());
+
 
         UserEntity user2 = RandomTestData.newRandomTestUser();
         userService.addUser(user2);
-        UserEntity loaded_user_2=userService.findByUsername(user2.getUsername());
+
 
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(
-            loaded_user_owner,
+            user_owner,
             RandomTestData.newRandomTestAddress()
         );
         productService.addProduct(productEntity);
@@ -68,7 +68,7 @@ public class MyLendingsControllerTest {
 
         //user2 wants to lend
         boolean requestIsOk = lendingService.requestLending(
-            loaded_user_2,
+            user2,
             productService.getByTitle(productEntity.getTitle()),
             timestamps[0],
             timestamps[1]
@@ -76,7 +76,7 @@ public class MyLendingsControllerTest {
 
         //lending request accepted
         boolean acceptIsOk = lendingService.acceptLendingRequest(
-            lendingService.getAllRequestsForUser(loaded_user_owner).get(0)
+            lendingService.getAllRequestsForUser(user_owner).get(0)
         );
 
         Assert.assertTrue(requestIsOk && acceptIsOk);
@@ -84,7 +84,7 @@ public class MyLendingsControllerTest {
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)
             .with(user(authenticatedUserService.loadUserByUsername(
-                loaded_user_2.getUsername()
+                user2.getUsername()
             )))
         )
             .andExpect(content()

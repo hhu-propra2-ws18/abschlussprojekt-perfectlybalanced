@@ -24,7 +24,6 @@ public class ProductRepositoryTest {
     @Autowired
     UserRepository userRepository;
 
-
     @Test
     public void test_saving_sets_id(){
         UserEntity user2 = RandomTestData.newRandomTestUser();
@@ -45,8 +44,8 @@ public class ProductRepositoryTest {
         UserEntity user1 = RandomTestData.newRandomTestUser();
         AddressEntity address1 = RandomTestData.newRandomTestAddress();
         userRepository.saveUser(user1);
-        UserEntity loadedUser = userRepository.getUserByFirstname(user1.getFirstname());
-        ProductEntity product = RandomTestData.newRandomTestProduct(loadedUser, address1);
+
+        ProductEntity product = RandomTestData.newRandomTestProduct(user1, address1);
         productRepository.saveProduct(product);
         List<ProductEntity> allProducts = productRepository.getAllProducts();
 
@@ -66,31 +65,13 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void getOneProductByTitleAndId() {
-        UserEntity user2 = RandomTestData.newRandomTestUser();
-        AddressEntity address2 = RandomTestData.newRandomTestAddress();
-        userRepository.saveUser(user2);
-        UserEntity loadedUser = userRepository.getUserByFirstname(user2.getFirstname());
-        ProductEntity product = RandomTestData.newRandomTestProduct(loadedUser, address2);
-
-        productRepository.saveProduct(product);
-        ProductEntity loadedProductViaTitle 
-	    = productRepository.getProductByTitlel(product.getTitle());
-        ProductEntity loadedProductViaId 
-	    = productRepository.getProductById(loadedProductViaTitle.getId());
-
-        Assert.assertSame(loadedProductViaTitle.getId(), loadedProductViaId.getId());
-        Assert.assertSame(product.getTitle(), loadedProductViaId.getTitle());
-    }
-
-    @Test
     public void getAllAvailableProducts(){
         boolean savedProductsExists = false;
         AddressEntity address3 = RandomTestData.newRandomTestAddress();
         UserEntity user3 = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user3);
-        UserEntity loadedUser = userRepository.getUserByFirstname(user3.getFirstname());
-        ProductEntity product = RandomTestData.newRandomTestProduct(loadedUser, address3);
+
+        ProductEntity product = RandomTestData.newRandomTestProduct(user3, address3);
         productRepository.saveProduct(product);
         List<ProductEntity> availableProducts = productRepository.getAvailableProducts();
 
@@ -115,8 +96,8 @@ public class ProductRepositoryTest {
         AddressEntity address4 = RandomTestData.newRandomTestAddress();
         UserEntity user4 = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user4);
-        UserEntity loadedUser = userRepository.getUserByFirstname(user4.getFirstname());
-        ProductEntity product = RandomTestData.newRandomTestProduct(loadedUser, address4);
+
+        ProductEntity product = RandomTestData.newRandomTestProduct(user4, address4);
         productRepository.saveProduct(product);
         ProductEntity savedProduct = productRepository.getProductByTitlel(product.getTitle());
         savedProduct.setSurety(10);
