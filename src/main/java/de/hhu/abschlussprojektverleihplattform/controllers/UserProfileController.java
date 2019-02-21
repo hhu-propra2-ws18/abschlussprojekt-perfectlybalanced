@@ -33,15 +33,11 @@ public class UserProfileController {
 
     @PostMapping("/profile/deposit")
     public String depositAmountIntoPropay(
-        @RequestParam Long amount,
         Authentication auth
     ) throws Exception{
-        if(amount<=0){
-            return "redirect:/profile";
-        }
 
         UserEntity user = (UserEntity) auth.getPrincipal();
-        proPayService.changeUserBalanceBy(user.getUsername(),amount);
+        proPayService.changeUserBalanceBy(user.getUsername(),100);
         return "redirect:/profile";
     }
 }

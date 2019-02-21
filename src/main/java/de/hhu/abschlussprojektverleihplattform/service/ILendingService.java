@@ -24,16 +24,15 @@ public interface ILendingService {
     // Accept/Deny a Request
     public boolean acceptLendingRequest(LendingEntity lending);
 
-    public boolean denyLendingRequest(LendingEntity lending);
+    public void denyLendingRequest(LendingEntity lending);
 
-    // Return a Product (two Versions, depending on View/Controller)
+    // Return a Product
     public void returnProduct(LendingEntity lending);
-    // public void ReturnProduct(UserEntity actingUser, ProductEntity product);
 
     // Decide wether a returned product is in acceptable condition or not
     public boolean acceptReturnedProduct(LendingEntity lending);
 
-    public boolean denyRetunedProduct(LendingEntity lending);
+    public void denyRetunedProduct(LendingEntity lending);
 
 
     // An admin resolves a conflict and decides who gets the surety
