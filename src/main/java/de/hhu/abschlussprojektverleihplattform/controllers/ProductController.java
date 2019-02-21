@@ -6,6 +6,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,7 @@ public class ProductController {
     private final IUserService userService;
     private final IProductService productService;
 
+    @Autowired
     public ProductController(IUserService userService, IProductService productService) {
         this.userService = userService;
         this.productService = productService;
@@ -101,7 +103,10 @@ public class ProductController {
     }
 
     @GetMapping("/productdetail/{id}")
-    public String getProductDetails(Model model, @PathVariable Long id) {
+    public String getProductDetails(
+            Model model,
+            @PathVariable Long id,
+            @ModelAttribute("user") UserEntity userEntity) {
         ProductEntity product = productService.getById(id);
         if(product != null) {
             model.addAttribute("product", product);
