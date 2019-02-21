@@ -39,7 +39,7 @@ public class LendingRepositoryTest {
     public void saveSetupEntities() {
         userRepository.saveUser(user1);
 
-         product1
+        product1
             = RandomTestData.newRandomTestProduct(user1, address1);
         productRepository.saveProduct(product1);
 
@@ -51,7 +51,8 @@ public class LendingRepositoryTest {
                 = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
 
-        Assert.assertEquals(lendingEntity.getId(),lendingRepository.getLendingById(lendingEntity.getId()).getId());
+        Assert.assertEquals(lendingEntity.getId(),
+            lendingRepository.getLendingById(lendingEntity.getId()).getId());
     }
 
     @Test
