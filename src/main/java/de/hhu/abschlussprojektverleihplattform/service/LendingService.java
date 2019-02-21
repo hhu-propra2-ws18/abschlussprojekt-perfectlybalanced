@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
+import de.hhu.abschlussprojektverleihplattform.logic.Zeitspanne;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
@@ -35,10 +36,16 @@ public class LendingService implements ILendingService {
     }
 
     // Verfuegbaren Zeitraum pruefen
-    public TempZeitraumModel getTime(ProductEntity product) {
+    public List<Zeitspanne> getTime(ProductEntity product) {
         List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
-        //TODO: Irgendwie in ein Format umwandeln, was die Viwes anzeigen koennen
-        return new TempZeitraumModel();
+        List<Zeitspanne> list = new ArrayList<Zeitspanne>();
+        for (LendingEntity lend: lendings) {
+            if(lend.getStatus()!=Lendingstatus.done && lend.getStatus()!=Lendingstatus.denied) {
+                Zeitspanne z = new Zeitspanne(lend.getStart(), lend.getEnd());
+                list.add(z);
+            }
+        }
+        return list;
     }
 
     // Anfrage einer Buchung eintragen

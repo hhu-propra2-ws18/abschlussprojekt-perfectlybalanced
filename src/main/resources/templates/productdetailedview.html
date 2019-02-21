@@ -34,6 +34,31 @@
                     </li>
                 </ul>
 
+                <div class="card" th:each="timeSpan : ${ListOfReservatedTimes}">
+                    <div class="card-header">
+                        <p >Belegter Zeitraum</p>
+                    </div>
+                    <div class="card-body">
+                        <span th:text="${#dates.dayOfWeekName(timeSpan.start)}">TimeStampStart</span>
+                        <span>, der </span>
+                        <span th:text="${#dates.day(timeSpan.start)}">TimeStampStart</span>
+                        <span>.</span>
+                        <span th:text="${#dates.month(timeSpan.start)}">TimeStampStart</span>
+                        <span>.</span>
+                        <span th:text="${#dates.year(timeSpan.start)}">TimeStampStart</span>
+                        <br>
+                        <span>bis</span>
+                        <br>
+                        <span th:text="${#dates.dayOfWeekName(timeSpan.end)}">TimeStampStart</span>
+                        <span>, der </span>
+                        <span th:text="${#dates.day(timeSpan.end)}">TimeStampStart</span>
+                        <span>.</span>
+                        <span th:text="${#dates.month(timeSpan.end)}">TimeStampStart</span>
+                        <span>.</span>
+                        <span th:text="${#dates.year(timeSpan.end)}">TimeStampStart</span>
+                    </div>
+                </div>
+
                 <button th:if="${(product.owner.userId.equals(user.userId))==false}" class="btn btn-primary" type="submit">Ausleihen</button>
             </div>
         </div>
