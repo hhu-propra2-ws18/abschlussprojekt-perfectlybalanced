@@ -1,7 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.testdummys;
 
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
-import de.hhu.abschlussprojektverleihplattform.service.ILendingService;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;

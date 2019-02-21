@@ -123,8 +123,7 @@ public class ProductController {
     }
 
     @GetMapping("/myproducts")
-    public String getMyProducts(Model model, Authentication auth) {
-        UserEntity user = (UserEntity) auth.getPrincipal();
+    public String getMyProducts(Model model, @ModelAttribute("user") UserEntity user) {
         List<ProductEntity> myProducts = productService.getAllProductsFromUser(user);
         boolean gotNoProducts = myProducts.isEmpty();
         model.addAttribute("myProducts", myProducts);
