@@ -187,8 +187,6 @@ public class LendingRepositoryTest {
             = RandomTestData.newRandomLendingStausDone(testBorrower1, testProduct);
         lendingEntity.setStatus(Lendingstatus.requested);
         lendingRepository.addLending(lendingEntity);
-        LendingEntity testLending
-            = lendingRepository.getLendingByProductAndBorrower(testProduct, testBorrower1);
 
         List<LendingEntity> allReturnedLendingsFromOwner
             = lendingRepository.getAllRequestsForUser(testOwner1);
