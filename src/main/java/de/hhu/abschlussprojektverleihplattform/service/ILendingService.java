@@ -26,9 +26,8 @@ public interface ILendingService {
 
     public boolean denyLendingRequest(LendingEntity lending);
 
-    // Return a Product (two Versions, depending on View/Controller)
+    // Return a Product
     public void returnProduct(LendingEntity lending);
-    // public void ReturnProduct(UserEntity actingUser, ProductEntity product);
 
     // Decide wether a returned product is in acceptable condition or not
     public boolean acceptReturnedProduct(LendingEntity lending);

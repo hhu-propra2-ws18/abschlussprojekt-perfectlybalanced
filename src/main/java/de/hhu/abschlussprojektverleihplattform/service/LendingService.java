@@ -124,14 +124,6 @@ public class LendingService implements ILendingService {
         lending_repository.update(lending);
     }
 
-    // Artikel zurueckgeben alternative
-    public void returnProduct(UserEntity actingUser, ProductEntity product) {
-        LendingEntity lending
-                = lending_repository.getLendingByProductAndUser(product, actingUser);
-        lending.setStatus(Lendingstatus.returned);
-        lending_repository.update(lending);
-    }
-
     // Angeben dass ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean acceptReturnedProduct(LendingEntity lending) {
         if (payment_service.returnReservatedMoney(
@@ -151,33 +143,6 @@ public class LendingService implements ILendingService {
         lending.setStatus(Lendingstatus.conflict);
         lending_repository.update(lending);
         return true;
-    }
-
-    // Angeben ob ein Artikel in gutem Zustand zurueckgegeben wurde Alternative
-    public boolean checkReturnedProduct(
-            UserEntity actingUser,
-            ProductEntity product,
-            boolean isAcceptable
-    ) {
-        LendingEntity lending
-                = lending_repository.getLendingByProductAndUser(product, actingUser);
-        if (isAcceptable) {
-            if (
-                    payment_service.returnReservatedMoney(
-                            lending.getBorrower().getUsername(),
-                            lending.getSuretyReservationID()
-                    )
-            ) {
-                lending.setStatus(Lendingstatus.done);
-                lending_repository.update(lending);
-                return true;
-            }
-            return false;
-        } else {
-            lending.setStatus(Lendingstatus.conflict);
-            lending_repository.update(lending);
-            return true;
-        }
     }
 
     // Konflikt vom Admin loesen
