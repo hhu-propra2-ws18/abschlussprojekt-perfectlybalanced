@@ -3,7 +3,6 @@ package de.hhu.abschlussprojektverleihplattform.database;
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

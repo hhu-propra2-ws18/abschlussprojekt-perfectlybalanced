@@ -9,7 +9,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.plaf.basic.BasicTreeUI;
 import java.util.List;
 
 import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
