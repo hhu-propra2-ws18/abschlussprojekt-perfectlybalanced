@@ -50,15 +50,12 @@ public class ProductControllerTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
 
         productService.addProduct(product);
-        ProductEntity loadedProduct = productService.getByTitle(product.getTitle());
 
-        Long productId = loadedProduct.getId();
-
-        mockMvc.perform(get("/productdetail/" + productId.toString()))
+        mockMvc.perform(get("/productdetail/" + product.getId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Detailansicht")))
-                .andExpect(content().string(containsString(loadedProduct.getTitle())))
-                .andExpect(content().string(containsString(loadedProduct.getDescription())));
+                .andExpect(content().string(containsString(product.getTitle())))
+                .andExpect(content().string(containsString(product.getDescription())));
     }
 
     @Test
@@ -81,7 +78,7 @@ public class ProductControllerTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
 
-        productRepository.saveProduct(product);
+        productService.addProduct(product);
 
         mockMvc.perform(get("/editproduct/" + product.getId().toString()))
                 .andExpect(status().isOk())
@@ -105,15 +102,13 @@ public class ProductControllerTest {
         productService.addProduct(product2);
 
         List<ProductEntity> myproducts = productService.getAllProductsFromUser(user);
-        ProductEntity loadProduct1 = myproducts.get(0);
-        ProductEntity loadProduct2 = myproducts.get(1);
 
         mockMvc.perform(get("/myproducts"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString(loadProduct1.getTitle())))
-                .andExpect(content().string(containsString(loadProduct1.getDescription())))
-                .andExpect(content().string(containsString(loadProduct2.getTitle())))
-                .andExpect(content().string(containsString(loadProduct2.getDescription())));
+                .andExpect(content().string(containsString(myproducts.get(0).getTitle())))
+                .andExpect(content().string(containsString(myproducts.get(0).getDescription())))
+                .andExpect(content().string(containsString(myproducts.get(1).getTitle())))
+                .andExpect(content().string(containsString(myproducts.get(1).getDescription())));
     }
 
     @Test
@@ -195,11 +190,8 @@ public class ProductControllerTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
 
         productService.addProduct(product);
-        ProductEntity loadedProduct = productService.getByTitle(product.getTitle());
 
-        Long productId = loadedProduct.getId();
-
-        mockMvc.perform(post("/editproduct/" + productId.toString())
+        mockMvc.perform(post("/editproduct/" + product.getId().toString())
                 .param("description","Beschreibung zum TestProdukt")
                 .param("title", "TestProdukt")
                 .param("surety", "100")
@@ -222,11 +214,8 @@ public class ProductControllerTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
 
         productService.addProduct(product);
-        ProductEntity loadedProduct = productService.getByTitle(product.getTitle());
 
-        Long productId = loadedProduct.getId();
-
-        mockMvc.perform(post("/editproduct/" + productId.toString())
+        mockMvc.perform(post("/editproduct/" + product.getId().toString())
                 .param("description","Beschreibung zum TestProdukt")
                 .param("title", "T")
                 .param("surety", "100")
@@ -249,11 +238,8 @@ public class ProductControllerTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
 
         productService.addProduct(product);
-        ProductEntity loadedProduct = productService.getByTitle(product.getTitle());
 
-        Long productId = loadedProduct.getId();
-
-        mockMvc.perform(post("/editproduct/" + productId.toString())
+        mockMvc.perform(post("/editproduct/" + product.getId().toString())
                 .param("description","Beschreibung zum TestProdukt")
                 .param("title", "TestProdukt")
                 .param("surety", "100")
@@ -277,11 +263,8 @@ public class ProductControllerTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
 
         productService.addProduct(product);
-        ProductEntity loadedProduct = productService.getByTitle(product.getTitle());
 
-        Long productId = loadedProduct.getId();
-
-        mockMvc.perform(post("/editproduct/" + productId.toString())
+        mockMvc.perform(post("/editproduct/" + product.getId().toString())
                 .param("description","Beschreibung zum TestProdukt")
                 .param("title", "TestProdukt")
                 .param("surety", "100")
