@@ -54,9 +54,9 @@ public class LendingService implements ILendingService {
             Timestamp lend_start = lend.getStart();
             Timestamp lend_end = lend.getEnd();
             if (
-                    (start.after(lend_start) && start.before(lend_end))
-                            || (end.after(lend_start) && end.before(lend_end))
-                            || (lend_start.after(start) && lend_start.before(end))
+                (start.after(lend_start) && start.before(lend_end))
+                    || (end.after(lend_start) && end.before(lend_end))
+                    || (lend_start.after(start) && lend_start.before(end))
             ) {
                 timeIsOK = false;
             }
@@ -65,13 +65,13 @@ public class LendingService implements ILendingService {
         boolean moneyIsOK = payment_service.userHasAmount(actingUser, totalMoney);
         if (timeIsOK && moneyIsOK) {
             LendingEntity lending = new LendingEntity(
-                    Lendingstatus.requested,
-                    start,
-                    end,
-                    actingUser,
-                    product,
-                    0L,
-                    0L
+                Lendingstatus.requested,
+                start,
+                end,
+                actingUser,
+                product,
+                0L,
+                0L
             );
             // TODO: check if 0L realy is unused in ProPay
             lending_repository.addLending(lending);
@@ -83,20 +83,20 @@ public class LendingService implements ILendingService {
     // Anfrage einer Buchung beantworten
     public boolean acceptLendingRequest(LendingEntity lending) {
         Long costID = payment_service.reservateAmount(
-                lending.getBorrower(),
-                lending.getProduct().getOwner(),
-                lending.getProduct().getCost()
-                        * daysBetween(lending.getStart(), lending.getEnd())
+            lending.getBorrower(),
+            lending.getProduct().getOwner(),
+            lending.getProduct().getCost()
+                * daysBetween(lending.getStart(), lending.getEnd())
         );
         Long suretyID = payment_service.reservateAmount(
-                lending.getBorrower(),
-                lending.getProduct().getOwner(),
-                lending.getProduct().getSurety()
+            lending.getBorrower(),
+            lending.getProduct().getOwner(),
+            lending.getProduct().getSurety()
         );
         if (costID > 0 && suretyID > 0) {
             if (payment_service.tranferReservatedMoney(
-                    lending.getBorrower().getUsername(),
-                    costID
+                lending.getBorrower().getUsername(),
+                costID
             )
             ) {
                 lending.setStatus(Lendingstatus.confirmt);
@@ -126,8 +126,8 @@ public class LendingService implements ILendingService {
     // Angeben dass ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean acceptReturnedProduct(LendingEntity lending) {
         if (payment_service.returnReservatedMoney(
-                lending.getBorrower().getUsername(),
-                lending.getSuretyReservationID()
+            lending.getBorrower().getUsername(),
+            lending.getSuretyReservationID()
         )
         ) {
             lending.setStatus(Lendingstatus.done);
@@ -146,8 +146,8 @@ public class LendingService implements ILendingService {
     // Konflikt vom Admin loesen
     public boolean ownerRecivesSurety(LendingEntity lending) {
         if (payment_service.tranferReservatedMoney(
-                lending.getBorrower().getUsername(),
-                lending.getSuretyReservationID()
+            lending.getBorrower().getUsername(),
+            lending.getSuretyReservationID()
         )) {
             lending.setStatus(Lendingstatus.done);
             lending_repository.update(lending);
@@ -159,8 +159,8 @@ public class LendingService implements ILendingService {
     // Konflikt vom Admin loesen
     public boolean borrowerRecivesSurety(LendingEntity lending) {
         if (payment_service.returnReservatedMoney(
-                lending.getBorrower().getUsername(),
-                lending.getSuretyReservationID()
+            lending.getBorrower().getUsername(),
+            lending.getSuretyReservationID()
         )
         ) {
             lending.setStatus(Lendingstatus.done);
@@ -254,13 +254,13 @@ public class LendingService implements ILendingService {
         Long costReervationID = 1L;
         Long suretyReservationID = 2L;
         return new LendingEntity(
-                status,
-                start,
-                end,
-                borrower,
-                product,
-                costReervationID,
-                suretyReservationID
+            status,
+            start,
+            end,
+            borrower,
+            product,
+            costReervationID,
+            suretyReservationID
         );
     }
 
