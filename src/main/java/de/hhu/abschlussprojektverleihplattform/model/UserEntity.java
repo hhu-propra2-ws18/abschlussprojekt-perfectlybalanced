@@ -1,11 +1,11 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
+import de.hhu.abschlussprojektverleihplattform.model.validation.CustomEmail;
 import de.hhu.abschlussprojektverleihplattform.model.validation.UniqueEmail;
 import de.hhu.abschlussprojektverleihplattform.model.validation.UniqueUsername;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -33,7 +33,7 @@ public class UserEntity {
     @Column(unique = true)
     @NotEmpty
     @UniqueEmail
-    @Email(message = "{email.error}")
+    @CustomEmail
     private String email;
     private Role role;
 
