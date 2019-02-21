@@ -67,7 +67,7 @@ public class MyLendingsControllerTest {
         Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
 
         //user2 wants to lend
-        boolean bool1 = lendingService.requestLending(
+        boolean requestIsOk = lendingService.requestLending(
             loaded_user_2,
             productService.getByTitle(productEntity.getTitle()),
             timestamps[0],
@@ -75,11 +75,11 @@ public class MyLendingsControllerTest {
         );
 
         //lending request accepted
-        boolean bool2 = lendingService.acceptLendingRequest(
+        boolean acceptIsOk = lendingService.acceptLendingRequest(
             lendingService.getAllRequestsForUser(loaded_user_owner).get(0)
         );
 
-        Assert.assertTrue(bool1&&bool2);
+        Assert.assertTrue(requestIsOk && acceptIsOk);
 
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)
