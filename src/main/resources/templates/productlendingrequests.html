@@ -10,6 +10,7 @@
     <div class="container">
         <div class="m-3"></div>
         <h3>Leih Anfragen</h3>
+        <span th:if="${checkMyLendings}==true">Aktuell liegen keine Anfragen vor.</span>
             <div class="card" th:each="lending : ${lendings}">
                 <div class="row">
                     <div class="col-md-8">
