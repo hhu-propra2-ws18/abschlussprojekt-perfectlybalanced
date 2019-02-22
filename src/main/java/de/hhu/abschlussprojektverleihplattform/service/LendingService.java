@@ -234,8 +234,8 @@ public class LendingService implements ILendingService {
         return allLendings
                 .stream()
                 .filter(
-                    lendingEntity -> lendingEntity.getStatus().equals(Lendingstatus.done) ||
-                            lendingEntity.getStatus().equals(Lendingstatus.denied)
+                    lendingEntity -> lendingEntity.getStatus().equals(Lendingstatus.done)
+                            || lendingEntity.getStatus().equals(Lendingstatus.denied)
                 )
                 .collect(Collectors.toList());
     }
