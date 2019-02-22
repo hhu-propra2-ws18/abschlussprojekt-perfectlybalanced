@@ -104,14 +104,11 @@ public class LendingService implements ILendingService {
                 lending.setSuretyReservationID(suretyID);
                 lending_repository.update(lending);
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
-            payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-            return false;
         }
+        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
+        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
+        return false;
     }
 
     // Anfrage einer Buchung beantworten
