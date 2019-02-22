@@ -1,8 +1,8 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
+import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
-import de.hhu.abschlussprojektverleihplattform.logic.TempZeitraumModel;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import org.springframework.stereotype.Service;
@@ -18,27 +18,25 @@ import java.util.List;
 @Service
 public class LendingService implements ILendingService {
 
-    //For the development of the Controllers/Views
-    //cant be private, since i have to disable them for the tests
-    protected static boolean ReturnExampleLendings = false;
-    protected static boolean UseDummyProPay = true;
-
     private ILendingRepository lending_repository;
     private IPaymentService payment_service;
 
     public LendingService(ILendingRepository lending_repository, IPaymentService payment_service) {
         this.lending_repository = lending_repository;
         this.payment_service = payment_service;
-        if (UseDummyProPay) {
-            this.payment_service = new PaymentServiceDummy(true, true, true, true);
-        }
     }
 
     // Verfuegbaren Zeitraum pruefen
-    public TempZeitraumModel getTime(ProductEntity product) {
+    public List<Timespan> getTime(ProductEntity product) {
         List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
-        //TODO: Irgendwie in ein Format umwandeln, was die Viwes anzeigen koennen
-        return new TempZeitraumModel();
+        List<Timespan> list = new ArrayList<Timespan>();
+        for (LendingEntity lend: lendings) {
+            if(lend.getStatus()!=Lendingstatus.done && lend.getStatus()!=Lendingstatus.denied) {
+                Timespan timespan = new Timespan(lend.getStart(), lend.getEnd());
+                list.add(timespan);
+            }
+        }
+        return list;
     }
 
     // Anfrage einer Buchung eintragen
@@ -185,46 +183,25 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity borrower = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.confirmt, user, borrower));
-            return list;
-        }
         return lending_repository.getAllLendingsFromUser(user);
     }
 
     // return all Lendings, that are borrowed by the user
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity owner = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.confirmt, owner, user));
-            return list;
-        }
         return lending_repository.getAllLendingsForUser(user);
     }
 
     // return all Lendings, that are owned by the user and have the status returned
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity borrower = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.returned, user, borrower));
-            return list;
-        }
         return lending_repository.getReturnedLendingFromUser(user);
+    }
+
+    public List<LendingEntity> getAllLendings() {
+        return lending_repository.getAllLendings();
     }
 
     // return all Lendings, that have the status conflict
     public List<LendingEntity> getAllConflicts() {
-        if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<LendingEntity>();
-            UserEntity owner = createExampleUser1();
-            UserEntity borrower = createExampleUser2();
-            list.add(createExampleLending1(Lendingstatus.conflict, owner, borrower));
-            return list;
-        }
         return lending_repository.getAllConflicts();
     }
 

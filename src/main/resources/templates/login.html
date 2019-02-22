@@ -16,6 +16,16 @@
     <div th:if="${param.logout}" class="alert alert-success" role="alert">
         <span>Sie haben sich erfolgreich abgemeldet.</span>
     </div>
+    <div class="m-3 alert alert-secondary" role="alert">
+        <h5>
+            Testdaten
+            <small class="text-muted">(Login:Passwort)</small>
+        </h5>
+        <ul class="list-group">
+            <li class="list-group-item">sarah:sarah</li>
+            <li class="list-group-item">admin:admin</li>
+        </ul>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form name="login" th:action="@{/login}" method="post">

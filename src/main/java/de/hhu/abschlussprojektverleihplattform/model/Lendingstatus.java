@@ -1,8 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum Lendingstatus {
     requested,
     confirmt,

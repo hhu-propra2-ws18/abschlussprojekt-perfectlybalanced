@@ -2,7 +2,6 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.repository.LendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
@@ -11,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,27 +21,23 @@ public class ProductLendingRequestsController {
     private final ProductService productService;
     private final LendingService lendingService;
     private final UserService userService;
-    //TODO: REMOVE REPO IT WAS JUST FPR TESTING!!!
-    private final LendingRepository lendingRepository;
 
     @Autowired
     public ProductLendingRequestsController(
             ProductService productService,
             LendingService lendingService,
-            UserService userService,
-            LendingRepository lendingRepository) {
-
+            UserService userService
+    ) {
         this.productService = productService;
         this.lendingService = lendingService;
         this.userService = userService;
-        this.lendingRepository = lendingRepository;
     }
 
     @GetMapping("/lendingrequests")
     public String getLendingRequestsOverview(Model model, Authentication auth) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
         List<LendingEntity> lendings = lendingService.getAllRequestsForUser(user);
-        List<LendingEntity> oldLendings = lendingRepository.getAllLendings();
+        List<LendingEntity> oldLendings = lendingService.getAllLendings();
         boolean checkMyLendings = lendings.isEmpty();
         model.addAttribute("checkMyLendings", checkMyLendings);
         model.addAttribute("lendings", lendings);

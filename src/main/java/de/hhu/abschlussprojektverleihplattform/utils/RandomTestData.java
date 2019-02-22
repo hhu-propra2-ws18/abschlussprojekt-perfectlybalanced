@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.utils;
 
-import com.mysql.cj.xdevapi.AddResult;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import java.sql.Timestamp;
 import java.util.Date;
