@@ -186,6 +186,7 @@ public class LendingRepositoryTest {
             = RandomTestData.newRandomLendingStausDone(borrower, productEntity);
         lendingEntity.setStatus(Lendingstatus.requested);
         lendingRepository.addLending(lendingEntity);
+
         LendingEntity testLending
             = lendingRepository.getLendingsByProductAndBorrower(productEntity, borrower).get(0);
 

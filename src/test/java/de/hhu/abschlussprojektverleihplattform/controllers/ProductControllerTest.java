@@ -43,6 +43,9 @@ public class ProductControllerTest {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    LendingService lendingService;
+
     @Test
     @WithUserDetails("sarah")
     public void testdetailscontrolleristhere() throws Exception {
@@ -60,8 +63,7 @@ public class ProductControllerTest {
             .andExpect(content().string(containsString(product.getDescription())));
     }
 
-    @MockBean
-    LendingService lendingService;
+
 
     @Test
     @WithUserDetails("sarah")
@@ -291,7 +293,7 @@ public class ProductControllerTest {
         UserEntity user = (UserEntity)  auth.getPrincipal();
 
         ProductEntity productEntity = new ProductEntity();
-        productEntity.setId(1L);
+
 
 
         mockMvc.perform(post("/request/?id=2").with(csrf()))

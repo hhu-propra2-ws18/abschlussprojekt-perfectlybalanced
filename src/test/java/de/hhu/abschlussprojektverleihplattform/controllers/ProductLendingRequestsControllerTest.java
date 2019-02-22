@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
+import de.hhu.abschlussprojektverleihplattform.controllers.lending.ProductLendingRequestsController;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
