@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Verleihplattform Produkt Detailansicht</title>
@@ -33,6 +33,17 @@
                         <span th:text="${product.owner.email}"></span>
                     </li>
                 </ul>
+                <div id="lendingform">
+                    <!--<form th:action="@{/request/(id=${product.getId()})}" method="post">
+
+                        <button
+                                th:if="${(product.owner.userId.equals(user.userId))==false}"
+                                class="btn btn-primary" type="submit">Ausleihen
+                        </button>
+
+                    </form>-->
+                    <a href="/sendLendingRequest/="><button class="btn btn-primary">Ausleihen</button></a>
+                </div>
 
                 <div class="card" th:each="timeSpan : ${ListOfReservatedTimes}">
                     <div class="card-header">
@@ -60,6 +71,7 @@
                 </div>
 
                 <button th:if="${(product.owner.userId.equals(user.userId))==false}" class="btn btn-primary" type="submit">Ausleihen</button>
+
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
@@ -47,7 +47,7 @@ public class UserProfileControllerTest {
                 .andExpect(content().string(containsString("Kontostand")));
     }
 
-    //@WithUserDetails("sarah")
+
     @Test
     public void test_sarah_can_deposit_money_and_see_her_balance() throws Exception{
 

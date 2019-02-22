@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>LendingRequestRehected</title>
@@ -7,10 +7,13 @@
 </head>
 <body>
     <nav th:replace="nav-fragment"></nav>
-    <h1>Leihanfrage abgelehnt</h1>
-    <h3>Du hast die Leihanfrage erfolgreich abgelehnt</h3>
-    <form action="/lendingrequests" method="get">
-        <button type="submit" class="btn btn-success">Zurück zu deinen Ausleihen</button>
+    <h1>Leihanfrage Senden</h1>
+
+
+    <form th:action="@{/requests/accept(id=${lending.getId()})}" method="post">
+        <a><button type="submit" class="btn btn-success">Approve</button></a>
     </form>
+
+
 </body>
 </html>
