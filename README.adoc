@@ -15,6 +15,10 @@
 25.41.U1.22 +
 Ausnahme am 21.02.2019: 25.13.U1.24
 
+=== Konventionen
+- Maximale Zeilenlänge: 100
+- Länge der Einrückungen: 4
+
 == Proleih
 - https://github.com/hhu-propra2/abschlussprojekt-perfectlybalanced[Github Repository]
 - https://propra-proleih.herokuapp.com/[Testversion der App]

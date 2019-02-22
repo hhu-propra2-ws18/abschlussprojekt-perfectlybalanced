@@ -3,7 +3,7 @@ package de.hhu.abschlussprojektverleihplattform.controllers;
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
+import de.hhu.abschlussprojektverleihplattform.service.ILendingService;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,16 @@ public class ProductController {
 
     private final IUserService userService;
     private final IProductService productService;
+    private final ILendingService lendingService;
 
     @Autowired
-    public ProductController(IUserService userService, IProductService productService) {
+    public ProductController(
+            IUserService userService,
+            IProductService productService,
+            ILendingService lendingService) {
         this.userService = userService;
         this.productService = productService;
+        this.lendingService = lendingService;
     }
 
 
@@ -110,14 +115,14 @@ public class ProductController {
         ProductEntity product = productService.getById(id);
         if(product != null) {
             model.addAttribute("product", product);
+            model.addAttribute("ListOfReservatedTimes", lendingService.getTime(product));
             return "productdetailedview";
         }
         return "redirect:/";
     }
 
     @GetMapping("/myproducts")
-    public String getMyProducts(Model model, Authentication auth) {
-        UserEntity user = (UserEntity) auth.getPrincipal();
+    public String getMyProducts(Model model, @ModelAttribute("user") UserEntity user) {
         List<ProductEntity> myProducts = productService.getAllProductsFromUser(user);
         boolean gotNoProducts = myProducts.isEmpty();
         model.addAttribute("myProducts", myProducts);
