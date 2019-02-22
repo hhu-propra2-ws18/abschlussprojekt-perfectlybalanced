@@ -43,8 +43,9 @@ public class MyLendingsController {
     }
 
     @PostMapping("/mylendings/return")
-    public String handleReturn(Model model, @RequestParam Long id,
-                               Authentication auth) {
+    public String handleReturn(Model model,
+                               @RequestParam Long id,
+                               Authentication auth) throws Exception{
         UserEntity user = (UserEntity) auth.getPrincipal();
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.returnProduct(requestedLending);

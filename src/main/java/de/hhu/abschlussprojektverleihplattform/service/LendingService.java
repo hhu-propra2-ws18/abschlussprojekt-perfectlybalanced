@@ -199,7 +199,7 @@ public class LendingService implements ILendingService {
         return lending_repository.getAllConflicts();
     }
 
-    public LendingEntity getLendingById(Long id) {
+    public LendingEntity getLendingById(Long id) throws Exception {
         return lending_repository.getLendingById(id);
     }
 

@@ -27,7 +27,7 @@ public class RegistryController {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
+    @GetMapping(url)
     public String getRegisterPage(Model model){
 
         Authentication auth = SecurityContextHolder
@@ -41,7 +41,7 @@ public class RegistryController {
         return "registry";
     }
 
-    @PostMapping("/register")
+    @PostMapping(url)
     public String postRegisterUser(@ModelAttribute("user") @Valid UserEntity userEntity,
                                    BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
