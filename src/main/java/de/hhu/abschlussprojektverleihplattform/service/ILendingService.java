@@ -62,4 +62,17 @@ public interface ILendingService {
     List<LendingEntity> getAllLendings();
 
     LendingEntity getLendingById(Long id);
+
+    //Sorting methodes for the MyLendingsView
+
+    List<LendingEntity> getAllRequestedLendings(List<LendingEntity> allLendings);
+
+    List<LendingEntity> getAllConfirmedLendings(List<LendingEntity> allLendings);
+
+    List<LendingEntity> getAllReturnedLendings(List<LendingEntity> allLendings);
+
+    List<LendingEntity> getAllConflictedLendings(List<LendingEntity> allLendings);
+
+    //Done and Denied Lendings, scine bothe are just history and have no further interactions
+    List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings);
 }

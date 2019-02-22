@@ -122,16 +122,9 @@ public class LendingService implements ILendingService {
 
     // Angeben dass ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean acceptReturnedProduct(LendingEntity lending) {
-        if (payment_service.returnReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )
-        ) {
-            lending.setStatus(Lendingstatus.done);
-            lending_repository.update(lending);
-            return true;
-        }
-        return false;
+        lending.setStatus(Lendingstatus.done);
+        lending_repository.update(lending);
+        return true;
     }
 
     // Angeben dass ein Artikel in schlechtem Zustand zurueckgegeben wurde
@@ -200,6 +193,26 @@ public class LendingService implements ILendingService {
 
     public LendingEntity getLendingById(Long id) {
         return lending_repository.getLendingById(id);
+    }
+
+    public List<LendingEntity> getAllRequestedLendings(List<LendingEntity> allLendings) {
+        return new ArrayList<>();
+    }
+
+    public List<LendingEntity> getAllConfirmedLendings(List<LendingEntity> allLendings){
+        return new ArrayList<>();
+    }
+
+    public List<LendingEntity> getAllReturnedLendings(List<LendingEntity> allLendings){
+        return new ArrayList<>();
+    }
+
+    public List<LendingEntity> getAllConflictedLendings(List<LendingEntity> allLendings){
+        return new ArrayList<>();
+    }
+
+    public List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings){
+        return new ArrayList<>();
     }
 
     // private Methode die die Differrenz in Tagen zwischen zwei Timestamps
