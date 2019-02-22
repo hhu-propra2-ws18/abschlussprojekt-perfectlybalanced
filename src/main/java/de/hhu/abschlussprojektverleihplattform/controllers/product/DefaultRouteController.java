@@ -21,9 +21,6 @@ public class DefaultRouteController {
 
     @GetMapping("/")
     public String getDefaultRouteOverviewOfProducts(Model model) {
-
-        //TODO: redirect if user is not logged in
-        // Startseite für alle
         List<ProductEntity> products = productService.showAll();
 
         model.addAttribute("products", products);

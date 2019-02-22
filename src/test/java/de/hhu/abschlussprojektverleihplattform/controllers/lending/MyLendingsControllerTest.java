@@ -56,7 +56,7 @@ public class MyLendingsControllerTest {
     //TODO: den richten Test wieder aktivieren sobald die SQL-Abfrage gefixt ist
 
     @Test
-    public void test_can_see_my_lending_request() throws Exception{
+    public void testCanSeeMyLendingRequest() throws Exception{
 
         UserEntity user_owner = RandomTestData.newRandomTestUser();
         userService.addUser(user_owner);

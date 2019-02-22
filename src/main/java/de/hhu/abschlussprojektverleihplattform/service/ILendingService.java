@@ -11,7 +11,7 @@ import java.util.List;
 public interface ILendingService {
 
     // maybee needs to be changes, once the ZeitraumModel has been implemented
-    List<Timespan> getTime(ProductEntity product);
+    List<Timespan> getAvailableTime(ProductEntity product);
 
     // Request a new Lending
     boolean requestLending(
@@ -32,13 +32,13 @@ public interface ILendingService {
     // Decide wether a returned product is in acceptable condition or not
     boolean acceptReturnedProduct(LendingEntity lending);
 
-    void denyRetunedProduct(LendingEntity lending);
+    void denyReturnedProduct(LendingEntity lending);
 
 
     // An admin resolves a conflict and decides who gets the surety
-    boolean ownerRecivesSurety(LendingEntity lending);
+    boolean ownerReceivesSuretyAfterConflict(LendingEntity lending);
 
-    boolean borrowerRecivesSurety(LendingEntity lending);
+    boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending);
 
     // The following Methodes are just for the views,
     // calling them doesnt change anything in the database
