@@ -4,7 +4,6 @@ import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.*;
-import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -178,7 +177,7 @@ public class LendingService implements ILendingService {
             list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
             return list;
         }*/
-        return lending_repository.getAllRequestsForUser(user);
+        return lending_repository.getAllLendingRequestsForProductOwner(user);
     }
 
     // return all Lendings, that are owned by the user

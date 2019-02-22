@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.controllers;
 
-import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
@@ -17,14 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-
 import java.sql.Timestamp;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -54,7 +51,6 @@ public class MyLendingsControllerTest {
 
     //TODO: den richten Test wieder aktivieren sobald die SQL-Abfrage gefixt ist
 
-    /*
     @Test
     public void test_can_see_my_lending_request() throws Exception{
 
@@ -101,5 +97,4 @@ public class MyLendingsControllerTest {
                 ))
             );
     }
-    */
 }
