@@ -127,7 +127,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void ChangelendingStatusTest() {
+    public void ChangeLendingStatusTest() {
         UserEntity user = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user);
 
