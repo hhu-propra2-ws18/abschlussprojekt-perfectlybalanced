@@ -228,46 +228,6 @@ public class LendingService implements ILendingService {
         return (int) Math.ceil(differenceInDays);
     }
 
-    // private Methodes for the Develop-Mode
-
-    private LendingEntity createExampleLending1(
-            Lendingstatus status,
-            UserEntity owner, UserEntity borrower
-    ) {
-        Timestamp start = new Timestamp(1549368000000L); //3d+2h difference
-        Timestamp end = new Timestamp(1549634400000L);
-        ProductEntity product = createExampleProduct1(owner);
-        Long costReervationID = 1L;
-        Long suretyReservationID = 2L;
-        return new LendingEntity(
-            status,
-            start,
-            end,
-            borrower,
-            product,
-            costReervationID,
-            suretyReservationID
-        );
-    }
-
-    private UserEntity createExampleUser1() {
-        String firstname = "Frank";
-        String lastname = "Meier";
-        String username = "DerTolleFrank";
-        String password = "123456";
-        String email = "Frank.Meier@Example.com";
-        return new UserEntity(firstname, lastname, username, password, email);
-    }
-
-    private UserEntity createExampleUser2() {
-        String firstname = "Hans";
-        String lastname = "Müller";
-        String username = "Hnaswurst";
-        String password = "qwertz";
-        String email = "D.Schulz@Example.com";
-        return new UserEntity(firstname, lastname, username, password, email);
-    }
-
     private ProductEntity createExampleProduct1(UserEntity owner) {
         String description = "Ein toller Rasemäher";
         String title = "Rasemäher";
