@@ -37,6 +37,34 @@
 
     <div class="container">
         <div class="m-3"></div>
+        <h3>Zurückgegebene Artikel</h3>
+        <span th:if="${checkMyReturns}==true">Aktuell liegen keine Rückgaben vor.</span>
+        <div class="card" th:each="lending : ${returnedProducts}">
+            <div class="row">
+                <div class="col-md-8">
+                    <span th:text="${lending.getBorrower().getUsername()}"></span>
+                    <span> hat das Produkt </span>
+                    <span th:text="${lending.getProduct().getTitle()}"></span>
+                    <span> zurückgegeben </span>
+                    <span th:text="${lending.getId()}"></span>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <form th:action="@{/lendingrequests/acceptReturn(id=${lending.getId()})}" method="post">
+                            <a><button type="submit" class="btn btn-success">Zustand ist in Ordnung</button></a>
+                        </form>
+                        <div class="m-3"></div>
+                        <form th:action="@{/lendingrequests/rejectReturn(id=${lending.getId()})}"  method="post">
+                            <a><button type="submit" class="btn btn-danger">Zustand ist nicht akzeptabel</button></a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="m-3"></div>
         <h3>History</h3>
         <div class="card" th:each="oldlending : ${oldLendings}">
             <div class="row">
