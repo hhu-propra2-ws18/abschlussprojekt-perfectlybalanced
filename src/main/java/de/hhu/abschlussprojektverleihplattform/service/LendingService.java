@@ -30,7 +30,7 @@ public class LendingService implements ILendingService {
         List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
         List<Timespan> list = new ArrayList<Timespan>();
         for (LendingEntity lend : lendings) {
-            if (lend.getStatus() != Lendingstatus.done && lend.getStatus() != Lendingstatus.denied) {
+            if (lend.getStatus() != Lendingstatus.done && lend.getStatus() != Lendingstatus.denied){
                 Timespan timespan = new Timespan(lend.getStart(), lend.getEnd());
                 list.add(timespan);
             }
