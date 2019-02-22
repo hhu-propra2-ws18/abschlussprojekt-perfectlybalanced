@@ -48,6 +48,6 @@ public class MyLendingsController {
         UserEntity user = (UserEntity) auth.getPrincipal();
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.returnProduct(requestedLending);
-        return "redirect:/mycurrentlendings";
+        return "redirect:/mylendings";
     }
 }
