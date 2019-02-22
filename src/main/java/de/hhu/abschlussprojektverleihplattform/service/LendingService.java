@@ -29,8 +29,8 @@ public class LendingService implements ILendingService {
     public List<Timespan> getTime(ProductEntity product) {
         List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
         List<Timespan> list = new ArrayList<Timespan>();
-        for (LendingEntity lend: lendings) {
-            if(lend.getStatus()!=Lendingstatus.done && lend.getStatus()!=Lendingstatus.denied) {
+        for (LendingEntity lend : lendings) {
+            if (lend.getStatus() != Lendingstatus.done && lend.getStatus() != Lendingstatus.denied) {
                 Timespan timespan = new Timespan(lend.getStart(), lend.getEnd());
                 list.add(timespan);
             }
@@ -196,23 +196,54 @@ public class LendingService implements ILendingService {
     }
 
     public List<LendingEntity> getAllRequestedLendings(List<LendingEntity> allLendings) {
-        return new ArrayList<>();
+        List<LendingEntity> sortedList = new ArrayList<>();
+        for (LendingEntity lend : allLendings) {
+            if (lend.getStatus().equals(Lendingstatus.requested)) {
+                sortedList.add(lend);
+            }
+        }
+        return sortedList;
     }
 
-    public List<LendingEntity> getAllConfirmedLendings(List<LendingEntity> allLendings){
-        return new ArrayList<>();
+    public List<LendingEntity> getAllConfirmedLendings(List<LendingEntity> allLendings) {
+        List<LendingEntity> sortedList = new ArrayList<>();
+        for (LendingEntity lend : allLendings) {
+            if (lend.getStatus().equals(Lendingstatus.confirmt)) {
+                sortedList.add(lend);
+            }
+        }
+        return sortedList;
     }
 
-    public List<LendingEntity> getAllReturnedLendings(List<LendingEntity> allLendings){
-        return new ArrayList<>();
+    public List<LendingEntity> getAllReturnedLendings(List<LendingEntity> allLendings) {
+        List<LendingEntity> sortedList = new ArrayList<>();
+        for (LendingEntity lend : allLendings) {
+            if (lend.getStatus().equals(Lendingstatus.returned)) {
+                sortedList.add(lend);
+            }
+        }
+        return sortedList;
     }
 
-    public List<LendingEntity> getAllConflictedLendings(List<LendingEntity> allLendings){
-        return new ArrayList<>();
+    public List<LendingEntity> getAllConflictedLendings(List<LendingEntity> allLendings) {
+        List<LendingEntity> sortedList = new ArrayList<>();
+        for (LendingEntity lend : allLendings) {
+            if (lend.getStatus().equals(Lendingstatus.conflict)) {
+                sortedList.add(lend);
+            }
+        }
+        return sortedList;
     }
 
-    public List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings){
-        return new ArrayList<>();
+    public List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings) {
+        List<LendingEntity> sortedList = new ArrayList<>();
+        for (LendingEntity lend : allLendings) {
+            if (lend.getStatus().equals(Lendingstatus.done)
+                    || lend.getStatus().equals(Lendingstatus.denied)) {
+                sortedList.add(lend);
+            }
+        }
+        return sortedList;
     }
 
     // private Methode die die Differrenz in Tagen zwischen zwei Timestamps
