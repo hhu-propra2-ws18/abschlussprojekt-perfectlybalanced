@@ -12,13 +12,7 @@ import org.junit.Test;
 import java.sql.Timestamp;
 
 public class LendingServiceTest {
-
-
-    @Before
-    public void unsetDevelopFlags() {
-        LendingService.UseDummyProPay = false;
-        LendingService.ReturnExampleLendings = false;
-    }
+    
     // Tests for requestLending
 
     @Test
