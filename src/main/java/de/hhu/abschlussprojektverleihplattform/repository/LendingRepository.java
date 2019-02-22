@@ -120,9 +120,11 @@ public class LendingRepository implements ILendingRepository {
                                 new Object[]{},
                                 new LendingEntityRowMapper(userRepository, productRepository));
     }
+
     @Override
     public List<LendingEntity> getAllLendingRequestsForProductOwner(UserEntity user) {
-        String query2 = "select * from product_entity p join lending_entity l on p.id = l.product_id"
+        String query2 = "select * from product_entity p "
+                + "join lending_entity l on p.id = l.product_id"
                 + " where p.owner_user_id =" + user.getUserId()
                 + " and l.status=" + Lendingstatus.requested.ordinal();
 

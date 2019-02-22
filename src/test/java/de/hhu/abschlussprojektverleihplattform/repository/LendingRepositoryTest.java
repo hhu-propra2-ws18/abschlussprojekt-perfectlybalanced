@@ -129,7 +129,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void ChangelendingStatusTest() {
+    public void changelendingStatusTest() {
         UserEntity user = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user);
 
