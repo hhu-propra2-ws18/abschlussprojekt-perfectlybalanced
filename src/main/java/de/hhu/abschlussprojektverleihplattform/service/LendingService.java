@@ -162,18 +162,7 @@ public class LendingService implements ILendingService {
 
     // Konflikt vom Admin loesen
     public boolean borrowerRecivesSurety(LendingEntity lending) {
-        if (
-            payment_service.returnReservatedMoney(
-                lending.getBorrower().getUsername(),
-                lending.getSuretyReservationID()
-            )
-        ) {
-            lending.setStatus(Lendingstatus.done);
-            lending_repository.update(lending);
-            return true;
-        } else {
-            return false;
-        }
+        return acceptReturnedProduct(lending);
     }
 
     // Methoden um die Daten fuer die Views anzuzeigen
