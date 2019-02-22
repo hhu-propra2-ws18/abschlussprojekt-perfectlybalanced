@@ -45,10 +45,6 @@ public class RequestALendingControllerTest {
     ProPayService proPayService;
 
     @Test
-    public void emptyTest(){}
-
-
-    @Test
     public void lendingRequestTest() throws Exception {
         UserEntity user_wannabe_borrower= RandomTestData.newRandomTestUser();
         userService.addUser(user_wannabe_borrower);
