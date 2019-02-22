@@ -22,7 +22,7 @@ public interface ILendingRepository {
     List<LendingEntity> getAllLendingsFromProduct(ProductEntity product);
 
     // return all Lendings, that are owned by the user and have the status requested
-    List<LendingEntity> getAllRequestsForUser(UserEntity user);
+    List<LendingEntity> getAllLendingRequestsForProductOwner(UserEntity user);
 
     // return all Lendings, that are owned by the user
     List<LendingEntity> getAllLendingsFromUser(UserEntity user);

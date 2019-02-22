@@ -24,9 +24,9 @@ public class ProductLendingRequestsController {
 
     @Autowired
     public ProductLendingRequestsController(
-            ProductService productService,
-            LendingService lendingService,
-            UserService userService
+        ProductService productService,
+        LendingService lendingService,
+        UserService userService
     ) {
         this.productService = productService;
         this.lendingService = lendingService;
@@ -39,17 +39,22 @@ public class ProductLendingRequestsController {
         List<LendingEntity> lendings = lendingService.getAllRequestsForUser(user);
         List<LendingEntity> oldLendings = lendingService.getAllLendings();
         boolean checkMyLendings = lendings.isEmpty();
+        List<LendingEntity> returnedProducts = lendingService.getReturnedLendingFromUser(user);
+        boolean checkMyReturns = returnedProducts.isEmpty();
         model.addAttribute("checkMyLendings", checkMyLendings);
         model.addAttribute("lendings", lendings);
         model.addAttribute("oldLendings", oldLendings);
+        model.addAttribute("returnedProducts", returnedProducts);
+        model.addAttribute("checkMyReturns", checkMyReturns);
         return "productlendingrequests";
     }
 
     @PostMapping("/lendingrequests/reject")
-    public String handleRejection(Model model, @RequestParam Long id,
-                                  Authentication auth)
-            throws Exception {
-
+    public String handleRejection(
+        Model model,
+        @RequestParam Long id,
+        Authentication auth
+    ) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
@@ -58,10 +63,11 @@ public class ProductLendingRequestsController {
     }
 
     @PostMapping("/lendingrequests/accept")
-    public String handleAccept(Model model, @RequestParam Long id,
-                               Authentication auth)
-            throws Exception {
-
+    public String handleAccept(
+        Model model,
+        @RequestParam Long id,
+        Authentication auth
+    ) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
@@ -69,17 +75,38 @@ public class ProductLendingRequestsController {
         return "redirect:/lendingrequests";
     }
 
+    @PostMapping("/lendingrequests/rejectReturn")
+    public String handleGoodReturn(
+        Model model,
+        @RequestParam Long id,
+        Authentication auth
+    ) throws Exception {
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity loadedUser = userService.findByUsername("sarah");
+        LendingEntity requestedLending = lendingService.getLendingById(id);
+        lendingService.denyRetunedProduct(requestedLending);
+        return "redirect:/lendingrequests";
+    }
 
+    @PostMapping("/lendingrequests/acceptReturn")
+    public String handleBadReturn(
+        Model model,
+        @RequestParam Long id,
+        Authentication auth
+    ) throws Exception {
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity loadedUser = userService.findByUsername("sarah");
+        LendingEntity requestedLending = lendingService.getLendingById(id);
+        lendingService.acceptReturnedProduct(requestedLending);
+        return "redirect:/lendingrequests";
+    }
 
-
-
-    /*TODO:
-    PostMapping accept/deny request
-    Get/Post Mappings to create a request
-    GetMapping to show all Products the user has borrowed
-    (Get/)Post Mappings to return Products
-    GetMapping to Check returned Prdoduct
-    (Get/)Post Mappings to accept a retuned product or create a conflict
-    All the Views for the Mappings
-     */
+    // TODO:
+    // PostMapping accept/deny request
+    // Get/Post Mappings to create a request
+    // GetMapping to show all Products the user has borrowed
+    // (Get/)Post Mappings to return Products
+    // GetMapping to Check returned Prdoduct
+    // (Get/)Post Mappings to accept a retuned product or create a conflict
+    // All the Views for the Mappings
 }
