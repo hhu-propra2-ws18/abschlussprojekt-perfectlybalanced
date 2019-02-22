@@ -4,7 +4,6 @@ import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.*;
-import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -29,7 +28,7 @@ public class LendingService implements ILendingService {
     // Verfuegbaren Zeitraum pruefen
     public List<Timespan> getTime(ProductEntity product) {
         List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
-        List<Timespan> list = new ArrayList<Timespan>();
+        List<Timespan> list = new ArrayList<>();
         for (LendingEntity lend: lendings) {
             if(lend.getStatus()!=Lendingstatus.done && lend.getStatus()!=Lendingstatus.denied) {
                 Timespan timespan = new Timespan(lend.getStart(), lend.getEnd());
@@ -125,17 +124,7 @@ public class LendingService implements ILendingService {
 
     // Angeben dass ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean acceptReturnedProduct(LendingEntity lending) {
-        if (payment_service.returnReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )
-        ) {
-            lending.setStatus(Lendingstatus.done);
-            lending_repository.update(lending);
-            return true;
-        } else {
-            return false;
-        }
+        return isLendingDone(lending);
     }
 
     // Angeben dass ein Artikel in schlechtem Zustand zurueckgegeben wurde
@@ -162,7 +151,22 @@ public class LendingService implements ILendingService {
 
     // Konflikt vom Admin loesen
     public boolean borrowerRecivesSurety(LendingEntity lending) {
-        return acceptReturnedProduct(lending);
+        return isLendingDone(lending);
+    }
+
+    private boolean isLendingDone(LendingEntity lending) {
+        if (
+            payment_service.returnReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+            )
+        ) {
+            lending.setStatus(Lendingstatus.done);
+            lending_repository.update(lending);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Methoden um die Daten fuer die Views anzuzeigen
@@ -211,22 +215,9 @@ public class LendingService implements ILendingService {
     // berechnet, kann ggf ausgelagert werden
     // kann hier nicht als private makiert werden, da sie sonst
     // nich getestet werden kann
-    protected int daysBetween(Timestamp start, Timestamp end) {
+    int daysBetween(Timestamp start, Timestamp end) {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);
-    }
-
-    private ProductEntity createExampleProduct1(UserEntity owner) {
-        String description = "Ein toller Rasemäher";
-        String title = "Rasemäher";
-        int surety = 200;
-        int cost = 20;
-        String street = "Tulpenweg";
-        int housenumber = 33;
-        int postcode = 12345;
-        String city = "Heidelberg";
-        AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
-        return new ProductEntity(description, title, surety, cost, a, owner);
     }
 }
