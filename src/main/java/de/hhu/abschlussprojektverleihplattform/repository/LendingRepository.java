@@ -7,6 +7,8 @@ import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -63,7 +65,7 @@ public class LendingRepository implements ILendingRepository {
     }
 
     @Override
-    public void update(LendingEntity lending) {
+    public void update(LendingEntity lending) throws DataAccessException {
         String query = "UPDATE LENDING_ENTITY "
                 + "SET "
                 + "STATUS=?,"
@@ -87,10 +89,12 @@ public class LendingRepository implements ILendingRepository {
     }
 
     @Override
-    public LendingEntity getLendingById(Long id) {
-        String query = "SELECT * FROM LENDING_ENTITY WHERE ID=" + id;
+    public LendingEntity getLendingById(Long id) throws EmptyResultDataAccessException {
+        String query = "SELECT * FROM LENDING_ENTITY WHERE ID=?";
         return (LendingEntity) jdbcTemplate.queryForObject(query,
-                new LendingEntityRowMapper(userRepository, productRepository));
+                new Object[]{id},
+                new LendingEntityRowMapper(userRepository, productRepository)
+        );
     }
 
     public List<LendingEntity> getLendingsByProductAndBorrower(
