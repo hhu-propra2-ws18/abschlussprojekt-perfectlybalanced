@@ -20,6 +20,8 @@ public class RegistryController {
 
     private final IUserService userService;
 
+    public static final String url="/register";
+
     @Autowired
     public RegistryController(IUserService userService) {
         this.userService = userService;
