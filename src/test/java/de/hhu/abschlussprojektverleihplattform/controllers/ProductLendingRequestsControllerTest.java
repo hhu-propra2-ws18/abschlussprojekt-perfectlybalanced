@@ -45,7 +45,7 @@ public class ProductLendingRequestsControllerTest {
     public void testcontrolleristhere() throws Exception {
         mockMvc.perform(get("/lendingrequests"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Leih Anfragen")));
+                .andExpect(content().string(containsString("Leihanfragen")));
     }
 
 
