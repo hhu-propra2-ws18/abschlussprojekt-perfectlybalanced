@@ -126,7 +126,8 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public List<ProductEntity> getAllProductsFromUser(UserEntity user) throws EmptyResultDataAccessException{
+    public List<ProductEntity> getAllProductsFromUser(UserEntity user)
+            throws EmptyResultDataAccessException{
         String query = "SELECT * FROM PRODUCT_ENTITY WHERE OWNER_USER_ID=" + user.getUserId();
         return (List<ProductEntity>)jdbcTemplate.query(query,
                 new Object[]{},
