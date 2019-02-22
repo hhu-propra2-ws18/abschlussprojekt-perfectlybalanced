@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 @RunWith(SpringRunner.class)
@@ -118,12 +119,13 @@ public class LendingRepositoryTest {
         LendingEntity lendingEntity
             = RandomTestData.newRandomLendingStatusConflict(user1, product1);
 
+        List<LendingEntity> conflictLendingsBefore = lendingRepository.getAllConflicts();
+        int sizeBefore = conflictLendingsBefore.size();
         lendingRepository.addLending(lendingEntity);
-
         List<LendingEntity> conflictLendings = lendingRepository.getAllConflicts();
 
-        assertEquals(1, conflictLendings.size());
-        assertEquals(product1, conflictLendings.get(0).getProduct());
+        assertEquals(sizeBefore+1, conflictLendings.size());
+        assertTrue(conflictLendings.contains(lendingEntity));
     }
 
     @Test
