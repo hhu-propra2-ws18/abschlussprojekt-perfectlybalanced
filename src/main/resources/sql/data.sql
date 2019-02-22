@@ -27,3 +27,6 @@ VALUES('2019-02-11 12:00:00','2019-02-12 12:00:00', 4, 1, 1, 1, 1);
 
 INSERT INTO LENDING_ENTITY(start,end,status,borrower_user_id,product_id,surety_reservationid,cost_reservationid)
 VALUES('2019-02-11 12:00:00','2019-02-12 12:00:00', 0, 1, 2, 1, 1);
+
+INSERT INTO LENDING_ENTITY(start,end,status,borrower_user_id,product_id,surety_reservationid,cost_reservationid)
+VALUES('2019-02-11 12:00:00','2019-02-12 12:00:00', 1, 3, 1, 1, 1);
