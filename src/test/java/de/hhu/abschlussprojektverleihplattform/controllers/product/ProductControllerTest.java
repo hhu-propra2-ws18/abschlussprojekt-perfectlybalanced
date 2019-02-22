@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.product;
 
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -285,22 +286,5 @@ public class ProductControllerTest {
             containsString("Adresse muss mindestens 5 Zeichen lang sein.")));
     }
 
-    @Test
-    @WithUserDetails("sarah")
-    public void lendingRequestTest() throws Exception {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity)  auth.getPrincipal();
-
-        ProductEntity productEntity = new ProductEntity();
-
-
-
-        mockMvc.perform(post("/request/?id=2").with(csrf()))
-                .andExpect(status().is3xxRedirection());
-
-        verify(productService).getById(any());
-        verify(lendingService).requestLending(any(), any(), any(), any());
-
-    }
 }

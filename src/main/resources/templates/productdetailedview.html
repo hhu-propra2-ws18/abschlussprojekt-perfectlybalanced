@@ -33,15 +33,17 @@
                         <span th:text="${product.owner.email}"></span>
                     </li>
                 </ul>
-                <!--<form th:action="@{/request/(id=${product.getId()})}" method="post">
+                <div id="lendingform">
+                    <!--<form th:action="@{/request/(id=${product.getId()})}" method="post">
 
-                    <button
-                            th:if="${(product.owner.userId.equals(user.userId))==false}"
-                            class="btn btn-primary" type="submit">Ausleihen
-                    </button>
+                        <button
+                                th:if="${(product.owner.userId.equals(user.userId))==false}"
+                                class="btn btn-primary" type="submit">Ausleihen
+                        </button>
 
-                </form>-->
-                <a href="/sendLendingRequest/="><button class="btn btn-primary">Ausleihen</button></a>
+                    </form>-->
+                    <a href="/sendLendingRequest/="><button class="btn btn-primary">Ausleihen</button></a>
+                </div>
 
                 <div class="card" th:each="timeSpan : ${ListOfReservatedTimes}">
                     <div class="card-header">

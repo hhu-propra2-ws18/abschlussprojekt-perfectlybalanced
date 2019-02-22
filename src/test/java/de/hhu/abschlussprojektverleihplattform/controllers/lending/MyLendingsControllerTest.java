@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
