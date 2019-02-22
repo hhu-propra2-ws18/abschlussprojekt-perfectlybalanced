@@ -11,10 +11,10 @@ import java.util.List;
 public interface ILendingService {
 
     // maybee needs to be changes, once the ZeitraumModel has been implemented
-    public List<Timespan> getTime(ProductEntity product);
+    List<Timespan> getTime(ProductEntity product);
 
     // Request a new Lending
-    public boolean requestLending(
+    boolean requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
@@ -22,44 +22,44 @@ public interface ILendingService {
     );
 
     // Accept/Deny a Request
-    public boolean acceptLendingRequest(LendingEntity lending);
+    boolean acceptLendingRequest(LendingEntity lending);
 
-    public void denyLendingRequest(LendingEntity lending);
+    void denyLendingRequest(LendingEntity lending);
 
     // Return a Product
-    public void returnProduct(LendingEntity lending);
+    void returnProduct(LendingEntity lending);
 
     // Decide wether a returned product is in acceptable condition or not
-    public boolean acceptReturnedProduct(LendingEntity lending);
+    boolean acceptReturnedProduct(LendingEntity lending);
 
-    public void denyRetunedProduct(LendingEntity lending);
+    void denyRetunedProduct(LendingEntity lending);
 
 
     // An admin resolves a conflict and decides who gets the surety
-    public boolean ownerRecivesSurety(LendingEntity lending);
+    boolean ownerRecivesSurety(LendingEntity lending);
 
-    public boolean borrowerRecivesSurety(LendingEntity lending);
+    boolean borrowerRecivesSurety(LendingEntity lending);
 
     // The following Methodes are just for the views,
     // calling them doesnt change anything in the database
 
     // return all Lendings, that are owned by the user and have the status requested
-    public List<LendingEntity> getAllRequestsForUser(UserEntity user);
+    List<LendingEntity> getAllRequestsForUser(UserEntity user);
 
     // return all Lendings, that are owned by the user
-    public List<LendingEntity> getAllLendingsFromUser(UserEntity user);
+    List<LendingEntity> getAllLendingsFromUser(UserEntity user);
 
     // return all Lendings, that are borrowed by the user
-    public List<LendingEntity> getAllLendingsForUser(UserEntity user);
+    List<LendingEntity> getAllLendingsForUser(UserEntity user);
 
     // return all Lendings, that are owned by the user and have the status returned
-    public List<LendingEntity> getReturnedLendingFromUser(UserEntity user);
+    List<LendingEntity> getReturnedLendingFromUser(UserEntity user);
 
     // return all Lendings, that have the status conflict
-    public List<LendingEntity> getAllConflicts();
+    List<LendingEntity> getAllConflicts();
 
     // return all Lendings in the Database
-    public List<LendingEntity> getAllLendings();
+    List<LendingEntity> getAllLendings();
 
-    public LendingEntity getLendingById(Long id);
+    LendingEntity getLendingById(Long id);
 }
