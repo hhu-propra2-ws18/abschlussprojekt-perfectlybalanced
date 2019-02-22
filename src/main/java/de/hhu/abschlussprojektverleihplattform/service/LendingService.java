@@ -122,9 +122,16 @@ public class LendingService implements ILendingService {
 
     // Angeben dass ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean acceptReturnedProduct(LendingEntity lending) {
-        lending.setStatus(Lendingstatus.done);
-        lending_repository.update(lending);
-        return true;
+        if (payment_service.returnReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+        )
+        ) {
+            lending.setStatus(Lendingstatus.done);
+            lending_repository.update(lending);
+            return true;
+        }
+        return false;
     }
 
     // Angeben dass ein Artikel in schlechtem Zustand zurueckgegeben wurde
