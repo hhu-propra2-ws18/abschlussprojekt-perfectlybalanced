@@ -23,9 +23,9 @@ public class RequestALendingController {
     @Autowired
     LendingService lendingService;
 
-    public static final String sendLendingRequestURL="sendLendingRequest";
+    public static final String sendLendingRequestURL="/sendLendingRequest";
 
-    public static final String requestalendingURL ="requestalending";
+    public static final String requestalendingURL ="/requestalending";
 
     @GetMapping("/sendLendingRequest")
     public String gotoSendRequest(Model model, @RequestParam Long id, Authentication auth){
@@ -35,14 +35,18 @@ public class RequestALendingController {
     }
 
     @PostMapping("/requestalending")
-    public String requestalending(@RequestParam Long id, Authentication auth){
+    public String requestalending(@RequestParam Long id, Authentication auth) throws Exception{
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
 
-        lendingService.requestLending(user,
+        boolean didrequest = lendingService.requestLending(user,
                 product,
                 new Timestamp(System.currentTimeMillis()),
                 new Timestamp(System.currentTimeMillis() + 86400000));
+
+        if(!didrequest){
+            throw new Exception("cannot make lending request");
+        }
 
         return "redirect:/";
     }

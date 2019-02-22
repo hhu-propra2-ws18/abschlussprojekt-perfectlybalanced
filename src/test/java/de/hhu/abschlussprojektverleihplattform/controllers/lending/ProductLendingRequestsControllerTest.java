@@ -95,22 +95,4 @@ public class ProductLendingRequestsControllerTest {
         verify(lendingService).acceptLendingRequest(null);
     }
 
-    @Test
-    @WithUserDetails("sarah")
-    public void lendingRequestTest() throws Exception {
-
-
-        UserEntity user= RandomTestData.newRandomTestUser();
-        userService.addUser(user);
-        ProductEntity productEntity = RandomTestData.newRandomTestProduct(user,RandomTestData.newRandomTestAddress());
-        productService.addProduct(productEntity);
-
-
-        mockMvc.perform(post("/request/?id=2").with(csrf()))
-                .andExpect(status().is3xxRedirection());
-
-        verify(productService).getById(any());
-        verify(lendingService).requestLending(any(), any(), any(), any());
-
-    }
 }

@@ -171,12 +171,6 @@ public class LendingService implements ILendingService {
 
     // return all Lendings, that are owned by the user and have the status requested
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        /*if (ReturnExampleLendings) {
-            List<LendingEntity> list = new ArrayList<>();
-            UserEntity borrower = createExampleUser1();
-            list.add(createExampleLending1(Lendingstatus.requested, user, borrower));
-            return list;
-        }*/
         return lending_repository.getAllLendingRequestsForProductOwner(user);
     }
 

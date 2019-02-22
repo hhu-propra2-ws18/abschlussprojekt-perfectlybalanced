@@ -6,6 +6,7 @@ import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,6 +44,9 @@ public class MyLendingsControllerTest {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ProPayService proPayService;
+
     @Test
     public void doNothing() {
         //eine Testklasse ohne Tests ist nicht zulaessig
@@ -58,8 +62,8 @@ public class MyLendingsControllerTest {
         userService.addUser(user_owner);
 
 
-        UserEntity user2 = RandomTestData.newRandomTestUser();
-        userService.addUser(user2);
+        UserEntity user_wannabe_borrower = RandomTestData.newRandomTestUser();
+        userService.addUser(user_wannabe_borrower);
 
 
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(
@@ -70,13 +74,17 @@ public class MyLendingsControllerTest {
 
         Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
 
+        proPayService.changeUserBalanceBy(user_wannabe_borrower.getUsername(),100000);
+
         //user2 wants to lend
         boolean requestIsOk = lendingService.requestLending(
-            user2,
+            user_wannabe_borrower,
             productEntity,
             timestamps[0],
             timestamps[1]
         );
+
+        System.out.println("request is ok"+requestIsOk);
 
         //lending request accepted
         boolean acceptIsOk = lendingService.acceptLendingRequest(
@@ -88,7 +96,7 @@ public class MyLendingsControllerTest {
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)
             .with(user(authenticatedUserService.loadUserByUsername(
-                user2.getUsername()
+                user_wannabe_borrower.getUsername()
             )))
         )
             .andExpect(content()
