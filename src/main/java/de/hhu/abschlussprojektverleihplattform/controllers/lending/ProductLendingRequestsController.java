@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
+import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
@@ -99,6 +100,27 @@ public class ProductLendingRequestsController {
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptReturnedProduct(requestedLending);
         return "redirect:/lendingrequests";
+    }
+
+
+    @GetMapping("lendingrequests/sendRequest")
+    public String sendLendingRequestView(Model model, Authentication auth, @RequestParam Long id){
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity produt = productService.getById(id);
+        model.addAttribute("product", produt);
+        model.addAttribute("user", user);
+
+        return "sendLendingRequest";
+    }
+
+    @PostMapping("lendingrequests/sendRequest")
+    public String sendLendingRequestToProductOwner(Model model, Authentication auth, @RequestParam Long id){
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+        model.addAttribute("product", product);
+        model.addAttribute("user", user);
+
+        return "redirect:/";
     }
 
     // TODO:

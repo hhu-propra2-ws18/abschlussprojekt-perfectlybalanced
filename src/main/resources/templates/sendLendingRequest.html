@@ -7,12 +7,32 @@
 </head>
 <body>
     <nav th:replace="nav-fragment"></nav>
+
     <h1>Leihanfrage Senden</h1>
 
+    <div class="card">
+        <h3 th:text="${product.getTitle()}"></h3>
+    </div>
 
-    <form th:action="@{/requests/accept(id=${lending.getId()})}" method="post">
-        <a><button type="submit" class="btn btn-success">Approve</button></a>
+    <form th:action="@{/lendingrequests/sendRequest(id=${product.getId()})}" method="post">
+
+        <div>
+            <span>Von:</span>
+            <input type="datetime-local">
+        </div>
+
+        <div>
+            <span>Bis:</span>
+            <input type="datetime-local">
+        </div>
+
+    <button type="submit" class="btn btn-primary">Ausleihanfrage Senden</button>
+
     </form>
+
+   <!-- <form th:action="@{/requests/accept(id=${lending.getId()})}" method="post">
+        <a><button type="submit" class="btn btn-success">Approve</button></a>
+    </form>-->
 
 
 </body>
