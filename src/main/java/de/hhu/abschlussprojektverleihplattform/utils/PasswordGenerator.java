@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class PasswordGenerator {
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in, Encoding"UTF-8");
+        Scanner input = new Scanner(System.in, "UTF-8");
         System.out.println("Bitte gebe ein Passwort ein, welches verschlüsselt werden soll:");
         String password = input.nextLine();
 
