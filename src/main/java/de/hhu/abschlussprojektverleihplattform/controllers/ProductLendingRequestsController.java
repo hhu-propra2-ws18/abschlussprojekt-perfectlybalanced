@@ -39,9 +39,13 @@ public class ProductLendingRequestsController {
         List<LendingEntity> lendings = lendingService.getAllRequestsForUser(user);
         List<LendingEntity> oldLendings = lendingService.getAllLendings();
         boolean checkMyLendings = lendings.isEmpty();
+        List<LendingEntity> returnedProducts = lendingService.getReturnedLendingFromUser(user);
+        boolean checkMyReturns = returnedProducts.isEmpty();
         model.addAttribute("checkMyLendings", checkMyLendings);
         model.addAttribute("lendings", lendings);
         model.addAttribute("oldLendings", oldLendings);
+        model.addAttribute("returnedProducts", returnedProducts);
+        model.addAttribute("checkMyReturns", checkMyReturns);
         return "productlendingrequests";
     }
 
@@ -66,6 +70,30 @@ public class ProductLendingRequestsController {
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptLendingRequest(requestedLending);
+        return "redirect:/lendingrequests";
+    }
+
+    @PostMapping("/lendingrequests/rejectReturn")
+    public String handleGoodReturn(Model model, @RequestParam Long id,
+                                  Authentication auth)
+            throws Exception {
+
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity loadedUser = userService.findByUsername("sarah");
+        LendingEntity requestedLending = lendingService.getLendingById(id);
+        lendingService.denyRetunedProduct(requestedLending);
+        return "redirect:/lendingrequests";
+    }
+
+    @PostMapping("/lendingrequests/acceptReturn")
+    public String handleBadReturn(Model model, @RequestParam Long id,
+                               Authentication auth)
+            throws Exception {
+
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity loadedUser = userService.findByUsername("sarah");
+        LendingEntity requestedLending = lendingService.getLendingById(id);
+        lendingService.acceptReturnedProduct(requestedLending);
         return "redirect:/lendingrequests";
     }
 
