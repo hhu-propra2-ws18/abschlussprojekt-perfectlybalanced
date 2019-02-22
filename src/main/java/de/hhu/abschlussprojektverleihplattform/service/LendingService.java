@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //NOTE: Die meisten Methoden geben einen boolean-wert zurueck.
 //      ist dieser false wurde die Operation nicht(erfolgreich) ausgefuehrt,
@@ -202,55 +203,41 @@ public class LendingService implements ILendingService {
         return lending_repository.getLendingById(id);
     }
 
+    private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status){
+        return lendings
+                .stream()
+                .filter(
+                        lendingEntity -> lendingEntity
+                                .getStatus()
+                                .equals(status)
+                )
+                .collect(Collectors.toList());
+    }
+
     public List<LendingEntity> getAllRequestedLendings(List<LendingEntity> allLendings) {
-        List<LendingEntity> sortedList = new ArrayList<>();
-        for (LendingEntity lend : allLendings) {
-            if (lend.getStatus().equals(Lendingstatus.requested)) {
-                sortedList.add(lend);
-            }
-        }
-        return sortedList;
+        return filterByStatus(allLendings,Lendingstatus.requested);
     }
 
     public List<LendingEntity> getAllConfirmedLendings(List<LendingEntity> allLendings) {
-        List<LendingEntity> sortedList = new ArrayList<>();
-        for (LendingEntity lend : allLendings) {
-            if (lend.getStatus().equals(Lendingstatus.confirmt)) {
-                sortedList.add(lend);
-            }
-        }
-        return sortedList;
+        return filterByStatus(allLendings,Lendingstatus.confirmt);
     }
 
     public List<LendingEntity> getAllReturnedLendings(List<LendingEntity> allLendings) {
-        List<LendingEntity> sortedList = new ArrayList<>();
-        for (LendingEntity lend : allLendings) {
-            if (lend.getStatus().equals(Lendingstatus.returned)) {
-                sortedList.add(lend);
-            }
-        }
-        return sortedList;
+        return filterByStatus(allLendings,Lendingstatus.returned);
     }
 
     public List<LendingEntity> getAllConflictedLendings(List<LendingEntity> allLendings) {
-        List<LendingEntity> sortedList = new ArrayList<>();
-        for (LendingEntity lend : allLendings) {
-            if (lend.getStatus().equals(Lendingstatus.conflict)) {
-                sortedList.add(lend);
-            }
-        }
-        return sortedList;
+        return filterByStatus(allLendings,Lendingstatus.conflict);
     }
 
     public List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings) {
-        List<LendingEntity> sortedList = new ArrayList<>();
-        for (LendingEntity lend : allLendings) {
-            if (lend.getStatus().equals(Lendingstatus.done)
-                    || lend.getStatus().equals(Lendingstatus.denied)) {
-                sortedList.add(lend);
-            }
-        }
-        return sortedList;
+        return allLendings
+                .stream()
+                .filter(
+                    lendingEntity -> lendingEntity.getStatus().equals(Lendingstatus.done) ||
+                            lendingEntity.getStatus().equals(Lendingstatus.denied)
+                )
+                .collect(Collectors.toList());
     }
 
     // private Methode die die Differrenz in Tagen zwischen zwei Timestamps
