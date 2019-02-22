@@ -61,10 +61,8 @@ public class MyLendingsControllerTest {
         UserEntity user_owner = RandomTestData.newRandomTestUser();
         userService.addUser(user_owner);
 
-
         UserEntity user_wannabe_borrower = RandomTestData.newRandomTestUser();
         userService.addUser(user_wannabe_borrower);
-
 
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(
             user_owner,
