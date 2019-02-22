@@ -59,12 +59,7 @@ public class LendingRepositoryDummy implements ILendingRepository {
         return isUpdated;
     }
 
-    public void setLendingByProductAndUser(LendingEntity lending) {
-        lendingByProductAndUser = lending;
-    }
-
     // Methodes from the Inertface that are not needed for Testing
-
     @Override
     public List<LendingEntity> getAllLendings() {
         return null;
