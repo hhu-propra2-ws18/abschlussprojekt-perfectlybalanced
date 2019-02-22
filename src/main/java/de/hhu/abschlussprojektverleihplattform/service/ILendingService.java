@@ -44,19 +44,22 @@ public interface ILendingService {
     // calling them doesnt change anything in the database
 
     // return all Lendings, that are owned by the user and have the status requested
-    List<LendingEntity> getAllRequestsForUser(UserEntity user);
+    public List<LendingEntity> getAllRequestsForUser(UserEntity user);
 
     // return all Lendings, that are owned by the user
-    List<LendingEntity> getAllLendingsFromUser(UserEntity user);
+    public List<LendingEntity> getAllLendingsFromUser(UserEntity user);
 
     // return all Lendings, that are borrowed by the user
-    List<LendingEntity> getAllLendingsForUser(UserEntity user);
+    public List<LendingEntity> getAllLendingsForUser(UserEntity user);
 
     // return all Lendings, that are owned by the user and have the status returned
-    List<LendingEntity> getReturnedLendingFromUser(UserEntity user);
+    public List<LendingEntity> getReturnedLendingFromUser(UserEntity user);
 
     // return all Lendings, that have the status conflict
-    List<LendingEntity> getAllConflicts();
+    public List<LendingEntity> getAllConflicts();
 
-    LendingEntity getLendingById(Long id);
+    // return all Lendings in the Database
+    public List<LendingEntity> getAllLendings();
+
+    public LendingEntity getLendingById(Long id);
 }

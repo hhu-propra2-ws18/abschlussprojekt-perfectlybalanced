@@ -196,6 +196,10 @@ public class LendingService implements ILendingService {
         return lending_repository.getReturnedLendingFromUser(user);
     }
 
+    public List<LendingEntity> getAllLendings() {
+        return lending_repository.getAllLendings();
+    }
+
     // return all Lendings, that have the status conflict
     public List<LendingEntity> getAllConflicts() {
         return lending_repository.getAllConflicts();
