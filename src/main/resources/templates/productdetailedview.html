@@ -33,14 +33,15 @@
                         <span th:text="${product.owner.email}"></span>
                     </li>
                 </ul>
-                <form th:action="@{/request/(id=${product.getId()})}" method="post">
+                <!--<form th:action="@{/request/(id=${product.getId()})}" method="post">
 
                     <button
                             th:if="${(product.owner.userId.equals(user.userId))==false}"
                             class="btn btn-primary" type="submit">Ausleihen
                     </button>
 
-                </form>
+                </form>-->
+                <a href="/sendLendingRequest/="><button class="btn btn-primary">Ausleihen</button></a>
 
             </div>
         </div>

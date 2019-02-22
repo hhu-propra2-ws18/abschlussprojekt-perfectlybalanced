@@ -122,6 +122,13 @@ public class ProductController {
         return "myproducts";
     }
 
+    @GetMapping("/sendLendingRequest")
+    public String gotoSendRequest(Model model, @RequestParam Long id, Authentication auth){
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+        return "sendLendingRequest";
+    }
+
     @PostMapping("/request")
     public String handleLendingRequest(@RequestParam Long id, Authentication auth){
         UserEntity user = (UserEntity) auth.getPrincipal();

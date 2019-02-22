@@ -125,7 +125,7 @@ public class LendingRepository implements ILendingRepository {
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
         String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS "
                 + "(SELECT p.ID FROM PRODUCT_ENTITY p WHERE P.OWNER_USER_ID =" + user.getUserId()
-                + " AND l.STATUS=" + Lendingstatus.requested.ordinal() + ")";
+                + " AND (l.STATUS=" + Lendingstatus.requested.ordinal() + "))";
 
         return (List<LendingEntity>) jdbcTemplate.query(query,
                 new Object[]{},
