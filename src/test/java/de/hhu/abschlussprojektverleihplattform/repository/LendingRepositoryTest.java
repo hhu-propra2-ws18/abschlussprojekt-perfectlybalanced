@@ -39,8 +39,7 @@ public class LendingRepositoryTest {
     public void saveSetupEntities() {
         userRepository.saveUser(user1);
 
-        product1
-            = RandomTestData.newRandomTestProduct(user1, address1);
+        product1 = RandomTestData.newRandomTestProduct(user1, address1);
         productRepository.saveProduct(product1);
 
     }
