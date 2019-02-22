@@ -31,16 +31,13 @@ public class ProductRepository implements IProductRepository {
 
 
     @Override
-    public ProductEntity getProductById(Long id) {
-        try {
-            return (ProductEntity) jdbcTemplate.queryForObject(
-                "SELECT * FROM PRODUCT_ENTITY WHERE id=?",
-                new Object[]{id},
-                new ProductEntityRowMapper(userRepository)
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+    public ProductEntity getProductById(Long id) throws EmptyResultDataAccessException{
+
+        return (ProductEntity) jdbcTemplate.queryForObject(
+            "SELECT * FROM PRODUCT_ENTITY WHERE id=?",
+            new Object[]{id},
+            new ProductEntityRowMapper(userRepository)
+        );
     }
 
     @Override

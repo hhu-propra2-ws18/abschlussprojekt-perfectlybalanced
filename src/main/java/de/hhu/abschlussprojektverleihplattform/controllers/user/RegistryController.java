@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
@@ -19,6 +19,8 @@ import javax.validation.Valid;
 public class RegistryController {
 
     private final IUserService userService;
+
+    public static final String url="/register";
 
     @Autowired
     public RegistryController(IUserService userService) {

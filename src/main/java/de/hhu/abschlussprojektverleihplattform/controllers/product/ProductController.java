@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.product;
 
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
@@ -11,13 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
@@ -28,6 +25,7 @@ public class ProductController {
     private final ILendingService lendingService;
 
     @Autowired
+
     public ProductController(
             IUserService userService,
             IProductService productService,
@@ -129,6 +127,8 @@ public class ProductController {
         model.addAttribute("gotNoProducts", gotNoProducts);
         return "myproducts";
     }
+
+
 
 }
 
