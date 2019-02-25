@@ -52,6 +52,7 @@ public class LendingService implements ILendingService {
                 (start.after(lend_start) && start.before(lend_end))
                     || (end.after(lend_start) && end.before(lend_end))
                     || (lend_start.after(start) && lend_start.before(end))
+                    || start.equals(lend_start)
             ) {
                 throw new Exception("The Product is not available in the selected time.");
             }
