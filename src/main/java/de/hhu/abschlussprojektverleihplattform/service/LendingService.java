@@ -38,12 +38,12 @@ public class LendingService implements ILendingService {
         return list;
     }
 
-    public boolean requestLending(
+    public LendingEntity requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
             Timestamp end
-    ) {
+    ) throws Exception{
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         boolean timeIsOK = true;
         for (LendingEntity lend : lendings) {
@@ -72,10 +72,9 @@ public class LendingService implements ILendingService {
             );
             // TODO: check if 0L realy is unused in ProPay
             lendingRepository.addLending(lending);
-            return true;
-        } else {
-            return false;
+            return lending;
         }
+        throw new Exception("time or money are not ok");
     }
 
     public void acceptLendingRequest(LendingEntity lending) throws Exception{
