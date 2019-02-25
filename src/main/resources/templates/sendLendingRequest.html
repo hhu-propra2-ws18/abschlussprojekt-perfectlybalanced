@@ -18,12 +18,12 @@
 
         <div>
             <span>Von:</span>
-            <input type="datetime-local">
+            <input type="datetime-local" required th:field="${start}">
         </div>
 
         <div>
             <span>Bis:</span>
-            <input type="datetime-local">
+            <input type="datetime-local" required th:field="${end}">
         </div>
 
     <button type="submit" class="btn btn-primary">Ausleihanfrage Senden</button>

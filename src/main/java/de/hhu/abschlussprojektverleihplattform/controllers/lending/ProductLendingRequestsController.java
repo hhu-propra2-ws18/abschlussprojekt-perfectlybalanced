@@ -106,22 +106,6 @@ public class ProductLendingRequestsController {
     }
 
 
-    @GetMapping("lendingrequests/sendRequest")
-    public String sendLendingRequestView(Model model, Authentication auth, @RequestParam Long id){
-        UserEntity user = (UserEntity) auth.getPrincipal();
-        ProductEntity produt = productService.getById(id);
-        model.addAttribute("product", produt);
-        model.addAttribute("user", user);
-
-        return "sendLendingRequest";
-    }
-
-    @PostMapping("lendingrequests/sendRequest")
-    public String sendLendingRequestToProductOwner(Model model, Authentication auth, @RequestParam Long id){
-
-        return "redirect:/";
-    }
-
     // TODO:
     // PostMapping accept/deny request
     // Get/Post Mappings to create a request
