@@ -7,7 +7,10 @@ import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
+import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,7 +44,10 @@ public class KathrinHaeckslerAusleihen {
         UserEntity kathrin = RandomTestData.newRandomTestUser();
         kathrin.setFirstname("kathrin");
         userService.addUser(kathrin);
-        proPayService.changeUserBalanceBy(kathrin.getUsername(),1000);
+
+        long kathrin_balance_before=1000;
+
+        proPayService.changeUserBalanceBy(kathrin.getUsername(),kathrin_balance_before);
 
         //hacksler product mit besitzer erstellen
         UserEntity owner = RandomTestData.newRandomTestUser();
@@ -49,8 +57,11 @@ public class KathrinHaeckslerAusleihen {
                         owner,RandomTestData.newRandomTestAddress()
                 );
         hacksler.setTitle("ein hacksler fuer alle faelle");
-        hacksler.setSurety(300);
-        hacksler.setCost(5);
+        long hacksler_surety=300;
+        hacksler.setSurety(hacksler_surety);
+
+        long hacksler_cost=5;
+        hacksler.setCost(hacksler_cost);
         productService.addProduct(hacksler);
 
         Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
@@ -61,12 +72,28 @@ public class KathrinHaeckslerAusleihen {
         //leih anfrage wird angenommen
         lendingService.acceptLendingRequest(hacksler_lending);
 
+        //assert that amount is reserved on kathrins account
+        Reservation[] reservations
+         = proPayService.getAccount(kathrin.getUsername()).reservations;
+        assertEquals(reservations.length,1);
+        assertEquals(reservations[0].amount,hacksler_surety);
+
         //geliehenes produkt wird zurueck gegeben
         lendingService.returnProduct(hacksler_lending);
 
         //besitzer findet es in guten zustand
         lendingService.acceptReturnedProduct(hacksler_lending);
 
-        //TODO: assert all the assumptions inbetween the actions
+        Account kathrin_account_after_lending=
+                proPayService.getAccount(kathrin.getUsername());
+
+        //assert that reservation is released and the lending cost is paid
+        assertEquals(
+                kathrin_account_after_lending.amount,
+                kathrin_balance_before-hacksler_cost*2
+        );
+        assertEquals(kathrin_account_after_lending.reservations.length,0);
+
+
     }
 }
