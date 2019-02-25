@@ -47,7 +47,7 @@ public class PaymentServiceDummy implements IPaymentService {
 
     @Override
     public Long usersCurrentBalance(String username) throws Exception {
-        if(userCurrentBalanceThrowsException) {
+        if (userCurrentBalanceThrowsException) {
             throw userCurrentBalanceFailed;
         } else {
             return userCurrentBalance;
@@ -82,7 +82,7 @@ public class PaymentServiceDummy implements IPaymentService {
             = new ReservationDummy(payingUser, recivingUser, amount, reservationId);
         payments.add(reservation);
         reservationId++;
-        if(secondReservationFails) {
+        if (secondReservationFails) {
             reservationThrowsException = true;
         }
         return reservation.getId();
@@ -98,12 +98,12 @@ public class PaymentServiceDummy implements IPaymentService {
         lastCalledId = id;
         lastCalledUsername = username;
         lastWasTransfer = true;
-        if(transferThrowsException) {
+        if (transferThrowsException) {
             throw transferFailed;
         }
     }
 
-    public  void configureReturn(Exception returnFailed, boolean returnThrowsException) {
+    public void configureReturn(Exception returnFailed, boolean returnThrowsException) {
         this.returnFailed = returnFailed;
         this.returnThrowsException = returnThrowsException;
 
@@ -114,7 +114,7 @@ public class PaymentServiceDummy implements IPaymentService {
         lastCalledId = id;
         lastCalledUsername = username;
         lastWasTransfer = false;
-        if(returnThrowsException) {
+        if (returnThrowsException) {
             throw returnFailed;
         }
     }
