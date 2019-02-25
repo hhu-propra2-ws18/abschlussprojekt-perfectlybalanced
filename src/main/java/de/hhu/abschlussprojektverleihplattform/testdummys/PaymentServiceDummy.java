@@ -42,11 +42,11 @@ public class PaymentServiceDummy implements IPaymentService {
     }
 
     @Override
-    public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
+    public Long reservateAmount(UserEntity payingUser, UserEntity receivingUser, int amount) {
         if (!reservationsAreSuccessfull) {
             return 0L;
         }
-        ReservationDummy reservation = new ReservationDummy(payingUser, recivingUser, amount, id);
+        ReservationDummy reservation = new ReservationDummy(payingUser, receivingUser, amount, id);
         payments.add(reservation);
         id++;
         return reservation.getId();
