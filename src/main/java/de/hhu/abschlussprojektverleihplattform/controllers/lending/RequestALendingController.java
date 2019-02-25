@@ -23,9 +23,7 @@ public class RequestALendingController {
     @Autowired
     LendingService lendingService;
 
-    public static final String sendLendingRequestURL="/lendingrequests/sendRequest";
-
-    public static final String requestalendingURL ="lendingrequests/sendRequest";
+    public static final String requestalendingURL ="/lendingrequests/sendRequest";
 
     @GetMapping("lendingrequests/sendRequest")
     public String gotoSendRequest(Model model, @RequestParam Long id, Authentication auth){
@@ -36,7 +34,7 @@ public class RequestALendingController {
         return "sendLendingRequest";
     }
 
-    @PostMapping("lendingrequests/sendRequest")
+    @PostMapping(requestalendingURL)
     public String requestalending(@RequestParam Long id,
                                   Authentication auth,
                                   @RequestParam("start") String start,
