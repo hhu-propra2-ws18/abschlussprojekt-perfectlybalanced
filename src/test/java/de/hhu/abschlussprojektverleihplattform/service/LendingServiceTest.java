@@ -5,6 +5,7 @@ import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentStatus;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
 import de.hhu.abschlussprojektverleihplattform.model.*;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,9 +18,10 @@ public class LendingServiceTest {
     @Test
     public void timeIsBlocked1() {
         // start is in reservated Time
-        UserEntity actingUser = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner,address);
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
@@ -46,9 +48,10 @@ public class LendingServiceTest {
     @Test
     public void timeIsBlocked2() {
         // end is in reservated Time
-        UserEntity actingUser = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
@@ -75,9 +78,10 @@ public class LendingServiceTest {
     @Test
     public void timeIsBlocked3() {
         // both are in reservated Time
-        UserEntity actingUser = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
@@ -104,9 +108,10 @@ public class LendingServiceTest {
     @Test
     public void timeIsBlocked4() {
         // reservated Time within requested Time
-        UserEntity actingUser = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
@@ -133,9 +138,10 @@ public class LendingServiceTest {
     @Test
     public void userHasNotEnoughMoney() {
         // reservated Time within requested Time
-        UserEntity actingUser = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(false, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
@@ -150,9 +156,10 @@ public class LendingServiceTest {
     @Test
     public void reservationSuccess1() {
         // reservated Time within requested Time
-        UserEntity actingUser = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
@@ -175,9 +182,10 @@ public class LendingServiceTest {
     @Test
     public void reservationSuccess2() {
         // reservated Time within requested Time
-        UserEntity actingUser = createExampleUser2();
-        UserEntity owner = createExampleUser1();
-        ProductEntity product = createExampleProduct2(owner);
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
@@ -197,15 +205,16 @@ public class LendingServiceTest {
         Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
-    // Tests for decideLendingRequest
+    // Test for decideLendingRequest
 
     @Test
     public void requestGetsDenied() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
             start,
@@ -226,13 +235,16 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.denied, lending.getStatus());
     }
 
+    // Tests for acceptLendingRequest
+
     @Test
     public void reservationFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
             start,
@@ -258,9 +270,10 @@ public class LendingServiceTest {
     public void paymentFails() {
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
             start,
@@ -299,9 +312,10 @@ public class LendingServiceTest {
     public void requestGetsAccepted1() {
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
             start,
@@ -344,9 +358,10 @@ public class LendingServiceTest {
     public void requestGetsAccepted2() {
         Timestamp start = new Timestamp(1546804200000L);
         Timestamp end = new Timestamp(1547148600000L);
-        UserEntity borrower = createExampleUser2();
-        UserEntity owner = createExampleUser1();
-        ProductEntity product = createExampleProduct2(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
             start,
@@ -385,15 +400,16 @@ public class LendingServiceTest {
         Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
     }
 
-    // Tests for returnProduct
+    // Test for returnProduct
 
     @Test
     public void productGetsReturned() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
             start,
@@ -419,9 +435,10 @@ public class LendingServiceTest {
     public void productGetsReturnedInBadCondition() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.returned,
             start,
@@ -447,9 +464,10 @@ public class LendingServiceTest {
     public void productGetsReturnedInGoodCondition() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.returned,
             start,
@@ -478,9 +496,10 @@ public class LendingServiceTest {
     public void returnReservationFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.returned,
             start,
@@ -508,9 +527,10 @@ public class LendingServiceTest {
     public void ownerRecivesSurety() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.conflict,
             start,
@@ -539,9 +559,10 @@ public class LendingServiceTest {
     public void ownerRecivesSuretyButTranferFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.conflict,
             start,
@@ -569,9 +590,10 @@ public class LendingServiceTest {
     public void borrowerRecivesSurety() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.conflict,
             start,
@@ -601,9 +623,10 @@ public class LendingServiceTest {
     public void borrowerRecivesSuretyButTranferFails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
-        UserEntity borrower = createExampleUser1();
-        UserEntity owner = createExampleUser2();
-        ProductEntity product = createExampleProduct1(owner);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
             Lendingstatus.conflict,
             start,
@@ -647,52 +670,5 @@ public class LendingServiceTest {
         int result = logic.daysBetweenTwoTimestamps(first, second);
 
         Assert.assertEquals(4, result);
-    }
-
-
-    // private Methoden um schnell an TestEntities zu kommen
-
-    private UserEntity createExampleUser1() {
-        String firstname = "Frank";
-        String lastname = "Meier";
-        String username = "DerTolleFrank";
-        String password = "123456";
-        String email = "Frank.Meier@Example.com";
-        return new UserEntity(firstname, lastname, username, password, email);
-    }
-
-    private UserEntity createExampleUser2() {
-        String firstname = "Hans";
-        String lastname = "Müller";
-        String username = "Hnaswurst";
-        String password = "qwertz";
-        String email = "D.Schulz@Example.com";
-        return new UserEntity(firstname, lastname, username, password, email);
-    }
-
-    private ProductEntity createExampleProduct1(UserEntity owner) {
-        String description = "Ein toller Rasemäher";
-        String title = "Rasemäher";
-        int surety = 200;
-        int cost = 20;
-        String street = "Tulpenweg";
-        int housenumber = 33;
-        int postcode = 12345;
-        String city = "Heidelberg";
-        AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
-        return new ProductEntity(description, title, surety, cost, a, owner);
-    }
-
-    private ProductEntity createExampleProduct2(UserEntity owner) {
-        String description = "Eine Heckenschere";
-        String title = "Heckenschere";
-        int surety = 60;
-        int cost = 5;
-        String street = "Talstrasse";
-        int housenumber = 44;
-        int postcode = 67890;
-        String city = "Bad Salzbug";
-        AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
-        return new ProductEntity(description, title, surety, cost, a, owner);
     }
 }
