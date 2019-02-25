@@ -40,12 +40,16 @@
     <nav th:replace="nav-fragment"></nav>
 
     <div class="container mx-auto">
-        <div class="row">
+        <div class="row justify-content-center" style="padding-top: 1.5em; padding-bottom: 1.5em;">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-
+                        <h3 class="card-title" th:text="${product.title}">Produkt-Titel</h3>
+                        <p class="card-text" th:text="${product.description}">Produkt-Beschreibung.</p>
                     </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:text="'Kontakt: ' + ${product.owner.email}">Cras justo odio</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -54,15 +58,15 @@
                 <form th:action="@{|/lendingrequests/sendRequest?id=${product.id}|}" method="post">
                     <div class="form-group">
                         <label for="start">Von:</label>
-                        <input type="datetime-local" class="form-control" required th:field="${timespan.start}" th:type="datetime-local"
-                            id="start" name="start">
-                        <small id="startHelp" class="form-text text-muted">Ab wann möchtest du dein Item ausleihen?</small>
+                        <input type="datetime-local" class="form-control" required th:field="${time.start}" th:value="${time.start}"
+                            th:type="datetime-local" id="start" name="start">
+                        <small id="startHelp" class="form-text text-muted">Ab wann möchtest du dein Produkt ausleihen?</small>
                     </div>
                     <div class="form-group">
                         <label for="end">Bis:</label>
-                        <input type="datetime-local" class="form-control" required th:field="${timespan.end}" th:type="datetime-local"
-                            id="end" name="end">
-                        <small id="endHelp" class="form-text text-muted">Wann möchtest du dein Item zurückgeben?</small>
+                        <input type="datetime-local" class="form-control" required th:field="${time.end}" th:value="${time.end}"
+                            th:type="datetime-local" id="end" name="end">
+                        <small id="endHelp" class="form-text text-muted">Wann möchtest du dein Produkt zurückgeben?</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Anfrage senden</button>
                 </form>
