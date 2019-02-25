@@ -251,7 +251,7 @@ public class LendingServiceTest {
             logic.acceptLendingRequest(lending);
             Assert.fail();
         }catch (Exception e){
-
+            System.out.println();
         }
 
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -283,7 +283,7 @@ public class LendingServiceTest {
             logic.acceptLendingRequest(lending);
             Assert.fail();
         }catch (Exception e){
-
+            System.out.println();
         }
 
         Assert.assertFalse(lending_repository.hasBeenUpdated());

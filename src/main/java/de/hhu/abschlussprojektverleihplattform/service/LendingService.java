@@ -122,7 +122,9 @@ public class LendingService implements ILendingService {
 
     public boolean acceptReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception("cannot reject returned lending if status is not : "+Lendingstatus.returned);
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
         }
 
         if (paymentService.returnReservatedMoney(
@@ -139,7 +141,9 @@ public class LendingService implements ILendingService {
 
     public void denyReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception("cannot reject returned lending if status is not : "+Lendingstatus.returned);
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
         }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
