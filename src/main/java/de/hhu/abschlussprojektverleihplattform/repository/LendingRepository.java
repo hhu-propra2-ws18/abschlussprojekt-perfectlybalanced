@@ -5,6 +5,7 @@ import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -39,29 +40,29 @@ public class LendingRepository implements ILendingRepository {
         this.productRepository = productRepository;
     }
 
+    @SuppressFBWarnings
     @Override
     public void addLending(LendingEntity lending) {
         KeyHolder keyHolder=new GeneratedKeyHolder();
         jdbcTemplate.update(psc(
-                "INSERT INTO LENDING_ENTITY "
-                        + "(STATUS,"
-                        + "START,"
-                        + "END,"
-                        + "BORROWER_USER_ID,"
-                        + "PRODUCT_ID,"
-                        + "COST_RESERVATIONID,"
-                        + "SURETY_RESERVATIONID)"
-                        + "VALUES (?,?,?,?,?,?,?)",
-                lending.getStatus().ordinal(),
-                lending.getStart(),
-                lending.getEnd(),
-                lending.getBorrower().getUserId(),
-                lending.getProduct().getId(),
-                lending.getCostReservationID(),
-                lending.getSuretyReservationID()),
-                keyHolder
+            "INSERT INTO LENDING_ENTITY "
+                + "(STATUS,"
+                + "START,"
+                + "END,"
+                + "BORROWER_USER_ID,"
+                + "PRODUCT_ID,"
+                + "COST_RESERVATIONID,"
+                + "SURETY_RESERVATIONID)"
+                + "VALUES (?,?,?,?,?,?,?)",
+            lending.getStatus().ordinal(),
+            lending.getStart(),
+            lending.getEnd(),
+            lending.getBorrower().getUserId(),
+            lending.getProduct().getId(),
+            lending.getCostReservationID(),
+            lending.getSuretyReservationID()),
+            keyHolder
         );
-
         lending.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
