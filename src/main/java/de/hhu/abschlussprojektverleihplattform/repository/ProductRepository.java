@@ -67,7 +67,7 @@ public class ProductRepository implements IProductRepository {
         );
     }
 
-    @SuppressFBWarnings
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public void saveProduct(ProductEntity product) {
         KeyHolder keyHolder=new GeneratedKeyHolder();

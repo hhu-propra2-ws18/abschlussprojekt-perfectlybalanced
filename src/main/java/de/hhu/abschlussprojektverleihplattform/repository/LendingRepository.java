@@ -40,7 +40,7 @@ public class LendingRepository implements ILendingRepository {
         this.productRepository = productRepository;
     }
 
-    @SuppressFBWarnings
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public void addLending(LendingEntity lending) {
         KeyHolder keyHolder=new GeneratedKeyHolder();

@@ -54,7 +54,7 @@ public class UserRepository implements IUserRepository {
                 new BeanPropertyRowMapper<>(UserEntity.class));
     }
 
-    @SuppressFBWarnings
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public void saveUser(UserEntity user) {
         KeyHolder  keyHolder=new GeneratedKeyHolder();
@@ -73,7 +73,7 @@ public class UserRepository implements IUserRepository {
         user.setUserId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
-    @SuppressFBWarnings
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public int getNumberOfUsers() {
         return jdbcTemplate.queryForObject("select count (*) from USER_ENTITY", Integer.class);

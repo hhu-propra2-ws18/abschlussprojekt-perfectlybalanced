@@ -42,7 +42,7 @@ public class PaymentServiceDummy implements IPaymentService {
         return usersHaveMoney;
     }
 
-    @SuppressFBWarnings
+    @SuppressFBWarnings(justification="code needs serious refactoring")
     @Override
     public Long reservateAmount(UserEntity payingUser, UserEntity receivingUser, int amount) {
         if (!reservationsAreSuccessfull) {
