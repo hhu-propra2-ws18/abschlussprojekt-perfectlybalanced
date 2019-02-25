@@ -54,7 +54,8 @@ public class LendingService implements ILendingService {
                 timeIsOK = false;
             }
         }
-        int totalMoney = product.getSurety() + product.getCost() * daysBetweenTwoTimestamps(start, end);
+        int totalMoney = product.getSurety()
+            + product.getCost() * daysBetweenTwoTimestamps(start, end);
         boolean moneyIsOK = paymentService.userHasAmount(actingUser, totalMoney);
         if (timeIsOK && moneyIsOK) {
             LendingEntity lending = new LendingEntity(
