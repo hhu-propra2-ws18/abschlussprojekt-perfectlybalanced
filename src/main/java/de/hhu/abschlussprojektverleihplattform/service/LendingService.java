@@ -182,7 +182,7 @@ public class LendingService implements ILendingService {
     }
 
     public LendingEntity getLendingById(Long id) throws Exception {
-        return lending_repository.getLendingById(id);
+        return lendingRepository.getLendingById(id);
     }
 
     private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status){
