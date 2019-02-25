@@ -108,5 +108,29 @@
     </div>
 </div>
 <br>
+<div class="container">
+    <div class="m-3"></div>
+    <h3>Abgeschlossene Artikel</h3>
+    <div class="row">
+        <span th:if="${completedLendings.isEmpty()}==true">Es liegen noch keine abgeschlossene Artikel vor.</span>
+        <div th:each="lending : ${completedLendings}" class="card">
+            <div class="card-header">
+                <span th:text="${lending.product.title}"></span>
+            </div>
+            <div class="card-body">
+                <p>Besitzer: </p>
+                <div class="card-text" th:text="${lending.product.owner.username}">
+                    Username
+                </div>
+            </div>
+            <div class="card-footer">
+                <p th:text="${lending.getStart().toString()}"></p>
+                <p>bis</p>
+                <p th:text="${lending.getEnd().toString()}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
 </body>
 </html>
