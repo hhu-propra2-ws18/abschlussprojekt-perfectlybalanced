@@ -44,7 +44,7 @@ public class LendingServiceTest {
             logic.requestLending(actingUser, product, start2, end2);
             Assert.fail();
         }catch (Exception e){
-            System.out.println();
+            System.out.println(e.toString());
         }
     }
 
