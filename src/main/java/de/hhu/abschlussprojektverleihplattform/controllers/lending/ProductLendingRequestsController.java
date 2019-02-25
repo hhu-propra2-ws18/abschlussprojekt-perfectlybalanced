@@ -58,7 +58,9 @@ public class ProductLendingRequestsController {
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
+
         lendingService.denyLendingRequest(requestedLending);
+
         return "redirect:/lendingrequests";
     }
 
@@ -71,12 +73,15 @@ public class ProductLendingRequestsController {
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
-        lendingService.acceptLendingRequest(requestedLending);
+        boolean acceptOk = lendingService.acceptLendingRequest(requestedLending);
+        if(!acceptOk){
+            throw new Exception("Could not Accept Lending Request.");
+        }
         return "redirect:/lendingrequests";
     }
 
     @PostMapping("/lendingrequests/rejectReturn")
-    public String handleGoodReturn(
+    public String handleBadReturn(
         Model model,
         @RequestParam Long id,
         Authentication auth
@@ -89,7 +94,7 @@ public class ProductLendingRequestsController {
     }
 
     @PostMapping("/lendingrequests/acceptReturn")
-    public String handleBadReturn(
+    public String handleGoodReturn(
         Model model,
         @RequestParam Long id,
         Authentication auth

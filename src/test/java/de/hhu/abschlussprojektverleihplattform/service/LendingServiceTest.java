@@ -200,7 +200,7 @@ public class LendingServiceTest {
     // Tests for decideLendingRequest
 
     @Test
-    public void requestGetsDenied() {
+    public void requestGetsDenied() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = createExampleUser1();
@@ -388,14 +388,14 @@ public class LendingServiceTest {
     // Tests for returnProduct
 
     @Test
-    public void productGetsReturned() {
+    public void productGetsReturned() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = createExampleUser1();
         UserEntity owner = createExampleUser2();
         ProductEntity product = createExampleProduct1(owner);
         LendingEntity lending = new LendingEntity(
-            Lendingstatus.requested,
+            Lendingstatus.confirmt,
             start,
             end,
             borrower,
@@ -416,7 +416,7 @@ public class LendingServiceTest {
     // Test for denyReturnedProduct
 
     @Test
-    public void productGetsReturnedInBadCondition() {
+    public void productGetsReturnedInBadCondition() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = createExampleUser1();
@@ -444,7 +444,7 @@ public class LendingServiceTest {
     // Tests for acceptReturnedProduct
 
     @Test
-    public void productGetsReturnedInGoodCondition() {
+    public void productGetsReturnedInGoodCondition() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = createExampleUser1();
@@ -475,7 +475,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void returnReservationFails() {
+    public void returnReservationFails() throws Exception {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = createExampleUser1();

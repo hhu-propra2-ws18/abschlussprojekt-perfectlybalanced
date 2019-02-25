@@ -104,7 +104,10 @@ public class LendingService implements ILendingService {
         return false;
     }
 
-    public void denyLendingRequest(LendingEntity lending) {
+    public void denyLendingRequest(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.requested)){
+            throw new Exception("lending was not requested, cannot reject it.");
+        }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
     }
@@ -117,7 +120,11 @@ public class LendingService implements ILendingService {
         lendingRepository.update(lending);
     }
 
-    public boolean acceptReturnedProduct(LendingEntity lending) {
+    public boolean acceptReturnedProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.returned)){
+            throw new Exception("cannot reject returned lending if status is not : "+Lendingstatus.returned);
+        }
+
         if (paymentService.returnReservatedMoney(
                 lending.getBorrower().getUsername(),
                 lending.getSuretyReservationID()
@@ -130,7 +137,10 @@ public class LendingService implements ILendingService {
         return false;
     }
 
-    public void denyReturnedProduct(LendingEntity lending) {
+    public void denyReturnedProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.returned)){
+            throw new Exception("cannot reject returned lending if status is not : "+Lendingstatus.returned);
+        }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
     }
