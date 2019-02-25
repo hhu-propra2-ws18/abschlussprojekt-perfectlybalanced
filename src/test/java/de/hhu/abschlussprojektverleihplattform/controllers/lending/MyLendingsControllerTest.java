@@ -85,11 +85,11 @@ public class MyLendingsControllerTest {
         System.out.println("request is ok"+requestIsOk);
 
         //lending request accepted
-        boolean acceptIsOk = lendingService.acceptLendingRequest(
+        lendingService.acceptLendingRequest(
             lendingService.getAllRequestsForUser(user_owner).get(0)
         );
 
-        Assert.assertTrue(requestIsOk && acceptIsOk);
+        Assert.assertTrue(requestIsOk);
 
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)

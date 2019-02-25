@@ -32,11 +32,16 @@ public class MyLendingsController {
     @GetMapping("/mylendings")
     public String getMyCurrentLendings(Model model, Authentication auth){
         UserEntity user = (UserEntity) auth.getPrincipal();
-
         model.addAttribute("user",user);
         List<LendingEntity> lendings = lendingService.getAllLendingsForUser(user);
-
-        model.addAttribute("lendings",lendings);
+        List<LendingEntity> requestedLendings = lendingService.getAllRequestedLendings(lendings);
+        List<LendingEntity> confirmedLendings = lendingService.getAllConfirmedLendings(lendings);
+        List<LendingEntity> returnedLendings = lendingService.getAllReturnedLendings(lendings);
+        List<LendingEntity> conflictedLendings = lendingService.getAllConflictedLendings(lendings);
+        model.addAttribute("requestedLendings", requestedLendings);
+        model.addAttribute("confirmedLendings", confirmedLendings);
+        model.addAttribute("returnedLendings", returnedLendings);
+        model.addAttribute("conflictedLendings", conflictedLendings);
         return "mycurrentlendings";
     }
 

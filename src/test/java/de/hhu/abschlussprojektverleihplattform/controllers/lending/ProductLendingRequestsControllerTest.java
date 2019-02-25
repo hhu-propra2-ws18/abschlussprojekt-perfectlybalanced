@@ -1,14 +1,10 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
-import de.hhu.abschlussprojektverleihplattform.controllers.lending.ProductLendingRequestsController;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
-import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
-import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +66,8 @@ public class ProductLendingRequestsControllerTest {
         // lending.setId(2L);
         // lending.setStatus(Lendingstatus.requested);
 
-        mockMvc.perform(post("/lendingrequests/reject?id=2")
+        mockMvc.perform(post(
+                ProductLendingRequestsController.lendingRequestsRejectURL +"?id=2")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(ProductLendingRequestsController.class));
@@ -86,7 +83,8 @@ public class ProductLendingRequestsControllerTest {
         // lending.setId(2L);
         // lending.setStatus(Lendingstatus.requested);
 
-        mockMvc.perform(post("/lendingrequests/accept?id=2")
+        mockMvc.perform(post(
+                ProductLendingRequestsController.lendingRequestsAcceptURL+"?id=2")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(ProductLendingRequestsController.class));

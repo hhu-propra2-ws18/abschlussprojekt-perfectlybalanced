@@ -20,6 +20,10 @@ public class ProductLendingRequestsController {
     private final LendingService lendingService;
     private final UserService userService;
 
+    public static final String lendingRequestsURL="/lendingrequests";
+    public static final String lendingRequestsAcceptURL=lendingRequestsURL+"/accept";
+    public static final String lendingRequestsRejectURL =lendingRequestsURL+"/reject";
+
     @Autowired
     public ProductLendingRequestsController(
         LendingService lendingService,
@@ -51,7 +55,9 @@ public class ProductLendingRequestsController {
     ) throws Exception {
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
+
         lendingService.denyLendingRequest(requestedLending);
+
         return "redirect:/lendingrequests";
     }
 
@@ -62,11 +68,13 @@ public class ProductLendingRequestsController {
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptLendingRequest(requestedLending);
+
         return "redirect:/lendingrequests";
     }
 
     @PostMapping("/lendingrequests/rejectReturn")
-    public String handleGoodReturn(
+    public String handleBadReturn(
+        Model model,
         @RequestParam Long id
     ) throws Exception {
         userService.findByUsername("sarah");
@@ -76,7 +84,8 @@ public class ProductLendingRequestsController {
     }
 
     @PostMapping("/lendingrequests/acceptReturn")
-    public String handleBadReturn(
+    public String handleGoodReturn(
+        Model model,
         @RequestParam Long id
     ) throws Exception {
         userService.findByUsername("sarah");
