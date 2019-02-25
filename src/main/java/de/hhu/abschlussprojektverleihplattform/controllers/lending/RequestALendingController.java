@@ -49,8 +49,10 @@ public class RequestALendingController {
         String startTimeStampString = start + ":00";
         String endTimeStampString = end + ":00";
 
-        Timestamp startTimestamp = Timestamp.valueOf(startTimeStampString.replace("T", " "));
-        Timestamp endTimestamp = Timestamp.valueOf(endTimeStampString.replace("T", " "));
+        Timestamp startTimestamp
+                = Timestamp.valueOf(startTimeStampString.replace("T", " "));
+        Timestamp endTimestamp
+                = Timestamp.valueOf(endTimeStampString.replace("T", " "));
 
 
 
