@@ -19,6 +19,7 @@ public class PaymentServiceDummy implements IPaymentService {
 
     private Exception reservationFailed;
     private boolean reservationThrowsException;
+    private boolean secondReservationFails;
 
     private Exception returnFailed;
     private boolean returnThrowsException;
@@ -59,6 +60,13 @@ public class PaymentServiceDummy implements IPaymentService {
     ) {
         this.reservationFailed = reservationFailed;
         this.reservationThrowsException = reservationThrowsException;
+        this.secondReservationFails = false;
+    }
+
+    public void configureReservateAmountSecondOneFails(Exception reservationFailed) {
+        this.reservationFailed = reservationFailed;
+        this.reservationThrowsException = false;
+        this.secondReservationFails = true;
     }
 
     @Override
@@ -74,6 +82,9 @@ public class PaymentServiceDummy implements IPaymentService {
             = new ReservationDummy(payingUser, recivingUser, amount, reservationId);
         payments.add(reservation);
         reservationId++;
+        if(secondReservationFails) {
+            reservationThrowsException = true;
+        }
         return reservation.getId();
     }
 

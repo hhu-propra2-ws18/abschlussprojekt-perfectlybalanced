@@ -147,6 +147,10 @@ public class LendingService implements ILendingService {
     }
 
     public void ownerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
+        if(!lending.getStatus().equals(Lendingstatus.conflict)){
+            throw new Exception("The Lending has the Status: " + lending.getStatus()
+                    + " but it needs to be: " + Lendingstatus.conflict);
+        }
         paymentService.tranferReservatedMoney(
             lending.getBorrower().getUsername(),
             lending.getSuretyReservationID()
@@ -156,6 +160,10 @@ public class LendingService implements ILendingService {
     }
 
     public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
+        if(!lending.getStatus().equals(Lendingstatus.conflict)){
+            throw new Exception("The Lending has the Status: " + lending.getStatus()
+                    + " but it needs to be: " + Lendingstatus.conflict);
+        }
         paymentService.returnReservatedMoney(
             lending.getBorrower().getUsername(),
             lending.getSuretyReservationID()
