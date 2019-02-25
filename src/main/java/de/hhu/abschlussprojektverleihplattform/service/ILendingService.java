@@ -61,7 +61,7 @@ public interface ILendingService {
     // return all Lendings in the Database
     List<LendingEntity> getAllLendings();
 
-    LendingEntity getLendingById(Long id);
+    LendingEntity getLendingById(Long id) throws Exception;
 
     //Sorting methodes for the MyLendingsView
 

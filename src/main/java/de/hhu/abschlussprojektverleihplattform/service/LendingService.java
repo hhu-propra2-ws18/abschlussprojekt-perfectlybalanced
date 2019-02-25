@@ -181,8 +181,8 @@ public class LendingService implements ILendingService {
         return lendingRepository.getAllConflicts();
     }
 
-    public LendingEntity getLendingById(Long id) {
-        return lendingRepository.getLendingById(id);
+    public LendingEntity getLendingById(Long id) throws Exception {
+        return lending_repository.getLendingById(id);
     }
 
     private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status){
