@@ -3,6 +3,7 @@ package de.hhu.abschlussprojektverleihplattform.repository;
 import de.hhu.abschlussprojektverleihplattform.database.ProductEntityRowMapper;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -66,9 +67,7 @@ public class ProductRepository implements IProductRepository {
         );
     }
 
-
-
-
+    @SuppressFBWarnings
     @Override
     public void saveProduct(ProductEntity product) {
         KeyHolder keyHolder=new GeneratedKeyHolder();
