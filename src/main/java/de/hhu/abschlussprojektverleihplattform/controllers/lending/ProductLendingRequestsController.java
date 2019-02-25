@@ -53,11 +53,8 @@ public class ProductLendingRequestsController {
     public String handleRejection(
         @RequestParam Long id
     ) throws Exception {
-        userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
-
         lendingService.denyLendingRequest(requestedLending);
-
         return "redirect:/lendingrequests";
     }
 
@@ -65,10 +62,8 @@ public class ProductLendingRequestsController {
     public String handleAccept(
         @RequestParam Long id
     ) throws Exception {
-        userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptLendingRequest(requestedLending);
-
         return "redirect:/lendingrequests";
     }
 
@@ -76,7 +71,6 @@ public class ProductLendingRequestsController {
     public String handleBadReturn(
         @RequestParam Long id
     ) throws Exception {
-        userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.denyReturnedProduct(requestedLending);
         return "redirect:/lendingrequests";
@@ -86,7 +80,6 @@ public class ProductLendingRequestsController {
     public String handleGoodReturn(
         @RequestParam Long id
     ) throws Exception {
-        userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptReturnedProduct(requestedLending);
         return "redirect:/lendingrequests";
