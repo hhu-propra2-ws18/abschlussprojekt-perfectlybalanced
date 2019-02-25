@@ -41,7 +41,6 @@ public class ProductLendingRequestsControllerTest {
     @Autowired
     private UserService userService;
 
-
     @Autowired
     private ProductService productService;
 
@@ -58,14 +57,9 @@ public class ProductLendingRequestsControllerTest {
                 .andExpect(content().string(containsString("Leihanfragen")));
     }
 
-
     @Test
     @WithUserDetails("sarah")
     public void rejectRequest() throws Exception {
-        LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
-        lending.setStatus(Lendingstatus.requested);
-
         mockMvc.perform(post(
                 ProductLendingRequestsController.lendingRequestsRejectURL +"?id=2")
                 .with(csrf()))
@@ -79,10 +73,6 @@ public class ProductLendingRequestsControllerTest {
     @Test
     @WithUserDetails("sarah")
     public void acceptRequest() throws Exception {
-        LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
-        lending.setStatus(Lendingstatus.requested);
-
         mockMvc.perform(post(
                 ProductLendingRequestsController.lendingRequestsAcceptURL+"?id=2")
                 .with(csrf()))
@@ -92,5 +82,4 @@ public class ProductLendingRequestsControllerTest {
         verify(lendingService).getLendingById(2L);
         verify(lendingService).acceptLendingRequest(null);
     }
-
 }

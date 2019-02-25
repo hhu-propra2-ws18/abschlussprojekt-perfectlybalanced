@@ -27,7 +27,10 @@ public class LendingService implements ILendingService {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         List<Timespan> list = new ArrayList<Timespan>();
         for (LendingEntity lend : lendings) {
-            if (lend.getStatus() != Lendingstatus.done && lend.getStatus() != Lendingstatus.denied){
+            if (
+                lend.getStatus() != Lendingstatus.done
+                    && lend.getStatus() != Lendingstatus.denied
+            ) {
                 Timespan timespan = new Timespan(lend.getStart(), lend.getEnd());
                 list.add(timespan);
             }
@@ -87,10 +90,11 @@ public class LendingService implements ILendingService {
             lending.getProduct().getSurety()
         );
         if (costID > 0 && suretyID > 0) {
-            if (paymentService.tranferReservatedMoney(
-                lending.getBorrower().getUsername(),
-                costID
-            )
+            if (
+                paymentService.tranferReservatedMoney(
+                    lending.getBorrower().getUsername(),
+                    costID
+                )
             ) {
                 lending.setStatus(Lendingstatus.confirmt);
                 lending.setCostReservationID(costID);
@@ -130,7 +134,7 @@ public class LendingService implements ILendingService {
         if (paymentService.returnReservatedMoney(
                 lending.getBorrower().getUsername(),
                 lending.getSuretyReservationID()
-        )
+            )
         ) {
             lending.setStatus(Lendingstatus.done);
             lendingRepository.update(lending);
@@ -150,28 +154,33 @@ public class LendingService implements ILendingService {
     }
 
     public boolean ownerReceivesSuretyAfterConflict(LendingEntity lending) {
-        if (paymentService.tranferReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )) {
-            lending.setStatus(Lendingstatus.done);
-            lendingRepository.update(lending);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending) {
-        if (paymentService.returnReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )
+        if (
+            paymentService.tranferReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+            )
         ) {
             lending.setStatus(Lendingstatus.done);
             lendingRepository.update(lending);
             return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    public boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending) {
+        if (
+            paymentService.returnReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+            )
+        ) {
+            lending.setStatus(Lendingstatus.done);
+            lendingRepository.update(lending);
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
