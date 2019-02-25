@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Objects;
 
 import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
