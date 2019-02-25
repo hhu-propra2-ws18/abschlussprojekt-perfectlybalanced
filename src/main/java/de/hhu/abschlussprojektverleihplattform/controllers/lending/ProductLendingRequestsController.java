@@ -20,9 +20,9 @@ public class ProductLendingRequestsController {
     private final LendingService lendingService;
     private final UserService userService;
 
-    public static final String lendingRequestsURL="/lendingrequests";
-    public static final String lendingRequestsAcceptURL=lendingRequestsURL+"/accept";
-    public static final String lendingRequestsRejectURL =lendingRequestsURL+"/reject";
+    private static final String lendingRequestsURL="/lendingrequests";
+    static final String lendingRequestsAcceptURL=lendingRequestsURL+"/accept";
+    static final String lendingRequestsRejectURL =lendingRequestsURL+"/reject";
 
     @Autowired
     public ProductLendingRequestsController(
