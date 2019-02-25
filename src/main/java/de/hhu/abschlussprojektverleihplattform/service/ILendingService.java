@@ -22,7 +22,7 @@ public interface ILendingService {
     );
 
     // Accept/Deny a Request
-    boolean acceptLendingRequest(LendingEntity lending);
+    void acceptLendingRequest(LendingEntity lending) throws Exception;
 
     void denyLendingRequest(LendingEntity lending) throws Exception;
 

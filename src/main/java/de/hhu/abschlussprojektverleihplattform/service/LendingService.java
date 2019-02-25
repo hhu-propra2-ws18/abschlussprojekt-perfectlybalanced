@@ -74,7 +74,7 @@ public class LendingService implements ILendingService {
         return false;
     }
 
-    public boolean acceptLendingRequest(LendingEntity lending) {
+    public void acceptLendingRequest(LendingEntity lending) throws Exception{
         Long costID = paymentService.reservateAmount(
             lending.getBorrower(),
             lending.getProduct().getOwner(),
@@ -96,12 +96,12 @@ public class LendingService implements ILendingService {
                 lending.setCostReservationID(costID);
                 lending.setSuretyReservationID(suretyID);
                 lendingRepository.update(lending);
-                return true;
+                return;
             }
         }
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-        return false;
+        throw new Exception("could not accept lending request");
     }
 
     public void denyLendingRequest(LendingEntity lending) throws Exception{
