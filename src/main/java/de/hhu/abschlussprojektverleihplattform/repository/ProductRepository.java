@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
@@ -96,7 +97,7 @@ public class ProductRepository implements IProductRepository {
             product.getOwner().getUserId()),
                 keyHolder
         );
-        product.setId(keyHolder.getKey().longValue());
+        product.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
