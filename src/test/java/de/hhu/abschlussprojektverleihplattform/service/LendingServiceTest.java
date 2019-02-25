@@ -106,9 +106,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(1800L);
         Timestamp end2 = new Timestamp(1900L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println();
+        }
     }
 
     @Test
@@ -136,9 +139,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(3500L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println();
+        }
     }
 
     @Test
@@ -154,13 +160,16 @@ public class LendingServiceTest {
         Timestamp start = new Timestamp(800L);
         Timestamp end = new Timestamp(3500L);
 
-        boolean result = logic.requestLending(actingUser, product, start, end);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start, end);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println();
+        }
     }
 
     @Test
-    public void reservationSuccess1() {
+    public void reservationSuccess1() throws Exception{
         // reservated Time within requested Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
@@ -172,9 +181,8 @@ public class LendingServiceTest {
         Timestamp start = new Timestamp(1557543600000L);
         Timestamp end = new Timestamp(1557900000000L);
 
-        boolean result = logic.requestLending(actingUser, product, start, end);
+        logic.requestLending(actingUser, product, start, end);
 
-        Assert.assertTrue(result);
         LendingEntity created_lending = lending_repository.getFirst();
         Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
         Assert.assertTrue(created_lending.getStart().equals(start));
@@ -186,7 +194,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void reservationSuccess2() {
+    public void reservationSuccess2() throws Exception{
         // reservated Time within requested Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
@@ -198,9 +206,8 @@ public class LendingServiceTest {
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
 
-        boolean result = logic.requestLending(actingUser, product, start, end);
+        logic.requestLending(actingUser, product, start, end);
 
-        Assert.assertTrue(result);
         LendingEntity created_lending = lending_repository.getFirst();
         Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
         Assert.assertTrue(created_lending.getStart().equals(start));

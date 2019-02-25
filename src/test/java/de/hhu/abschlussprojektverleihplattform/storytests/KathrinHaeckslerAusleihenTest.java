@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class KathrinHaeckslerAusleihen {
+public class KathrinHaeckslerAusleihenTest {
 
     @Autowired
     UserService userService;
@@ -57,17 +57,18 @@ public class KathrinHaeckslerAusleihen {
                         owner,RandomTestData.newRandomTestAddress()
                 );
         hacksler.setTitle("ein hacksler fuer alle faelle");
-        long hacksler_surety=300;
+        int hacksler_surety=300;
         hacksler.setSurety(hacksler_surety);
 
-        long hacksler_cost=5;
+        int hacksler_cost=5;
         hacksler.setCost(hacksler_cost);
         productService.addProduct(hacksler);
 
         Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
         long days_2=1000*60*60*24*2;
         timestamps[1].setTime(timestamps[0].getTime()+days_2);
-        LendingEntity hacksler_lending = lendingService.requestLending(kathrin, hacksler, timestamps[0], timestamps[1]);
+        LendingEntity hacksler_lending =
+                lendingService.requestLending(kathrin, hacksler, timestamps[0], timestamps[1]);
 
         //leih anfrage wird angenommen
         lendingService.acceptLendingRequest(hacksler_lending);
