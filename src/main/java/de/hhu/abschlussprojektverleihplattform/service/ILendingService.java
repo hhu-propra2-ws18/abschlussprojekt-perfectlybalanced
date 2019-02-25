@@ -27,7 +27,7 @@ public interface ILendingService {
     void denyLendingRequest(LendingEntity lending);
 
     // Return a Product
-    void returnProduct(LendingEntity lending);
+    void returnProduct(LendingEntity lending)throws Exception;
 
     // Decide wether a returned product is in acceptable condition or not
     boolean acceptReturnedProduct(LendingEntity lending);

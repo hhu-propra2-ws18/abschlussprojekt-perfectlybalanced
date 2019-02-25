@@ -109,7 +109,10 @@ public class LendingService implements ILendingService {
         lendingRepository.update(lending);
     }
 
-    public void returnProduct(LendingEntity lending) {
+    public void returnProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.confirmt)){
+            throw new Exception("the lending is not confirmed, cannot be returned.");
+        }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
     }
