@@ -47,10 +47,8 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/reject")
     public String handleRejection(
-        @RequestParam Long id,
-        Authentication auth
+        @RequestParam Long id
     ) throws Exception {
-        auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.denyLendingRequest(requestedLending);
@@ -59,10 +57,8 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/accept")
     public String handleAccept(
-        @RequestParam Long id,
-        Authentication auth
+        @RequestParam Long id
     ) throws Exception {
-        auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptLendingRequest(requestedLending);
@@ -71,10 +67,8 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/rejectReturn")
     public String handleGoodReturn(
-        @RequestParam Long id,
-        Authentication auth
+        @RequestParam Long id
     ) throws Exception {
-        auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.denyReturnedProduct(requestedLending);
@@ -83,10 +77,8 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/acceptReturn")
     public String handleBadReturn(
-        @RequestParam Long id,
-        Authentication auth
+        @RequestParam Long id
     ) throws Exception {
-        auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptReturnedProduct(requestedLending);
