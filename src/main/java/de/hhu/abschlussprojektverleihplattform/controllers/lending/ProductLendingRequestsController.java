@@ -74,7 +74,6 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/rejectReturn")
     public String handleBadReturn(
-        Model model,
         @RequestParam Long id
     ) throws Exception {
         userService.findByUsername("sarah");
@@ -85,7 +84,6 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/acceptReturn")
     public String handleGoodReturn(
-        Model model,
         @RequestParam Long id
     ) throws Exception {
         userService.findByUsername("sarah");
