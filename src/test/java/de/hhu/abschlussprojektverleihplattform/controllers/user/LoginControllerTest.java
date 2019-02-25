@@ -23,7 +23,7 @@ public class LoginControllerTest {
     MockMvc mockMvc;
 
     @Test
-    public void testcontrolleristhere() throws Exception {
+    public void testControllerIsThere() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Login")))

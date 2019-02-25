@@ -27,7 +27,7 @@ public class DefaultRouteControllerTest {
 
     @Test
     @WithUserDetails("sarah")
-    public void testcontrolleristhere() throws Exception {
+    public void testControllerIsThere() throws Exception {
         mockMvc.perform(get("/"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Verleihplattform")))

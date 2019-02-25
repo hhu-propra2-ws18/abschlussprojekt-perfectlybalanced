@@ -7,7 +7,6 @@ import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Timestamp;
@@ -428,7 +427,7 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
     }
 
-    // Test for denyRetunedProduct
+    // Test for denyReturnedProduct
 
     @Test
     public void productGetsReturnedInBadCondition() {
@@ -451,7 +450,7 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         LendingService logic = new LendingService(lending_repository, null);
 
-        logic.denyRetunedProduct(lending);
+        logic.denyReturnedProduct(lending);
 
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
@@ -520,7 +519,7 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.returned, lending.getStatus());
     }
 
-    // Tests for ownerRecivesSurety
+    // Tests for ownerReceivesSuretyAfterConflict
 
     @Test
     public void ownerRecivesSurety() {
@@ -544,7 +543,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.ownerRecivesSurety(lending);
+        boolean result = logic.ownerReceivesSuretyAfterConflict(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -576,14 +575,14 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.ownerRecivesSurety(lending);
+        boolean result = logic.ownerReceivesSuretyAfterConflict(lending);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
-    // Tests for borrowerRecivesSurety
+    // Tests for borrowerReceivesSuretyAfterConflict
 
     @Test
     public void borrowerRecivesSurety() {
@@ -607,7 +606,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.borrowerRecivesSurety(lending);
+        boolean result = logic.borrowerReceivesSuretyAfterConflict(lending);
 
         Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
@@ -640,14 +639,14 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, false);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.borrowerRecivesSurety(lending);
+        boolean result = logic.borrowerReceivesSuretyAfterConflict(lending);
 
         Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
-    // Tests for daysBetween
+    // Tests for daysBetweenTwoTimestamps
 
     @Test
     public void differenceIs3() {
@@ -655,7 +654,7 @@ public class LendingServiceTest {
         Timestamp second = new Timestamp(1557525600000L);
         LendingService logic = new LendingService(null, null);
 
-        int result = logic.daysBetween(first, second);
+        int result = logic.daysBetweenTwoTimestamps(first, second);
 
         Assert.assertEquals(3, result);
     }
@@ -666,7 +665,7 @@ public class LendingServiceTest {
         Timestamp second = new Timestamp(1557525600010L);
         LendingService logic = new LendingService(null, null);
 
-        int result = logic.daysBetween(first, second);
+        int result = logic.daysBetweenTwoTimestamps(first, second);
 
         Assert.assertEquals(4, result);
     }

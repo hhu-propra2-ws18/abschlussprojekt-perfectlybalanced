@@ -46,7 +46,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void test_saving_sets_id(){
+    public void testSavingSetsId(){
         LendingEntity lendingEntity
                 = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
@@ -77,7 +77,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void test_get_all_lendings_from_product() {
+    public void testGetAllLendingsFromProduct() {
         LendingEntity lendingEntity
             = RandomTestData.newRandomLendingStausDone(user1, product1);
         lendingRepository.addLending(lendingEntity);
@@ -88,7 +88,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void test_getLendingByProductAndUser() {
+    public void testGetLendingByProductAndUser() {
         LendingEntity lendingEntity
             = RandomTestData.newRandomLendingStausDone(user1, product1);
 
@@ -101,7 +101,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void test_getReturnedLendingFromUser() {
+    public void testGetReturnedLendingFromUser() {
         LendingEntity returnedLendingEntity
             = RandomTestData.newRandomLendingStatusConflict(user1, product1);
         returnedLendingEntity.setStatus(Lendingstatus.returned);
@@ -115,7 +115,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void test_getAllConflicts() {
+    public void testGetAllConflicts() {
         LendingEntity lendingEntity
             = RandomTestData.newRandomLendingStatusConflict(user1, product1);
 
@@ -129,7 +129,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void changelendingStatusTest() {
+    public void changeLendingStatusTest() {
         UserEntity user = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user);
 
@@ -176,7 +176,7 @@ public class LendingRepositoryTest {
     }
 
     @Test
-    public void getAllRquestsForUser() {
+    public void getAllRequestsForUser() {
         UserEntity owner1337 = RandomTestData.newRandomTestUser();
         UserEntity borrower = RandomTestData.newRandomTestUser();
         userRepository.saveUser(owner1337);
