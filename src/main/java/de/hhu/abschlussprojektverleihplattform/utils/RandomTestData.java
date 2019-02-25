@@ -60,7 +60,7 @@ public class RandomTestData {
     public static Timestamp[] new2SuccessiveTimestamps(){
 
         Timestamp t1 = new Timestamp(new Date().getTime());
-        Timestamp t2 = new Timestamp(t1.getTime()+100);
+        Timestamp t2 = new Timestamp(t1.getTime()+300000000);
 
         return new Timestamp[]{t1,t2};
     }

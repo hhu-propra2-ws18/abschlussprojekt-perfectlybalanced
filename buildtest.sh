@@ -1,1 +1,2 @@
 gradle test
+gradle checkStyle
