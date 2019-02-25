@@ -16,18 +16,16 @@ import java.util.List;
 @Controller
 public class MyLendingsController {
 
-    public static final String url="/mylendings";
+    static final String url="/mylendings";
 
     //this can be extended to also show past lendings.
     //this is benefit for people who want to lend
     //things multiple times so they can find those products
 
-    private final IUserService userService;
     private final ILendingService lendingService;
 
     @Autowired
-    public MyLendingsController(IUserService userService, ILendingService lendingService) {
-        this.userService = userService;
+    public MyLendingsController(ILendingService lendingService) {
         this.lendingService = lendingService;
     }
 
@@ -43,10 +41,7 @@ public class MyLendingsController {
     }
 
     @PostMapping("/mylendings/return")
-    public String handleReturn(Model model,
-                               @RequestParam Long id,
-                               Authentication auth) throws Exception{
-        UserEntity user = (UserEntity) auth.getPrincipal();
+    public String handleReturn(@RequestParam Long id) throws Exception{
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.returnProduct(requestedLending);
         return "redirect:/mylendings";
