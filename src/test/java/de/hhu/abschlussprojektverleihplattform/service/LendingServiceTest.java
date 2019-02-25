@@ -205,7 +205,7 @@ public class LendingServiceTest {
         Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
-    // Tests for decideLendingRequest
+    // Test for decideLendingRequest
 
     @Test
     public void requestGetsDenied() {
@@ -234,6 +234,8 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.denied, lending.getStatus());
     }
+
+    // Tests for acceptLendingRequest
 
     @Test
     public void reservationFails() {
@@ -398,7 +400,7 @@ public class LendingServiceTest {
         Assert.assertEquals(PaymentStatus.reservated, surety.getStatus());
     }
 
-    // Tests for returnProduct
+    // Test for returnProduct
 
     @Test
     public void productGetsReturned() {
