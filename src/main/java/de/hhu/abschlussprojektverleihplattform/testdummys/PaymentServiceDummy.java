@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.testdummys;
 
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public class PaymentServiceDummy implements IPaymentService {
         return usersHaveMoney;
     }
 
+    @SuppressFBWarnings
     @Override
     public Long reservateAmount(UserEntity payingUser, UserEntity receivingUser, int amount) {
         if (!reservationsAreSuccessfull) {
