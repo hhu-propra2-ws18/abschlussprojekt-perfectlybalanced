@@ -5,7 +5,8 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 
 import java.util.ArrayList;
 
-public class PaymentServiceDummy implements IPaymentService {
+//public class PaymentServiceDummy implements IPaymentService {
+public class PaymentServiceDummy {
 
     private ArrayList<ReservationDummy> payments;
     private Long id;
@@ -36,12 +37,12 @@ public class PaymentServiceDummy implements IPaymentService {
         lastWasTransfer = false;
     }
 
-    @Override
+//    @Override
     public boolean userHasAmount(UserEntity user, int amount) {
         return usersHaveMoney;
     }
 
-    @Override
+//    @Override
     public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
         if (!reservationsAreSuccessfull) {
             return 0L;
@@ -52,7 +53,7 @@ public class PaymentServiceDummy implements IPaymentService {
         return reservation.getId();
     }
 
-    @Override
+//    @Override
     public boolean tranferReservatedMoney(String username, Long id) {
         if (findReservation(id) != null) {
             findReservation(id).setStatus(PaymentStatus.payed);
@@ -63,7 +64,7 @@ public class PaymentServiceDummy implements IPaymentService {
         return transfersAreSuccessfull;
     }
 
-    @Override
+//    @Override
     public boolean returnReservatedMoney(String username, Long id) {
         if (findReservation(id) != null) {
             findReservation(id).setStatus(PaymentStatus.returned);

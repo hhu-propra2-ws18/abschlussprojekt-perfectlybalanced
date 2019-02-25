@@ -40,16 +40,11 @@ public class RequestALendingController {
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
 
-        boolean didrequest = lendingService.requestLending(user,
+        lendingService.requestLending(user,
                 product,
                 new Timestamp(System.currentTimeMillis()),
-                new Timestamp(System.currentTimeMillis() + 86400000));
-
-        if(!didrequest){
-            throw new Exception("cannot make lending request");
-
-        }
-
+                new Timestamp(System.currentTimeMillis() + 86400000)
+        );
         return "redirect:/";
     }
 }
