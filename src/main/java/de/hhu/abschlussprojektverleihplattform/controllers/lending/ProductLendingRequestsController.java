@@ -22,6 +22,10 @@ public class ProductLendingRequestsController {
     private final LendingService lendingService;
     private final UserService userService;
 
+    public static final String lendingRequestsURL="/lendingrequests";
+    public static final String lendingRequestsAcceptURL=lendingRequestsURL+"/accept";
+    public static final String lendingRequestsRejectURL =lendingRequestsURL+"/reject";
+
     @Autowired
     public ProductLendingRequestsController(
         ProductService productService,
@@ -73,10 +77,8 @@ public class ProductLendingRequestsController {
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
-        boolean acceptOk = lendingService.acceptLendingRequest(requestedLending);
-        if(!acceptOk){
-            throw new Exception("Could not Accept Lending Request.");
-        }
+        lendingService.acceptLendingRequest(requestedLending);
+
         return "redirect:/lendingrequests";
     }
 

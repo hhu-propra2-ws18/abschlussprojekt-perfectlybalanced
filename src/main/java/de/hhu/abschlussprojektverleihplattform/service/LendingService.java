@@ -72,7 +72,7 @@ public class LendingService implements ILendingService {
         lendingRepository.addLending(lending);
     }
 
-    public boolean acceptLendingRequest(LendingEntity lending) {
+    public void acceptLendingRequest(LendingEntity lending) throws Exception{
         Long costID = paymentService.reservateAmount(
             lending.getBorrower(),
             lending.getProduct().getOwner(),
@@ -94,12 +94,12 @@ public class LendingService implements ILendingService {
                 lending.setCostReservationID(costID);
                 lending.setSuretyReservationID(suretyID);
                 lendingRepository.update(lending);
-                return true;
+                return;
             }
         }
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-        return false;
+        throw new Exception("could not accept lending request");
     }
 
     public void denyLendingRequest(LendingEntity lending) throws Exception{
@@ -120,7 +120,9 @@ public class LendingService implements ILendingService {
 
     public boolean acceptReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception("cannot reject returned lending if status is not : "+Lendingstatus.returned);
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
         }
 
         if (paymentService.returnReservatedMoney(
@@ -137,7 +139,9 @@ public class LendingService implements ILendingService {
 
     public void denyReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception("cannot reject returned lending if status is not : "+Lendingstatus.returned);
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
         }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
@@ -237,58 +241,5 @@ public class LendingService implements ILendingService {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);
-    }
-
-    // private Methodes for the Develop-Mode
-
-    private LendingEntity createExampleLending1(
-            Lendingstatus status,
-            UserEntity owner, UserEntity borrower
-    ) {
-        Timestamp start = new Timestamp(1549368000000L); //3d+2h difference
-        Timestamp end = new Timestamp(1549634400000L);
-        ProductEntity product = createExampleProduct1(owner);
-        Long costReervationID = 1L;
-        Long suretyReservationID = 2L;
-        return new LendingEntity(
-            status,
-            start,
-            end,
-            borrower,
-            product,
-            costReervationID,
-            suretyReservationID
-        );
-    }
-
-    private UserEntity createExampleUser1() {
-        String firstname = "Frank";
-        String lastname = "Meier";
-        String username = "DerTolleFrank";
-        String password = "123456";
-        String email = "Frank.Meier@Example.com";
-        return new UserEntity(firstname, lastname, username, password, email);
-    }
-
-    private UserEntity createExampleUser2() {
-        String firstname = "Hans";
-        String lastname = "Müller";
-        String username = "Hnaswurst";
-        String password = "qwertz";
-        String email = "D.Schulz@Example.com";
-        return new UserEntity(firstname, lastname, username, password, email);
-    }
-
-    private ProductEntity createExampleProduct1(UserEntity owner) {
-        String description = "Ein toller Rasemäher";
-        String title = "Rasemäher";
-        int surety = 200;
-        int cost = 20;
-        String street = "Tulpenweg";
-        int housenumber = 33;
-        int postcode = 12345;
-        String city = "Heidelberg";
-        AddressEntity a = new AddressEntity(street, housenumber, postcode, city);
-        return new ProductEntity(description, title, surety, cost, a, owner);
     }
 }
