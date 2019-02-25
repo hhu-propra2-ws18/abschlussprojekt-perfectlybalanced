@@ -43,7 +43,7 @@ public class LendingService implements ILendingService {
             ProductEntity product,
             Timestamp start,
             Timestamp end
-    ) throws Exception{
+    ) throws Exception {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         for (LendingEntity lend : lendings) {
             Timestamp lend_start = lend.getStart();
@@ -59,7 +59,7 @@ public class LendingService implements ILendingService {
         int totalMoney = product.getSurety()
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
         Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
-        if(userMoney < totalMoney) {
+        if (userMoney < totalMoney) {
             throw new Exception("The cost and the surety sum up to: "
                 + totalMoney + "€, but you only have: " + userMoney + "€.");
         }
@@ -77,8 +77,8 @@ public class LendingService implements ILendingService {
         return lending;
     }
 
-    public void acceptLendingRequest(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.requested)) {
+    public void acceptLendingRequest(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.requested)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.requested);
         }
@@ -106,8 +106,8 @@ public class LendingService implements ILendingService {
         lendingRepository.update(lending);
     }
 
-    public void denyLendingRequest(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.requested)){
+    public void denyLendingRequest(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.requested)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.requested);
         }
@@ -115,8 +115,8 @@ public class LendingService implements ILendingService {
         lendingRepository.update(lending);
     }
 
-    public void returnProduct(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.confirmt)){
+    public void returnProduct(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.confirmt)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.confirmt);
         }
@@ -124,8 +124,8 @@ public class LendingService implements ILendingService {
         lendingRepository.update(lending);
     }
 
-    public void acceptReturnedProduct(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.returned)){
+    public void acceptReturnedProduct(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.returned)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.returned);
         }
@@ -137,8 +137,8 @@ public class LendingService implements ILendingService {
         lendingRepository.update(lending);
     }
 
-    public void denyReturnedProduct(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.returned)){
+    public void denyReturnedProduct(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.returned)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.returned);
         }
@@ -147,7 +147,7 @@ public class LendingService implements ILendingService {
     }
 
     public void ownerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
-        if(!lending.getStatus().equals(Lendingstatus.conflict)){
+        if (!lending.getStatus().equals(Lendingstatus.conflict)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                     + " but it needs to be: " + Lendingstatus.conflict);
         }
@@ -160,7 +160,7 @@ public class LendingService implements ILendingService {
     }
 
     public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
-        if(!lending.getStatus().equals(Lendingstatus.conflict)){
+        if (!lending.getStatus().equals(Lendingstatus.conflict)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                     + " but it needs to be: " + Lendingstatus.conflict);
         }
@@ -200,7 +200,7 @@ public class LendingService implements ILendingService {
         return lendingRepository.getLendingById(id);
     }
 
-    private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status){
+    private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status) {
         return lendings
                 .stream()
                 .filter(
@@ -212,19 +212,19 @@ public class LendingService implements ILendingService {
     }
 
     public List<LendingEntity> getAllRequestedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.requested);
+        return filterByStatus(allLendings, Lendingstatus.requested);
     }
 
     public List<LendingEntity> getAllConfirmedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.confirmt);
+        return filterByStatus(allLendings, Lendingstatus.confirmt);
     }
 
     public List<LendingEntity> getAllReturnedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.returned);
+        return filterByStatus(allLendings, Lendingstatus.returned);
     }
 
     public List<LendingEntity> getAllConflictedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.conflict);
+        return filterByStatus(allLendings, Lendingstatus.conflict);
     }
 
     public List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings) {
