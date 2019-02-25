@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
@@ -38,7 +38,7 @@ public class UserProfileControllerTest {
 
     @Test
     @WithUserDetails("sarah")
-    public void testcontrolleristhere() throws Exception {
+    public void testControllerIsThere() throws Exception {
         mockMvc.perform(get("/profile"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Profile")))
@@ -47,9 +47,9 @@ public class UserProfileControllerTest {
                 .andExpect(content().string(containsString("Kontostand")));
     }
 
-    //@WithUserDetails("sarah")
+
     @Test
-    public void test_sarah_can_deposit_money_and_see_her_balance() throws Exception{
+    public void testSarahCanDepositMoneyAndSeeHerBalance() throws Exception{
 
         UserEntity user= RandomTestData.newRandomTestUser();
         userService.addUser(user);

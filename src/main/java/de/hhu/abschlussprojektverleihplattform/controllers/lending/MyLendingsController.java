@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -38,5 +40,15 @@ public class MyLendingsController {
 
         model.addAttribute("lendings",lendings);
         return "mycurrentlendings";
+    }
+
+    @PostMapping("/mylendings/return")
+    public String handleReturn(Model model,
+                               @RequestParam Long id,
+                               Authentication auth) throws Exception{
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        LendingEntity requestedLending = lendingService.getLendingById(id);
+        lendingService.returnProduct(requestedLending);
+        return "redirect:/mylendings";
     }
 }

@@ -1,12 +1,12 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
-import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,14 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-
 import java.sql.Timestamp;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,6 +44,9 @@ public class MyLendingsControllerTest {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ProPayService proPayService;
+
     @Test
     public void doNothing() {
         //eine Testklasse ohne Tests ist nicht zulaessig
@@ -54,17 +55,14 @@ public class MyLendingsControllerTest {
 
     //TODO: den richten Test wieder aktivieren sobald die SQL-Abfrage gefixt ist
 
-    /*
     @Test
-    public void test_can_see_my_lending_request() throws Exception{
+    public void testCanSeeMyLendingRequest() throws Exception{
 
         UserEntity user_owner = RandomTestData.newRandomTestUser();
         userService.addUser(user_owner);
 
-
-        UserEntity user2 = RandomTestData.newRandomTestUser();
-        userService.addUser(user2);
-
+        UserEntity user_wannabe_borrower = RandomTestData.newRandomTestUser();
+        userService.addUser(user_wannabe_borrower);
 
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(
             user_owner,
@@ -74,13 +72,17 @@ public class MyLendingsControllerTest {
 
         Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
 
+        proPayService.changeUserBalanceBy(user_wannabe_borrower.getUsername(),100000);
+
         //user2 wants to lend
         boolean requestIsOk = lendingService.requestLending(
-            user2,
+            user_wannabe_borrower,
             productEntity,
             timestamps[0],
             timestamps[1]
         );
+
+        System.out.println("request is ok"+requestIsOk);
 
         //lending request accepted
         boolean acceptIsOk = lendingService.acceptLendingRequest(
@@ -92,7 +94,7 @@ public class MyLendingsControllerTest {
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)
             .with(user(authenticatedUserService.loadUserByUsername(
-                user2.getUsername()
+                user_wannabe_borrower.getUsername()
             )))
         )
             .andExpect(content()
@@ -101,5 +103,4 @@ public class MyLendingsControllerTest {
                 ))
             );
     }
-    */
 }

@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.product;
 
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
@@ -21,9 +21,6 @@ public class DefaultRouteController {
 
     @GetMapping("/")
     public String getDefaultRouteOverviewOfProducts(Model model) {
-
-        //TODO: redirect if user is not logged in
-        // Startseite für alle
         List<ProductEntity> products = productService.showAll();
 
         model.addAttribute("products", products);

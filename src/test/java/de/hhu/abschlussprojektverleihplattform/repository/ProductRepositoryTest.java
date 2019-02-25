@@ -25,7 +25,7 @@ public class ProductRepositoryTest {
     UserRepository userRepository;
 
     @Test
-    public void test_saving_sets_id(){
+    public void testSavingSetsId(){
         UserEntity user2 = RandomTestData.newRandomTestUser();
         AddressEntity address2 = RandomTestData.newRandomTestAddress();
         userRepository.saveUser(user2);

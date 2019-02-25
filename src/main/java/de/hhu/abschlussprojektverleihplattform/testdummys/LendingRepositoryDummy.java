@@ -64,7 +64,7 @@ public class LendingRepositoryDummy implements ILendingRepository {
     }
 
     @Override
-    public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
+    public List<LendingEntity> getAllLendingRequestsForProductOwner(UserEntity user) {
         return null;
     }
 

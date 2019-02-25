@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
@@ -20,12 +20,14 @@ public class RegistryController {
 
     private final IUserService userService;
 
+    public static final String url="/register";
+
     @Autowired
     public RegistryController(IUserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/register")
+    @GetMapping(url)
     public String getRegisterPage(Model model){
 
         Authentication auth = SecurityContextHolder
@@ -39,7 +41,7 @@ public class RegistryController {
         return "registry";
     }
 
-    @PostMapping("/register")
+    @PostMapping(url)
     public String postRegisterUser(@ModelAttribute("user") @Valid UserEntity userEntity,
                                    BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {

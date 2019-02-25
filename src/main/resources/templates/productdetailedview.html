@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Verleihplattform Produkt Detailansicht</title>
@@ -7,6 +7,7 @@
 </head>
 <body>
     <nav th:replace="nav-fragment"></nav>
+
     <div class="container">
         <div class="m-3"></div>
         <div class="row">
@@ -33,33 +34,36 @@
                         <span th:text="${product.owner.email}"></span>
                     </li>
                 </ul>
+                <div id="lendingform">
+                    <!--<form th:action="@{/request/(id=${product.getId()})}" method="post">
+
+                        <button
+                                th:if="${(product.owner.userId.equals(user.userId))==false}"
+                                class="btn btn-primary" type="submit">Ausleihen
+                        </button>
+
+                    </form>-->
+                    <a href="/sendLendingRequest/="><button class="btn btn-primary">Ausleihen</button></a>
+                </div>
 
                 <div class="card" th:each="timeSpan : ${ListOfReservatedTimes}">
                     <div class="card-header">
                         <p >Belegter Zeitraum</p>
                     </div>
                     <div class="card-body">
-                        <span th:text="${#dates.dayOfWeekName(timeSpan.start)}">TimeStampStart</span>
-                        <span>, der </span>
-                        <span th:text="${#dates.day(timeSpan.start)}">TimeStampStart</span>
-                        <span>.</span>
-                        <span th:text="${#dates.month(timeSpan.start)}">TimeStampStart</span>
-                        <span>.</span>
-                        <span th:text="${#dates.year(timeSpan.start)}">TimeStampStart</span>
-                        <br>
-                        <span>bis</span>
-                        <br>
-                        <span th:text="${#dates.dayOfWeekName(timeSpan.end)}">TimeStampStart</span>
-                        <span>, der </span>
-                        <span th:text="${#dates.day(timeSpan.end)}">TimeStampStart</span>
-                        <span>.</span>
-                        <span th:text="${#dates.month(timeSpan.end)}">TimeStampStart</span>
-                        <span>.</span>
+                        <span th:text="${#dates.dayOfWeekName(timeSpan.start)}">TimeStampStart</span>, der
+                        <span th:text="${#dates.day(timeSpan.start)}">TimeStampStart</span>.
+                        <span th:text="${#dates.month(timeSpan.start)}">TimeStampStart</span>.
+                        <span th:text="${#dates.year(timeSpan.start)}">TimeStampStart</span> bis
+                        <span th:text="${#dates.dayOfWeekName(timeSpan.end)}">TimeStampStart</span>, der
+                        <span th:text="${#dates.day(timeSpan.end)}">TimeStampStart</span>.
+                        <span th:text="${#dates.month(timeSpan.end)}">TimeStampStart</span>.
                         <span th:text="${#dates.year(timeSpan.end)}">TimeStampStart</span>
                     </div>
                 </div>
 
                 <button th:if="${(product.owner.userId.equals(user.userId))==false}" class="btn btn-primary" type="submit">Ausleihen</button>
+
             </div>
         </div>
     </div>

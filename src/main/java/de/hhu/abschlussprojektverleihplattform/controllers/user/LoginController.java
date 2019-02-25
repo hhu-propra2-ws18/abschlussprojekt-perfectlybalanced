@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,13 +19,4 @@ public class LoginController {
 
         return "login";
     }
-
-    /*
-    @PostMapping("/login")
-    public String postLogin(@RequestParam(value="username")String username,
-    @RequestParam(value="password")String password){
-        //TODO: actually check user credentials submitted
-        return "redirect:/profile";
-    }
-    */
 }

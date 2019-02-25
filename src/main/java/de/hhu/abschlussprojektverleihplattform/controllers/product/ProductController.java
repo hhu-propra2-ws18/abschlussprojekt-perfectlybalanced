@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.product;
 
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
@@ -11,28 +11,23 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 @Controller
 public class ProductController {
 
-    private final IUserService userService;
     private final IProductService productService;
     private final ILendingService lendingService;
 
     @Autowired
+
     public ProductController(
             IUserService userService,
             IProductService productService,
             ILendingService lendingService) {
-        this.userService = userService;
         this.productService = productService;
         this.lendingService = lendingService;
     }
@@ -115,7 +110,7 @@ public class ProductController {
         ProductEntity product = productService.getById(id);
         if(product != null) {
             model.addAttribute("product", product);
-            model.addAttribute("ListOfReservatedTimes", lendingService.getTime(product));
+            model.addAttribute("ListOfReservatedTimes", lendingService.getAvailableTime(product));
             return "productdetailedview";
         }
         return "redirect:/";
@@ -129,6 +124,8 @@ public class ProductController {
         model.addAttribute("gotNoProducts", gotNoProducts);
         return "myproducts";
     }
+
+
 
 }
 

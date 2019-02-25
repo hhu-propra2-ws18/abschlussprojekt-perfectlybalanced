@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.controllers;
+package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class RegistryControllerTest {
     MockMvc mockMvc;
 
     @Test
-    public void testcontrolleristhere() throws Exception {
+    public void testControllerIsThere() throws Exception {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Registrierung")))
@@ -33,14 +33,14 @@ public class RegistryControllerTest {
     }
 
     @Test
-    public void test404onwrongparameters() throws Exception{
+    public void test404OnWrongParameters() throws Exception{
         mockMvc.perform(post("/register"))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     public void testPostValidUser() throws Exception {
-        mockMvc.perform(post("/register")
+        mockMvc.perform(post(RegistryController.url)
                 .param("firstname","Vorname")
                 .param("lastname", "Name")
                 .param("email", "mail@test.com")
@@ -53,7 +53,7 @@ public class RegistryControllerTest {
 
     @Test
     public void testPostWrongEmail() throws Exception {
-        mockMvc.perform(post("/register")
+        mockMvc.perform(post(RegistryController.url)
                 .param("firstname","Vorname")
                 .param("lastname", "Name")
                 .param("email", "mail")

@@ -5,6 +5,7 @@ import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -31,16 +32,13 @@ public class ProductRepository implements IProductRepository {
 
 
     @Override
-    public ProductEntity getProductById(Long id) {
-        try {
-            return (ProductEntity) jdbcTemplate.queryForObject(
-                "SELECT * FROM PRODUCT_ENTITY WHERE id=?",
-                new Object[]{id},
-                new ProductEntityRowMapper(userRepository)
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+    public ProductEntity getProductById(Long id) throws EmptyResultDataAccessException{
+
+        return (ProductEntity) jdbcTemplate.queryForObject(
+            "SELECT * FROM PRODUCT_ENTITY WHERE id=?",
+            new Object[]{id},
+            new ProductEntityRowMapper(userRepository)
+        );
     }
 
     @Override
@@ -102,7 +100,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public void editProduct(ProductEntity productEntity){
+    public void editProduct(ProductEntity productEntity) throws DataAccessException {
         jdbcTemplate.update("UPDATE PRODUCT_ENTITY "
                 + "SET COST = ?, "
                 + "DESCRIPTION = ?, "
@@ -128,7 +126,8 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public List<ProductEntity> getAllProductsFromUser(UserEntity user) {
+    public List<ProductEntity> getAllProductsFromUser(UserEntity user)
+            throws EmptyResultDataAccessException{
         String query = "SELECT * FROM PRODUCT_ENTITY WHERE OWNER_USER_ID=" + user.getUserId();
         return (List<ProductEntity>)jdbcTemplate.query(query,
                 new Object[]{},

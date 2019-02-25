@@ -21,7 +21,7 @@ public class UserRepositoryTest {
 
 
     @Test
-    public void test_saving_sets_id(){
+    public void testSavingSetsId(){
         UserEntity user = RandomTestData.newRandomTestUser();
 
         userRepository.saveUser(user);
@@ -108,35 +108,32 @@ public class UserRepositoryTest {
 
     @Test
     public void findByIdExpectNull() {
-        // Arrange
-
-        // Act
-        UserEntity loadedUser = userRepository.findById((long) -9999);
-
-        // Assert
-        Assert.assertNull(loadedUser);
+        try {
+            UserEntity loadedUser = userRepository.findById((long) -9999);
+            Assert.fail();
+        }catch (Exception e){
+            //pass
+        }
     }
 
     @Test
     public void findByUsernameExpectNull() {
-        // Arrange
-
-        // Act
-        UserEntity loadedUser = userRepository.findByUsername("");
-
-        // Assert
-        Assert.assertNull(loadedUser);
+        try {
+            UserEntity loadedUser = userRepository.findByUsername("");
+            Assert.fail();
+        }catch (Exception e){
+            //pass
+        }
     }
 
     @Test
     public void findByEmailExpectNull() {
-        // Arrange
-
-        // Act
-        UserEntity loadedUser = userRepository.findByEmail("");
-
-        // Assert
-        Assert.assertNull(loadedUser);
+        try {
+            UserEntity loadedUser = userRepository.findByEmail("");
+            Assert.fail();
+        }catch (Exception e){
+            //pass
+        }
     }
 
     @Test

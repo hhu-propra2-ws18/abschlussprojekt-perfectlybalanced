@@ -7,6 +7,8 @@ import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -63,7 +65,7 @@ public class LendingRepository implements ILendingRepository {
     }
 
     @Override
-    public void update(LendingEntity lending) {
+    public void update(LendingEntity lending) throws DataAccessException {
         String query = "UPDATE LENDING_ENTITY "
                 + "SET "
                 + "STATUS=?,"
@@ -87,10 +89,12 @@ public class LendingRepository implements ILendingRepository {
     }
 
     @Override
-    public LendingEntity getLendingById(Long id) {
-        String query = "SELECT * FROM LENDING_ENTITY WHERE ID=" + id;
+    public LendingEntity getLendingById(Long id) throws EmptyResultDataAccessException {
+        String query = "SELECT * FROM LENDING_ENTITY WHERE ID=?";
         return (LendingEntity) jdbcTemplate.queryForObject(query,
-                new LendingEntityRowMapper(userRepository, productRepository));
+                new Object[]{id},
+                new LendingEntityRowMapper(userRepository, productRepository)
+        );
     }
 
     public List<LendingEntity> getLendingsByProductAndBorrower(
@@ -122,12 +126,14 @@ public class LendingRepository implements ILendingRepository {
     }
 
     @Override
-    public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        String query = "SELECT * FROM LENDING_ENTITY l WHERE EXISTS "
-                + "(SELECT p.ID FROM PRODUCT_ENTITY p WHERE P.OWNER_USER_ID =" + user.getUserId()
-                + " AND l.STATUS=" + Lendingstatus.requested.ordinal() + ")";
+    public List<LendingEntity> getAllLendingRequestsForProductOwner(UserEntity user) {
+        String query2 = "select * from product_entity p "
+                + "join lending_entity l on p.id = l.product_id"
+                + " where p.owner_user_id =" + user.getUserId()
+                + " and l.status=" + Lendingstatus.requested.ordinal();
 
-        return (List<LendingEntity>) jdbcTemplate.query(query,
+
+        return (List<LendingEntity>) jdbcTemplate.query(query2,
                 new Object[]{},
                 new LendingEntityRowMapper(userRepository, productRepository));
     }
