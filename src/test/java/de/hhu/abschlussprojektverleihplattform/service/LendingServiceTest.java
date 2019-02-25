@@ -708,7 +708,10 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
-        Assert.assertEquals((long) lending.getSuretyReservationID(), (long) payment_service.getLastId());
+        Assert.assertEquals(
+            (long) lending.getSuretyReservationID(),
+            (long) payment_service.getLastId()
+        );
         Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
 
@@ -889,7 +892,10 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
-        Assert.assertEquals((long) lending.getSuretyReservationID(), (long) payment_service.getLastId());
+        Assert.assertEquals(
+            (long) lending.getSuretyReservationID(),
+            (long) payment_service.getLastId()
+        );
         Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
 
@@ -1000,7 +1006,10 @@ public class LendingServiceTest {
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
         Assert.assertFalse(payment_service.getLastWasTransfer());
-        Assert.assertEquals((long) lending.getSuretyReservationID(), (long) payment_service.getLastId());
+        Assert.assertEquals(
+            (long) lending.getSuretyReservationID(),
+            (long) payment_service.getLastId()
+        );
         Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
     }
 
