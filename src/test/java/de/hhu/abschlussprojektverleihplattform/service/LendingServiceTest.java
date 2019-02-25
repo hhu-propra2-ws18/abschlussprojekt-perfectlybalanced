@@ -316,7 +316,7 @@ public class LendingServiceTest {
         Exception result = new Exception("0");
         try {
             logic.acceptLendingRequest(lending);
-        }catch (Exception e){
+        } catch (Exception e) {
             result = e;
         }
 
@@ -353,7 +353,7 @@ public class LendingServiceTest {
         Exception result = new Exception("0");
         try {
             logic.acceptLendingRequest(lending);
-        }catch (Exception e){
+        } catch (Exception e) {
             result = e;
         }
 
@@ -417,7 +417,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void requestGetsAccepted2(){
+    public void requestGetsAccepted2() {
         Timestamp start = new Timestamp(1546804200000L);
         Timestamp end = new Timestamp(1547148600000L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -505,7 +505,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void requestGetsDenied() throws Exception{
+    public void requestGetsDenied() throws Exception {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -571,7 +571,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void productGetsReturned(){
+    public void productGetsReturned() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -677,7 +677,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void productGetsReturnedInGoodCondition(){
+    public void productGetsReturnedInGoodCondition() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
