@@ -14,16 +14,16 @@
         <h3 th:text="${product.getTitle()}"></h3>
     </div>
 
-    <form th:action="@{/lendingrequests/sendRequest(id=${product.getId()})}" method="post">
+    <form th:action="@{|/lendingrequests/sendRequest?id=${product.id}|}" method="post">
 
         <div>
             <span>Von:</span>
-            <input type="datetime-local" required th:field="${start}">
+            <input type="datetime-local" required th:field="${timespan.start}" th:type="datetime-local">
         </div>
 
         <div>
             <span>Bis:</span>
-            <input type="datetime-local" required th:field="${end}">
+            <input type="datetime-local" required th:field="${timespan.end}" th:type="datetime-local">
         </div>
 
     <button type="submit" class="btn btn-primary">Ausleihanfrage Senden</button>
