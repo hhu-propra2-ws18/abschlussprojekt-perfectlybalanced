@@ -10,9 +10,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -29,7 +32,7 @@ public class UserProfileControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     UserService userService;
 
     @Autowired
@@ -37,9 +40,17 @@ public class UserProfileControllerTest {
 
 
     @Test
-    @WithUserDetails("sarah")
     public void testControllerIsThere() throws Exception {
-        mockMvc.perform(get("/profile"))
+        UserEntity user = RandomTestData.newRandomTestUser();
+        user.setUserId(1L);
+
+        when(userService.findByUsername(user.getUsername())).thenReturn(user);
+
+        mockMvc.perform(get("/profile")
+                .with(user(authenticatedUserService.loadUserByUsername(
+                        user.getUsername()
+                )))
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Profile")))
                 .andExpect(content().string(containsString("Email")))
@@ -47,23 +58,21 @@ public class UserProfileControllerTest {
                 .andExpect(content().string(containsString("Kontostand")));
     }
 
-
     @Test
     public void testSarahCanDepositMoneyAndSeeHerBalance() throws Exception{
+        UserEntity user = RandomTestData.newRandomTestUser();
+        user.setUserId(1L);
 
-        UserEntity user= RandomTestData.newRandomTestUser();
-        userService.addUser(user);
-
-        String username=user.getUsername();
+        when(userService.findByUsername(user.getUsername())).thenReturn(user);
 
         mockMvc.perform(post("/profile/deposit")
                 .with(csrf())
-                .with(user(authenticatedUserService.loadUserByUsername(username)))
+                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
         )
             .andExpect(status().is3xxRedirection());
 
         mockMvc.perform(get("/profile")
-            .with(user(authenticatedUserService.loadUserByUsername(username)))
+            .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
         ).andExpect(content().string(containsString(""+100)));
         //because /deposit deposits 100 Euros
     }

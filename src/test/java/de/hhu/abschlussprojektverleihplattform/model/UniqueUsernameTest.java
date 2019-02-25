@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
-import de.hhu.abschlussprojektverleihplattform.service.IUserService;
+import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class UniqueUsernameTest {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
     private Validator validator;
