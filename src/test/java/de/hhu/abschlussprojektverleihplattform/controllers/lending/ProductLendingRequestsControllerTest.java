@@ -66,9 +66,9 @@ public class ProductLendingRequestsControllerTest {
     @Test
     @WithUserDetails("sarah")
     public void rejectRequest() throws Exception {
-        LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
-        lending.setStatus(Lendingstatus.requested);
+        // LendingEntity lending = new LendingEntity();
+        // lending.setId(2L);
+        // lending.setStatus(Lendingstatus.requested);
 
         mockMvc.perform(post("/lendingrequests/reject?id=2")
                 .with(csrf()))
@@ -82,9 +82,9 @@ public class ProductLendingRequestsControllerTest {
     @Test
     @WithUserDetails("sarah")
     public void acceptRequest() throws Exception {
-        LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
-        lending.setStatus(Lendingstatus.requested);
+        // LendingEntity lending = new LendingEntity();
+        // lending.setId(2L);
+        // lending.setStatus(Lendingstatus.requested);
 
         mockMvc.perform(post("/lendingrequests/accept?id=2")
                 .with(csrf()))

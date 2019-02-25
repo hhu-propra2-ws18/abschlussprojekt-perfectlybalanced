@@ -127,7 +127,7 @@ public class ProPayService implements IProPayService, IPaymentService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         String url = baseurl + "account/"+username;
-        ResponseEntity<Account> response = restTemplate.postForEntity(url, request, Account.class);
+        restTemplate.postForEntity(url, request, Account.class);
     }
 
     @Override
@@ -249,10 +249,7 @@ public class ProPayService implements IProPayService, IPaymentService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-        ResponseEntity<Account> punishedAccount 
-            = restTemplate.postForEntity(
-            URI.create(url),request,Account.class
-        );
+        restTemplate.postForEntity(URI.create(url),request,Account.class);
     }
 
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
