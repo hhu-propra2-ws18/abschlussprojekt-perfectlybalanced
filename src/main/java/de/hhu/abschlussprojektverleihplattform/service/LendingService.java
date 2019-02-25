@@ -73,6 +73,7 @@ public class LendingService implements ILendingService {
         );
         // TODO: check if 0L really is unused in ProPay
         lendingRepository.addLending(lending);
+        return lending;
     }
 
     public void acceptLendingRequest(LendingEntity lending) throws Exception{
