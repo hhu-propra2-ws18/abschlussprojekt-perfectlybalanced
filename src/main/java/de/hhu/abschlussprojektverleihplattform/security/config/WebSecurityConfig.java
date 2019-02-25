@@ -37,8 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profile/deposit**")
                     .hasRole("USER")
                 // nur Admin-Berechtigung
-                /*.antMatchers("/admin")
-                    .hasRole("ADMIN")*/
+                .antMatchers("/admin")
+                    .hasRole("ADMIN")
                 .anyRequest()
                     .authenticated()
                     .and()
