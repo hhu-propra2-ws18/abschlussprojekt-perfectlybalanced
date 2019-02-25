@@ -255,8 +255,16 @@ public class ProPayService implements IProPayService, IPaymentService {
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
 
     @Override
-    public Long reservateAmount(String payingUser, String recivingUser, int amount) throws Exception {
-        Reservation reservation = makeReservationFromSourceUserToTargetUser(payingUser, recivingUser, amount);
+    public Long reservateAmount(
+        String payingUser,
+        String recivingUser,
+        int amount
+    ) throws Exception {
+        Reservation reservation = makeReservationFromSourceUserToTargetUser(
+            payingUser,
+            recivingUser,
+            amount
+        );
         return reservation.id;
     }
 

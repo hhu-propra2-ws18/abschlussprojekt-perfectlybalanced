@@ -60,7 +60,8 @@ public class LendingService implements ILendingService {
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
         Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
         if(userMoney < totalMoney) {
-            throw new Exception("The cost and the surety sum up to: " + totalMoney + "€, but you only have: " + userMoney + "€.");
+            throw new Exception("The cost and the surety sum up to: "
+                + totalMoney + "€, but you only have: " + userMoney + "€.");
         }
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
@@ -78,7 +79,8 @@ public class LendingService implements ILendingService {
 
     public void acceptLendingRequest(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.requested)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.requested);
+            throw new Exception("The Lending has the Status: " + lending.getStatus()
+                + " but it needs to be: " + Lendingstatus.requested);
         }
         Long costID = paymentService.reservateAmount(
             lending.getBorrower().getUsername(),
@@ -106,7 +108,8 @@ public class LendingService implements ILendingService {
 
     public void denyLendingRequest(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.requested)){
-            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.requested);
+            throw new Exception("The Lending has the Status: " + lending.getStatus()
+                + " but it needs to be: " + Lendingstatus.requested);
         }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
@@ -114,7 +117,8 @@ public class LendingService implements ILendingService {
 
     public void returnProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.confirmt)){
-            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.confirmt);
+            throw new Exception("The Lending has the Status: " + lending.getStatus()
+                + " but it needs to be: " + Lendingstatus.confirmt);
         }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
@@ -122,29 +126,40 @@ public class LendingService implements ILendingService {
 
     public void acceptReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.returned);
+            throw new Exception("The Lending has the Status: " + lending.getStatus()
+                + " but it needs to be: " + Lendingstatus.returned);
         }
-        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
+        paymentService.returnReservatedMoney(
+            lending.getBorrower().getUsername(),
+            lending.getSuretyReservationID()
+        );
         lending.setStatus(Lendingstatus.done);
         lendingRepository.update(lending);
     }
 
     public void denyReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.returned);
+            throw new Exception("The Lending has the Status: " + lending.getStatus()
+                + " but it needs to be: " + Lendingstatus.returned);
         }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
     }
 
     public void ownerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
-        paymentService.tranferReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
+        paymentService.tranferReservatedMoney(
+            lending.getBorrower().getUsername(),
+            lending.getSuretyReservationID()
+        );
         lending.setStatus(Lendingstatus.done);
         lendingRepository.update(lending);
     }
 
     public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
-        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
+        paymentService.returnReservatedMoney(
+            lending.getBorrower().getUsername(),
+            lending.getSuretyReservationID()
+        );
         lending.setStatus(Lendingstatus.done);
         lendingRepository.update(lending);
     }

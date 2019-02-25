@@ -34,7 +34,11 @@ public class PaymentServiceDummy implements IPaymentService {
         lastWasTransfer = false;
     }
 
-    public void configurateUsersCurrentBalance(Long userCurrentBalance, Exception userCurrentBalanceFailed, boolean userCurrentBalanceThrowsException) {
+    public void configurateUsersCurrentBalance(
+        Long userCurrentBalance,
+        Exception userCurrentBalanceFailed,
+        boolean userCurrentBalanceThrowsException
+    ) {
         this.userCurrentBalance = userCurrentBalance;
         this.userCurrentBalanceFailed = userCurrentBalanceFailed;
         this.userCurrentBalanceThrowsException = userCurrentBalanceThrowsException;
@@ -49,13 +53,20 @@ public class PaymentServiceDummy implements IPaymentService {
         }
     }
 
-    public void configureReservateAmount(Exception reservationFailed, boolean reservationThrowsException) {
+    public void configureReservateAmount(
+        Exception reservationFailed,
+        boolean reservationThrowsException
+    ) {
         this.reservationFailed = reservationFailed;
         this.reservationThrowsException = reservationThrowsException;
     }
 
     @Override
-    public Long reservateAmount(String payingUser, String recivingUser, int amount) throws Exception {
+    public Long reservateAmount(
+        String payingUser,
+        String recivingUser,
+        int amount)
+        throws Exception {
         if (reservationThrowsException) {
             throw reservationFailed;
         }
