@@ -232,12 +232,10 @@ public class LendingServiceTest {
         Assert.assertEquals(0L, (long) created_lending.getSuretyReservationID());
     }
 
-} /*
-
     // Tests for acceptLendingRequest
 
     @Test
-    public void reservationFails() {
+    public void wrongLendingStatusA() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -245,34 +243,38 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-            Lendingstatus.requested,
-            start,
-            end,
-            borrower,
-            product,
-            0L,
-            0L
+                Lendingstatus.done,
+                start,
+                end,
+                borrower,
+                product,
+                0L,
+                0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, null);
 
-        try{
+        Exception result = new Exception("0");
+        try {
             logic.acceptLendingRequest(lending);
-            Assert.fail();
-        }catch (Exception e){
-            System.out.println();
+        } catch (Exception e) {
+            result = e;
         }
 
-        Assert.assertFalse(lending_repository.hasBeenUpdated());
-        Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
+        Assert.assertEquals("The Lending has the Status: " + Lendingstatus.done + " but it needs to be: " + Lendingstatus.requested, result.getMessage());
     }
 
+
+    // 1.reservierung fail
+    // 2.reservierung fail
+    // erfolg
+} /*
+
     @Test
-    public void paymentFails() {
-        Timestamp start = new Timestamp(1521811800000L);
-        Timestamp end = new Timestamp(1522326000000L);
+    public void reservationFails() {
+        Timestamp start = new Timestamp(300L);
+        Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
