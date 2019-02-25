@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
+import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
@@ -7,6 +8,7 @@ import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,12 +60,12 @@ public class RequestALendingController {
 
 
 
-        boolean didrequest = lendingService.requestLending(user,
+        LendingEntity didrequest = lendingService.requestLending(user,
                 product,
                 startTimestamp,
                 endTimestamp);
 
-        if(!didrequest){
+        if(didrequest == null){
             throw new Exception("cannot make lending request");
 
         }
