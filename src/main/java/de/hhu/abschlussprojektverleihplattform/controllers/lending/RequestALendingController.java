@@ -1,20 +1,18 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
-import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
-import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.sql.Timestamp;
 
 @Controller
 public class RequestALendingController {
@@ -35,29 +33,32 @@ public class RequestALendingController {
         ProductEntity product = productService.getById(id);
         model.addAttribute("product", product);
         model.addAttribute("user", user);
-        model.addAttribute("timespan", new Timespan());
         return "sendLendingRequest";
     }
 
     @PostMapping("lendingrequests/sendRequest")
     public String requestalending(@RequestParam Long id,
                                   Authentication auth,
-                                  @ModelAttribute("lending") LendingEntity lending,
-                                  Timespan timespan) throws Exception{
-
+                                  @RequestParam("start") String start,
+                                  @RequestParam("end") String end) throws Exception{
 
 
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
 
-        //Timestamp start = Timestamp.valueOf(startTime.toString());
-        //Timestamp end = Timestamp.valueOf(endTime.toString());
+        String startTimeStampString = start + ":00";
+        String endTimeStampString = end + ":00";
+
+        Timestamp startTimestamp = Timestamp.valueOf(startTimeStampString.replace("T", " "));
+        Timestamp endTimestamp = Timestamp.valueOf(endTimeStampString.replace("T", " "));
+
 
 
         boolean didrequest = lendingService.requestLending(user,
                 product,
-                timespan.getStart(),
-                timespan.getEnd());
+                startTimestamp,
+                endTimestamp);
+
         if(!didrequest){
             throw new Exception("cannot make lending request");
 

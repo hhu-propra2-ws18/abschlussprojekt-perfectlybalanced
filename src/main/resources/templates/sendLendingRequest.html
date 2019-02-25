@@ -18,21 +18,18 @@
 
         <div>
             <span>Von:</span>
-            <input type="datetime-local" required th:field="${timespan.start}" th:type="datetime-local">
+            <input name="start" type="datetime-local" required >
         </div>
 
         <div>
             <span>Bis:</span>
-            <input type="datetime-local" required th:field="${timespan.end}" th:type="datetime-local">
+            <input name="end" type="datetime-local" required >
         </div>
 
     <button type="submit" class="btn btn-primary">Ausleihanfrage Senden</button>
 
     </form>
 
-   <!-- <form th:action="@{/requests/accept(id=${lending.getId()})}" method="post">
-        <a><button type="submit" class="btn btn-success">Approve</button></a>
-    </form>-->
 
 
 </body>
