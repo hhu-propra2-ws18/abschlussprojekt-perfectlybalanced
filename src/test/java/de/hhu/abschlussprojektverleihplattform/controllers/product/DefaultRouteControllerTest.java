@@ -27,11 +27,13 @@ public class DefaultRouteControllerTest {
 
     @Test
     @WithUserDetails("sarah")
-    public void testcontrolleristhere() throws Exception {
+    public void testControllerIsThere() throws Exception {
         mockMvc.perform(get("/"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Verleihplattform")))
             .andExpect(content().string(containsString("Logout")))
-            .andExpect(content().string(containsString("Produkte ansehen")));
+            .andExpect(content().string(containsString("Meine Produkte")))
+            .andExpect(content().string(containsString("Neues Produkt")))
+            .andExpect(content().string(containsString("Start")));
     }
 }

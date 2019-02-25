@@ -21,13 +21,13 @@ public class ProPayServiceTest {
     private ProPayService proPayService;
 
     @Test
-    public void testnewuserhaszerobalance() throws Exception {
+    public void testNewUserHasZeroBalance() throws Exception {
         String generated_username = make_new_user();
         Assert.assertEquals(0, this.proPayService.getBalance(generated_username));
     }
 
     @Test
-    public void test_can_create_account() {
+    public void testCanCreateAccount() {
         String user1 = make_new_user();
         try {
             this.proPayService.createAccountIfNotExists(user1);
@@ -37,7 +37,7 @@ public class ProPayServiceTest {
     }
 
     @Test
-    public void test_can_increase_user_balance() {
+    public void testCanIncreaseUserBalance() {
         try {
             String user1 = make_new_user();
             this.proPayService.createAccountIfNotExists(user1);
@@ -52,7 +52,7 @@ public class ProPayServiceTest {
 
 
     @Test
-    public void test_can_make_payment() throws Exception {
+    public void testCanMakePayment() throws Exception {
         String user1 = make_new_user();
         String user2 = make_new_user();
 
@@ -68,7 +68,7 @@ public class ProPayServiceTest {
 
 
     @Test
-    public void can_make_reservation() throws Exception {
+    public void canMakeReservation() throws Exception {
 
         //propay does not work yet. there is an issue in their repository
 
@@ -100,7 +100,7 @@ public class ProPayServiceTest {
     }
 
     @Test
-    public void can_release_reservation() throws Exception {
+    public void canReleaseReservation() throws Exception {
         //make users
         String user1 = make_new_user();
         String user2 = make_new_user();
@@ -125,7 +125,7 @@ public class ProPayServiceTest {
     }
 
     @Test
-    public void can_punish_reservation() throws Exception{
+    public void canPunishReservation() throws Exception{
         //make users
         String user1 = make_new_user();
         String user2 = make_new_user();

@@ -24,7 +24,7 @@ public class RegistryControllerTest {
     MockMvc mockMvc;
 
     @Test
-    public void testcontrolleristhere() throws Exception {
+    public void testControllerIsThere() throws Exception {
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Registrierung")))
@@ -33,7 +33,7 @@ public class RegistryControllerTest {
     }
 
     @Test
-    public void test404onwrongparameters() throws Exception{
+    public void test404OnWrongParameters() throws Exception{
         mockMvc.perform(post("/register"))
                 .andExpect(status().is4xxClientError());
     }
