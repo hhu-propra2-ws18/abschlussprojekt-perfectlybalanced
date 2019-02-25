@@ -35,14 +35,13 @@ public class LendingService implements ILendingService {
         return list;
     }
 
-    public boolean requestLending(
+    public void requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
             Timestamp end
-    ) {
+    )  throws Exception {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        boolean timeIsOK = true;
         for (LendingEntity lend : lendings) {
             Timestamp lend_start = lend.getStart();
             Timestamp lend_end = lend.getEnd();
@@ -51,27 +50,26 @@ public class LendingService implements ILendingService {
                     || (end.after(lend_start) && end.before(lend_end))
                     || (lend_start.after(start) && lend_start.before(end))
             ) {
-                timeIsOK = false;
+                throw new Exception("The Product is not available in the selected time.");
             }
         }
         int totalMoney = product.getSurety()
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
-        boolean moneyIsOK = paymentService.userHasAmount(actingUser, totalMoney);
-        if (timeIsOK && moneyIsOK) {
-            LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                actingUser,
-                product,
-                0L,
-                0L
-            );
-            // TODO: check if 0L realy is unused in ProPay
-            lendingRepository.addLending(lending);
-            return true;
+        if(!paymentService.userHasAmount(actingUser, totalMoney)) {
+            Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
+            throw new Exception("The cost and the surety sum up to: " + totalMoney + "€, but you only have: " + userMoney + "€.");
         }
-        return false;
+        LendingEntity lending = new LendingEntity(
+            Lendingstatus.requested,
+            start,
+            end,
+            actingUser,
+            product,
+            0L,
+            0L
+        );
+        // TODO: check if 0L realy is unused in ProPay
+        lendingRepository.addLending(lending);
     }
 
     public boolean acceptLendingRequest(LendingEntity lending) {
