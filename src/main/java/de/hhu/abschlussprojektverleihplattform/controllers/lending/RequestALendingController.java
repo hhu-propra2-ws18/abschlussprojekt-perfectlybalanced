@@ -7,7 +7,6 @@ import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,13 +16,18 @@ import java.sql.Timestamp;
 @Controller
 public class RequestALendingController {
 
-    @Autowired
-    ProductService productService;
+    private final ProductService productService;
 
-    @Autowired
-    LendingService lendingService;
+    private final LendingService lendingService;
 
     public static final String requestalendingURL ="/lendingrequests/sendRequest";
+
+    @Autowired
+    public RequestALendingController(ProductService productService, LendingService lendingService) {
+        this.productService = productService;
+        this.lendingService = lendingService;
+    }
+
 
     @GetMapping("lendingrequests/sendRequest")
     public String gotoSendRequest(Model model, @RequestParam Long id, Authentication auth){

@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
@@ -52,6 +54,7 @@ public class UserRepository implements IUserRepository {
                 new BeanPropertyRowMapper<>(UserEntity.class));
     }
 
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public void saveUser(UserEntity user) {
         KeyHolder  keyHolder=new GeneratedKeyHolder();
@@ -67,9 +70,10 @@ public class UserRepository implements IUserRepository {
                 keyHolder
         );
 
-        user.setUserId(keyHolder.getKey().longValue());
+        user.setUserId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public int getNumberOfUsers() {
         return jdbcTemplate.queryForObject("select count (*) from USER_ENTITY", Integer.class);
