@@ -97,7 +97,7 @@ public class LendingRepository implements ILendingRepository {
         );
     }
 
-    public List<LendingEntity> getLendingsByProductAndBorrower(
+    List<LendingEntity> getLendingsByProductAndBorrower(
         ProductEntity product, UserEntity user
     ) {
         String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()
