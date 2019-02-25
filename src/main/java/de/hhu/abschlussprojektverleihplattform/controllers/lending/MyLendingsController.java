@@ -38,10 +38,12 @@ public class MyLendingsController {
         List<LendingEntity> confirmedLendings = lendingService.getAllConfirmedLendings(lendings);
         List<LendingEntity> returnedLendings = lendingService.getAllReturnedLendings(lendings);
         List<LendingEntity> conflictedLendings = lendingService.getAllConflictedLendings(lendings);
+        List<LendingEntity> completedLendings = lendingService.getAllCompletedLendings(lendings);
         model.addAttribute("requestedLendings", requestedLendings);
         model.addAttribute("confirmedLendings", confirmedLendings);
         model.addAttribute("returnedLendings", returnedLendings);
         model.addAttribute("conflictedLendings", conflictedLendings);
+        model.addAttribute("completedLendings", completedLendings);
         return "mycurrentlendings";
     }
 
