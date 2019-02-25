@@ -7,16 +7,44 @@
 </head>
 <body>
 <nav th:replace="nav-fragment"></nav>
+
 <div class="container">
     <div class="m-3"></div>
-    <div class="row justify-content-center">
-        <div th:each="lending : ${lendings}" class="card">
+    <h3>Angefragte Artikel</h3>
+    <div class="row">
+        <span th:if="${requestedLendings.isEmpty()}==true">Aktuell liegen keine angefragten Artikel vor.</span>
+        <div th:each="lending : ${requestedLendings}" class="card">
             <div class="card-header">
                 <span th:text="${lending.product.title}"></span>
             </div>
             <div class="card-body">
-                <div class="card-text">
-
+                <p>Besitzer: </p>
+                <div class="card-text" th:text="${lending.product.owner.username}">
+                    Username
+                </div>
+            </div>
+            <div class="card-footer">
+                <p th:text="${lending.getStart().toString()}"></p>
+                <p>bis</p>
+                <p th:text="${lending.getEnd().toString()}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="m-3"></div>
+    <h3>Bestätigte Artikel</h3>
+    <div class="row">
+        <span th:if="${confirmedLendings.isEmpty()}==true">Aktuell liegen keine bestätigte Artikel vor.</span>
+        <div th:each="lending : ${confirmedLendings}" class="card">
+            <div class="card-header">
+                <span th:text="${lending.product.title}"></span>
+            </div>
+            <div class="card-body">
+                <p>Besitzer: </p>
+                <div class="card-text" th:text="${lending.product.owner.username}">
+                    Username
                 </div>
             </div>
             <div class="card-footer">
@@ -31,6 +59,54 @@
         </div>
     </div>
 </div>
-
+<br>
+<div class="container">
+    <div class="m-3"></div>
+    <h3>Zurückgegebene Artikel</h3>
+    <div class="row">
+        <span th:if="${returnedLendings.isEmpty()}==true">Es liegen noch keine zurückgegebene Artikel vor.</span>
+        <div th:each="lending : ${returnedLendings}" class="card">
+            <div class="card-header">
+                <span th:text="${lending.product.title}"></span>
+            </div>
+            <div class="card-body">
+                <p>Besitzer: </p>
+                <div class="card-text" th:text="${lending.product.owner.username}">
+                    Username
+                </div>
+            </div>
+            <div class="card-footer">
+                <p th:text="${lending.getStart().toString()}"></p>
+                <p>bis</p>
+                <p th:text="${lending.getEnd().toString()}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="m-3"></div>
+    <h3>Konflikte</h3>
+    <div class="row">
+        <span th:if="${conflictedLendings.isEmpty()}==true">Aktuell gibt es keine Konflikte.</span>
+        <div th:each="lending : ${conflictedLendings}" class="card">
+            <div class="card-header">
+                <span th:text="${lending.product.title}"></span>
+            </div>
+            <div class="card-body">
+                <p>Besitzer: </p>
+                <div class="card-text" th:text="${lending.product.owner.username}">
+                    Username
+                </div>
+            </div>
+            <div class="card-footer">
+                <p th:text="${lending.getStart().toString()}"></p>
+                <p>bis</p>
+                <p th:text="${lending.getEnd().toString()}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
 </body>
 </html>
