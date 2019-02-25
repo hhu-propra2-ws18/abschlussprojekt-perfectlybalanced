@@ -40,9 +40,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(3000L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println();
+        }
     }
 
     @Test
@@ -70,9 +73,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(1500L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println();
+        }
     }
 
     @Test
