@@ -300,10 +300,8 @@ public class LendingServiceTest {
 
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
-        ReservationDummy cost
-                = payment_service.findReservation(1L);
-        ReservationDummy surety
-                = payment_service.findReservation(2L);
+        ReservationDummy cost = payment_service.findReservation(1L);
+        ReservationDummy surety = payment_service.findReservation(2L);
         Assert.assertEquals(borrower.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
         //Timedifference is between 5 and 6 Days

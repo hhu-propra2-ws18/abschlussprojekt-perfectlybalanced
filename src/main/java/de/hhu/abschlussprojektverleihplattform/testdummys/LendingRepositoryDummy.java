@@ -14,10 +14,8 @@ public class LendingRepositoryDummy implements ILendingRepository {
     private LendingEntity lendigToUpdate;
     private boolean isUpdated;
 
-    private LendingEntity lendingByProductAndUser;
-
     public LendingRepositoryDummy() {
-        lendings = new ArrayList<LendingEntity>();
+        lendings = new ArrayList<>();
     }
 
     @Override
@@ -35,7 +33,7 @@ public class LendingRepositoryDummy implements ILendingRepository {
 
     @Override
     public List<LendingEntity> getAllLendingsFromProduct(ProductEntity product) {
-        ArrayList<LendingEntity> ret = new ArrayList<LendingEntity>();
+        ArrayList<LendingEntity> ret = new ArrayList<>();
         for (LendingEntity lend : lendings) {
             if (lend.getProduct().getTitle().equals(product.getTitle())) {
                 ret.add(lend);
@@ -59,12 +57,7 @@ public class LendingRepositoryDummy implements ILendingRepository {
         return isUpdated;
     }
 
-    public void setLendingByProductAndUser(LendingEntity lending) {
-        lendingByProductAndUser = lending;
-    }
-
     // Methodes from the Inertface that are not needed for Testing
-
     @Override
     public List<LendingEntity> getAllLendings() {
         return null;
