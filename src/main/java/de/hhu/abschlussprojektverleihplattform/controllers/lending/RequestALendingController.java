@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
+import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
@@ -7,6 +8,7 @@ import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +22,7 @@ public class RequestALendingController {
 
     private final LendingService lendingService;
 
-    static final String requestalendingURL ="/requestalending";
+    public static final String requestalendingURL ="/lendingrequests/sendRequest";
 
     @Autowired
     public RequestALendingController(ProductService productService, LendingService lendingService) {
@@ -28,21 +30,46 @@ public class RequestALendingController {
         this.lendingService = lendingService;
     }
 
-    @GetMapping("/sendLendingRequest")
-    public String gotoSendRequest(){
+
+    @GetMapping("lendingrequests/sendRequest")
+    public String gotoSendRequest(Model model, @RequestParam Long id, Authentication auth){
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+        model.addAttribute("product", product);
+        model.addAttribute("user", user);
         return "sendLendingRequest";
     }
 
-    @PostMapping("/requestalending")
-    public String requestalending(@RequestParam Long id, Authentication auth) throws Exception{
+    @PostMapping(requestalendingURL)
+    public String requestalending(@RequestParam Long id,
+                                  Authentication auth,
+                                  @RequestParam("start") String start,
+                                  @RequestParam("end") String end) throws Exception{
+
+
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
 
-        lendingService.requestLending(user,
+        String startTimeStampString = start + ":00";
+        String endTimeStampString = end + ":00";
+
+        Timestamp startTimestamp
+                = Timestamp.valueOf(startTimeStampString.replace("T", " "));
+        Timestamp endTimestamp
+                = Timestamp.valueOf(endTimeStampString.replace("T", " "));
+
+
+
+        LendingEntity didrequest = lendingService.requestLending(user,
                 product,
-                new Timestamp(System.currentTimeMillis()),
-                new Timestamp(System.currentTimeMillis() + 86400000)
-        );
+                startTimestamp,
+                endTimestamp);
+
+        if(didrequest == null){
+            throw new Exception("cannot make lending request");
+
+        }
+
         return "redirect:/";
     }
 }

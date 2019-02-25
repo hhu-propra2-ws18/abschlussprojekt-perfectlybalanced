@@ -14,12 +14,12 @@ public interface ILendingService {
     List<Timespan> getAvailableTime(ProductEntity product);
 
     // Request a new Lending
-    void requestLending (
+    LendingEntity requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
             Timestamp end
-    )throws Exception;
+    ) throws Exception;
 
     // Accept/Deny a Request
     void acceptLendingRequest(LendingEntity lending) throws Exception;

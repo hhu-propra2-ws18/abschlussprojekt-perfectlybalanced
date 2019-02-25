@@ -3,16 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>LendingRequestRehected</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
 </head>
 <body>
     <nav th:replace="nav-fragment"></nav>
+
     <h1>Leihanfrage Senden</h1>
 
+    <div class="card">
+        <h3 th:text="${product.getTitle()}"></h3>
+    </div>
 
-    <form th:action="@{/requests/accept(id=${lending.getId()})}" method="post">
-        <a><button type="submit" class="btn btn-success">Approve</button></a>
+    <form th:action="@{|/lendingrequests/sendRequest?id=${product.id}|}" method="post">
+
+        <div>
+            <span>Von:</span>
+            <input name="start" type="datetime-local" required >
+        </div>
+
+        <div>
+            <span>Bis:</span>
+            <input name="end" type="datetime-local" required >
+        </div>
+
+    <button type="submit" class="btn btn-primary">Ausleihanfrage Senden</button>
+
     </form>
+
 
 
 </body>

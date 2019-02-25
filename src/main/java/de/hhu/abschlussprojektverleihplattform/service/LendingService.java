@@ -38,12 +38,12 @@ public class LendingService implements ILendingService {
         return list;
     }
 
-    public void requestLending(
+    public LendingEntity requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
             Timestamp end
-    )  throws Exception {
+    ) throws Exception{
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         for (LendingEntity lend : lendings) {
             Timestamp lend_start = lend.getStart();

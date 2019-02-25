@@ -17,4 +17,8 @@ public class Timespan {
         this.end = end;
     }
 
+    public Timespan() {
+
+    }
+
 }

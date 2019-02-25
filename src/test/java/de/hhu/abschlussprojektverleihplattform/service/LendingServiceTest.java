@@ -297,7 +297,7 @@ public class LendingServiceTest {
             logic.acceptLendingRequest(lending);
             Assert.fail();
         }catch (Exception e){
-            System.out.println();
+            System.out.println(e.toString());
         }
 
         Assert.assertFalse(lending_repository.hasBeenUpdated());
