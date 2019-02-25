@@ -78,7 +78,8 @@ public class ProductLendingRequestsControllerTest {
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
-        mockMvc.perform(post("/lendingrequests/reject?id=2")
+        mockMvc.perform(post(
+                ProductLendingRequestsController.lendingRequestsRejectURL +"?id=2")
                 .with(csrf())
                 .with(user(authenticatedUserService.loadUserByUsername(
                         randomUser.getUsername()
@@ -100,7 +101,8 @@ public class ProductLendingRequestsControllerTest {
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
-        mockMvc.perform(post("/lendingrequests/accept?id=2")
+        mockMvc.perform(post(
+                ProductLendingRequestsController.lendingRequestsAcceptURL+"?id=2")
                 .with(csrf())
                 .with(user(authenticatedUserService.loadUserByUsername(
                         randomUser.getUsername()

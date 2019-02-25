@@ -14,25 +14,25 @@ public interface ILendingService {
     List<Timespan> getAvailableTime(ProductEntity product);
 
     // Request a new Lending
-    boolean requestLending(
+    LendingEntity requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
             Timestamp end
-    );
+    ) throws Exception;
 
     // Accept/Deny a Request
-    boolean acceptLendingRequest(LendingEntity lending);
+    void acceptLendingRequest(LendingEntity lending) throws Exception;
 
-    void denyLendingRequest(LendingEntity lending);
+    void denyLendingRequest(LendingEntity lending) throws Exception;
 
     // Return a Product
-    void returnProduct(LendingEntity lending);
+    void returnProduct(LendingEntity lending)throws Exception;
 
     // Decide wether a returned product is in acceptable condition or not
-    boolean acceptReturnedProduct(LendingEntity lending);
+    boolean acceptReturnedProduct(LendingEntity lending) throws Exception;
 
-    void denyReturnedProduct(LendingEntity lending);
+    void denyReturnedProduct(LendingEntity lending) throws Exception;
 
 
     // An admin resolves a conflict and decides who gets the surety

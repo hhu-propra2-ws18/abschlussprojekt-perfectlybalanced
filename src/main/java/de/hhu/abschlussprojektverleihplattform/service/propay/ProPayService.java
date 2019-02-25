@@ -3,6 +3,7 @@ package de.hhu.abschlussprojektverleihplattform.service.propay;
 import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.service.propay.exceptions.ProPayAccountNotExistException;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import java.net.URI;
@@ -69,20 +70,22 @@ public class ProPayService implements IProPayService, IPaymentService {
     }
 
     @Override
-    public boolean accountExists(String username) {
+    public Account accountExists(String username)
+        throws ProPayAccountNotExistException, HttpClientErrorException{
         try {
             RestTemplate restTemplate = new RestTemplate();
 
             String url = baseurl + "account/" + username;
             Account account = restTemplate.getForObject(url, Account.class);
 
-            return true;
+            return account;
         }catch (HttpClientErrorException ex){
             if(ex.getStatusCode().is4xxClientError()){
-                return false;
+                throw new ProPayAccountNotExistException();
+            } else {
+                throw ex;
             }
         }
-        return false;
     }
 
     @Override
@@ -124,7 +127,7 @@ public class ProPayService implements IProPayService, IPaymentService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         String url = baseurl + "account/"+username;
-        ResponseEntity<Account> response = restTemplate.postForEntity(url, request, Account.class);
+        restTemplate.postForEntity(url, request, Account.class);
     }
 
     @Override
@@ -246,10 +249,7 @@ public class ProPayService implements IProPayService, IPaymentService {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-        ResponseEntity<Account> punishedAccount 
-            = restTemplate.postForEntity(
-            URI.create(url),request,Account.class
-        );
+        restTemplate.postForEntity(URI.create(url),request,Account.class);
     }
 
     //------------------- implement methods from Johannes LendingService Interfaces ---------------

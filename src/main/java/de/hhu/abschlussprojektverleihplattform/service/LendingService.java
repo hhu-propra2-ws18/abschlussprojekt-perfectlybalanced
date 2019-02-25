@@ -27,7 +27,10 @@ public class LendingService implements ILendingService {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         List<Timespan> list = new ArrayList<Timespan>();
         for (LendingEntity lend : lendings) {
-            if (lend.getStatus() != Lendingstatus.done && lend.getStatus() != Lendingstatus.denied){
+            if (
+                lend.getStatus() != Lendingstatus.done
+                    && lend.getStatus() != Lendingstatus.denied
+            ) {
                 Timespan timespan = new Timespan(lend.getStart(), lend.getEnd());
                 list.add(timespan);
             }
@@ -35,12 +38,12 @@ public class LendingService implements ILendingService {
         return list;
     }
 
-    public boolean requestLending(
+    public LendingEntity requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
             Timestamp end
-    ) {
+    ) throws Exception{
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         boolean timeIsOK = true;
         for (LendingEntity lend : lendings) {
@@ -69,12 +72,12 @@ public class LendingService implements ILendingService {
             );
             // TODO: check if 0L realy is unused in ProPay
             lendingRepository.addLending(lending);
-            return true;
+            return lending;
         }
-        return false;
+        throw new Exception("time or money are not ok");
     }
 
-    public boolean acceptLendingRequest(LendingEntity lending) {
+    public void acceptLendingRequest(LendingEntity lending) throws Exception{
         Long costID = paymentService.reservateAmount(
             lending.getBorrower(),
             lending.getProduct().getOwner(),
@@ -87,38 +90,51 @@ public class LendingService implements ILendingService {
             lending.getProduct().getSurety()
         );
         if (costID > 0 && suretyID > 0) {
-            if (paymentService.tranferReservatedMoney(
-                lending.getBorrower().getUsername(),
-                costID
-            )
+            if (
+                paymentService.tranferReservatedMoney(
+                    lending.getBorrower().getUsername(),
+                    costID
+                )
             ) {
                 lending.setStatus(Lendingstatus.confirmt);
                 lending.setCostReservationID(costID);
                 lending.setSuretyReservationID(suretyID);
                 lendingRepository.update(lending);
-                return true;
+                return;
             }
         }
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-        return false;
+        throw new Exception("could not accept lending request");
     }
 
-    public void denyLendingRequest(LendingEntity lending) {
+    public void denyLendingRequest(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.requested)){
+            throw new Exception("lending was not requested, cannot reject it.");
+        }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
     }
 
-    public void returnProduct(LendingEntity lending) {
+    public void returnProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.confirmt)){
+            throw new Exception("the lending is not confirmed, cannot be returned.");
+        }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
     }
 
-    public boolean acceptReturnedProduct(LendingEntity lending) {
+    public boolean acceptReturnedProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.returned)){
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
+        }
+
         if (paymentService.returnReservatedMoney(
                 lending.getBorrower().getUsername(),
                 lending.getSuretyReservationID()
-        )
+            )
         ) {
             lending.setStatus(Lendingstatus.done);
             lendingRepository.update(lending);
@@ -127,34 +143,44 @@ public class LendingService implements ILendingService {
         return false;
     }
 
-    public void denyReturnedProduct(LendingEntity lending) {
+    public void denyReturnedProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.returned)){
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
+        }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
     }
 
     public boolean ownerReceivesSuretyAfterConflict(LendingEntity lending) {
-        if (paymentService.tranferReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )) {
-            lending.setStatus(Lendingstatus.done);
-            lendingRepository.update(lending);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending) {
-        if (paymentService.returnReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )
+        if (
+            paymentService.tranferReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+            )
         ) {
             lending.setStatus(Lendingstatus.done);
             lendingRepository.update(lending);
             return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    public boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending) {
+        if (
+            paymentService.returnReservatedMoney(
+                lending.getBorrower().getUsername(),
+                lending.getSuretyReservationID()
+            )
+        ) {
+            lending.setStatus(Lendingstatus.done);
+            lendingRepository.update(lending);
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {

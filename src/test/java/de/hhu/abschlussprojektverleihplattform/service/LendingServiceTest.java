@@ -40,9 +40,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(3000L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 
     @Test
@@ -70,9 +73,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(1500L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 
     @Test
@@ -100,9 +106,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(1800L);
         Timestamp end2 = new Timestamp(1900L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 
     @Test
@@ -130,9 +139,12 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(3500L);
 
-        boolean result = logic.requestLending(actingUser, product, start2, end2);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start2, end2);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 
     @Test
@@ -148,13 +160,16 @@ public class LendingServiceTest {
         Timestamp start = new Timestamp(800L);
         Timestamp end = new Timestamp(3500L);
 
-        boolean result = logic.requestLending(actingUser, product, start, end);
-
-        Assert.assertFalse(result);
+        try{
+            logic.requestLending(actingUser, product, start, end);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
     }
 
     @Test
-    public void reservationSuccess1() {
+    public void reservationSuccess1() throws Exception{
         // reservated Time within requested Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
@@ -166,9 +181,8 @@ public class LendingServiceTest {
         Timestamp start = new Timestamp(1557543600000L);
         Timestamp end = new Timestamp(1557900000000L);
 
-        boolean result = logic.requestLending(actingUser, product, start, end);
+        logic.requestLending(actingUser, product, start, end);
 
-        Assert.assertTrue(result);
         LendingEntity created_lending = lending_repository.getFirst();
         Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
         Assert.assertTrue(created_lending.getStart().equals(start));
@@ -180,7 +194,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void reservationSuccess2() {
+    public void reservationSuccess2() throws Exception{
         // reservated Time within requested Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
@@ -192,9 +206,8 @@ public class LendingServiceTest {
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
 
-        boolean result = logic.requestLending(actingUser, product, start, end);
+        logic.requestLending(actingUser, product, start, end);
 
-        Assert.assertTrue(result);
         LendingEntity created_lending = lending_repository.getFirst();
         Assert.assertEquals(Lendingstatus.requested, created_lending.getStatus());
         Assert.assertTrue(created_lending.getStart().equals(start));
@@ -208,7 +221,7 @@ public class LendingServiceTest {
     // Test for decideLendingRequest
 
     @Test
-    public void requestGetsDenied() {
+    public void requestGetsDenied() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -259,9 +272,13 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, false, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLendingRequest(lending);
+        try{
+            logic.acceptLendingRequest(lending);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
 
-        Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
     }
@@ -288,15 +305,17 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, false, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLendingRequest(lending);
+        try {
+            logic.acceptLendingRequest(lending);
+            Assert.fail();
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
 
-        Assert.assertFalse(result);
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
-        ReservationDummy cost
-                = payment_service.findReservation(1L);
-        ReservationDummy surety
-                = payment_service.findReservation(2L);
+        ReservationDummy cost = payment_service.findReservation(1L);
+        ReservationDummy surety = payment_service.findReservation(2L);
         Assert.assertEquals(borrower.getUsername(), cost.getFrom().getUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getTo().getUsername());
         //Timedifference is between 5 and 6 Days
@@ -309,7 +328,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void requestGetsAccepted1() {
+    public void requestGetsAccepted1() throws Exception{
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -330,9 +349,9 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLendingRequest(lending);
 
-        Assert.assertTrue(result);
+        logic.acceptLendingRequest(lending);
+
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
@@ -355,7 +374,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void requestGetsAccepted2() {
+    public void requestGetsAccepted2() throws Exception{
         Timestamp start = new Timestamp(1546804200000L);
         Timestamp end = new Timestamp(1547148600000L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -376,9 +395,8 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy(true, true, true, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
-        boolean result = logic.acceptLendingRequest(lending);
+        logic.acceptLendingRequest(lending);
 
-        Assert.assertTrue(result);
         Assert.assertTrue(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
@@ -403,7 +421,7 @@ public class LendingServiceTest {
     // Test for returnProduct
 
     @Test
-    public void productGetsReturned() {
+    public void productGetsReturned() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -411,7 +429,7 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-            Lendingstatus.requested,
+            Lendingstatus.confirmt,
             start,
             end,
             borrower,
@@ -432,7 +450,7 @@ public class LendingServiceTest {
     // Test for denyReturnedProduct
 
     @Test
-    public void productGetsReturnedInBadCondition() {
+    public void productGetsReturnedInBadCondition() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -461,7 +479,7 @@ public class LendingServiceTest {
     // Tests for acceptReturnedProduct
 
     @Test
-    public void productGetsReturnedInGoodCondition() {
+    public void productGetsReturnedInGoodCondition() throws Exception{
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -493,7 +511,7 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void returnReservationFails() {
+    public void returnReservationFails() throws Exception {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();

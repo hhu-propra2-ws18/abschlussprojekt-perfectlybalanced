@@ -2,6 +2,8 @@ package de.hhu.abschlussprojektverleihplattform.model;
 
 import java.sql.Timestamp;
 import javax.persistence.*;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 
 @Data
@@ -12,7 +14,9 @@ public class LendingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Lendingstatus status;
+    @SuppressFBWarnings(justification="generated code")
     private Timestamp start;
+    @SuppressFBWarnings(justification="generated code")
     private Timestamp end;
     @OneToOne
     private UserEntity borrower;

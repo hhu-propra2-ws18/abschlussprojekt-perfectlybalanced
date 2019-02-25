@@ -74,16 +74,20 @@ public class RequestALendingControllerTest {
                 productEntity.getId()))
                 .thenReturn(productEntity);
 
+        System.out.println(productEntity.toString());
+
         mockMvc.perform(
                 post(
                         RequestALendingController
-                                .requestalendingURL+"?id="+productEntity.getId()
-                ).with(
-                        csrf()
-                ).with(
-                        user(authenticatedUserService
-                                .loadUserByUsername(user_wannabe_borrower.getUsername()))
-                )
+                                .requestalendingURL+"?id="+productEntity.getId())
+                        .param("start", "2019-02-25T15:15")
+                        .param("end", "2019-02-26T15:15")
+                        .with(csrf())
+                        .with(
+                                user(authenticatedUserService
+                                        .loadUserByUsername(user_wannabe_borrower.getUsername())))
+
+
         )
                 .andExpect(status().is3xxRedirection());
 
