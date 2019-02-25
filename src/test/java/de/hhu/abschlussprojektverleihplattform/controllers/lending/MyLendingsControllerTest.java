@@ -75,21 +75,21 @@ public class MyLendingsControllerTest {
         proPayService.changeUserBalanceBy(user_wannabe_borrower.getUsername(),100000);
 
         //user2 wants to lend
-        boolean requestIsOk = lendingService.requestLending(
-            user_wannabe_borrower,
-            productEntity,
-            timestamps[0],
-            timestamps[1]
-        );
-
-        System.out.println("request is ok"+requestIsOk);
+        try {
+            lendingService.requestLending(
+                user_wannabe_borrower,
+                productEntity,
+                timestamps[0],
+                timestamps[1]
+            );
+        } catch (Exception e) {
+            Assert.assertTrue(false);
+        }
 
         //lending request accepted
         lendingService.acceptLendingRequest(
             lendingService.getAllRequestsForUser(user_owner).get(0)
         );
-
-        Assert.assertTrue(requestIsOk);
 
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)
