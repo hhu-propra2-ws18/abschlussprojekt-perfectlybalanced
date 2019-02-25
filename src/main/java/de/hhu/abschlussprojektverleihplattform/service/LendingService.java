@@ -11,24 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//NOTE: Die meisten Methoden geben einen boolean-wert zurueck.
-//      ist dieser false wurde die Operation nicht(erfolgreich) ausgefuehrt,
-//      und auf der Website muss eine entsprechende Fehlermeldung angezeigt werden.
 
 @Service
 public class LendingService implements ILendingService {
 
-    private ILendingRepository lending_repository;
-    private IPaymentService payment_service;
+    private ILendingRepository lendingRepository;
+    private IPaymentService paymentService;
 
-    public LendingService(ILendingRepository lending_repository, IPaymentService payment_service) {
-        this.lending_repository = lending_repository;
-        this.payment_service = payment_service;
+    public LendingService(ILendingRepository lendingRepository, IPaymentService paymentService) {
+        this.lendingRepository = lendingRepository;
+        this.paymentService = paymentService;
     }
 
-    // Verfuegbaren Zeitraum pruefen
-    public List<Timespan> getTime(ProductEntity product) {
-        List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
+    public List<Timespan> getAvailableTime(ProductEntity product) {
+        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         List<Timespan> list = new ArrayList<Timespan>();
         for (LendingEntity lend : lendings) {
             if (lend.getStatus() != Lendingstatus.done && lend.getStatus() != Lendingstatus.denied){
@@ -39,14 +35,13 @@ public class LendingService implements ILendingService {
         return list;
     }
 
-    // Anfrage einer Buchung eintragen
     public boolean requestLending(
             UserEntity actingUser,
             ProductEntity product,
             Timestamp start,
             Timestamp end
     ) {
-        List<LendingEntity> lendings = lending_repository.getAllLendingsFromProduct(product);
+        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         boolean timeIsOK = true;
         for (LendingEntity lend : lendings) {
             Timestamp lend_start = lend.getStart();
@@ -59,8 +54,9 @@ public class LendingService implements ILendingService {
                 timeIsOK = false;
             }
         }
-        int totalMoney = product.getSurety() + product.getCost() * daysBetween(start, end);
-        boolean moneyIsOK = payment_service.userHasAmount(actingUser, totalMoney);
+        int totalMoney = product.getSurety()
+            + product.getCost() * daysBetweenTwoTimestamps(start, end);
+        boolean moneyIsOK = paymentService.userHasAmount(actingUser, totalMoney);
         if (timeIsOK && moneyIsOK) {
             LendingEntity lending = new LendingEntity(
                 Lendingstatus.requested,
@@ -72,27 +68,26 @@ public class LendingService implements ILendingService {
                 0L
             );
             // TODO: check if 0L realy is unused in ProPay
-            lending_repository.addLending(lending);
+            lendingRepository.addLending(lending);
             return true;
         }
         return false;
     }
 
-    // Anfrage einer Buchung beantworten
     public boolean acceptLendingRequest(LendingEntity lending) {
-        Long costID = payment_service.reservateAmount(
+        Long costID = paymentService.reservateAmount(
             lending.getBorrower(),
             lending.getProduct().getOwner(),
             lending.getProduct().getCost()
-                * daysBetween(lending.getStart(), lending.getEnd())
+                * daysBetweenTwoTimestamps(lending.getStart(), lending.getEnd())
         );
-        Long suretyID = payment_service.reservateAmount(
+        Long suretyID = paymentService.reservateAmount(
             lending.getBorrower(),
             lending.getProduct().getOwner(),
             lending.getProduct().getSurety()
         );
         if (costID > 0 && suretyID > 0) {
-            if (payment_service.tranferReservatedMoney(
+            if (paymentService.tranferReservatedMoney(
                 lending.getBorrower().getUsername(),
                 costID
             )
@@ -100,107 +95,94 @@ public class LendingService implements ILendingService {
                 lending.setStatus(Lendingstatus.confirmt);
                 lending.setCostReservationID(costID);
                 lending.setSuretyReservationID(suretyID);
-                lending_repository.update(lending);
+                lendingRepository.update(lending);
                 return true;
             }
         }
-        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
-        payment_service.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
+        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
+        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
         return false;
     }
 
-    // Anfrage einer Buchung beantworten
     public void denyLendingRequest(LendingEntity lending) {
         lending.setStatus(Lendingstatus.denied);
-        lending_repository.update(lending);
+        lendingRepository.update(lending);
     }
 
-    // Artikel zurueckgeben
     public void returnProduct(LendingEntity lending) {
         lending.setStatus(Lendingstatus.returned);
-        lending_repository.update(lending);
+        lendingRepository.update(lending);
     }
 
-    // Angeben dass ein Artikel in gutem Zustand zurueckgegeben wurde
     public boolean acceptReturnedProduct(LendingEntity lending) {
-        if (payment_service.returnReservatedMoney(
+        if (paymentService.returnReservatedMoney(
                 lending.getBorrower().getUsername(),
                 lending.getSuretyReservationID()
         )
         ) {
             lending.setStatus(Lendingstatus.done);
-            lending_repository.update(lending);
+            lendingRepository.update(lending);
             return true;
         }
         return false;
     }
 
-    // Angeben dass ein Artikel in schlechtem Zustand zurueckgegeben wurde
-    public void denyRetunedProduct(LendingEntity lending) {
+    public void denyReturnedProduct(LendingEntity lending) {
         lending.setStatus(Lendingstatus.conflict);
-        lending_repository.update(lending);
+        lendingRepository.update(lending);
     }
 
-    // Konflikt vom Admin loesen
-    public boolean ownerRecivesSurety(LendingEntity lending) {
-        if (payment_service.tranferReservatedMoney(
+    public boolean ownerReceivesSuretyAfterConflict(LendingEntity lending) {
+        if (paymentService.tranferReservatedMoney(
             lending.getBorrower().getUsername(),
             lending.getSuretyReservationID()
         )) {
             lending.setStatus(Lendingstatus.done);
-            lending_repository.update(lending);
+            lendingRepository.update(lending);
             return true;
         }
         return false;
     }
 
-    // Konflikt vom Admin loesen
-    public boolean borrowerRecivesSurety(LendingEntity lending) {
-        if (payment_service.returnReservatedMoney(
+    public boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending) {
+        if (paymentService.returnReservatedMoney(
             lending.getBorrower().getUsername(),
             lending.getSuretyReservationID()
         )
         ) {
             lending.setStatus(Lendingstatus.done);
-            lending_repository.update(lending);
+            lendingRepository.update(lending);
             return true;
         }
         return false;
     }
-
-    // Methoden um die Daten fuer die Views anzuzeigen
-
-    // return all Lendings, that are owned by the user and have the status requested
+    
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
-        return lending_repository.getAllLendingRequestsForProductOwner(user);
+        return lendingRepository.getAllLendingRequestsForProductOwner(user);
     }
 
-    // return all Lendings, that are owned by the user
     public List<LendingEntity> getAllLendingsFromUser(UserEntity user) {
-        return lending_repository.getAllLendingsFromUser(user);
+        return lendingRepository.getAllLendingsFromUser(user);
     }
 
-    // return all Lendings, that are borrowed by the user
     public List<LendingEntity> getAllLendingsForUser(UserEntity user) {
-        return lending_repository.getAllLendingsForUser(user);
+        return lendingRepository.getAllLendingsForUser(user);
     }
 
-    // return all Lendings, that are owned by the user and have the status returned
     public List<LendingEntity> getReturnedLendingFromUser(UserEntity user) {
-        return lending_repository.getReturnedLendingFromUser(user);
+        return lendingRepository.getReturnedLendingFromUser(user);
     }
 
     public List<LendingEntity> getAllLendings() {
-        return lending_repository.getAllLendings();
+        return lendingRepository.getAllLendings();
     }
 
-    // return all Lendings, that have the status conflict
     public List<LendingEntity> getAllConflicts() {
-        return lending_repository.getAllConflicts();
+        return lendingRepository.getAllConflicts();
     }
 
     public LendingEntity getLendingById(Long id) throws Exception {
-        return lending_repository.getLendingById(id);
+        return lendingRepository.getLendingById(id);
     }
 
     private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status){
@@ -240,11 +222,7 @@ public class LendingService implements ILendingService {
                 .collect(Collectors.toList());
     }
 
-    // private Methode die die Differrenz in Tagen zwischen zwei Timestamps
-    // berechnet, kann ggf ausgelagert werden
-    // kann hier nicht als private makiert werden, da sie sonst
-    // nich getestet werden kann
-    protected int daysBetween(Timestamp start, Timestamp end) {
+    protected int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);

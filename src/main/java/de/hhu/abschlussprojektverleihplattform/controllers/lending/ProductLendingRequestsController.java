@@ -84,7 +84,7 @@ public class ProductLendingRequestsController {
         UserEntity user = (UserEntity) auth.getPrincipal();
         UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
-        lendingService.denyRetunedProduct(requestedLending);
+        lendingService.denyReturnedProduct(requestedLending);
         return "redirect:/lendingrequests";
     }
 
@@ -102,7 +102,6 @@ public class ProductLendingRequestsController {
     }
 
     // TODO:
-    // PostMapping accept/deny request
     // Get/Post Mappings to create a request
     // GetMapping to show all Products the user has borrowed
     // (Get/)Post Mappings to return Products
