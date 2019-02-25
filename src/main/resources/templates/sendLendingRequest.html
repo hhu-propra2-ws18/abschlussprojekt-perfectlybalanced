@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>LendingRequestRehected</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Anfrage auf Ausleihe</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
 </head>
+
 <body>
+    <!--
     <nav th:replace="nav-fragment"></nav>
 
     <h1>Leihanfrage Senden</h1>
@@ -32,8 +36,39 @@
 
    <!-- <form th:action="@{/requests/accept(id=${lending.getId()})}" method="post">
         <a><button type="submit" class="btn btn-success">Approve</button></a>
-    </form>-->
+    </form> -->
+    <nav th:replace="nav-fragment"></nav>
 
+    <div class="container mx-auto">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form th:action="@{|/lendingrequests/sendRequest?id=${product.id}|}" method="post">
+                    <div class="form-group">
+                        <label for="start">Von:</label>
+                        <input type="datetime-local" class="form-control" required th:field="${timespan.start}" th:type="datetime-local"
+                            id="start" name="start">
+                        <small id="startHelp" class="form-text text-muted">Ab wann möchtest du dein Item ausleihen?</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="end">Bis:</label>
+                        <input type="datetime-local" class="form-control" required th:field="${timespan.end}" th:type="datetime-local"
+                            id="end" name="end">
+                        <small id="endHelp" class="form-text text-muted">Wann möchtest du dein Item zurückgeben?</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Anfrage senden</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
