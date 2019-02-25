@@ -49,7 +49,7 @@ public class ProductLendingRequestsController {
     public String handleRejection(
         @RequestParam Long id,
         Authentication auth
-    ) {
+    ) throws Exception {
         auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
@@ -61,7 +61,7 @@ public class ProductLendingRequestsController {
     public String handleAccept(
         @RequestParam Long id,
         Authentication auth
-    ) {
+    ) throws Exception {
         auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
@@ -73,7 +73,7 @@ public class ProductLendingRequestsController {
     public String handleGoodReturn(
         @RequestParam Long id,
         Authentication auth
-    ) {
+    ) throws Exception {
         auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
@@ -85,7 +85,7 @@ public class ProductLendingRequestsController {
     public String handleBadReturn(
         @RequestParam Long id,
         Authentication auth
-    ) {
+    ) throws Exception {
         auth.getPrincipal();
         userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
