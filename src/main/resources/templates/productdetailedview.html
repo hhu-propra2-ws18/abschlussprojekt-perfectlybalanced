@@ -7,6 +7,7 @@
 </head>
 <body>
     <nav th:replace="nav-fragment"></nav>
+
     <div class="container">
         <div class="m-3"></div>
         <div class="row">
@@ -39,22 +40,13 @@
                         <p >Belegter Zeitraum</p>
                     </div>
                     <div class="card-body">
-                        <span th:text="${#dates.dayOfWeekName(timeSpan.start)}">TimeStampStart</span>
-                        <span>, der </span>
-                        <span th:text="${#dates.day(timeSpan.start)}">TimeStampStart</span>
-                        <span>.</span>
-                        <span th:text="${#dates.month(timeSpan.start)}">TimeStampStart</span>
-                        <span>.</span>
-                        <span th:text="${#dates.year(timeSpan.start)}">TimeStampStart</span>
-                        <br>
-                        <span>bis</span>
-                        <br>
-                        <span th:text="${#dates.dayOfWeekName(timeSpan.end)}">TimeStampStart</span>
-                        <span>, der </span>
-                        <span th:text="${#dates.day(timeSpan.end)}">TimeStampStart</span>
-                        <span>.</span>
-                        <span th:text="${#dates.month(timeSpan.end)}">TimeStampStart</span>
-                        <span>.</span>
+                        <span th:text="${#dates.dayOfWeekName(timeSpan.start)}">TimeStampStart</span>, der
+                        <span th:text="${#dates.day(timeSpan.start)}">TimeStampStart</span>.
+                        <span th:text="${#dates.month(timeSpan.start)}">TimeStampStart</span>.
+                        <span th:text="${#dates.year(timeSpan.start)}">TimeStampStart</span> bis
+                        <span th:text="${#dates.dayOfWeekName(timeSpan.end)}">TimeStampStart</span>, der
+                        <span th:text="${#dates.day(timeSpan.end)}">TimeStampStart</span>.
+                        <span th:text="${#dates.month(timeSpan.end)}">TimeStampStart</span>.
                         <span th:text="${#dates.year(timeSpan.end)}">TimeStampStart</span>
                     </div>
                 </div>

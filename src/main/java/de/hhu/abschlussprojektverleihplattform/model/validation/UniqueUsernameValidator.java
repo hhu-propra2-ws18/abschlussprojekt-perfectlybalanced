@@ -22,9 +22,13 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
-        UserEntity user = userService.findByUsername(username);
-        return (username != null)
-                && !username.contains(" ")
-                && (user == null);
+        try {
+            UserEntity user = userService.findByUsername(username);
+        }catch (Exception e){
+            //could not find user with that username,
+            // so it is a valid username to use
+            return username!=null && !username.contains(" ");
+        }
+        return false;
     }
 }

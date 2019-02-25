@@ -6,14 +6,14 @@ import org.junit.Test;
 public class LendingStatusTest {
 
     @Test
-    public void test_to_ordinal(){
+    public void testToOrdinal(){
 
         Lendingstatus s1 = Lendingstatus.requested;
         Assert.assertEquals(0,s1.ordinal());
     }
 
     @Test
-    public void test_from_ordinal(){
+    public void testFromOrdinal(){
 
         Lendingstatus s2 = Lendingstatus.values()[0];
         Assert.assertEquals(0,s2.ordinal());
