@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
+import de.hhu.abschlussprojektverleihplattform.service.propay.exceptions.ProPayAccountNotExistException;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 
@@ -9,7 +10,7 @@ public interface IProPayService {
 
     long getBalance(String username) throws Exception;
 
-    boolean accountExists(String username);
+    Account accountExists(String username) throws ProPayAccountNotExistException;
 
     boolean makePayment(String sourceAccount, String targetAccount, long amount);
 
