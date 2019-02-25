@@ -1,12 +1,10 @@
 package de.hhu.abschlussprojektverleihplattform.testdummys;
 
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 
 import java.util.ArrayList;
 
-//public class PaymentServiceDummy implements IPaymentService {
-public class PaymentServiceDummy {
+public class PaymentServiceDummy implements IPaymentService {
 
     private ArrayList<ReservationDummy> payments;
     private Long id;
@@ -15,37 +13,51 @@ public class PaymentServiceDummy {
     private Long lastCalledId;
     private boolean lastWasTransfer;
 
-    private boolean usersHaveMoney;
-    private boolean reservationsAreSuccessfull;
-    private boolean transfersAreSuccessfull;
-    private boolean returnsAreSuccessfull;
+    private Long userCurrentBalance;
+    private Exception userCurrentBalanceFailed;
+    private boolean userCurrentBalanceThrowsException;
 
-    public PaymentServiceDummy(
-            boolean usersHaveMoney,
-            boolean reservationsAreSuccessfull,
-            boolean transfersAreSuccessfull,
-            boolean returnsAreSuccessfull
-    ) {
+    private Exception reservationFailed;
+    private boolean reservationThrowsException;
+
+    private Exception returnFailed;
+    private boolean returnThrowsException;
+
+    private Exception transferFailed;
+    private boolean transferThrowsException;
+
+    public PaymentServiceDummy() {
         payments = new ArrayList<ReservationDummy>();
         id = 1L;
-        this.usersHaveMoney = usersHaveMoney;
-        this.reservationsAreSuccessfull = reservationsAreSuccessfull;
-        this.transfersAreSuccessfull = transfersAreSuccessfull;
-        this.returnsAreSuccessfull = returnsAreSuccessfull;
         lastCalledUsername = "";
         lastCalledId = 0L;
         lastWasTransfer = false;
     }
 
-//    @Override
-    public boolean userHasAmount(UserEntity user, int amount) {
-        return usersHaveMoney;
+    public void configurateUsersCurrentBalance(Long userCurrentBalance, Exception userCurrentBalanceFailed, boolean userCurrentBalanceThrowsException) {
+        this.userCurrentBalance = userCurrentBalance;
+        this.userCurrentBalanceFailed = userCurrentBalanceFailed;
+        this.userCurrentBalanceThrowsException = userCurrentBalanceThrowsException;
     }
 
-//    @Override
-    public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
-        if (!reservationsAreSuccessfull) {
-            return 0L;
+    @Override
+    public Long usersCurrentBalance(String username) throws Exception {
+        if(userCurrentBalanceThrowsException) {
+            throw userCurrentBalanceFailed;
+        } else {
+            return userCurrentBalance;
+        }
+    }
+
+    public void configureReservateAmount(Exception reservationFailed, boolean reservationThrowsException) {
+        this.reservationFailed = reservationFailed;
+        this.reservationThrowsException = reservationThrowsException;
+    }
+
+    @Override
+    public Long reservateAmount(String payingUser, String recivingUser, int amount) throws Exception {
+        if (reservationThrowsException) {
+            throw reservationFailed;
         }
         ReservationDummy reservation = new ReservationDummy(payingUser, recivingUser, amount, id);
         payments.add(reservation);
@@ -53,26 +65,35 @@ public class PaymentServiceDummy {
         return reservation.getId();
     }
 
-//    @Override
-    public boolean tranferReservatedMoney(String username, Long id) {
-        if (findReservation(id) != null) {
-            findReservation(id).setStatus(PaymentStatus.payed);
-        }
+    public void configureTransfer(Exception transferFailed, boolean transferThrowsException) {
+        this.transferFailed = transferFailed;
+        this.transferThrowsException = transferThrowsException;
+    }
+
+    @Override
+    public void tranferReservatedMoney(String username, Long id) throws Exception {
         lastCalledId = id;
         lastCalledUsername = username;
         lastWasTransfer = true;
-        return transfersAreSuccessfull;
+        if(transferThrowsException) {
+            throw transferFailed;
+        }
     }
 
-//    @Override
-    public boolean returnReservatedMoney(String username, Long id) {
-        if (findReservation(id) != null) {
-            findReservation(id).setStatus(PaymentStatus.returned);
-        }
+    public  void configureReturn(Exception returnFailed, boolean returnThrowsException) {
+        this.returnFailed = returnFailed;
+        this.returnThrowsException = returnThrowsException;
+
+    }
+
+    @Override
+    public void returnReservatedMoney(String username, Long id) throws Exception {
         lastCalledId = id;
         lastCalledUsername = username;
         lastWasTransfer = false;
-        return returnsAreSuccessfull;
+        if(returnThrowsException) {
+            throw returnFailed;
+        }
     }
 
     public Long getLastId() {

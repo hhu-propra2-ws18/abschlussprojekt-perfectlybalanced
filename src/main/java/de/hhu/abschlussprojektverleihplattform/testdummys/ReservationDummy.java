@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.testdummys;
 
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import lombok.Data;
 
 @Data
@@ -8,14 +7,14 @@ public class ReservationDummy {
 
     private Long id;
     private int amount;
-    private UserEntity from;
-    private UserEntity to;
+    private String fromUsername;
+    private String toUsername;
     private PaymentStatus status;
 
-    public ReservationDummy(UserEntity payer, UserEntity reciver, int amount, Long id) {
+    public ReservationDummy(String payer, String reciver, int amount, Long id) {
         this.amount = amount;
-        this.from = payer;
-        this.to = reciver;
+        this.fromUsername = payer;
+        this.toUsername = reciver;
         this.status = PaymentStatus.reservated;
         this.id = id;
     }
