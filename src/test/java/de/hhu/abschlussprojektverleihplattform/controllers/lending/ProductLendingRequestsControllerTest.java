@@ -1,14 +1,10 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
-import de.hhu.abschlussprojektverleihplattform.controllers.lending.ProductLendingRequestsController;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
-import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
-import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +41,6 @@ public class ProductLendingRequestsControllerTest {
     @Autowired
     private UserService userService;
 
-
     @Autowired
     private ProductService productService;
 
@@ -59,18 +54,14 @@ public class ProductLendingRequestsControllerTest {
     public void testcontrolleristhere() throws Exception {
         mockMvc.perform(get("/lendingrequests"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Leih Anfragen")));
+                .andExpect(content().string(containsString("Leihanfragen")));
     }
-
 
     @Test
     @WithUserDetails("sarah")
     public void rejectRequest() throws Exception {
-        LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
-        lending.setStatus(Lendingstatus.requested);
-
-        mockMvc.perform(post("/lendingrequests/reject?id=2")
+        mockMvc.perform(post(
+                ProductLendingRequestsController.lendingRequestsRejectURL +"?id=2")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(ProductLendingRequestsController.class));
@@ -82,11 +73,8 @@ public class ProductLendingRequestsControllerTest {
     @Test
     @WithUserDetails("sarah")
     public void acceptRequest() throws Exception {
-        LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
-        lending.setStatus(Lendingstatus.requested);
-
-        mockMvc.perform(post("/lendingrequests/accept?id=2")
+        mockMvc.perform(post(
+                ProductLendingRequestsController.lendingRequestsAcceptURL+"?id=2")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(ProductLendingRequestsController.class));
@@ -94,5 +82,4 @@ public class ProductLendingRequestsControllerTest {
         verify(lendingService).getLendingById(2L);
         verify(lendingService).acceptLendingRequest(null);
     }
-
 }

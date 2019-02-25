@@ -5,7 +5,6 @@ import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
-import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,23 +21,24 @@ import java.util.List;
 @Controller
 public class ProductLendingRequestsController {
 
-    private final ProductService productService;
     private final LendingService lendingService;
     private final UserService userService;
 
+    private static final String lendingRequestsURL="/lendingrequests";
+    static final String lendingRequestsAcceptURL=lendingRequestsURL+"/accept";
+    static final String lendingRequestsRejectURL =lendingRequestsURL+"/reject";
+
     @Autowired
     public ProductLendingRequestsController(
-        ProductService productService,
         LendingService lendingService,
         UserService userService
     ) {
-        this.productService = productService;
         this.lendingService = lendingService;
         this.userService = userService;
     }
 
     @GetMapping("/lendingrequests")
-    public String getLendingRequestsOverview(Model model, Authentication auth) throws Exception {
+    public String getLendingRequestsOverview(Model model, Authentication auth) {
         UserEntity user = (UserEntity) auth.getPrincipal();
         List<LendingEntity> lendings = lendingService.getAllRequestsForUser(user);
         List<LendingEntity> oldLendings = lendingService.getAllLendings();
@@ -55,12 +55,8 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/reject")
     public String handleRejection(
-        Model model,
-        @RequestParam Long id,
-        Authentication auth
+        @RequestParam Long id
     ) throws Exception {
-        UserEntity user = (UserEntity) auth.getPrincipal();
-        UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.denyLendingRequest(requestedLending);
         return "redirect:/lendingrequests";
@@ -68,38 +64,26 @@ public class ProductLendingRequestsController {
 
     @PostMapping("/lendingrequests/accept")
     public String handleAccept(
-        Model model,
-        @RequestParam Long id,
-        Authentication auth
+        @RequestParam Long id
     ) throws Exception {
-        UserEntity user = (UserEntity) auth.getPrincipal();
-        UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptLendingRequest(requestedLending);
         return "redirect:/lendingrequests";
     }
 
     @PostMapping("/lendingrequests/rejectReturn")
-    public String handleGoodReturn(
-        Model model,
-        @RequestParam Long id,
-        Authentication auth
+    public String handleBadReturn(
+        @RequestParam Long id
     ) throws Exception {
-        UserEntity user = (UserEntity) auth.getPrincipal();
-        UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
-        lendingService.denyRetunedProduct(requestedLending);
+        lendingService.denyReturnedProduct(requestedLending);
         return "redirect:/lendingrequests";
     }
 
     @PostMapping("/lendingrequests/acceptReturn")
-    public String handleBadReturn(
-        Model model,
-        @RequestParam Long id,
-        Authentication auth
+    public String handleGoodReturn(
+        @RequestParam Long id
     ) throws Exception {
-        UserEntity user = (UserEntity) auth.getPrincipal();
-        UserEntity loadedUser = userService.findByUsername("sarah");
         LendingEntity requestedLending = lendingService.getLendingById(id);
         lendingService.acceptReturnedProduct(requestedLending);
         return "redirect:/lendingrequests";
@@ -107,7 +91,6 @@ public class ProductLendingRequestsController {
 
 
     // TODO:
-    // PostMapping accept/deny request
     // Get/Post Mappings to create a request
     // GetMapping to show all Products the user has borrowed
     // (Get/)Post Mappings to return Products

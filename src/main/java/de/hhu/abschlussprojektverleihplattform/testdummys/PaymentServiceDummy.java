@@ -2,13 +2,14 @@ package de.hhu.abschlussprojektverleihplattform.testdummys;
 
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.ArrayList;
 
 public class PaymentServiceDummy implements IPaymentService {
 
     private ArrayList<ReservationDummy> payments;
-    private Long id;
+    private Long reservationId;
 
     private String lastCalledUsername;
     private Long lastCalledId;
@@ -26,7 +27,7 @@ public class PaymentServiceDummy implements IPaymentService {
             boolean returnsAreSuccessfull
     ) {
         payments = new ArrayList<ReservationDummy>();
-        id = 1L;
+        reservationId = 1L;
         this.usersHaveMoney = usersHaveMoney;
         this.reservationsAreSuccessfull = reservationsAreSuccessfull;
         this.transfersAreSuccessfull = transfersAreSuccessfull;
@@ -41,14 +42,16 @@ public class PaymentServiceDummy implements IPaymentService {
         return usersHaveMoney;
     }
 
+    @SuppressFBWarnings(justification="code needs serious refactoring")
     @Override
-    public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
+    public Long reservateAmount(UserEntity payingUser, UserEntity receivingUser, int amount) {
         if (!reservationsAreSuccessfull) {
             return 0L;
         }
-        ReservationDummy reservation = new ReservationDummy(payingUser, recivingUser, amount, id);
+        ReservationDummy reservation
+            = new ReservationDummy(payingUser, receivingUser, amount, reservationId);
         payments.add(reservation);
-        id++;
+        reservationId++;
         return reservation.getId();
     }
 

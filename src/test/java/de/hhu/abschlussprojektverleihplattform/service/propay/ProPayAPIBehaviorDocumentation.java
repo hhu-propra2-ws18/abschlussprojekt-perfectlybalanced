@@ -18,7 +18,7 @@ public class ProPayAPIBehaviorDocumentation {
     private ProPayService proPayService;
 
     @Test
-    public void test_that_system_rejects_decrease_of_account_balance() throws Exception{
+    public void testThatSystemRejectsDecreaseOfAccountBalance() throws Exception{
         String user1 = make_new_user();
         proPayService.createAccountIfNotExists(user1);
         try{
@@ -30,7 +30,7 @@ public class ProPayAPIBehaviorDocumentation {
     }
 
     @Test
-    public void test_propay_api_that_payment_to_not_created_account_succeeds() throws Exception{
+    public void testPropayApiThatPaymentToNotCreatedAccountSucceeds() throws Exception{
         String user1 = make_new_user();
         String user2 = make_new_user();
 

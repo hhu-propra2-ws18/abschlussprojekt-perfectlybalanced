@@ -17,15 +17,9 @@ public class UserProfileController {
 
     @GetMapping("/profile")
     public String getProfile(Model model, Authentication auth) throws Exception{
-
-        //this page should only be available to logged in users.
-        //otherwise it would redirect to login page
-
         UserEntity user = (UserEntity) auth.getPrincipal();
         model.addAttribute("user", user);
         model.addAttribute("user_balance",proPayService.getBalance(user.getUsername()));
-
-        //TODO: make it redirect to login page for not logged in users
 
         return "profile";
     }

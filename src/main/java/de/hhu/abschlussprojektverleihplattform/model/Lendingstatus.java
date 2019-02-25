@@ -8,10 +8,6 @@ public enum Lendingstatus {
     done,
     denied;
 
-
-
-    //Lendingstatus s1 = Lendingstatus.values()[3];
-    //int i= this.ordinal();
 }
 
 

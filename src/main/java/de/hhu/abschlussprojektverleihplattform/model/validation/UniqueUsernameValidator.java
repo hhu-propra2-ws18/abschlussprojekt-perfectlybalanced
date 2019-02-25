@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.model.validation;
 
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 
@@ -22,9 +21,13 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
-        UserEntity user = userService.findByUsername(username);
-        return (username != null)
-                && !username.contains(" ")
-                && (user == null);
+        try {
+            userService.findByUsername(username);
+        }catch (Exception e){
+            //could not find user with that username,
+            // so it is a valid username to use
+            return username!=null && !username.contains(" ");
+        }
+        return false;
     }
 }

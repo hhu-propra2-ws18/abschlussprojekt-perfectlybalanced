@@ -5,13 +5,17 @@ import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Objects;
 
 import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
@@ -36,34 +40,34 @@ public class LendingRepository implements ILendingRepository {
         this.productRepository = productRepository;
     }
 
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public void addLending(LendingEntity lending) {
         KeyHolder keyHolder=new GeneratedKeyHolder();
         jdbcTemplate.update(psc(
-                "INSERT INTO LENDING_ENTITY "
-                        + "(STATUS,"
-                        + "START,"
-                        + "END,"
-                        + "BORROWER_USER_ID,"
-                        + "PRODUCT_ID,"
-                        + "COST_RESERVATIONID,"
-                        + "SURETY_RESERVATIONID)"
-                        + "VALUES (?,?,?,?,?,?,?)",
-                lending.getStatus().ordinal(),
-                lending.getStart(),
-                lending.getEnd(),
-                lending.getBorrower().getUserId(),
-                lending.getProduct().getId(),
-                lending.getCostReservationID(),
-                lending.getSuretyReservationID()),
-                keyHolder
+            "INSERT INTO LENDING_ENTITY "
+                + "(STATUS,"
+                + "START,"
+                + "END,"
+                + "BORROWER_USER_ID,"
+                + "PRODUCT_ID,"
+                + "COST_RESERVATIONID,"
+                + "SURETY_RESERVATIONID)"
+                + "VALUES (?,?,?,?,?,?,?)",
+            lending.getStatus().ordinal(),
+            lending.getStart(),
+            lending.getEnd(),
+            lending.getBorrower().getUserId(),
+            lending.getProduct().getId(),
+            lending.getCostReservationID(),
+            lending.getSuretyReservationID()),
+            keyHolder
         );
-
-        lending.setId(keyHolder.getKey().longValue());
+        lending.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
-    public void update(LendingEntity lending) {
+    public void update(LendingEntity lending) throws DataAccessException {
         String query = "UPDATE LENDING_ENTITY "
                 + "SET "
                 + "STATUS=?,"
@@ -87,13 +91,15 @@ public class LendingRepository implements ILendingRepository {
     }
 
     @Override
-    public LendingEntity getLendingById(Long id) {
-        String query = "SELECT * FROM LENDING_ENTITY WHERE ID=" + id;
+    public LendingEntity getLendingById(Long id) throws EmptyResultDataAccessException {
+        String query = "SELECT * FROM LENDING_ENTITY WHERE ID=?";
         return (LendingEntity) jdbcTemplate.queryForObject(query,
-                new LendingEntityRowMapper(userRepository, productRepository));
+                new Object[]{id},
+                new LendingEntityRowMapper(userRepository, productRepository)
+        );
     }
 
-    public List<LendingEntity> getLendingsByProductAndBorrower(
+    List<LendingEntity> getLendingsByProductAndBorrower(
         ProductEntity product, UserEntity user
     ) {
         String sql = "SELECT * FROM LENDING_ENTITY WHERE PRODUCT_ID=" + product.getId()

@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" xmlns:th="http://www.w3.org/1999/xhtml">
-    <a class="navbar-brand" href="#">Verleihplattform - Perfectlybalanced</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#" th:href="@{/}">Verleihplattform - Perfectlybalanced</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -7,23 +7,28 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/">Produkte ansehen </a>
+                <a class="nav-link" href="/" th:href="@{/}">Start </a>
+            </li>
+            <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+            <li class="nav-item">
+                <a class="nav-link" href="/myproducts" th:href="@{/myproducts}">Meine Produkte</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/myproducts">Meine Produkte ansehen </a>
+                <a class="nav-link" href="/addproduct" th:href="@{/addproduct}">Neues Produkt</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/addproduct">Produkt einstellen</a>
+                <a class="nav-link" href="/lendingrequests" th:href="@{/lendingrequests}">Leih-Anfragen</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/lendingrequests">Leih-Anfragen</a>
+                <a class="nav-link"  href="/mylendings" th:href="@{/mylendings}">Meine Ausleihen</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/mylendings">Meine Ausleihen</a>
-            </li>
+            </th:block>
         </ul>
         <div th:switch="${#authentication} ? ${#authorization.expression('isAuthenticated()')} : ${false}">
             <ul class="ml-auto navbar-nav" th:case="${true}">
+                <li class="nav-item float-right" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a class="nav-link" href="/admin" th:href="@{/admin}" th:text="Admin">Admin</a>
+                </li>
                 <li class="nav-item float-right">
                     <a class="nav-link" href="/profile">Profile</a>
                 </li>

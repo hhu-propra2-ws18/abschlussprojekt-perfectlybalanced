@@ -3,8 +3,10 @@ package de.hhu.abschlussprojektverleihplattform.repository;
 import de.hhu.abschlussprojektverleihplattform.database.ProductEntityRowMapper;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,6 +14,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 import static de.hhu.abschlussprojektverleihplattform.database.DBUtils.psc;
 
@@ -64,9 +67,7 @@ public class ProductRepository implements IProductRepository {
         );
     }
 
-
-
-
+    @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public void saveProduct(ProductEntity product) {
         KeyHolder keyHolder=new GeneratedKeyHolder();
@@ -95,11 +96,11 @@ public class ProductRepository implements IProductRepository {
             product.getOwner().getUserId()),
                 keyHolder
         );
-        product.setId(keyHolder.getKey().longValue());
+        product.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
-    public void editProduct(ProductEntity productEntity){
+    public void editProduct(ProductEntity productEntity) throws DataAccessException {
         jdbcTemplate.update("UPDATE PRODUCT_ENTITY "
                 + "SET COST = ?, "
                 + "DESCRIPTION = ?, "
@@ -125,7 +126,8 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public List<ProductEntity> getAllProductsFromUser(UserEntity user) {
+    public List<ProductEntity> getAllProductsFromUser(UserEntity user)
+            throws EmptyResultDataAccessException{
         String query = "SELECT * FROM PRODUCT_ENTITY WHERE OWNER_USER_ID=" + user.getUserId();
         return (List<ProductEntity>)jdbcTemplate.query(query,
                 new Object[]{},

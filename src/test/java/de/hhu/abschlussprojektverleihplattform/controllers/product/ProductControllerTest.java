@@ -49,7 +49,7 @@ public class ProductControllerTest {
 
     @Test
     @WithUserDetails("sarah")
-    public void testdetailscontrolleristhere() throws Exception {
+    public void testDetailsControllerIsThere() throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = (UserEntity) auth.getPrincipal();
         AddressEntity address = RandomTestData.newRandomTestAddress();
@@ -68,7 +68,7 @@ public class ProductControllerTest {
 
     @Test
     @WithUserDetails("sarah")
-    public void testaddcontrolleristhere() throws Exception {
+    public void testAddControllerIsThere() throws Exception {
         mockMvc.perform(get("/addproduct"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Artikel einstellen")))
@@ -80,7 +80,7 @@ public class ProductControllerTest {
 
     @Test
     @WithUserDetails("sarah")
-    public void testeditcontrolleristhere() throws Exception {
+    public void testEditControllerIsThere() throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = (UserEntity) auth.getPrincipal();
         AddressEntity address = RandomTestData.newRandomTestAddress();
@@ -99,7 +99,7 @@ public class ProductControllerTest {
 
     @Test
     @WithUserDetails("admin")
-    public void testmyproductsisthere() throws Exception {
+    public void testMyProductsControllerIsThere() throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity user = (UserEntity) auth.getPrincipal();
         AddressEntity address1 = RandomTestData.newRandomTestAddress();

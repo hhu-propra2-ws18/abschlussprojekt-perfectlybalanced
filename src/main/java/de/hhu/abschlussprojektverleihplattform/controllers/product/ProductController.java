@@ -14,13 +14,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
 public class ProductController {
 
-    private final IUserService userService;
     private final IProductService productService;
     private final ILendingService lendingService;
 
@@ -30,7 +28,6 @@ public class ProductController {
             IUserService userService,
             IProductService productService,
             ILendingService lendingService) {
-        this.userService = userService;
         this.productService = productService;
         this.lendingService = lendingService;
     }
@@ -113,7 +110,7 @@ public class ProductController {
         ProductEntity product = productService.getById(id);
         if(product != null) {
             model.addAttribute("product", product);
-            model.addAttribute("ListOfReservatedTimes", lendingService.getTime(product));
+            model.addAttribute("ListOfReservatedTimes", lendingService.getAvailableTime(product));
             return "productdetailedview";
         }
         return "redirect:/";

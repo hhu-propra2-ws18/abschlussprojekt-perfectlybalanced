@@ -56,7 +56,7 @@ public class MyLendingsControllerTest {
     //TODO: den richten Test wieder aktivieren sobald die SQL-Abfrage gefixt ist
 
     @Test
-    public void test_can_see_my_lending_request() throws Exception{
+    public void testCanSeeMyLendingRequest() throws Exception{
 
         UserEntity user_owner = RandomTestData.newRandomTestUser();
         userService.addUser(user_owner);
@@ -75,21 +75,19 @@ public class MyLendingsControllerTest {
         proPayService.changeUserBalanceBy(user_wannabe_borrower.getUsername(),100000);
 
         //user2 wants to lend
-        boolean requestIsOk = lendingService.requestLending(
+        lendingService.requestLending(
             user_wannabe_borrower,
             productEntity,
             timestamps[0],
             timestamps[1]
         );
 
-        System.out.println("request is ok"+requestIsOk);
 
         //lending request accepted
-        boolean acceptIsOk = lendingService.acceptLendingRequest(
+        lendingService.acceptLendingRequest(
             lendingService.getAllRequestsForUser(user_owner).get(0)
         );
 
-        Assert.assertTrue(requestIsOk && acceptIsOk);
 
         //user2 should see the products he is currently lending
         mockMvc.perform(get(MyLendingsController.url)

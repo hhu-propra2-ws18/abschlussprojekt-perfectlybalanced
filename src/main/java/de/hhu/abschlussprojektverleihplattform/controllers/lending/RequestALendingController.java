@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
-import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
@@ -11,22 +10,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.sql.Timestamp;
 
 @Controller
 public class RequestALendingController {
 
-    @Autowired
-    ProductService productService;
+    private final ProductService productService;
+
+    private final LendingService lendingService;
+
+    public static final String requestalendingURL ="/lendingrequests/sendRequest";
 
     @Autowired
-    LendingService lendingService;
+    public RequestALendingController(ProductService productService, LendingService lendingService) {
+        this.productService = productService;
+        this.lendingService = lendingService;
+    }
 
-    public static final String sendLendingRequestURL="/lendingrequests/sendRequest";
-
-    public static final String requestalendingURL ="lendingrequests/sendRequest";
 
     @GetMapping("lendingrequests/sendRequest")
     public String gotoSendRequest(Model model, @RequestParam Long id, Authentication auth){
@@ -34,31 +37,37 @@ public class RequestALendingController {
         ProductEntity product = productService.getById(id);
         model.addAttribute("product", product);
         model.addAttribute("user", user);
-        model.addAttribute("timespan", new Timespan());
         return "sendLendingRequest";
     }
 
-    @PostMapping("lendingrequests/sendRequest")
+    @PostMapping(requestalendingURL)
     public String requestalending(@RequestParam Long id,
                                   Authentication auth,
-                                  @ModelAttribute("lending") LendingEntity lending,
-                                  Timespan timespan) throws Exception{
-
+                                  @RequestParam("start") String start,
+                                  @RequestParam("end") String end) throws Exception{
 
 
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
 
-        //Timestamp start = Timestamp.valueOf(startTime.toString());
-        //Timestamp end = Timestamp.valueOf(endTime.toString());
+        String startTimeStampString = start + ":00";
+        String endTimeStampString = end + ":00";
+
+        Timestamp startTimestamp
+                = Timestamp.valueOf(startTimeStampString.replace("T", " "));
+        Timestamp endTimestamp
+                = Timestamp.valueOf(endTimeStampString.replace("T", " "));
 
 
-        boolean didrequest = lendingService.requestLending(user,
+
+        LendingEntity didrequest = lendingService.requestLending(user,
                 product,
-                timespan.getStart(),
-                timespan.getEnd());
-        if(!didrequest){
+                startTimestamp,
+                endTimestamp);
+
+        if(didrequest == null){
             throw new Exception("cannot make lending request");
+
         }
 
         return "redirect:/";
