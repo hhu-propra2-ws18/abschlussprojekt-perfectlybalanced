@@ -1,4 +1,4 @@
 package de.hhu.abschlussprojektverleihplattform.storytests;
 
-public class ManfredBesitztEinFahrrad {
+public class MemfredBesitztEinFahrrad {
 }
