@@ -74,7 +74,7 @@ public class LendingService implements ILendingService {
         return false;
     }
 
-    public boolean acceptLendingRequest(LendingEntity lending) {
+    public void acceptLendingRequest(LendingEntity lending) throws Exception{
         Long costID = paymentService.reservateAmount(
             lending.getBorrower(),
             lending.getProduct().getOwner(),
@@ -96,25 +96,37 @@ public class LendingService implements ILendingService {
                 lending.setCostReservationID(costID);
                 lending.setSuretyReservationID(suretyID);
                 lendingRepository.update(lending);
-                return true;
+                return;
             }
         }
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
         paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-        return false;
+        throw new Exception("could not accept lending request");
     }
 
-    public void denyLendingRequest(LendingEntity lending) {
+    public void denyLendingRequest(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.requested)){
+            throw new Exception("lending was not requested, cannot reject it.");
+        }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
     }
 
-    public void returnProduct(LendingEntity lending) {
+    public void returnProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.confirmt)){
+            throw new Exception("the lending is not confirmed, cannot be returned.");
+        }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
     }
 
-    public boolean acceptReturnedProduct(LendingEntity lending) {
+    public boolean acceptReturnedProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.returned)){
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
+        }
+
         if (paymentService.returnReservatedMoney(
                 lending.getBorrower().getUsername(),
                 lending.getSuretyReservationID()
@@ -127,7 +139,12 @@ public class LendingService implements ILendingService {
         return false;
     }
 
-    public void denyReturnedProduct(LendingEntity lending) {
+    public void denyReturnedProduct(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.returned)){
+            throw new Exception(
+            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+            );
+        }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
     }
