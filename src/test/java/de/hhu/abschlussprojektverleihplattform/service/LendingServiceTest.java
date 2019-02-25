@@ -46,7 +46,10 @@ public class LendingServiceTest {
             result = e;
         }
 
-        Assert.assertEquals("The Product is not available in the selected time.", result.getMessage());
+        Assert.assertEquals(
+            "The Product is not available in the selected time.",
+            result.getMessage()
+        );
     }
 
     @Test
@@ -80,7 +83,10 @@ public class LendingServiceTest {
             result = e;
         }
 
-        Assert.assertEquals("The Product is not available in the selected time.", result.getMessage());
+        Assert.assertEquals(
+            "The Product is not available in the selected time.",
+            result.getMessage()
+        );
     }
 
     @Test
@@ -114,7 +120,10 @@ public class LendingServiceTest {
             result = e;
         }
 
-        Assert.assertEquals("The Product is not available in the selected time.", result.getMessage());
+        Assert.assertEquals(
+            "The Product is not available in the selected time.",
+            result.getMessage()
+        );
     }
 
     @Test
@@ -148,7 +157,10 @@ public class LendingServiceTest {
             result = e;
         }
 
-        Assert.assertEquals("The Product is not available in the selected time.", result.getMessage());
+        Assert.assertEquals(
+            "The Product is not available in the selected time.",
+            result.getMessage()
+        );
     }
 
     @Test
@@ -173,7 +185,11 @@ public class LendingServiceTest {
         }
 
         int totalMoney = product.getSurety() + product.getCost();
-        Assert.assertEquals("The cost and the surety sum up to: " + totalMoney + "€, but you only have: " + 0L + "€.", result.getMessage());
+        Assert.assertEquals(
+            "The cost and the surety sum up to: "
+                + totalMoney + "€, but you only have: " + 0L + "€.",
+            result.getMessage()
+        );
     }
 
     @Test
@@ -262,14 +278,18 @@ public class LendingServiceTest {
             result = e;
         }
 
-        Assert.assertEquals("The Lending has the Status: " + Lendingstatus.done + " but it needs to be: " + Lendingstatus.requested, result.getMessage());
+        Assert.assertEquals(
+            "The Lending has the Status: " + Lendingstatus.done
+                + " but it needs to be: " + Lendingstatus.requested,
+            result.getMessage()
+        );
     }
 
 
     // 1.reservierung fail
     // 2.reservierung fail
     // erfolg
-} /*
+    /*
 
     @Test
     public void reservationFails() {
@@ -684,6 +704,7 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.conflict, lending.getStatus());
     }
 
+*/
     // Tests for daysBetweenTwoTimestamps
 
     @Test
@@ -708,5 +729,3 @@ public class LendingServiceTest {
         Assert.assertEquals(4, result);
     }
 }
-
-*/
