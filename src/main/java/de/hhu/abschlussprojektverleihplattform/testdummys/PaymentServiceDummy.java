@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class PaymentServiceDummy implements IPaymentService {
 
     private ArrayList<ReservationDummy> payments;
-    private Long id;
+    private Long reservationId;
 
     private String lastCalledUsername;
     private Long lastCalledId;
@@ -26,7 +26,7 @@ public class PaymentServiceDummy implements IPaymentService {
             boolean returnsAreSuccessfull
     ) {
         payments = new ArrayList<ReservationDummy>();
-        id = 1L;
+        reservationId = 1L;
         this.usersHaveMoney = usersHaveMoney;
         this.reservationsAreSuccessfull = reservationsAreSuccessfull;
         this.transfersAreSuccessfull = transfersAreSuccessfull;
@@ -46,9 +46,10 @@ public class PaymentServiceDummy implements IPaymentService {
         if (!reservationsAreSuccessfull) {
             return 0L;
         }
-        ReservationDummy reservation = new ReservationDummy(payingUser, receivingUser, amount, id);
+        ReservationDummy reservation
+            = new ReservationDummy(payingUser, receivingUser, amount, reservationId);
         payments.add(reservation);
-        id++;
+        reservationId++;
         return reservation.getId();
     }
 
