@@ -58,14 +58,12 @@
                 <form th:action="@{|/lendingrequests/sendRequest?id=${product.id}|}" method="post">
                     <div class="form-group">
                         <label for="start">Von:</label>
-                        <input type="datetime-local" class="form-control" required th:field="${time.start}" th:value="${time.start}"
-                            th:type="datetime-local" id="start" name="start">
+                        <input type="datetime-local" class="form-control" required id="start" name="start">
                         <small id="startHelp" class="form-text text-muted">Ab wann möchtest du dein Produkt ausleihen?</small>
                     </div>
                     <div class="form-group">
                         <label for="end">Bis:</label>
-                        <input type="datetime-local" class="form-control" required th:field="${time.end}" th:value="${time.end}"
-                            th:type="datetime-local" id="end" name="end">
+                        <input type="datetime-local" class="form-control" required id="end" name="end">
                         <small id="endHelp" class="form-text text-muted">Wann möchtest du dein Produkt zurückgeben?</small>
                     </div>
                     <button type="submit" class="btn btn-primary">Anfrage senden</button>
