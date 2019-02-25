@@ -265,17 +265,9 @@ public class ProPayService implements IProPayService, IPaymentService {
     }
 
     @Override
-    public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
-        try {
-            Reservation reservation =
-	        makeReservationFromSourceUserToTargetUser(
-	            payingUser.getUsername(), recivingUser.getUsername(), amount
-	        );
-            return reservation.id;
-        }catch (Exception e){
-            e.printStackTrace();
-            return -1L;
-        }
+    public Long reservateAmount(String payingUser, String recivingUser, int amount) throws Exception {
+        Reservation reservation = makeReservationFromSourceUserToTargetUser(payingUser, recivingUser, amount);
+        return reservation.id;
     }
 
     @Override
@@ -296,6 +288,15 @@ public class ProPayService implements IProPayService, IPaymentService {
         }catch (Exception e){
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public Long usersCurrentBalance(String username) {
+        try{
+            return getBalance(username);
+        } catch (Exception e) {
+            return 0L;
         }
     }
 }

@@ -7,9 +7,11 @@ public interface IPaymentService {
 
     // gibt die ID zurueck, fals der wert groesser als null ist,
     // sonst ist die reservierung fehlgeschlagen
-    Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount);
+    Long reservateAmount(String payingUser, String recivingUser, int amount) throws Exception;
 
     boolean tranferReservatedMoney(String username,Long id);
 
     boolean returnReservatedMoney(String username,Long id);
+
+    Long usersCurrentBalance(String username);
 }
