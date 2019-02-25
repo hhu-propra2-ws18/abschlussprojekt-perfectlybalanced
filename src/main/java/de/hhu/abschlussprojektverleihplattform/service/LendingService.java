@@ -55,8 +55,8 @@ public class LendingService implements ILendingService {
         }
         int totalMoney = product.getSurety()
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
-        if(!paymentService.userHasAmount(actingUser, totalMoney)) {
-            Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
+        Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
+        if(userMoney < totalMoney) {
             throw new Exception("The cost and the surety sum up to: " + totalMoney + "€, but you only have: " + userMoney + "€.");
         }
         LendingEntity lending = new LendingEntity(
@@ -68,43 +68,41 @@ public class LendingService implements ILendingService {
             0L,
             0L
         );
-        // TODO: check if 0L realy is unused in ProPay
+        // TODO: check if 0L really is unused in ProPay
         lendingRepository.addLending(lending);
     }
 
     public void acceptLendingRequest(LendingEntity lending) throws Exception{
+        if(!lending.getStatus().equals(Lendingstatus.requested)) {
+            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.requested);
+        }
         Long costID = paymentService.reservateAmount(
-            lending.getBorrower(),
-            lending.getProduct().getOwner(),
+            lending.getBorrower().getUsername(),
+            lending.getProduct().getOwner().getUsername(),
             lending.getProduct().getCost()
                 * daysBetweenTwoTimestamps(lending.getStart(), lending.getEnd())
         );
-        Long suretyID = paymentService.reservateAmount(
-            lending.getBorrower(),
-            lending.getProduct().getOwner(),
-            lending.getProduct().getSurety()
-        );
-        if (costID > 0 && suretyID > 0) {
-            if (paymentService.tranferReservatedMoney(
-                lending.getBorrower().getUsername(),
-                costID
-            )
-            ) {
-                lending.setStatus(Lendingstatus.confirmt);
-                lending.setCostReservationID(costID);
-                lending.setSuretyReservationID(suretyID);
-                lendingRepository.update(lending);
-                return;
-            }
+        Long suretyID;
+        try {
+            suretyID = paymentService.reservateAmount(
+                    lending.getBorrower().getUsername(),
+                    lending.getProduct().getOwner().getUsername(),
+                    lending.getProduct().getSurety()
+            );
+        } catch (Exception e) {
+            paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
+            throw e;
         }
-        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), costID);
-        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), suretyID);
-        throw new Exception("could not accept lending request");
+        paymentService.tranferReservatedMoney(lending.getBorrower().getUsername(), costID);
+        lending.setStatus(Lendingstatus.confirmt);
+        lending.setCostReservationID(costID);
+        lending.setSuretyReservationID(suretyID);
+        lendingRepository.update(lending);
     }
 
     public void denyLendingRequest(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.requested)){
-            throw new Exception("lending was not requested, cannot reject it.");
+            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.requested);
         }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
@@ -112,64 +110,39 @@ public class LendingService implements ILendingService {
 
     public void returnProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.confirmt)){
-            throw new Exception("the lending is not confirmed, cannot be returned.");
+            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.confirmt);
         }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
     }
 
-    public boolean acceptReturnedProduct(LendingEntity lending) throws Exception{
+    public void acceptReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception(
-            "cannot reject returned lending if status is not : "+Lendingstatus.returned
-            );
+            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.returned);
         }
-
-        if (paymentService.returnReservatedMoney(
-                lending.getBorrower().getUsername(),
-                lending.getSuretyReservationID()
-        )
-        ) {
-            lending.setStatus(Lendingstatus.done);
-            lendingRepository.update(lending);
-            return true;
-        }
-        return false;
+        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
+        lending.setStatus(Lendingstatus.done);
+        lendingRepository.update(lending);
     }
 
     public void denyReturnedProduct(LendingEntity lending) throws Exception{
         if(!lending.getStatus().equals(Lendingstatus.returned)){
-            throw new Exception(
-            "cannot reject returned lending if status is not : "+Lendingstatus.returned
-            );
+            throw new Exception("The Lending has the Status: " + lending.getStatus() + " but it needs to be: " + Lendingstatus.returned);
         }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
     }
 
-    public boolean ownerReceivesSuretyAfterConflict(LendingEntity lending) {
-        if (paymentService.tranferReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )) {
-            lending.setStatus(Lendingstatus.done);
-            lendingRepository.update(lending);
-            return true;
-        }
-        return false;
+    public void ownerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
+        paymentService.tranferReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
+        lending.setStatus(Lendingstatus.done);
+        lendingRepository.update(lending);
     }
 
-    public boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending) {
-        if (paymentService.returnReservatedMoney(
-            lending.getBorrower().getUsername(),
-            lending.getSuretyReservationID()
-        )
-        ) {
-            lending.setStatus(Lendingstatus.done);
-            lendingRepository.update(lending);
-            return true;
-        }
-        return false;
+    public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
+        paymentService.returnReservatedMoney(lending.getBorrower().getUsername(), lending.getSuretyReservationID());
+        lending.setStatus(Lendingstatus.done);
+        lendingRepository.update(lending);
     }
     
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
