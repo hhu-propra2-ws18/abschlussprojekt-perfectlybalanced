@@ -61,7 +61,7 @@ public class LendingRepository implements ILendingRepository {
                 keyHolder
         );
 
-        lending.setId(keyHolder.getKey().longValue());
+        lending.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override
