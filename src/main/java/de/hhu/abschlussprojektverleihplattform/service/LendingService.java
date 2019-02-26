@@ -44,6 +44,9 @@ public class LendingService implements ILendingService {
             Timestamp start,
             Timestamp end
     ) throws Exception{
+        if(!product.getStatus().equals(Productstatus.forLending)){
+            throw new Exception("This Product can only be bought, not lend.");
+        }
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         boolean timeIsOK = true;
         for (LendingEntity lend : lendings) {

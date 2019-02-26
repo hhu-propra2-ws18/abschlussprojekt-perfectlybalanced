@@ -15,6 +15,8 @@ public class LendingServiceTest {
     
     // Tests for requestLending
 
+    //TODO: Test for requesting a Product that cant be lend
+
     @Test
     public void timeIsBlocked1() {
         // start is in reservated Time
