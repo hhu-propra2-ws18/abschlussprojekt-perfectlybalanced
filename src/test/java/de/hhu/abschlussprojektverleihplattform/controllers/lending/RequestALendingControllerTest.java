@@ -78,9 +78,8 @@ public class RequestALendingControllerTest {
     @Test
     public void lendingRequestTest() throws Exception {
 
+        // Arrange
         UserEntity userBorrower = RandomTestData.newRandomTestUser();
-
-        proPayService.changeUserBalanceBy(userBorrower.getUsername(), 99999);
 
         UserEntity userOwner = RandomTestData.newRandomTestUser();
         ProductEntity productEntity =
@@ -93,13 +92,18 @@ public class RequestALendingControllerTest {
         productEntity.setId(1L);
         lending.setId(1L);
         lending.setStatus(Lendingstatus.requested);
+        proPayService.changeUserBalanceBy(userBorrower.getUsername(), 99999);
 
-        when(productService.getById(ArgumentMatchers.anyLong())).thenReturn(productEntity);
+        // Mockito
+        when(productService.getById(ArgumentMatchers.anyLong()))
+            .thenReturn(productEntity);
         when(lendingService
                 .requestLending(any(UserEntity.class), any(ProductEntity.class), any(Timestamp.class), any(Timestamp.class)))
             .thenReturn(lending);
-        when(userService.findByUsername(anyString())).thenReturn(userBorrower);
+        when(userService.findByUsername(anyString()))
+            .thenReturn(userBorrower);
 
+        // Act & Assert
         mockMvc.perform(
             post(
                 RequestALendingController
@@ -116,5 +120,4 @@ public class RequestALendingControllerTest {
             .andExpect(status().is3xxRedirection());
 
     }
-
 }
