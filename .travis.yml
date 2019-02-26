@@ -1,7 +1,6 @@
 language: java
 script:
-- "./gradlew checkstyle"
-- "./gradlew test"
+- "./gradlew check"
 deploy:
   provider: heroku
   api_key:
