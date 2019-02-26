@@ -255,47 +255,31 @@ public class ProPayService implements IProPayService, IPaymentService {
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
 
     @Override
-    public boolean userHasAmount(UserEntity user, int amount) {
-        try{
-            return getBalance(user.getUsername())>=amount;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+    public Long reservateAmount(
+        String payingUser,
+        String recivingUser,
+        int amount
+    ) throws Exception {
+        Reservation reservation = makeReservationFromSourceUserToTargetUser(
+            payingUser,
+            recivingUser,
+            amount
+        );
+        return reservation.id;
     }
 
     @Override
-    public Long reservateAmount(UserEntity payingUser, UserEntity recivingUser, int amount) {
-        try {
-            Reservation reservation =
-	        makeReservationFromSourceUserToTargetUser(
-	            payingUser.getUsername(), recivingUser.getUsername(), amount
-	        );
-            return reservation.id;
-        }catch (Exception e){
-            e.printStackTrace();
-            return -1L;
-        }
+    public void tranferReservatedMoney(String username,Long id) throws Exception {
+        punishReservedAmount(username,id);
     }
 
     @Override
-    public boolean tranferReservatedMoney(String username,Long id) {
-        try{
-            punishReservedAmount(username,id);
-            return true;
-        }catch (Exception e) {
-            return false;
-        }
+    public void returnReservatedMoney(String username,Long id) throws Exception {
+        returnReservedAmount(username,id);
     }
 
     @Override
-    public boolean returnReservatedMoney(String username,Long id) {
-        try{
-            returnReservedAmount(username,id);
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+    public Long usersCurrentBalance(String username) throws Exception {
+        return getBalance(username);
     }
 }

@@ -1,7 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
-public enum ProductStatus {
+public enum Productstatus {
     forLending,
     forBuying,
-    Sold;
+    sold;
 }

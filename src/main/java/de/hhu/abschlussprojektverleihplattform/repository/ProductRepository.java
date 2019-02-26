@@ -53,20 +53,6 @@ public class ProductRepository implements IProductRepository {
 
     }
 
-    @Override
-    public List<ProductEntity> getAvailableProducts() {
-        return (List<ProductEntity>) jdbcTemplate.query(
-                "SELECT * "
-                +"FROM PRODUCT_ENTITY "
-                +"WHERE EXISTS ( "
-                +"SELECT PRODUCT_ID "
-                +"FROM LENDING_ENTITY "
-                +"WHERE PRODUCT_ID <> PRODUCT_ENTITY.ID)",
-                new Object[]{},
-                new ProductEntityRowMapper(userRepository)
-        );
-    }
-
     @SuppressFBWarnings(justification="nullpointer exception")
     @Override
     public void saveProduct(ProductEntity product) {
