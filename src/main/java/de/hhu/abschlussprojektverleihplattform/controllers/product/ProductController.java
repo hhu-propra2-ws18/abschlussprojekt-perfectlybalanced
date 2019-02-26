@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.controllers.product;
 
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.ILendingService;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
@@ -42,14 +43,24 @@ public class ProductController {
 
     @GetMapping("/addproduct")
     public String getAddProduct(Model model) {
-        model.addAttribute("product", new ProductEntity());
-        model.addAttribute("address", new AddressEntity());
-
         return "addproduct";
     }
 
+    @GetMapping("/addproductlending")
+    public String getLendProduct(Model model) {
+        model.addAttribute("product", new ProductEntity());
+        model.addAttribute("address", new AddressEntity());
+        return "addproductlending";
+    }
 
-    @PostMapping(value = "/addproduct", params = "lending")
+    @GetMapping("/addproductselling")
+    public String getSellProduct(Model model) {
+        model.addAttribute("product", new ProductEntity());
+        model.addAttribute("address", new AddressEntity());
+        return "addproductselling";
+    }
+
+    @PostMapping("/addproductlending")
     public String postLendProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
         BindingResult bindingResultProduct,
         @ModelAttribute("address") @Valid AddressEntity addressEntity,
@@ -57,16 +68,17 @@ public class ProductController {
         @ModelAttribute("user") UserEntity userEntity){
 
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
-            return "addproduct";
+            return "addproductlending";
         }
 
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
+        productEntity.setStatus(Productstatus.forLending);
         productService.addProduct(productEntity);
         return "redirect:/";
     }
 
-    @PostMapping(value = "/addproduct", params = "selling")
+    @PostMapping("/addproductselling")
     public String postSellProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
          BindingResult bindingResultProduct,
          @ModelAttribute("address") @Valid AddressEntity addressEntity,
@@ -74,11 +86,12 @@ public class ProductController {
          @ModelAttribute("user") UserEntity userEntity){
 
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
-            return "addproduct";
+            return "addproductselling";
         }
 
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
+        productEntity.setStatus(Productstatus.forBuying);
         productService.addProduct(productEntity);
         return "redirect:/";
     }
