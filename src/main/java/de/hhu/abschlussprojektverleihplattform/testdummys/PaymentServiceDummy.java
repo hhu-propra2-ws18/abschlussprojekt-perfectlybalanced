@@ -29,7 +29,7 @@ public class PaymentServiceDummy implements IPaymentService {
 
     public PaymentServiceDummy() {
         payments = new ArrayList<ReservationDummy>();
-        reservationId = 1L;
+        reservationId = 0L;
         lastCalledUsername = "";
         lastCalledId = 0L;
         lastWasTransfer = false;
@@ -79,9 +79,8 @@ public class PaymentServiceDummy implements IPaymentService {
             throw reservationFailed;
         }
         ReservationDummy reservation
-            = new ReservationDummy(payingUser, recivingUser, amount, reservationId);
+            = new ReservationDummy(payingUser, recivingUser, amount, ++reservationId);
         payments.add(reservation);
-        reservationId++;
         if (secondReservationFails) {
             reservationThrowsException = true;
         }
