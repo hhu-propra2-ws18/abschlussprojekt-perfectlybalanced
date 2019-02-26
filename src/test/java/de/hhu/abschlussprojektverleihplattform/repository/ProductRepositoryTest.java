@@ -39,6 +39,52 @@ public class ProductRepositoryTest {
     }
 
     @Test
+    public void testSavingWithPriceAndStatus(){
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner);
+        AddressEntity productAddress = RandomTestData.newRandomTestAddress();
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, productAddress, 1000);
+        productRepository.saveProduct(testProduct);
+        ProductEntity product = productRepository.getProductById(testProduct.getId());
+        Assert.assertEquals(testProduct, product);
+    }
+
+    @Test
+    public void testUpdatingAProductWithPrice(){
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner);
+        AddressEntity addressEntity = RandomTestData.newRandomTestAddress();
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, addressEntity, 1000);
+        productRepository.saveProduct(testProduct);
+        testProduct.setPrice(500);
+        productRepository.editProduct(testProduct);
+        ProductEntity loadedProduct = productRepository.getProductById(testProduct.getId());
+        Assert.assertEquals(testProduct, loadedProduct);
+    }
+
+    @Test
+    public void getAllProductsWithPrice(){
+        boolean productExsists = false;
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner);
+        AddressEntity addressEntity = RandomTestData.newRandomTestAddress();
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, addressEntity, 1000);
+        productRepository.saveProduct(testProduct);
+        List<ProductEntity> allProducts = productRepository.getAllProducts();
+        ProductEntity loadedProduct = new ProductEntity();
+
+        for (ProductEntity product: allProducts){
+            if (product.getId() == testProduct.getId()){
+                productExsists = true;
+                loadedProduct = product;
+            }
+        }
+
+        Assert.assertTrue(productExsists);
+        Assert.assertEquals(testProduct, loadedProduct);
+    }
+
+    @Test
     public void getAllProducsFromDatabase() {
         boolean savedProductsExists = false;
         UserEntity user1 = RandomTestData.newRandomTestUser();
@@ -63,6 +109,7 @@ public class ProductRepositoryTest {
 
         Assert.assertTrue(savedProductsExists);
     }
+
 
     @Test
     public void editProduct(){
