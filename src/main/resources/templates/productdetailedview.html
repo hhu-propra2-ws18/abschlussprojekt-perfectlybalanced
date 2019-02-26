@@ -52,9 +52,16 @@
                 </div>
 
                 <a th:href="@{/lendingrequests/sendRequest(id=${product.getId()})}">
-                    <button th:if="${(product.owner.userId.equals(user.userId))==false}"
+                    <button th:if="${(product.owner.userId.equals(user.userId))==false} or ${product.getStatus().equals('forBuying')==true}"
                             class="btn btn-primary"
                             type="submit">Ausleihen
+                    </button>
+                </a>
+
+                <a th:href="@{/buyrequests/sendRequest(id=${product.getId()})}">
+                    <button th:if="${(product.owner.userId.equals(user.userId))==false} or ${product.getStatus().equals('forLending')==true}"
+                            class="btn btn-primary"
+                            type="submit">Kaufen
                     </button>
                 </a>
 
