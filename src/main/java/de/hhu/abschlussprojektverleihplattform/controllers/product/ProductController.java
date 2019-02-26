@@ -125,9 +125,11 @@ public class ProductController {
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "editproduct";
         }
+        ProductEntity oldProduct = productService.getById(id);
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
-        productService.editProduct(productEntity);
+        productEntity.setStatus(oldProduct.getStatus());
+            productService.editProduct(productEntity);
         return "redirect:/myproducts";
     }
 

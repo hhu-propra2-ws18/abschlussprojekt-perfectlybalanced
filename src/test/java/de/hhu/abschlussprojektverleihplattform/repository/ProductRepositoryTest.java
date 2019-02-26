@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.repository;
 
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
@@ -65,6 +66,7 @@ public class ProductRepositoryTest {
         );
         productRepository.saveProduct(testProduct);
         testProduct.setPrice(500);
+        testProduct.setStatus(Productstatus.sold);
         productRepository.editProduct(testProduct);
         ProductEntity loadedProduct = productRepository.getProductById(testProduct.getId());
         Assert.assertEquals(testProduct, loadedProduct);
