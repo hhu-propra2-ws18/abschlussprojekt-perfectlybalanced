@@ -61,8 +61,6 @@ public class CustomEmailTest {
             result.add(violations.size());
         }
 
-        System.out.println(result);
-
         // Assert
         Assert.assertTrue("Alle Emails sind gültig", result.equals(expected));
     }

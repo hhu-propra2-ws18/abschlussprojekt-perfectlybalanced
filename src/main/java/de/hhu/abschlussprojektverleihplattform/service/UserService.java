@@ -43,12 +43,21 @@ public class UserService implements IUserService {
 
     @Override
     public UserEntity findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        try {
+            return userRepository.findByUsername(username);
+        } catch(Exception e) {
+            return null;
+        }
+
     }
 
     @Override
     public UserEntity findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        try {
+            return userRepository.findByEmail(email);
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     @Override
