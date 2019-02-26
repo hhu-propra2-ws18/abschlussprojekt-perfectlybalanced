@@ -12,6 +12,7 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private ProductStatus status;
     @NotBlank
     @Size(min=10, max=255, message = "Beschreibung {string.size.error}")
     private String description;
@@ -24,6 +25,9 @@ public class ProductEntity {
     @NotNull
     @Min(value=0, message = "Kosten {product.price.error}")
     private int cost;
+    @NotNull
+    @Min(value=0, message = "Kosten {product.price.error}")
+    private int price;
 
     @Embedded
     private AddressEntity location;
@@ -31,6 +35,7 @@ public class ProductEntity {
     @ManyToOne
     @Embedded
     private UserEntity owner;
+
 
     public ProductEntity() {
 
@@ -48,8 +53,10 @@ public class ProductEntity {
         this.title = title;
         this.surety = surety;
         this.cost = cost;
+        this.price = 0;
         this.location = location;
         this.owner = owner;
+        this.status = ProductStatus.forLending;
     }
 
     public ProductEntity(
@@ -66,8 +73,45 @@ public class ProductEntity {
         this.title = title;
         this.surety = surety;
         this.cost = cost;
+        this.price = 0;
         this.location = location;
         this.owner = owner;
+        this.status = ProductStatus.forLending;
     }
-    
+
+    public ProductEntity(
+            String description,
+            String title,
+            int price,
+            AddressEntity location,
+            UserEntity owner
+    ) {
+        this.description = description;
+        this.title = title;
+        this.surety = 0;
+        this.cost = 0;
+        this.price = price;
+        this.location = location;
+        this.owner = owner;
+        this.status = ProductStatus.forBuying;
+    }
+
+    public ProductEntity(
+            Long id,
+            String description,
+            String title,
+            int price,
+            AddressEntity location,
+            UserEntity owner
+    ) {
+        this.id = id;
+        this.description = description;
+        this.title = title;
+        this.surety = 0;
+        this.cost = 0;
+        this.price = price;
+        this.location = location;
+        this.owner = owner;
+        this.status = ProductStatus.forBuying;
+    }
 }
