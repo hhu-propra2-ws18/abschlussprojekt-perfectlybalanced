@@ -127,4 +127,10 @@ public class ProductRepository implements IProductRepository {
                 new Object[]{},
                 new ProductEntityRowMapper(userRepository));
     }
+
+    @Override
+    public List<ProductEntity> getAllAvailableProducts() {
+        String query = "SELECT * FROM PRODUCT_ENTITY WHERE STATUS<>2";
+        return jdbcTemplate.query(query, new Object[]{}, new ProductEntityRowMapper(userRepository));
+    }
 }

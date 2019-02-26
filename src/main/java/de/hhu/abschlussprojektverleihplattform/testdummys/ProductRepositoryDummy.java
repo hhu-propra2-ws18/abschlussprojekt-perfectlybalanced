@@ -56,4 +56,9 @@ public class ProductRepositoryDummy implements IProductRepository {
     public void saveProduct(ProductEntity productEntity) {
 
     }
+
+    @Override
+    public List<ProductEntity> getAllAvailableProducts() {
+        return null;
+    }
 }

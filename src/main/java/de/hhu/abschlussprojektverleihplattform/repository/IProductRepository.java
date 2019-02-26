@@ -17,4 +17,6 @@ public interface IProductRepository {
     
     List<ProductEntity> getAllProductsFromUser(UserEntity user);
 
+    List<ProductEntity> getAllAvailableProducts();
+
 }
