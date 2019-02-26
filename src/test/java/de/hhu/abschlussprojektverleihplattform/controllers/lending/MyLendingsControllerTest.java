@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -55,7 +56,7 @@ public class MyLendingsControllerTest {
     @Autowired
     AuthenticatedUserService authenticatedUserService;
 
-    @Autowired
+    @MockBean
     ProductService productService;
 
     @Autowired
@@ -79,41 +80,25 @@ public class MyLendingsControllerTest {
 
         UserEntity userOwner = RandomTestData.newRandomTestUser();
         UserEntity userBorrower = RandomTestData.newRandomTestUser();
+        userOwner.setUserId(1L);
+        userBorrower.setUserId(2L);
+
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(
             userOwner,
             RandomTestData.newRandomTestAddress()
         );
+        productEntity.setId(1L);
 
         LendingEntity lending = RandomTestData.newRandomLendingStausDone(userBorrower, productEntity);
-        lending.setStatus(Lendingstatus.confirmt);
+        lending.setId(1L);
+        lending.setStatus(Lendingstatus.requested);
 
         List<LendingEntity> confirmedLendings = new ArrayList<>();
         confirmedLendings.add(lending);
 
-        userOwner.setUserId(1L);
-        userOwner.setUserId(2L);
-        productEntity.setId(1L);
-        lending.setId(1L);
-/*
-        proPayService.changeUserBalanceBy(userBorrower.getUsername(), 100000);
-
-        //user2 wants to lend
-        lendingService.requestLending(
-            userBorrower,
-            productEntity,
-            timestamps[0],
-            timestamps[1]
-        );
-
-
-        //lending request accepted
-        lendingService.acceptLendingRequest(
-            lendingService.getAllRequestsForUser(userOwner).get(0)
-        );*/
-
-        when(lendingService.getAllLendings()).thenReturn(confirmedLendings);
-        when(lendingService.getAllConfirmedLendings(confirmedLendings)).thenReturn(confirmedLendings);
         when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(userBorrower);
+        when(lendingService.getAllLendingsForUser(any(UserEntity.class))).thenReturn(confirmedLendings);
+        when(lendingService.getAllRequestedLendings(confirmedLendings)).thenReturn(confirmedLendings);
 
         //user2 should see the products he is currently lending
         mockMvc
