@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.database;
 
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -32,6 +33,8 @@ public class ProductEntityRowMapper implements RowMapper{
         int surety = rs.findColumn("SURETY");
         int title = rs.findColumn("TITLE");
         int ownerUserId = rs.findColumn("OWNER_USER_ID");
+        int status = rs.findColumn("STATUS");
+        int price = rs.findColumn("PRICE");
 
         location.setCity(rs.getString(city));
         location.setHousenumber(rs.getInt(houseNumber));
@@ -45,6 +48,8 @@ public class ProductEntityRowMapper implements RowMapper{
         product.setTitle(rs.getString(title));
         product.setOwner(userRepository.findById(rs.getLong(ownerUserId)));
         product.setLocation(location);
+        product.setStatus(Productstatus.values()[rs.getInt(status)]);
+        product.setPrice(rs.getInt(price));
         return product;
     }
 }
