@@ -9,6 +9,7 @@ services:
       - DB_PORT=1521
       - DB_USER=perfectlybalanced
       - DB_PASSWORD=whatdiditcost
+      - "SPRING_PROFILES_ACTIVE=prod"
     links:
       - datenbank
       - propay
