@@ -35,6 +35,15 @@ public class RandomTestData {
                 owner);
     }
 
+    public static ProductEntity newRandomTestPoductWithPrice(UserEntity owner, AddressEntity address, int price){
+        Random random = new Random();
+        return new ProductEntity(RandomStringUtils.randomAlphabetic(255),
+                RandomStringUtils.randomAlphabetic(50),
+                price,
+                address,
+                owner);
+    }
+
     public static LendingEntity newRandomLendingStausDone(
 		    UserEntity borrower, ProductEntity product
     ) {

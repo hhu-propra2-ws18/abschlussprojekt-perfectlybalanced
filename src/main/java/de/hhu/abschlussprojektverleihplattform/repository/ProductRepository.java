@@ -82,9 +82,11 @@ public class ProductRepository implements IProductRepository {
 	        +" POSTCODE,"
 	        +" STREET,"
 	        +" SURETY,"
-	        +" TITLE,"
-	        +" OWNER_USER_ID)"
-	        +"VALUES (?,?,?,?,?,?,?,?,?)",
+            +"TITLE,"
+            +"STATUS,"
+            +"PRICE,"
+            +"OWNER_USER_ID)"
+	        +" VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             product.getCost(),
             product.getDescription(),
             product.getLocation().getCity(),
@@ -93,9 +95,11 @@ public class ProductRepository implements IProductRepository {
             product.getLocation().getStreet(),
             product.getSurety(),
             product.getTitle(),
+            product.getStatus().ordinal(),
+            product.getPrice(),
             product.getOwner().getUserId()),
-                keyHolder
-        );
+            keyHolder
+                );
         product.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
@@ -110,8 +114,10 @@ public class ProductRepository implements IProductRepository {
                 + "STREET = ?, "
                 + "SURETY = ?, "
                 + "TITLE = ?, "
-                + "OWNER_USER_ID = ? "
-                + "WHERE ID = ?",
+                + "OWNER_USER_ID = ?, "
+                + "STATUS = ?, "
+                + "PRICE = ?"
+                + " WHERE ID = ?",
                 productEntity.getCost(),
                 productEntity.getDescription(),
                 productEntity.getLocation().getCity(),
@@ -121,6 +127,8 @@ public class ProductRepository implements IProductRepository {
                 productEntity.getSurety(),
                 productEntity.getTitle(),
                 productEntity.getOwner().getUserId(),
+                productEntity.getStatus().ordinal(),
+                productEntity.getPrice(),
                 productEntity.getId()
         );
     }

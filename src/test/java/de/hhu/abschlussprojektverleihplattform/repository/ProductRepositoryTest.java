@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.List;
 
 
@@ -39,6 +40,52 @@ public class ProductRepositoryTest {
     }
 
     @Test
+    public void testSavingWithPriceAndStatus(){
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner);
+        AddressEntity productAddress = RandomTestData.newRandomTestAddress();
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, productAddress, 1000);
+        productRepository.saveProduct(testProduct);
+        ProductEntity product = productRepository.getProductById(testProduct.getId());
+        Assert.assertEquals(testProduct, product);
+    }
+
+    @Test
+    public void testUpdatingAProductWithPrice(){
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner);
+        AddressEntity addressEntity = RandomTestData.newRandomTestAddress();
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, addressEntity, 1000);
+        productRepository.saveProduct(testProduct);
+        testProduct.setPrice(500);
+        productRepository.editProduct(testProduct);
+        ProductEntity loadedProduct = productRepository.getProductById(testProduct.getId());
+        Assert.assertEquals(testProduct, loadedProduct);
+    }
+
+    @Test
+    public void getAllProductsWithPrice(){
+        boolean productExsists = false;
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        userRepository.saveUser(owner);
+        AddressEntity addressEntity = RandomTestData.newRandomTestAddress();
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, addressEntity, 1000);
+        productRepository.saveProduct(testProduct);
+        List<ProductEntity> allProducts = productRepository.getAllProducts();
+        ProductEntity loadedProduct = new ProductEntity();
+
+        for (ProductEntity product: allProducts){
+            if (product.getId() == testProduct.getId()){
+                productExsists = true;
+                loadedProduct = product;
+            }
+        }
+
+        Assert.assertTrue(productExsists);
+        Assert.assertEquals(testProduct, loadedProduct);
+    }
+
+    @Test
     public void getAllProducsFromDatabase() {
         boolean savedProductsExists = false;
         UserEntity user1 = RandomTestData.newRandomTestUser();
@@ -64,32 +111,6 @@ public class ProductRepositoryTest {
         Assert.assertTrue(savedProductsExists);
     }
 
-    @Test
-    public void getAllAvailableProducts(){
-        boolean savedProductsExists = false;
-        AddressEntity address3 = RandomTestData.newRandomTestAddress();
-        UserEntity user3 = RandomTestData.newRandomTestUser();
-        userRepository.saveUser(user3);
-
-        ProductEntity product = RandomTestData.newRandomTestProduct(user3, address3);
-        productRepository.saveProduct(product);
-        List<ProductEntity> availableProducts = productRepository.getAvailableProducts();
-
-        for (ProductEntity productElement : availableProducts) {
-            if (productElement.getTitle().equals(product.getTitle())
-                    && productElement.getDescription().equals(product.getDescription())
-                    && productElement.getSurety() == product.getSurety()
-                    && productElement.getCost() == product.getCost()
-                    && productElement.getLocation().getStreet()
-                    .equals(product.getLocation().getStreet())
-            ) {
-                savedProductsExists = true;
-            }
-        }
-
-        Assert.assertTrue(savedProductsExists);
-
-    }
 
     @Test
     public void editProduct(){
