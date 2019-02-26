@@ -7,9 +7,11 @@ import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
 
+@ActiveProfiles("dev")
 public class LendingServiceTest {
 
     // Tests for requestLending
