@@ -41,35 +41,33 @@ public class RequestALendingController {
     }
 
     @PostMapping(requestalendingURL)
-    public String requestalending(@RequestParam Long id,
-                                  Authentication auth,
-                                  @RequestParam("start") String start,
-                                  @RequestParam("end") String end) throws Exception{
-
+    public String requestalending(
+        @RequestParam Long id,
+        Authentication auth,
+        @RequestParam("start") String start,
+        @RequestParam("end") String end
+    ) throws Exception {
 
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
 
-        String startTimeStampString = start + ":00";
-        String endTimeStampString = end + ":00";
+        String startTimeStampString = start + "T00:00:00";
+        String endTimeStampString = end + "T00:00:00";
 
         Timestamp startTimestamp
-                = Timestamp.valueOf(startTimeStampString.replace("T", " "));
+            = Timestamp.valueOf(startTimeStampString.replace("T", " "));
         Timestamp endTimestamp
-                = Timestamp.valueOf(endTimeStampString.replace("T", " "));
-
-
+            = Timestamp.valueOf(endTimeStampString.replace("T", " "));
 
         LendingEntity didrequest = lendingService.requestLending(user,
-                product,
-                startTimestamp,
-                endTimestamp);
+            product,
+            startTimestamp,
+            endTimestamp);
 
         if(didrequest == null){
             throw new Exception("cannot make lending request");
-
         }
 
         return "redirect:/";
-    }
+    }  
 }
