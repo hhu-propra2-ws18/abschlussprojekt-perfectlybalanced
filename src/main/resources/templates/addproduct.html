@@ -59,7 +59,12 @@
             <small class="form-text text-danger" th:if="${#fields.hasErrors('address.city')}" th:errors="${address.city}">Error</small>
         </div>
 
-        <button type="submit" class="btn btn-primary">Erstellen</button>
+        <form th:action="@{/addproduct}" method="post">
+            <a><button type="submit" name="selling" class="btn btn-warning">Verkaufen</button></a>
+        </form>
+        <form th:action="@{/addproduct}" method="post">
+            <a><button type="submit" name="lending" class="btn btn-warning">Verleihen</button></a>
+        </form>
     </form>
 </div>
 </body>
