@@ -45,7 +45,7 @@ public class KathrinHaeckslerAusleihenTest {
         kathrin.setFirstname("kathrin");
         userService.addUser(kathrin);
 
-        long kathrin_balance_before=1000;
+        long kathrin_balance_before=500;
 
         proPayService.changeUserBalanceBy(kathrin.getUsername(),kathrin_balance_before);
 
@@ -95,6 +95,6 @@ public class KathrinHaeckslerAusleihenTest {
         );
         assertEquals(kathrin_account_after_lending.reservations.length,0);
 
-
+        assertEquals(proPayService.getAccount(owner.getUsername()).amount,hacksler_cost*2);
     }
 }
