@@ -106,7 +106,7 @@ public class SellServiceTest {
     }
 
     @Test
-    public void ReservationFails() {
+    public void reservationFails() {
         UserEntity owner = RandomTestData.newRandomTestUser();
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
@@ -131,7 +131,7 @@ public class SellServiceTest {
     }
 
     @Test
-    public void TransferFails() {
+    public void transferFails() {
         UserEntity owner = RandomTestData.newRandomTestUser();
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
@@ -164,7 +164,7 @@ public class SellServiceTest {
     }
 
     @Test
-    public void BuySuccessfull() {
+    public void buySuccessfull() {
         UserEntity owner = RandomTestData.newRandomTestUser();
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();

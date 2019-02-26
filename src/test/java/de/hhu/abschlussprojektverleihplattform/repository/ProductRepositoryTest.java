@@ -43,7 +43,11 @@ public class ProductRepositoryTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         userRepository.saveUser(owner);
         AddressEntity productAddress = RandomTestData.newRandomTestAddress();
-        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, productAddress, 1000);
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(
+            owner,
+            productAddress,
+            1000
+        );
         productRepository.saveProduct(testProduct);
         ProductEntity product = productRepository.getProductById(testProduct.getId());
         Assert.assertEquals(testProduct, product);
@@ -54,7 +58,11 @@ public class ProductRepositoryTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         userRepository.saveUser(owner);
         AddressEntity addressEntity = RandomTestData.newRandomTestAddress();
-        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, addressEntity, 1000);
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(
+            owner,
+            addressEntity,
+            1000
+        );
         productRepository.saveProduct(testProduct);
         testProduct.setPrice(500);
         productRepository.editProduct(testProduct);
@@ -68,7 +76,11 @@ public class ProductRepositoryTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         userRepository.saveUser(owner);
         AddressEntity addressEntity = RandomTestData.newRandomTestAddress();
-        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(owner, addressEntity, 1000);
+        ProductEntity testProduct = RandomTestData.newRandomTestPoductWithPrice(
+            owner,
+            addressEntity,
+            1000
+        );
         productRepository.saveProduct(testProduct);
         List<ProductEntity> allProducts = productRepository.getAllProducts();
         ProductEntity loadedProduct = new ProductEntity();
