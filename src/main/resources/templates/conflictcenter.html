@@ -9,18 +9,24 @@
 <body>
 <nav th:replace="nav-fragment"></nav>
 <div class="container">
-    <br>
-            <div class="card">
-                <div class="card-body">
-            <h5 class="card-title">Produkt</h5>
+    <h3>Aktuelle Konflikte</h3>
+    <p th:if="${allLendingConflicts.isEmpty()}==true">Aktuell liegen keine Konflikte vor.</p>
+    <div class="card" th:each="lending: ${allLendingConflicts}">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${lending.product.title}">
+                Produkt
+            </h5>
             <p class="card-text">
-                <span>Verleiher:</span>
+                <span>Verleiher:
+                    <span th:text="${lending.product.owner.username}">Username</span>
+                </span>
                 <br>
-                <span>Ausleihender:</span>
+                <span>Ausleihender:
+                    <span th:text="${lending.borrower.username}">Username</span>
+                </span>
             </p>
-            <a href="#" class="btn btn-primary">Detailansicht</a>
+            <a href="#" class="btn btn-primary" th:href="@{|~/conflictdetail/${lending.id}|}">Detailansicht</a>
         </div>
-        <br>
     </div>
 </div>
 </body>

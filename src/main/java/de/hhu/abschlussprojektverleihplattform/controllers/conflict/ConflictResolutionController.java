@@ -2,12 +2,16 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.conflict;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -26,16 +30,23 @@ public class ConflictResolutionController {
         this.productService = productService;
     }
 
-    @GetMapping("/admin")
-    public String showConflictCenter(Model model) {
-        List<LendingEntity> lendings = lendingService.getAllConflicts();
-        model.addAttribute(lendings);
+    @GetMapping("/conflictcenter")
+    public String showConflictCenter (Model model) {
+        List<LendingEntity> allLendingConflicts = lendingService.getAllConflicts();
+        model.addAttribute("allLendingConflicts", allLendingConflicts);
         return "conflictcenter";
     }
 
-    @GetMapping("/admin/{id}")
-    public String showConflictDetails(Model model, Long id) {
-        // TODO: suche VerleiherID, inject Service
-        return "conflictdetails";
+    @GetMapping("/conflictdetail/{id}")
+    public String showConflictDetails (
+            Model model,
+            @PathVariable Long id,
+            @ModelAttribute("user") UserEntity userEntity) throws Exception {
+        LendingEntity lending = lendingService.getLendingById(id);
+        if (lending != null) {
+            model.addAttribute("lending", lending);
+            return "conflictdetail";
+        }
+        return "redirekt:/";
     }
 }

@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" xmlns:th="http://www.w3.org/1999/xhtml"
+     xmlns:sec="http://www.w3.org/1999/xhtml">
     <a class="navbar-brand" href="#" th:href="@{/}">Verleihplattform - Perfectlybalanced</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,18 +11,21 @@
                 <a class="nav-link" href="/" th:href="@{/}">Start </a>
             </li>
             <th:block th:if="${#authorization.expression('isAuthenticated()')}">
-            <li class="nav-item">
-                <a class="nav-link" href="/myproducts" th:href="@{/myproducts}">Meine Produkte</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/addproduct" th:href="@{/addproduct}">Neues Produkt</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/lendingrequests" th:href="@{/lendingrequests}">Leih-Anfragen</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"  href="/mylendings" th:href="@{/mylendings}">Meine Ausleihen</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/myproducts" th:href="@{/myproducts}">Meine Produkte</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/addproduct" th:href="@{/addproduct}">Neues Produkt</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/lendingrequests" th:href="@{/lendingrequests}">Leih-Anfragen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="/mylendings" th:href="@{/mylendings}">Meine Ausleihen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  href="/conflictcenter" th:href="@{/conflictcenter}">Konflikt-Center</a>
+                </li>
             </th:block>
         </ul>
         <div th:switch="${#authentication} ? ${#authorization.expression('isAuthenticated()')} : ${false}">
