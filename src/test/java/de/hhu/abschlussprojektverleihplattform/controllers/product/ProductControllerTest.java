@@ -16,12 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -347,21 +347,19 @@ public class ProductControllerTest {
         when(productService.getById(product.getId())).thenReturn(product);
 
 
-        mockMvc.perform(post("/editproduct/" + product.getId().toString())
-            .param("description","Beschreibung zum TestProdukt")
-            .param("title", "TestProdukt")
-            .param("surety", "100")
-            .param("cost", "100")
-            .param("street", "Test")
-            .param("housenumber", "1")
-            .param("postcode", "11111")
-            .param("city", "Teststadt")
-            .with(csrf())
-            .with(user(authenticatedUserService.loadUserByUsername(
-                    randomUser.getUsername()
-            )))
-        )
-            .andExpect(content().string(
-            containsString("Adresse muss mindestens 5 Zeichen lang sein.")));
+        mockMvc
+            .perform(post("/editproduct/" + product.getId().toString())
+                .param("description","Beschreibung zum TestProdukt")
+                .param("title", "TestProdukt")
+                .param("surety", "100")
+                .param("cost", "100")
+                .param("street", "Test")
+                .param("housenumber", "1")
+                .param("postcode", "11111")
+                .param("city", "Teststadt")
+                .with(csrf())
+                .with(user(authenticatedUserService.loadUserByUsername(randomUser.getUsername()))))
+            .andExpect(content()
+                .string(containsString("Adresse muss mindestens 5 Zeichen lang sein.")));
     }
 }

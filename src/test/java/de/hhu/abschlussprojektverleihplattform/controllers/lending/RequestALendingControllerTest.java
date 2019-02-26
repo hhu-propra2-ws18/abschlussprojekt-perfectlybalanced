@@ -103,19 +103,14 @@ public class RequestALendingControllerTest {
             .thenReturn(userBorrower);
 
         // Act & Assert
-        mockMvc.perform(
-            post(
-                RequestALendingController
-                    .requestalendingURL + "?id=" + productEntity.getId())
+        mockMvc
+            .perform(post(RequestALendingController.requestalendingURL + "?id=" + productEntity.getId())
                 .param("start", "2019-02-25T15:15")
                 .param("end", "2019-02-26T15:15")
                 .with(csrf())
                 .with(
                     user(authenticatedUserService
-                        .loadUserByUsername(userBorrower.getUsername())))
-
-
-        )
+                        .loadUserByUsername(userBorrower.getUsername()))))
             .andExpect(status().is3xxRedirection());
 
     }

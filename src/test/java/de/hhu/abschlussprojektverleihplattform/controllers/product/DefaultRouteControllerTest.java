@@ -42,11 +42,9 @@ public class DefaultRouteControllerTest {
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
-        mockMvc.perform(get("/")
-            .with(user(authenticatedUserService.loadUserByUsername(
-                randomUser.getUsername()
-            )))
-        )
+        mockMvc
+            .perform(get("/")
+                .with(user(authenticatedUserService.loadUserByUsername(randomUser.getUsername()))))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Verleihplattform")))
             .andExpect(content().string(containsString("Logout")))

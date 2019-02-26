@@ -66,16 +66,14 @@ public class UserProfileControllerTest {
 
         when(userService.findByUsername(user.getUsername())).thenReturn(user);
 
-        mockMvc.perform(get("/profile")
-                .with(user(authenticatedUserService.loadUserByUsername(
-                        user.getUsername()
-                )))
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("Profile")))
-                .andExpect(content().string(containsString("Email")))
-                .andExpect(content().string(containsString("Benutzername")))
-                .andExpect(content().string(containsString("Kontostand")));
+        mockMvc
+            .perform(get("/profile")
+                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername()))))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("Profile")))
+            .andExpect(content().string(containsString("Email")))
+            .andExpect(content().string(containsString("Benutzername")))
+            .andExpect(content().string(containsString("Kontostand")));
     }
 
     @Test
@@ -85,15 +83,16 @@ public class UserProfileControllerTest {
 
         when(userService.findByUsername(user.getUsername())).thenReturn(user);
 
-        mockMvc.perform(post("/profile/deposit")
+        mockMvc
+            .perform(post("/profile/deposit")
                 .with(csrf())
-                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
-        )
+                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername()))))
             .andExpect(status().is3xxRedirection());
 
-        mockMvc.perform(get("/profile")
-            .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
-        ).andExpect(content().string(containsString(""+100)));
+        mockMvc
+            .perform(get("/profile")
+                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername()))))
+            .andExpect(content().string(containsString(""+100)));
         //because /deposit deposits 100 Euros
     }
 }

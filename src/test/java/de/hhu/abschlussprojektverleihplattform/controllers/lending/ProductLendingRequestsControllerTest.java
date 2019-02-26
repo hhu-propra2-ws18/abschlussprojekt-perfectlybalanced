@@ -101,15 +101,15 @@ public class ProductLendingRequestsControllerTest {
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
-        mockMvc.perform(post(
+        mockMvc
+            .perform(post(
                 ProductLendingRequestsController.lendingRequestsAcceptURL+"?id=2")
                 .with(csrf())
-                .with(user(authenticatedUserService.loadUserByUsername(
-                        randomUser.getUsername()
-                )))
-        )
-                .andExpect(status().is3xxRedirection())
-                .andExpect(handler().handlerType(ProductLendingRequestsController.class));
+                .with(user(authenticatedUserService
+                    .loadUserByUsername(randomUser.getUsername()))))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(handler().handlerType(ProductLendingRequestsController.class));
+
         verify(lendingService).getLendingById(2L);
         verify(lendingService).acceptLendingRequest(null);
     }
