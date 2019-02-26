@@ -35,19 +35,12 @@
                     </li>
                 </ul>
 
-                <div class="card" th:each="timeSpan : ${ListOfReservatedTimes}">
+                <div class="card" th:each="zeitraum : ${ListOfStrings}">
                     <div class="card-header">
                         <p >Belegter Zeitraum</p>
                     </div>
                     <div class="card-body">
-                        <span th:text="${#dates.dayOfWeekName(timeSpan.start)}">TimeStampStart</span>, der
-                        <span th:text="${#dates.day(timeSpan.start)}">TimeStampStart</span>.
-                        <span th:text="${#dates.month(timeSpan.start)}">TimeStampStart</span>.
-                        <span th:text="${#dates.year(timeSpan.start)}">TimeStampStart</span> bis
-                        <span th:text="${#dates.dayOfWeekName(timeSpan.end)}">TimeStampStart</span>, der
-                        <span th:text="${#dates.day(timeSpan.end)}">TimeStampStart</span>.
-                        <span th:text="${#dates.month(timeSpan.end)}">TimeStampStart</span>.
-                        <span th:text="${#dates.year(timeSpan.end)}">TimeStampStart</span>
+                        <span th:text="${zeitraum}">fertig</span>
                     </div>
                 </div>
 
