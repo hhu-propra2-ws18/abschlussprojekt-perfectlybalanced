@@ -12,7 +12,7 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private ProductStatus status;
+    private Productstatus status;
     @NotBlank
     @Size(min=10, max=255, message = "Beschreibung {string.size.error}")
     private String description;
@@ -56,7 +56,7 @@ public class ProductEntity {
         this.price = 0;
         this.location = location;
         this.owner = owner;
-        this.status = ProductStatus.forLending;
+        this.status = Productstatus.forLending;
     }
 
     public ProductEntity(
@@ -76,7 +76,7 @@ public class ProductEntity {
         this.price = 0;
         this.location = location;
         this.owner = owner;
-        this.status = ProductStatus.forLending;
+        this.status = Productstatus.forLending;
     }
 
     public ProductEntity(
@@ -93,7 +93,7 @@ public class ProductEntity {
         this.price = price;
         this.location = location;
         this.owner = owner;
-        this.status = ProductStatus.forBuying;
+        this.status = Productstatus.forBuying;
     }
 
     public ProductEntity(
@@ -112,6 +112,6 @@ public class ProductEntity {
         this.price = price;
         this.location = location;
         this.owner = owner;
-        this.status = ProductStatus.forBuying;
+        this.status = Productstatus.forBuying;
     }
 }
