@@ -31,7 +31,10 @@
             </span>
             <br>
             <br>
-            <a class="btn btn-primary" th:href="@{/conflictcenter}">Konflikt</a>
+            <a class="btn btn-primary" th:href="@{/conflictcenter}">Kaution an
+                <span th:text="${lending.product.owner.username}"></span>
+                uebergeben
+            </a>
         </div>
 
         <div class="col-md-6">
@@ -53,7 +56,10 @@
             </span>
             <br>
             <br>
-            <a class="btn btn-primary" th:href="@{/conflictcenter}">Konflikt</a>
+            <a class="btn btn-primary" th:href="@{/conflictcenter}">Kaution an
+                <span th:text="${lending.borrower.username}"></span>
+                uebergeben
+            </a>
         </div>
     </div>
     <br>
