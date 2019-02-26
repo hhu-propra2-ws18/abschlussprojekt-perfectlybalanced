@@ -39,11 +39,11 @@ public class LendingService implements ILendingService {
     }
 
     public LendingEntity requestLending(
-            UserEntity actingUser,
-            ProductEntity product,
-            Timestamp start,
-            Timestamp end
-    ) throws Exception{
+        UserEntity actingUser,
+        ProductEntity product,
+        Timestamp start,
+        Timestamp end
+    ) throws Exception {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
         boolean timeIsOK = true;
         for (LendingEntity lend : lendings) {
@@ -77,7 +77,7 @@ public class LendingService implements ILendingService {
         throw new Exception("time or money are not ok");
     }
 
-    public void acceptLendingRequest(LendingEntity lending) throws Exception{
+    public void acceptLendingRequest(LendingEntity lending) throws Exception {
         Long costID = paymentService.reservateAmount(
             lending.getBorrower(),
             lending.getProduct().getOwner(),
@@ -108,33 +108,33 @@ public class LendingService implements ILendingService {
         throw new Exception("could not accept lending request");
     }
 
-    public void denyLendingRequest(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.requested)){
+    public void denyLendingRequest(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.requested)) {
             throw new Exception("lending was not requested, cannot reject it.");
         }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
     }
 
-    public void returnProduct(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.confirmt)){
+    public void returnProduct(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.confirmt)) {
             throw new Exception("the lending is not confirmed, cannot be returned.");
         }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
     }
 
-    public boolean acceptReturnedProduct(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.returned)){
+    public boolean acceptReturnedProduct(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.returned)) {
             throw new Exception(
-            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+                "cannot reject returned lending if status is not : " + Lendingstatus.returned
             );
         }
 
         if (paymentService.returnReservatedMoney(
-                lending.getBorrower().getUsername(),
-                lending.getSuretyReservationID()
-            )
+            lending.getBorrower().getUsername(),
+            lending.getSuretyReservationID()
+        )
         ) {
             lending.setStatus(Lendingstatus.done);
             lendingRepository.update(lending);
@@ -143,10 +143,10 @@ public class LendingService implements ILendingService {
         return false;
     }
 
-    public void denyReturnedProduct(LendingEntity lending) throws Exception{
-        if(!lending.getStatus().equals(Lendingstatus.returned)){
+    public void denyReturnedProduct(LendingEntity lending) throws Exception {
+        if (!lending.getStatus().equals(Lendingstatus.returned)) {
             throw new Exception(
-            "cannot reject returned lending if status is not : "+Lendingstatus.returned
+                "cannot reject returned lending if status is not : " + Lendingstatus.returned
             );
         }
         lending.setStatus(Lendingstatus.conflict);
@@ -182,7 +182,7 @@ public class LendingService implements ILendingService {
             return false;
         }
     }
-    
+
     public List<LendingEntity> getAllRequestsForUser(UserEntity user) {
         return lendingRepository.getAllLendingRequestsForProductOwner(user);
     }
@@ -211,41 +211,41 @@ public class LendingService implements ILendingService {
         return lendingRepository.getLendingById(id);
     }
 
-    private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status){
+    private List<LendingEntity> filterByStatus(List<LendingEntity> lendings, Lendingstatus status) {
         return lendings
-                .stream()
-                .filter(
-                        lendingEntity -> lendingEntity
-                                .getStatus()
-                                .equals(status)
-                )
-                .collect(Collectors.toList());
+            .stream()
+            .filter(
+                lendingEntity -> lendingEntity
+                    .getStatus()
+                    .equals(status)
+            )
+            .collect(Collectors.toList());
     }
 
     public List<LendingEntity> getAllRequestedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.requested);
+        return filterByStatus(allLendings, Lendingstatus.requested);
     }
 
     public List<LendingEntity> getAllConfirmedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.confirmt);
+        return filterByStatus(allLendings, Lendingstatus.confirmt);
     }
 
     public List<LendingEntity> getAllReturnedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.returned);
+        return filterByStatus(allLendings, Lendingstatus.returned);
     }
 
     public List<LendingEntity> getAllConflictedLendings(List<LendingEntity> allLendings) {
-        return filterByStatus(allLendings,Lendingstatus.conflict);
+        return filterByStatus(allLendings, Lendingstatus.conflict);
     }
 
     public List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings) {
         return allLendings
-                .stream()
-                .filter(
-                    lendingEntity -> lendingEntity.getStatus().equals(Lendingstatus.done)
-                            || lendingEntity.getStatus().equals(Lendingstatus.denied)
-                )
-                .collect(Collectors.toList());
+            .stream()
+            .filter(
+                lendingEntity -> lendingEntity.getStatus().equals(Lendingstatus.done)
+                    || lendingEntity.getStatus().equals(Lendingstatus.denied)
+            )
+            .collect(Collectors.toList());
     }
 
     protected int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
