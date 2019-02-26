@@ -125,6 +125,18 @@ public class ProductController {
         return "myproducts";
     }
 
+    @GetMapping("/buyrequests/sendRequest")
+    public String gotoBuyRequest(Model model,
+                                 @RequestParam Long id,
+                                 Authentication auth){
+
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("product", product);
+        return "sendBuyRequest";
+    }
+
 
 }
 
