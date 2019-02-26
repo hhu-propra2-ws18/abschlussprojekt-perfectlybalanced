@@ -6,6 +6,7 @@ import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.ILendingService;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
+import de.hhu.abschlussprojektverleihplattform.service.ISellService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,15 +23,18 @@ public class ProductController {
 
     private final IProductService productService;
     private final ILendingService lendingService;
+    private final ISellService sellService;
 
     @Autowired
 
     public ProductController(
-            IUserService userService,
-            IProductService productService,
-            ILendingService lendingService) {
+        IProductService productService,
+        ILendingService lendingService,
+        ISellService sellService
+    ) {
         this.productService = productService;
         this.lendingService = lendingService;
+        this.sellService = sellService;
     }
 
 
@@ -167,6 +171,15 @@ public class ProductController {
         return "sendBuyRequest";
     }
 
-
+    @PostMapping("/buyrequests/sendRequest")
+    public String performBuyRequest(Model model,
+        @RequestParam Long id,
+        Authentication auth
+    ) throws Exception {
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+        sellService.buyProduct(user, product);
+        return "redirect:/";
+    }
 }
 
