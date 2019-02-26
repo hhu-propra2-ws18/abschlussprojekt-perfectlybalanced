@@ -52,28 +52,27 @@ public class RequestALendingControllerTest {
         UserEntity user_owner= RandomTestData.newRandomTestUser();
         userService.addUser(user_owner);
         ProductEntity productEntity =
-                RandomTestData
-                        .newRandomTestProduct(user_owner,RandomTestData.newRandomTestAddress());
+            RandomTestData
+                .newRandomTestProduct(user_owner,RandomTestData.newRandomTestAddress());
         productService.addProduct(productEntity);
 
         System.out.println(productEntity.toString());
 
 
         mockMvc.perform(
-                post(
-                        RequestALendingController
-                                .requestalendingURL+"?id="+productEntity.getId())
-                        .param("start", "2019-02-25T15:15")
-                        .param("end", "2019-02-26T15:15")
-                        .with(csrf())
-                        .with(
-                                user(authenticatedUserService
-                                        .loadUserByUsername(user_wannabe_borrower.getUsername())))
-
-
+            post(
+                RequestALendingController
+                    .requestalendingURL+"?id="+productEntity.getId()
+            )
+            .param("start", "2019-02-25")
+            .param("end", "2019-02-26")
+            .with(csrf())
+            .with(
+                user(authenticatedUserService
+                    .loadUserByUsername(user_wannabe_borrower.getUsername())
+                )
+            )
         )
-                .andExpect(status().is3xxRedirection());
-
+            .andExpect(status().is3xxRedirection());
     }
-
 }
