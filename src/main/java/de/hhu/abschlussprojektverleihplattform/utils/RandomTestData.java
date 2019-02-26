@@ -40,7 +40,6 @@ public class RandomTestData {
         AddressEntity address,
         int price
     ){
-        Random random = new Random();
         return new ProductEntity(RandomStringUtils.randomAlphabetic(255),
                 RandomStringUtils.randomAlphabetic(50),
                 price,
