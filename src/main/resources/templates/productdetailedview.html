@@ -17,19 +17,20 @@
                     <li class="list-group-item">Beschreibung:
                         <span th:text="${product.description}"></span>
                     </li>
-                    <li class="list-group-item">Kosten:
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Kosten:
                         <span th:text="${product.cost}"></span>€
                     </li>
-                    <li class="list-group-item">Kautionswert:
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Kautionswert:
                         <span th:text="${product.surety}"></span>€
                     </li>
-                    <li class="list-group-item">Standort:
-                        <span th:text="${product.location.street}"></span>
-                        <span th:text="${product.location.housenumber}"></span>,
-                        <span th:text="${product.location.postcode}"></span>
-                        <span th:text="${product.location.city}"></span>
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==true}" class="list-group-item">Kaufpreis:
+                        <span th:text="${product.price}"></span>
                     </li>
-                    <li class="list-group-item">Verleihende Person:
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==true}" class="list-group-item">Verkäufer:
+                        <span th:text="${product.owner.username}"></span>,
+                        <span th:text="${product.owner.email}"></span>
+                    </li>
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Verleihende Person:
                         <span th:text="${product.owner.username}"></span>,
                         <span th:text="${product.owner.email}"></span>
                     </li>
@@ -52,14 +53,14 @@
                 </div>
 
                 <a th:href="@{/lendingrequests/sendRequest(id=${product.getId()})}">
-                    <button th:if="${(product.owner.userId.equals(user.userId))==false} or ${product.getStatus().equals('forBuying')==true}"
+                    <button th:if="${(product.owner.userId.equals(user.userId))==false} and ${product.getStatus().toString().equals('forBuying')==false}"
                             class="btn btn-primary"
                             type="submit">Ausleihen
                     </button>
                 </a>
 
                 <a th:href="@{/buyrequests/sendRequest(id=${product.getId()})}">
-                    <button th:if="${(product.owner.userId.equals(user.userId))==false} or ${product.getStatus().equals('forLending')==true}"
+                    <button th:if="${(product.owner.userId.equals(user.userId))==false} and ${product.getStatus().toString().equals('forLending')==false}"
                             class="btn btn-primary"
                             type="submit">Kaufen
                     </button>

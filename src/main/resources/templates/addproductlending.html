@@ -10,7 +10,7 @@
 <div class="container">
     <div class="m-3"></div>
     <h3>Artikel einstellen</h3>
-    <form action="/addproduct" th:action="@{/addproduct}" method="post">
+    <form action="/addproduct" th:action="@{/addproductlending}" method="post">
         <div class="form-group">
             <label for="titel">Titel</label>
             <input type="text" class="form-control" id="titel" placeholder="Titel" required th:field="${product.title}">
