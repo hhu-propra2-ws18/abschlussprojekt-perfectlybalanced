@@ -9,8 +9,6 @@ public interface IProductRepository {
 
     List<ProductEntity> getAllProducts();
 
-    List<ProductEntity> getAvailableProducts();
-
     void saveProduct(ProductEntity productEntity);
 
     void editProduct(ProductEntity productEntity);
