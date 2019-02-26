@@ -25,6 +25,14 @@ public class SellService implements ISellService {
         if(product.getStatus().equals(Productstatus.sold)){
             throw new Exception("This Product already has been sold.");
         }
-        //continue here
+        Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
+        if (userMoney < product.getPrice()) {
+            throw new Exception("The cost and the surety sum up to: "
+                    + product.getPrice() + "€, but you only have: " + userMoney + "€.");
+        }
+        Long paymentID = paymentService.reservateAmount(actingUser.getUsername(), product.getOwner().getUsername(), product.getPrice());
+        paymentService.tranferReservatedMoney(actingUser.getUsername(), paymentID);
+        product.setStatus(Productstatus.sold);
+        productRepository.editProduct(product);
     }
 }
