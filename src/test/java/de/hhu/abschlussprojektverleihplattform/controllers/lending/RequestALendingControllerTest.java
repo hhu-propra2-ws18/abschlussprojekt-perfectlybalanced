@@ -7,19 +7,21 @@ import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class RequestALendingControllerTest {
+
+    @Autowired
+    WebApplicationContext context;
 
     @Autowired
     UserService userService;
@@ -44,21 +49,35 @@ public class RequestALendingControllerTest {
     @Autowired
     ProPayService proPayService;
 
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
+    }
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
     public void lendingRequestTest() throws Exception {
-        UserEntity user_wannabe_borrower= RandomTestData.newRandomTestUser();
-        userService.addUser(user_wannabe_borrower);
 
-        proPayService.changeUserBalanceBy(user_wannabe_borrower.getUsername(),99999);
+        //when(productService.getById())
+        UserEntity userBorrower= RandomTestData.newRandomTestUser();
+        //userService.addUser(user_wannabe_borrower);
 
-        UserEntity user_owner= RandomTestData.newRandomTestUser();
-        userService.addUser(user_owner);
+        proPayService.changeUserBalanceBy(userBorrower.getUsername(),99999);
+
+        UserEntity userOwner= RandomTestData.newRandomTestUser();
+        //userService.addUser(user_owner);
         ProductEntity productEntity =
                 RandomTestData
-                        .newRandomTestProduct(user_owner,RandomTestData.newRandomTestAddress());
-        productService.addProduct(productEntity);
-
-        System.out.println(productEntity.toString());
+                        .newRandomTestProduct(userOwner,RandomTestData.newRandomTestAddress());
+        //productService.addProduct(productEntity);
+        //System.out.println(productEntity.toString());
 
 
         mockMvc.perform(
@@ -70,7 +89,7 @@ public class RequestALendingControllerTest {
                         .with(csrf())
                         .with(
                                 user(authenticatedUserService
-                                        .loadUserByUsername(user_wannabe_borrower.getUsername())))
+                                        .loadUserByUsername(userBorrower.getUsername())))
 
 
         )
