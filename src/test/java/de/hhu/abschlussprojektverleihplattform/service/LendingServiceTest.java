@@ -212,8 +212,7 @@ public class LendingServiceTest {
         } catch (Exception e) {
             result = e;
         }
-
-        int totalMoney = product.getSurety() + product.getCost();
+        
         Assert.assertEquals(exception, result);
     }
 
