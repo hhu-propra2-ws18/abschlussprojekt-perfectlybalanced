@@ -92,8 +92,7 @@ public class RequestALendingControllerTest {
         productEntity.setId(1L);
         lending.setId(1L);
         lending.setStatus(Lendingstatus.requested);
-        proPayService.changeUserBalanceBy(userBorrower.getUsername(), 99999);
-
+        
         // Mockito
         when(productService.getById(ArgumentMatchers.anyLong()))
             .thenReturn(productEntity);
