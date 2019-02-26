@@ -49,12 +49,29 @@ public class ProductController {
     }
 
 
-    @PostMapping("/addproduct")
-    public String postAddProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
+    @PostMapping(value = "/addproduct", params = "lending")
+    public String postLendProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
         BindingResult bindingResultProduct,
         @ModelAttribute("address") @Valid AddressEntity addressEntity,
         BindingResult bindingResultAddress,
         @ModelAttribute("user") UserEntity userEntity){
+
+        if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
+            return "addproduct";
+        }
+
+        productEntity.setLocation(addressEntity);
+        productEntity.setOwner(userEntity);
+        productService.addProduct(productEntity);
+        return "redirect:/";
+    }
+
+    @PostMapping(value = "/addproduct", params = "selling")
+    public String postSellProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
+         BindingResult bindingResultProduct,
+         @ModelAttribute("address") @Valid AddressEntity addressEntity,
+         BindingResult bindingResultAddress,
+         @ModelAttribute("user") UserEntity userEntity){
 
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "addproduct";
