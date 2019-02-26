@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("dev")
+
 public class MemfredHatFreundeZumEssen {
 
     @Autowired

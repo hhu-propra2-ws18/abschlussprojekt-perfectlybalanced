@@ -14,7 +14,7 @@ import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("dev")
+
 public class ProPayServiceTest {
 
     @Autowired

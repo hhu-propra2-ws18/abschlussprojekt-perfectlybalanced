@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
 
-@ActiveProfiles("dev")
+
 public class LendingServiceTest {
 
     // Tests for requestLending

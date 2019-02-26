@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("dev")
 public class AbschlussprojektVerleihplattformApplicationTests {
 
     @Test

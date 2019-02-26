@@ -17,7 +17,7 @@ import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("dev")
+
 public class CustomEmailTest {
     @Autowired
     private IUserService userService;
