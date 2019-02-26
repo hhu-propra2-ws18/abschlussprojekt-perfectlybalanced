@@ -30,15 +30,15 @@ public interface ILendingService {
     void returnProduct(LendingEntity lending)throws Exception;
 
     // Decide wether a returned product is in acceptable condition or not
-    boolean acceptReturnedProduct(LendingEntity lending) throws Exception;
+    void acceptReturnedProduct(LendingEntity lending) throws Exception;
 
     void denyReturnedProduct(LendingEntity lending) throws Exception;
 
 
     // An admin resolves a conflict and decides who gets the surety
-    boolean ownerReceivesSuretyAfterConflict(LendingEntity lending);
+    void ownerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception;
 
-    boolean borrowerReceivesSuretyAfterConflict(LendingEntity lending);
+    void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception;
 
     // The following Methodes are just for the views,
     // calling them doesnt change anything in the database
