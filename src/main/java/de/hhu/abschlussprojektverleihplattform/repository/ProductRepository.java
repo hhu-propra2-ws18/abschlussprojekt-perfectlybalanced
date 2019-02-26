@@ -85,7 +85,7 @@ public class ProductRepository implements IProductRepository {
             product.getPrice(),
             product.getOwner().getUserId()),
             keyHolder
-                );
+        );
         product.setId(Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
