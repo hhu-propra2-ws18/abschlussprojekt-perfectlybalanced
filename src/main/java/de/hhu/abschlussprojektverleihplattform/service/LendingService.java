@@ -105,6 +105,13 @@ public class LendingService implements ILendingService {
                 throw new Exception("The Product is not available in the selected time.");
             }
         }
+        int totalMoney = lending.getProduct().getSurety()
+                + lending.getProduct().getCost()
+                * daysBetweenTwoTimestamps(lending.getStart(), lending.getEnd());
+        Long userMoney = paymentService.usersCurrentBalance(lending.getBorrower().getUsername());
+        if (userMoney < totalMoney) {
+            throw new Exception("The borrower currently hasn't enough money for the lending");
+        }
         Long costID = paymentService.reservateAmount(
             lending.getBorrower().getUsername(),
             lending.getProduct().getOwner().getUsername(),

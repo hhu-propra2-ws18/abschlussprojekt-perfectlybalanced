@@ -534,6 +534,77 @@ public class LendingServiceTest {
     }
 
     @Test
+    public void moneyRequestFails() {
+        Timestamp start = new Timestamp(300L);
+        Timestamp end = new Timestamp(500L);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        LendingEntity lending = new LendingEntity(
+                Lendingstatus.requested,
+                start,
+                end,
+                borrower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy();
+        Exception fail = new Exception("TestFail");
+        payment_service.configurateUsersCurrentBalance(0L, fail, true);
+        LendingService logic = new LendingService(lending_repository, payment_service);
+
+        Exception result = new Exception("0");
+        try {
+            logic.acceptLendingRequest(lending);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(fail, result);
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
+    }
+
+    @Test
+    public void borrowerHasNoMoney() {
+        Timestamp start = new Timestamp(300L);
+        Timestamp end = new Timestamp(500L);
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        LendingEntity lending = new LendingEntity(
+                Lendingstatus.requested,
+                start,
+                end,
+                borrower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.setLendingToUpdate(lending);
+        PaymentServiceDummy payment_service = new PaymentServiceDummy();
+        payment_service.configurateUsersCurrentBalance(0L, null, false);
+        LendingService logic = new LendingService(lending_repository, payment_service);
+
+        Exception result = new Exception("0");
+        try {
+            logic.acceptLendingRequest(lending);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals("The borrower currently hasn't enough money for the lending", result.getMessage());
+        Assert.assertFalse(lending_repository.hasBeenUpdated());
+        Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
+    }
+
+    @Test
     public void reservation1Fails() {
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
@@ -554,6 +625,7 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         Exception fail = new Exception("TestFail");
+        payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
         payment_service.configureReservateAmount(fail, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
 
@@ -589,6 +661,7 @@ public class LendingServiceTest {
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
+        payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
         Exception fail = new Exception("TestFail");
         payment_service.configureReservateAmount(null, false);
         payment_service.configureReservateAmountSecondOneFails(fail);
@@ -631,6 +704,7 @@ public class LendingServiceTest {
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
+        payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
         payment_service.configureReservateAmount(null, false);
         payment_service.configureTransfer(null, false);
         LendingService logic = new LendingService(lending_repository, payment_service);
@@ -680,6 +754,7 @@ public class LendingServiceTest {
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
+        payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
         payment_service.configureReservateAmount(null, false);
         payment_service.configureTransfer(null, false);
         LendingService logic = new LendingService(lending_repository, payment_service);
