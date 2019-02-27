@@ -13,6 +13,13 @@ services:
   datenbank:
     container_name: datenbank
     image: oscarfonts/h2
+    ports:
+      - "1521:1521"
+    environment:
+      - H2_DATABASE=datenbank
+      - H2_USER=perfectlybalanced
+      - H2_PASSWORD=whatdiditcost
+      - H2_ROOT_PASSWORD=everything
     volumes:
       - ./datenbank:/opt/h2-data
 
