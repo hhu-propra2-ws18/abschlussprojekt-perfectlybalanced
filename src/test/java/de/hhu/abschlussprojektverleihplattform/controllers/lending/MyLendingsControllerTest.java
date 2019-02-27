@@ -70,7 +70,7 @@ public class MyLendingsControllerTest {
         );
         productService.addProduct(productEntity);
 
-        Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
+        Timestamp[] timestamps = RandomTestData.new2Timestamps1DayApart();
 
         proPayService.changeUserBalanceBy(user_wannabe_borrower.getUsername(),100000);
 
