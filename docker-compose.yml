@@ -5,10 +5,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_HOST=datenbank
-      - DB_PORT=1521
-      - DB_USER=perfectlybalanced
-      - DB_PASSWORD=whatdiditcost
       - "SPRING_PROFILES_ACTIVE=prod"
     links:
       - datenbank
@@ -23,13 +19,9 @@ services:
       #Port 81:81 für die H2-console
       - "81:81"
       - "1521:1521"
-    environment:
-      - H2_DATABASE=datenbank
-      - H2_USER=perfectlybalanced
-      - H2_PASSWORD=whatdiditcost
-      - H2_ROOT_PASSWORD=everything
 
   propay:
+    container_name: propay
     image: propra/propay
     ports:
       - "8888:8888"
