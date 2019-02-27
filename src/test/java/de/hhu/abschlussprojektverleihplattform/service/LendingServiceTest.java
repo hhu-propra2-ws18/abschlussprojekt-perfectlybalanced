@@ -7,6 +7,7 @@ import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 //The Dates used here are from May 2020.
 //Should the Tests be run after that Time some will fail, since the Dates will then be in the Past.
 //Should the Application still be needed after that Time, they have to be replaced with later Dates.
+
 
 public class LendingServiceTest {
 
