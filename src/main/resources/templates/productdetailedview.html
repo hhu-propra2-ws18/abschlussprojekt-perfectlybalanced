@@ -17,7 +17,7 @@
                     <li class="list-group-item">Beschreibung:
                         <span th:text="${product.description}"></span>
                     </li>
-                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Kosten:
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Kosten pro Tag:
                         <span th:text="${product.cost}"></span>€
                     </li>
                     <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Kautionswert:

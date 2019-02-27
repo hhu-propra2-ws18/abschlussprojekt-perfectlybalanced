@@ -34,5 +34,3 @@ build/
 out/
 bin/*
 data/*
-data/propay.mv.db
-datenbank/datenbank.mv.db
