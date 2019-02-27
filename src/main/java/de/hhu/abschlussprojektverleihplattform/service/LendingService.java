@@ -94,6 +94,10 @@ public class LendingService implements ILendingService {
         Timestamp start = lending.getStart();
         Timestamp end = lending.getEnd();
         for (LendingEntity lend : lendings) {
+            if(lend.getStatus() == Lendingstatus.requested
+                || lend.getStatus() == Lendingstatus.denied) {
+                continue;
+            }
             Timestamp lend_start = lend.getStart();
             Timestamp lend_end = lend.getEnd();
             if (

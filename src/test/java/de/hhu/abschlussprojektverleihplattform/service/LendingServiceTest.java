@@ -27,25 +27,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         product.setStatus(Productstatus.forBuying);
-        Timestamp start1 = new Timestamp(1000L);
-        Timestamp end1 = new Timestamp(2000L);
-        LendingEntity timeBlocker = new LendingEntity(
-            Lendingstatus.confirmt,
-            start1,
-            end1,
-            actingUser,
-            product,
-            0L,
-            0L
-        );
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         LendingService logic = new LendingService(null, null);
-        Timestamp start2 = new Timestamp(1700L);
-        Timestamp end2 = new Timestamp(3000L);
+        Timestamp start = new Timestamp(1700L);
+        Timestamp end = new Timestamp(3000L);
 
         Exception result = new Exception("0");
         try {
-            logic.requestLending(actingUser, product, start2, end2);
+            logic.requestLending(actingUser, product, start, end);
         } catch (Exception e) {
             result = e;
         }
@@ -63,25 +51,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         product.setStatus(Productstatus.sold);
-        Timestamp start1 = new Timestamp(1000L);
-        Timestamp end1 = new Timestamp(2000L);
-        LendingEntity timeBlocker = new LendingEntity(
-            Lendingstatus.confirmt,
-            start1,
-            end1,
-            actingUser,
-            product,
-            0L,
-            0L
-        );
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         LendingService logic = new LendingService(null, null);
-        Timestamp start2 = new Timestamp(1700L);
-        Timestamp end2 = new Timestamp(3000L);
+        Timestamp start = new Timestamp(1700L);
+        Timestamp end = new Timestamp(3000L);
 
         Exception result = new Exception("0");
         try {
-            logic.requestLending(actingUser, product, start2, end2);
+            logic.requestLending(actingUser, product, start, end);
         } catch (Exception e) {
             result = e;
         }
@@ -109,7 +85,6 @@ public class LendingServiceTest {
             result = e;
         }
 
-        int totalMoney = product.getSurety() + product.getCost();
         Assert.assertEquals(
             "You can't lend a product for an instant",
             result.getMessage()
@@ -133,7 +108,6 @@ public class LendingServiceTest {
             result = e;
         }
 
-        int totalMoney = product.getSurety() + product.getCost();
         Assert.assertEquals(
             "If you are searching for a Bug, there is non here. "
             + "The end-date must be after the start-date, you genius!",
@@ -159,7 +133,6 @@ public class LendingServiceTest {
             result = e;
         }
 
-        int totalMoney = product.getSurety() + product.getCost();
         Assert.assertEquals(
             "You can't change the Past. "
             + "You have to borrow the product after the current time.",
@@ -316,11 +289,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        PaymentServiceDummy paymentService = new PaymentServiceDummy();
-        paymentService.configureReservateAmount(null, false);
-        paymentService.configureTransfer(null, false);
         LendingService logic = new LendingService(lending_repository, null);
-
 
         Exception result = new Exception("0");
         try {
@@ -366,11 +335,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        PaymentServiceDummy paymentService = new PaymentServiceDummy();
-        paymentService.configureReservateAmount(null, false);
-        paymentService.configureTransfer(null, false);
         LendingService logic = new LendingService(lending_repository, null);
-
 
         Exception result = new Exception("0");
         try {
@@ -416,11 +381,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        PaymentServiceDummy paymentService = new PaymentServiceDummy();
-        paymentService.configureReservateAmount(null, false);
-        paymentService.configureTransfer(null, false);
         LendingService logic = new LendingService(lending_repository, null);
-
 
         Exception result = new Exception("0");
         try {
@@ -466,11 +427,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        PaymentServiceDummy paymentService = new PaymentServiceDummy();
-        paymentService.configureReservateAmount(null, false);
-        paymentService.configureTransfer(null, false);
         LendingService logic = new LendingService(lending_repository, null);
-
 
         Exception result = new Exception("0");
         try {
@@ -514,11 +471,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        PaymentServiceDummy paymentService = new PaymentServiceDummy();
-        paymentService.configureReservateAmount(null, false);
-        paymentService.configureTransfer(null, false);
         LendingService logic = new LendingService(lending_repository, null);
-
 
         Exception result = new Exception("0");
         try {

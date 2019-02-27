@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 
@@ -63,11 +64,12 @@ public class KathrinHaeckslerAusleihenTest {
         hacksler.setCost(hacksler_cost);
         productService.addProduct(hacksler);
 
-        Timestamp[] timestamps = RandomTestData.new2Timestamps1DayApart();
         long days_2=1000*60*60*24*2;
-        timestamps[1].setTime(timestamps[0].getTime()+days_2);
+        Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        Timestamp start = new Timestamp(currentMilis + 30000);
+        Timestamp end = new Timestamp(currentMilis + days_2);
         LendingEntity hacksler_lending =
-                lendingService.requestLending(kathrin, hacksler, timestamps[0], timestamps[1]);
+                lendingService.requestLending(kathrin, hacksler, start, end);
 
         //leih anfrage wird angenommen
         lendingService.acceptLendingRequest(hacksler_lending);
