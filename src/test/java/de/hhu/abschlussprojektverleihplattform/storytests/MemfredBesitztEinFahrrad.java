@@ -59,19 +59,23 @@ public class MemfredBesitztEinFahrrad {
         int borrower_old_wealth=1000;
         proPayService.changeUserBalanceBy(borrower.getUsername(),borrower_old_wealth);
 
-        Timestamp[] timespan = RandomTestData.new2SuccessiveTimestamps();
+        Timestamp[] timespan = RandomTestData.new2Timestamps1DayApart();
 
         LendingEntity fahrrad_lending =
                 lendingService.requestLending(borrower,fahrrad,timespan[0],timespan[1]);
 
         lendingService.acceptLendingRequest(fahrrad_lending);
 
+        //borrower returns bike in bad condition
         lendingService.returnProduct(fahrrad_lending);
 
+        //memfred creates a conflict
         lendingService.denyReturnedProduct(fahrrad_lending);
 
+        //conflict is decided for memfred
         lendingService.ownerReceivesSuretyAfterConflict(fahrrad_lending);
 
+        //memfred receives cost and surety
         assertEquals(
                 proPayService.getAccount(memfred.getUsername()).amount,
                 fahrrad_cost+fahrrad_surety
