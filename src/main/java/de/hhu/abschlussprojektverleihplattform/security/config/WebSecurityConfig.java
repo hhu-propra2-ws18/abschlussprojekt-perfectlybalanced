@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/register**", "/h2-console/**")
                     .permitAll()
                 // nur Admin-Berechtigung
-                .antMatchers("/admin")
+                .antMatchers("/conflictcenter")
                     .hasRole("ADMIN")
                 .anyRequest()
                     .authenticated()
