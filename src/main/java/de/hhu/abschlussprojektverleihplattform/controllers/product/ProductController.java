@@ -2,9 +2,11 @@ package de.hhu.abschlussprojektverleihplattform.controllers.product;
 
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.ILendingService;
 import de.hhu.abschlussprojektverleihplattform.service.IProductService;
+import de.hhu.abschlussprojektverleihplattform.service.ISellService;
 import de.hhu.abschlussprojektverleihplattform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,15 +23,18 @@ public class ProductController {
 
     private final IProductService productService;
     private final ILendingService lendingService;
+    private final ISellService sellService;
 
     @Autowired
 
     public ProductController(
-            IUserService userService,
-            IProductService productService,
-            ILendingService lendingService) {
+        IProductService productService,
+        ILendingService lendingService,
+        ISellService sellService
+    ) {
         this.productService = productService;
         this.lendingService = lendingService;
+        this.sellService = sellService;
     }
 
 
@@ -42,26 +47,55 @@ public class ProductController {
 
     @GetMapping("/addproduct")
     public String getAddProduct(Model model) {
-        model.addAttribute("product", new ProductEntity());
-        model.addAttribute("address", new AddressEntity());
-
         return "addproduct";
     }
 
+    @GetMapping("/addproductlending")
+    public String getLendProduct(Model model) {
+        model.addAttribute("product", new ProductEntity());
+        model.addAttribute("address", new AddressEntity());
+        return "addproductlending";
+    }
 
-    @PostMapping("/addproduct")
-    public String postAddProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
+    @GetMapping("/addproductselling")
+    public String getSellProduct(Model model) {
+        model.addAttribute("product", new ProductEntity());
+        model.addAttribute("address", new AddressEntity());
+        return "addproductselling";
+    }
+
+    @PostMapping("/addproductlending")
+    public String postLendProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
         BindingResult bindingResultProduct,
         @ModelAttribute("address") @Valid AddressEntity addressEntity,
         BindingResult bindingResultAddress,
         @ModelAttribute("user") UserEntity userEntity){
 
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
-            return "addproduct";
+            return "addproductlending";
         }
 
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
+        productEntity.setStatus(Productstatus.forLending);
+        productService.addProduct(productEntity);
+        return "redirect:/";
+    }
+
+    @PostMapping("/addproductselling")
+    public String postSellProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
+         BindingResult bindingResultProduct,
+         @ModelAttribute("address") @Valid AddressEntity addressEntity,
+         BindingResult bindingResultAddress,
+         @ModelAttribute("user") UserEntity userEntity){
+
+        if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
+            return "addproductselling";
+        }
+
+        productEntity.setLocation(addressEntity);
+        productEntity.setOwner(userEntity);
+        productEntity.setStatus(Productstatus.forBuying);
         productService.addProduct(productEntity);
         return "redirect:/";
     }
@@ -91,8 +125,10 @@ public class ProductController {
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "editproduct";
         }
+        ProductEntity oldProduct = productService.getById(id);
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
+        productEntity.setStatus(oldProduct.getStatus());
         productService.editProduct(productEntity);
         return "redirect:/myproducts";
     }
@@ -125,6 +161,27 @@ public class ProductController {
         return "myproducts";
     }
 
+    @GetMapping("/buyrequests/sendRequest")
+    public String gotoBuyRequest(Model model,
+                                 @RequestParam Long id,
+                                 Authentication auth){
 
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+        model.addAttribute("user", user);
+        model.addAttribute("product", product);
+        return "sendBuyRequest";
+    }
+
+    @PostMapping("/buyrequests/sendRequest")
+    public String performBuyRequest(Model model,
+        @RequestParam Long id,
+        Authentication auth
+    ) throws Exception {
+        UserEntity user = (UserEntity) auth.getPrincipal();
+        ProductEntity product = productService.getById(id);
+        sellService.buyProduct(user, product);
+        return "redirect:/";
+    }
 }
 

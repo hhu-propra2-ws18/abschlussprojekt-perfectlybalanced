@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Artikel bearbeiten</title>
@@ -13,7 +13,7 @@
     <form action="" th:action="@{|~/editproduct/${product.id}|}" method="post">
 
         <div class="form-group">
-            <label class="label" for="titel">Titel:</label>
+            <label class="label" for="titel">Titel</label>
             <input type="text" class="form-control" id="titel" required th:field="${product.title}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('product.title')}" th:errors="${product.title}">Error</small>
         </div>
@@ -24,19 +24,25 @@
             <small class="form-text text-danger" th:if="${#fields.hasErrors('product.description')}" th:errors="${product.description}">Error</small>
         </div>
 
-        <div class="form-group">
-            <label class="label" for="kosten">Kosten:</label>
+        <div class="form-group" th:if="${product.getStatus().toString().equals('forBuying')==false}">
+            <label class="label" for="kosten">Kosten pro Tag</label>
             <input type="text" class="form-control" id="kosten" required th:field="${product.cost}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('product.cost')}" th:errors="${product.cost}">Error</small>
         </div>
 
-        <div class="form-group">
-            <label class="label" for="kaution">Kaution:</label>
+        <div class="form-group" th:if="${product.getStatus().toString().equals('forBuying')==false}">
+            <label class="label" for="kaution">Kaution</label>
             <input type="text" class="form-control" id="kaution" required th:field="${product.surety}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('product.surety')}" th:errors="${product.surety}">Error</small>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" th:if="${product.getStatus().toString().equals('forLending')==false}">
+            <label class="label" for="preis">Preis</label>
+            <input type="text" class="form-control" id="preis" required th:field="${product.price}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('product.price')}" th:errors="${product.price}">Error</small>
+        </div>
+
+        <div class="form-group" >
             <label for="street">Straße</label>
             <input type="text" class="form-control" id="street" required th:field="${address.street}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('address.street')}" th:errors="${address.street}">Error</small>

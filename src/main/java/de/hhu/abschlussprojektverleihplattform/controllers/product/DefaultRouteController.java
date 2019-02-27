@@ -21,7 +21,7 @@ public class DefaultRouteController {
 
     @GetMapping("/")
     public String getDefaultRouteOverviewOfProducts(Model model) {
-        List<ProductEntity> products = productService.showAll();
+        List<ProductEntity> products = productService.getAllAvailableProducts();
 
         model.addAttribute("products", products);
 

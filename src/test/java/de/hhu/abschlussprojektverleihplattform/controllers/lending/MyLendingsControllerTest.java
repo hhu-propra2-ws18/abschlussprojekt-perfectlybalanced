@@ -1,5 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.lending;
 
+import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
+import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
@@ -8,19 +10,29 @@ import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -30,77 +42,79 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MyLendingsControllerTest {
 
     @Autowired
+    WebApplicationContext context;
+
+    @MockBean
     LendingService lendingService;
 
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     UserService userService;
 
     @Autowired
     AuthenticatedUserService authenticatedUserService;
 
-    @Autowired
+    @MockBean
     ProductService productService;
 
     @Autowired
     ProPayService proPayService;
 
-    @Test
-    public void doNothing() {
-        //eine Testklasse ohne Tests ist nicht zulaessig
-        Assert.assertTrue(true);
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
     }
 
-    //TODO: den richten Test wieder aktivieren sobald die SQL-Abfrage gefixt ist
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
-    public void testCanSeeMyLendingRequest() throws Exception{
+    public void testCanSeeMyLendingRequest() throws Exception {
 
-        UserEntity user_owner = RandomTestData.newRandomTestUser();
-        userService.addUser(user_owner);
-
-        UserEntity user_wannabe_borrower = RandomTestData.newRandomTestUser();
-        userService.addUser(user_wannabe_borrower);
+        UserEntity userOwner = RandomTestData.newRandomTestUser();
+        UserEntity userBorrower = RandomTestData.newRandomTestUser();
+        userOwner.setUserId(1L);
+        userBorrower.setUserId(2L);
 
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(
-            user_owner,
+            userOwner,
             RandomTestData.newRandomTestAddress()
         );
-        productService.addProduct(productEntity);
+        productEntity.setId(1L);
 
-        Timestamp[] timestamps = RandomTestData.new2Timestamps1DayApart();
+        LendingEntity lending = RandomTestData.newRandomLendingStausDone(
+            userBorrower,
+            productEntity);
+        lending.setId(1L);
+        lending.setStatus(Lendingstatus.requested);
 
-        proPayService.changeUserBalanceBy(user_wannabe_borrower.getUsername(),100000);
+        List<LendingEntity> confirmedLendings = new ArrayList<>();
+        confirmedLendings.add(lending);
 
-        //user2 wants to lend
-        try {
-            lendingService.requestLending(
-                user_wannabe_borrower,
-                productEntity,
-                timestamps[0],
-                timestamps[1]
-            );
-        } catch (Exception e) {
-            Assert.assertTrue(false);
-        }
-
-        //lending request accepted
-        lendingService.acceptLendingRequest(
-            lendingService.getAllRequestsForUser(user_owner).get(0)
-        );
+        when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(userBorrower);
+        when(lendingService.getAllLendingsForUser(
+            any(UserEntity.class)
+            )
+        )
+            .thenReturn(confirmedLendings);
+        when(lendingService.getAllRequestedLendings(
+                confirmedLendings)).thenReturn(confirmedLendings);
 
         //user2 should see the products he is currently lending
-        mockMvc.perform(get(MyLendingsController.url)
-            .with(user(authenticatedUserService.loadUserByUsername(
-                user_wannabe_borrower.getUsername()
-            )))
-        )
+        mockMvc
+            .perform(get(MyLendingsController.url)
+                .with(csrf())
+                .with(user(authenticatedUserService
+                    .loadUserByUsername(userBorrower.getUsername()))))
             .andExpect(content()
                 .string(containsString(
-                    productEntity.getTitle()
-                ))
-            );
+                    productEntity.getTitle())));
     }
 }

@@ -31,7 +31,7 @@ public class RequestALendingController {
     }
 
 
-    @GetMapping("lendingrequests/sendRequest")
+    @GetMapping(requestalendingURL)
     public String gotoSendRequest(Model model, @RequestParam Long id, Authentication auth){
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
