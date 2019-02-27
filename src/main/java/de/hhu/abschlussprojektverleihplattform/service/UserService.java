@@ -48,12 +48,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity findByEmail(String email) {
-        try {
-            return userRepository.findByEmail(email);
-        } catch(Exception e) {
-            return null;
-        }
+    public UserEntity findByEmail(String email) throws EmptyResultDataAccessException {
+        return userRepository.findByEmail(email);
     }
 
     @Override

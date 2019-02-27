@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static org.mockito.Mockito.when;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 
@@ -27,10 +29,12 @@ public class CustomEmailTest {
         // Arrange
         String email = "sam+love@test.de";
         UserEntity userEntity = new UserEntity("Sam", "Love", "sam", "sassel", email);
+        userEntity.setUserId(1L);
 
         // Act
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(userEntity);
 
+        System.out.println(violations.size());
         // Assert
         Assert.assertTrue("Email ist gültig.", violations.isEmpty());
     }
