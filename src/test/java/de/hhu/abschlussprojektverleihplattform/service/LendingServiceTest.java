@@ -9,6 +9,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+//NOTE:
+//The Dates used here are from May 2020.
+//Should the Tests be run after that Time some will fail, since the Dates will then be in the Past.
+//Should the Application still be needed after that Time, they have to be replaced with later Dates.
 
 public class LendingServiceTest {
 
@@ -89,18 +95,15 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void userHasNotEnoughMoney() {
-        // reservated Time within requested Time
+    public void instantTime() {
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        PaymentServiceDummy payment_service = new PaymentServiceDummy();
-        payment_service.configurateUsersCurrentBalance(0L, null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
-        Timestamp start = new Timestamp(800L);
-        Timestamp end = new Timestamp(3500L);
+        LendingService logic = new LendingService(lending_repository, null);
+        Timestamp start = new Timestamp(4000L);
+        Timestamp end = new Timestamp(4000L);
 
         Exception result = new Exception("0");
         try {
@@ -111,6 +114,86 @@ public class LendingServiceTest {
 
         int totalMoney = product.getSurety() + product.getCost();
         Assert.assertEquals(
+                "You can't lend a product for an instant",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void startAfterEnd() {
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        LendingService logic = new LendingService(lending_repository, null);
+        Timestamp start = new Timestamp(4000L);
+        Timestamp end = new Timestamp(3000L);
+
+        Exception result = new Exception("0");
+        try {
+            logic.requestLending(actingUser, product, start, end);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        int totalMoney = product.getSurety() + product.getCost();
+        Assert.assertEquals(
+                "If you are searching for a Bug, there is non here. "
+                + "The end-date must be after the start-date, you genius!",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void startIsInThePast() {
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        LendingService logic = new LendingService(lending_repository, null);
+        Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        Timestamp start = new Timestamp(currentMilis - 300);
+        Timestamp end = new Timestamp(currentMilis + 3000000);
+
+        Exception result = new Exception("0");
+        try {
+            logic.requestLending(actingUser, product, start, end);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        int totalMoney = product.getSurety() + product.getCost();
+        Assert.assertEquals(
+                "You can't change the Past. "
+                + "You have to borrow the product after the current time.",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void userHasNotEnoughMoney() {
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        PaymentServiceDummy payment_service = new PaymentServiceDummy();
+        payment_service.configurateUsersCurrentBalance(0L, null, false);
+        LendingService logic = new LendingService(lending_repository, payment_service);
+        Timestamp start = new Timestamp(1589187600000L);
+        Timestamp end = new Timestamp(1589549400000L);
+
+        Exception result = new Exception("0");
+        try {
+            logic.requestLending(actingUser, product, start, end);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        int totalMoney = product.getSurety() + product.getCost() * 5;
+        Assert.assertEquals(
             "The cost and the surety sum up to: "
                 + totalMoney + "€, but you only have: " + 0L + "€.",
             result.getMessage()
@@ -119,7 +202,6 @@ public class LendingServiceTest {
 
     @Test
     public void userBalanceCheckFails() {
-        // reservated Time within requested Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
@@ -129,8 +211,8 @@ public class LendingServiceTest {
         Exception exception = new Exception("TestFail");
         payment_service.configurateUsersCurrentBalance(0L, exception, true);
         LendingService logic = new LendingService(lending_repository, payment_service);
-        Timestamp start = new Timestamp(800L);
-        Timestamp end = new Timestamp(3500L);
+        Timestamp start = new Timestamp(1589187600000L);
+        Timestamp end = new Timestamp(1589549400000L);
 
         Exception result = new Exception("0");
         try {
@@ -144,7 +226,6 @@ public class LendingServiceTest {
 
     @Test
     public void reservationSuccess() {
-        // reservated Time within requested Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
@@ -153,8 +234,8 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(20000000L, null, false);
         LendingService logic = new LendingService(lending_repository, payment_service);
-        Timestamp start = new Timestamp(1557543600000L);
-        Timestamp end = new Timestamp(1557900000000L);
+        Timestamp start = new Timestamp(1589187600000L);
+        Timestamp end = new Timestamp(1589549400000L);
 
         try {
             logic.requestLending(actingUser, product, start, end);
@@ -222,7 +303,15 @@ public class LendingServiceTest {
         Timestamp end1 = new Timestamp(2000L);
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(3000L);
-        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity lend = new LendingEntity(
+                Lendingstatus.requested,
+                start2,
+                end2,
+                borrower,
+                product,
+                0L,
+                0L
+        );
         LendingEntity timeBlocker = new LendingEntity(
                 Lendingstatus.confirmt,
                 start1,
@@ -264,7 +353,15 @@ public class LendingServiceTest {
         Timestamp end1 = new Timestamp(2000L);
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(1500L);
-        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity lend = new LendingEntity(
+                Lendingstatus.requested,
+                start2,
+                end2,
+                borrower,
+                product,
+                0L,
+                0L
+        );
         LendingEntity timeBlocker = new LendingEntity(
                 Lendingstatus.confirmt,
                 start1,
@@ -306,7 +403,15 @@ public class LendingServiceTest {
         Timestamp end1 = new Timestamp(2000L);
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(1900L);
-        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity lend = new LendingEntity(
+                Lendingstatus.requested,
+                start2,
+                end2,
+                borrower,
+                product,
+                0L,
+                0L
+        );
         LendingEntity timeBlocker = new LendingEntity(
                 Lendingstatus.confirmt,
                 start1,
@@ -348,7 +453,15 @@ public class LendingServiceTest {
         Timestamp end1 = new Timestamp(2000L);
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(3500L);
-        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity lend = new LendingEntity(
+                Lendingstatus.requested,
+                start2,
+                end2,
+                borrower,
+                product,
+                0L,
+                0L
+        );
         LendingEntity timeBlocker = new LendingEntity(
                 Lendingstatus.confirmt,
                 start1,
@@ -388,7 +501,15 @@ public class LendingServiceTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         Timestamp start = new Timestamp(1000L);
         Timestamp end = new Timestamp(2000L);
-        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start, end, borrower, product, 0L, 0L);
+        LendingEntity lend = new LendingEntity(
+                Lendingstatus.requested,
+                start,
+                end,
+                borrower,
+                product,
+                0L,
+                0L
+        );
         LendingEntity timeBlocker = new LendingEntity(
                 Lendingstatus.confirmt,
                 start,

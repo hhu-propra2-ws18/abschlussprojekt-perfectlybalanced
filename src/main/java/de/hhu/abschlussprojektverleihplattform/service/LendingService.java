@@ -7,6 +7,7 @@ import de.hhu.abschlussprojektverleihplattform.model.*;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,6 +48,21 @@ public class LendingService implements ILendingService {
         if(!product.getStatus().equals(Productstatus.forLending)){
             throw new Exception("This Product can only be bought, not lend.");
         }
+        if(start.equals(end)) {
+            throw new Exception("You can't lend a product for an instant");
+        }
+        if(start.after(end)) {
+            throw new Exception(
+                "If you are searching for a Bug, there is non here. "
+                + "The end-date must be after the start-date, you genius!"
+            );
+        }
+        if(start.before(Timestamp.valueOf(LocalDateTime.now()))) {
+            throw new Exception(
+                "You can't change the Past. "
+                + "You have to borrow the product after the current time."
+            );
+        }
         int totalMoney = product.getSurety()
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
         Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
@@ -73,7 +89,8 @@ public class LendingService implements ILendingService {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.requested);
         }
-        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(lending.getProduct());
+        List<LendingEntity> lendings =
+            lendingRepository.getAllLendingsFromProduct(lending.getProduct());
         Timestamp start = lending.getStart();
         Timestamp end = lending.getEnd();
         for (LendingEntity lend : lendings) {
