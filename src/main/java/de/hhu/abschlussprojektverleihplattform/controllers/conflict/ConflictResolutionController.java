@@ -39,7 +39,7 @@ public class ConflictResolutionController {
         return "conflictcenter";
     }
 
-    @GetMapping("/conflictdetail/{id}")
+    @GetMapping("/conflictcenter/conflictdetail/{id}")
     public String showConflictDetails(
             Model model,
             @PathVariable Long id,
