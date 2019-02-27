@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Verleihplattform Produkt Detailansicht</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+    <nav th:replace="nav-fragment"></nav>
+
+    <div class="container">
+        <div class="m-3"></div>
+        <div class="row">
+            <div class="col-md-6">
+                <h1><span th:text="${product.title}"></span></h1>
+                <ul class="list-group">
+                    <li class="list-group-item">Beschreibung:
+                        <span th:text="${product.description}"></span>
+                    </li>
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Kosten pro Tag:
+                        <span th:text="${product.cost}"></span>€
+                    </li>
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Kautionswert:
+                        <span th:text="${product.surety}"></span>€
+                    </li>
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==true}" class="list-group-item">Kaufpreis:
+                        <span th:text="${product.price}"></span>
+                    </li>
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==true}" class="list-group-item">Verkäufer:
+                        <span th:text="${product.owner.username}"></span>,
+                        <span th:text="${product.owner.email}"></span>
+                    </li>
+                    <li th:if="${product.getStatus().toString().equals('forBuying')==false}" class="list-group-item">Verleihende Person:
+                        <span th:text="${product.owner.username}"></span>,
+                        <span th:text="${product.owner.email}"></span>
+                    </li>
+                    <li class="list-group-item">Standort:
+                        <span th:text="${product.location.street}"></span>
+                        <span th:text="${product.location.housenumber}"></span>,
+                        <span th:text="${product.location.postcode}"></span>
+                        <span th:text="${product.location.city}"></span>
+                    </li>
+                </ul>
+
+                <div class="card" th:each="zeitraum : ${ListOfStrings}">
+                    <div class="card-header">
+                        <p >Belegter Zeitraum</p>
+                    </div>
+                    <div class="card-body">
+                        <span th:text="${zeitraum}">fertig</span>
+                    </div>
+                </div>
+
+                <a th:href="@{/lendingrequests/sendRequest(id=${product.getId()})}">
+                    <button th:if="${(product.owner.userId.equals(user.userId))==false} and ${product.getStatus().toString().equals('forBuying')==false}"
+                            class="btn btn-primary"
+                            type="submit">Ausleihen
+                    </button>
+                </a>
+
+                <a th:href="@{/buyrequests/sendRequest(id=${product.getId()})}">
+                    <button th:if="${(product.owner.userId.equals(user.userId))==false} and ${product.getStatus().toString().equals('forLending')==false}"
+                            class="btn btn-primary"
+                            type="submit">Kaufen
+                    </button>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

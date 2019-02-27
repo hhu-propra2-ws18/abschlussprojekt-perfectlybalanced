@@ -1,0 +1,30 @@
+version: "3.1"
+services:
+  dienst:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    links:
+      - datenbank
+      - propay
+
+  datenbank:
+    container_name: datenbank
+    image: oscarfonts/h2
+    ports:
+      - "1521:1521"
+    environment:
+      - H2_DATABASE=datenbank
+      - H2_USER=perfectlybalanced
+      - H2_PASSWORD=whatdiditcost
+      - H2_ROOT_PASSWORD=everything
+    volumes:
+      - ./datenbank:/opt/h2-data
+
+  propay:
+    container_name: propay
+    image: propra/propay
+    volumes:
+      - ./data:/code/data
