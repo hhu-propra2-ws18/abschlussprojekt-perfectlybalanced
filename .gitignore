@@ -12,6 +12,9 @@ gradlew.bat
 # Log file
 *.log
 
+#Database files
+*.db
+
 # BlueJ files
 *.ctxt
 
