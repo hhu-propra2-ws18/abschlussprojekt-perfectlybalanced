@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Artikel entfernen</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<nav th:replace="nav-fragment"></nav>
+<div class="container">
+    <div class="m-3"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Möchten Sie dieses Produkt wirklich entfernen?</h1>
+
+            <ul class="list-group">
+                <li class="list-group-item">Beschreibung</li>
+                <li class="list-group-item">Verfügbarkeit</li>
+                <li class="list-group-item">Kosten</li>
+                <li class="list-group-item">Kautionswert</li>
+                <li class="list-group-item">Standort</li>
+                <li class="list-group-item">Verleihende Person</li>
+            </ul>
+
+            <button class="btn btn-primary" type="submit">Entfernen</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

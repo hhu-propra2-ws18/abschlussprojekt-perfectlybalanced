@@ -1,6 +1,5 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
-import de.hhu.abschlussprojektverleihplattform.service.IUserService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,8 +16,6 @@ import java.util.Set;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CustomEmailTest {
-    @Autowired
-    private IUserService userService;
 
     @Autowired
     private Validator validator;
@@ -63,8 +60,6 @@ public class CustomEmailTest {
             Set<ConstraintViolation<UserEntity>> violations = validator.validate(user);
             result.add(violations.size());
         }
-
-        System.out.println(result);
 
         // Assert
         Assert.assertTrue("Alle Emails sind gültig", result.equals(expected));

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verleihplattform Registrierung</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <nav th:replace="nav-fragment"></nav>
+    <div class="container">
+        <div class="m-3"></div>
+        <h3>User Registrierung</h3>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form action="/register" th:action="@{/register}" method="post">
+                    <div class="form-group">
+                        <label for="firstname">Vorname</label>
+                        <input type="text" class="form-control" id="firstname" placeholder="Vorname" required th:field="${user.firstname}">
+                        <th:block th:if="${#fields.hasErrors('user.firstname')}">
+                            <small class="form-text text-danger" th:each="error : ${#fields.errors('user.firstname')}"
+                                th:text="${error}">Error</small>
+                        </th:block>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Name</label>
+                        <input type="text" class="form-control" id="lastname" placeholder="Name" required th:field="${user.lastname}">
+                        <th:block th:if="${#fields.hasErrors('user.lastname')}">
+                            <small class="form-text text-danger" th:each="error : ${#fields.errors('user.lastname')}"
+                                th:text="${error}">Error</small>
+                        </th:block>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-Mail</label>
+                        <input type="email" class="form-control" id="email" placeholder="beispiel@mail.de" required
+                            th:field="${user.email}">
+                        <th:block th:if="${#fields.hasErrors('user.email')}">
+                            <small class="form-text text-danger" th:each="error : ${#fields.errors('user.email')}"
+                                th:text="${error}">Error</small>
+                        </th:block>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" placeholder="Username" required th:field="${user.username}">
+                        <th:block th:if="${#fields.hasErrors('user.username')}">
+                            <small class="form-text text-danger" th:each="error : ${#fields.errors('user.username')}"
+                                th:text="${error}">Error</small>
+                        </th:block>
+                        <th:block th:unless="${#fields.hasErrors('user.username')}">
+                            <small class="form-text text-muted">Dein Benutzername darf keine Leerzeichen enthalten oder zu kurz/lang sein.</small>
+                        </th:block>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Passwort</label>
+                        <input type="password" class="form-control" id="password" placeholder="Passwort" required
+                            th:field="${user.password}">
+                        <th:block th:if="${#fields.hasErrors('user.password')}">
+                            <small class="form-text text-danger" th:each="error : ${#fields.errors('user.password')}"
+                                th:text="${error}">Error</small>
+                        </th:block>
+                        <th:block th:unless="${#fields.hasErrors('user.password')}">
+                            <small class="form-text text-muted">Wähle ein sicheres Passwort mit mindestens 6 Zeichen.</small>
+                        </th:block>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrieren</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

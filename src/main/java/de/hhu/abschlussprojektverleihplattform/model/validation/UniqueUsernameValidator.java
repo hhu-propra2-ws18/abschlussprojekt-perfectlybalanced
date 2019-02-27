@@ -21,13 +21,8 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
-        try {
-            userService.findByUsername(username);
-        }catch (Exception e){
-            //could not find user with that username,
-            // so it is a valid username to use
-            return username!=null && !username.contains(" ");
-        }
-        return false;
+        return (userService.findByUsername(username) == null)
+            && (username != null)
+            && !username.contains(" ");
     }
 }

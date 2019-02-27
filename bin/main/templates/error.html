@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Error Page</title>
+</head>
+<body>
+<!-- https://www.baeldung.com/spring-boot-custom-error-page -->
+<!-- https://www.logicbig.com/tutorials/spring-framework/spring-boot/custom-thymeleaf-error-page.html -->
+
+    <p>The Application experienced an internal Error.</p>
+    <table>
+        <tr>
+            <td>Error</td>
+            <td th:text="${error}"/>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td th:text="${status}"/>
+        </tr>
+        <tr>
+            <td>Message</td>
+            <td th:text="${message}"/>
+        </tr>
+        <tr>
+            <td>Exception</td>
+            <td th:text="${exception}"/>
+        </tr>
+    </table>
+    <a href="/">Go Back</a>
+</body>
+</html>

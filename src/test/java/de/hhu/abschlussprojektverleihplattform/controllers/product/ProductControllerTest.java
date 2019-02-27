@@ -3,6 +3,7 @@ package de.hhu.abschlussprojektverleihplattform.controllers.product;
 import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
@@ -13,17 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,38 +36,52 @@ public class ProductControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     UserService userService;
 
-    @Autowired
+    @MockBean
     ProductService productService;
 
     @Autowired
     LendingService lendingService;
 
+    @Autowired
+    AuthenticatedUserService authenticatedUserService;
+
     @Test
-    @WithUserDetails("sarah")
     public void testDetailsControllerIsThere() throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
         AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
+        product.setId(1L);
 
-        productService.addProduct(product);
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+        when(productService.getById(product.getId())).thenReturn(product);
 
-        mockMvc.perform(get("/productdetail/" + product.getId().toString()))
+        mockMvc.perform(get("/productdetail/" + product.getId().toString())
+                .with(user(authenticatedUserService.loadUserByUsername(
+                        randomUser.getUsername()
+                )))
+        )
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Detailansicht")))
             .andExpect(content().string(containsString(product.getTitle())))
             .andExpect(content().string(containsString(product.getDescription())));
     }
 
-
-
     @Test
-    @WithUserDetails("sarah")
     public void testAddControllerIsThere() throws Exception {
-        mockMvc.perform(get("/addproduct"))
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
+
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+
+        mockMvc.perform(get("/addproduct")
+                .with(user(authenticatedUserService.loadUserByUsername(
+                        randomUser.getUsername()
+                )))
+        )
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Artikel einstellen")))
             .andExpect(content().string(containsString("Titel")))
@@ -79,16 +91,22 @@ public class ProductControllerTest {
     }
 
     @Test
-    @WithUserDetails("sarah")
     public void testEditControllerIsThere() throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
         AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
+        product.setId(1L);
 
-        productService.addProduct(product);
 
-        mockMvc.perform(get("/editproduct/" + product.getId().toString()))
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+        when(productService.getById(product.getId())).thenReturn(product);
+
+        mockMvc.perform(get("/editproduct/" + product.getId().toString())
+                .with(user(authenticatedUserService.loadUserByUsername(
+                        randomUser.getUsername()
+                )))
+        )
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Artikel bearbeiten")))
             .andExpect(content().string(containsString("Titel")))
@@ -98,20 +116,28 @@ public class ProductControllerTest {
     }
 
     @Test
-    @WithUserDetails("admin")
     public void testMyProductsControllerIsThere() throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
         AddressEntity address1 = RandomTestData.newRandomTestAddress();
-        ProductEntity product1 = RandomTestData.newRandomTestProduct(user, address1);
-        productService.addProduct(product1);
+        ProductEntity product1 = RandomTestData.newRandomTestProduct(randomUser, address1);
+        product1.setId(1L);
         AddressEntity address2 = RandomTestData.newRandomTestAddress();
-        ProductEntity product2 = RandomTestData.newRandomTestProduct(user, address2);
-        productService.addProduct(product2);
+        ProductEntity product2 = RandomTestData.newRandomTestProduct(randomUser, address2);
+        product2.setId(2L);
+        List<ProductEntity> products = new ArrayList<>();
+        products.add(product1);
+        products.add(product2);
 
-        List<ProductEntity> myproducts = productService.getAllProductsFromUser(user);
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+        when(productService.getAllProductsFromUser(randomUser)).thenReturn(products);
+        List<ProductEntity> myproducts = productService.getAllProductsFromUser(randomUser);
 
-        mockMvc.perform(get("/myproducts"))
+        mockMvc.perform(get("/myproducts")
+                .with(user(authenticatedUserService.loadUserByUsername(
+                        randomUser.getUsername()
+                )))
+        )
             .andExpect(status().isOk())
             .andExpect(content().string(containsString(myproducts.get(0).getTitle())))
             .andExpect(content().string(containsString(myproducts.get(0).getDescription())))
@@ -120,8 +146,12 @@ public class ProductControllerTest {
     }
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostValidProductAdd() throws Exception {
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
+
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+
         mockMvc.perform(post("/addproduct")
             .param("description","Beschreibung zum TestProdukt")
             .param("title", "TestProdukt")
@@ -131,14 +161,22 @@ public class ProductControllerTest {
             .param("housenumber", "1")
             .param("postcode", "11111")
             .param("city", "Teststadt")
-            .with(csrf()))
+            .with(csrf())
+            .with(user(authenticatedUserService.loadUserByUsername(
+                    randomUser.getUsername()
+            )))
+        )
             .andExpect(redirectedUrl("/"))
             .andExpect(status().isFound());
     }
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostProductAddWrongTitle() throws Exception {
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
+
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+
         mockMvc.perform(post("/addproduct")
             .param("description","Beschreibung zum TestProdukt")
             .param("title", "T")
@@ -148,14 +186,22 @@ public class ProductControllerTest {
             .param("housenumber", "1")
             .param("postcode", "11111")
             .param("city", "Teststadt")
-            .with(csrf()))
+            .with(csrf())
+            .with(user(authenticatedUserService.loadUserByUsername(
+                    randomUser.getUsername()
+            )))
+        )
             .andExpect(content().string(
             containsString("Titel muss zwischen 5 und 50 Zeichen lang sein.")));
     }
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostProductAddWrongCost() throws Exception {
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
+
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+
         mockMvc.perform(post("/addproduct")
             .param("description","Beschreibung zum TestProdukt")
             .param("title", "TestProdukt")
@@ -165,15 +211,23 @@ public class ProductControllerTest {
             .param("housenumber", "1")
             .param("postcode", "11111")
             .param("city", "Teststadt")
-            .with(csrf()))
+            .with(csrf())
+            .with(user(authenticatedUserService.loadUserByUsername(
+                    randomUser.getUsername()
+            )))
+        )
             .andExpect(content().string(
             containsString("Kosten muss mindestens einen Wert ab 0 Euro haben.")));
     }
 
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostProductAddWrongStreet() throws Exception {
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
+
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+
         mockMvc.perform(post("/addproduct")
             .param("description","Beschreibung zum TestProdukt")
             .param("title", "TestProdukt")
@@ -183,21 +237,26 @@ public class ProductControllerTest {
             .param("housenumber", "1")
             .param("postcode", "11111")
             .param("city", "Teststadt")
-            .with(csrf()))
+            .with(csrf())
+            .with(user(authenticatedUserService.loadUserByUsername(
+                    randomUser.getUsername()
+            )))
+        )
             .andExpect(content().string(
             containsString("Adresse muss mindestens 5 Zeichen lang sein.")));
     }
 
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostValidProductEdit() throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
         AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
+        product.setId(1L);
 
-        productService.addProduct(product);
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+        when(productService.getById(product.getId())).thenReturn(product);
 
         mockMvc.perform(post("/editproduct/" + product.getId().toString())
             .param("description","Beschreibung zum TestProdukt")
@@ -208,20 +267,25 @@ public class ProductControllerTest {
             .param("housenumber", "1")
             .param("postcode", "11111")
             .param("city", "Teststadt")
-            .with(csrf()))
+            .with(csrf())
+            .with(user(authenticatedUserService.loadUserByUsername(
+                    randomUser.getUsername()
+            )))
+        )
             .andExpect(redirectedUrl("/myproducts"))
             .andExpect(status().isFound());
     }
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostProductEditWrongTitle() throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
         AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
+        product.setId(1L);
 
-        productService.addProduct(product);
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+        when(productService.getById(product.getId())).thenReturn(product);
 
         mockMvc.perform(post("/editproduct/" + product.getId().toString())
             .param("description","Beschreibung zum TestProdukt")
@@ -232,20 +296,25 @@ public class ProductControllerTest {
             .param("housenumber", "1")
             .param("postcode", "11111")
             .param("city", "Teststadt")
-            .with(csrf()))
+            .with(csrf())
+            .with(user(authenticatedUserService.loadUserByUsername(
+                    randomUser.getUsername()
+            )))
+        )
             .andExpect(content().string(
             containsString("Titel muss zwischen 5 und 50 Zeichen lang sein.")));
     }
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostProductEditWrongCost() throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
         AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
+        product.setId(1L);
 
-        productService.addProduct(product);
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+        when(productService.getById(product.getId())).thenReturn(product);
 
         mockMvc.perform(post("/editproduct/" + product.getId().toString())
             .param("description","Beschreibung zum TestProdukt")
@@ -256,35 +325,41 @@ public class ProductControllerTest {
             .param("housenumber", "1")
             .param("postcode", "11111")
             .param("city", "Teststadt")
-            .with(csrf()))
+            .with(csrf())
+            .with(user(authenticatedUserService.loadUserByUsername(
+                    randomUser.getUsername()
+            )))
+        )
             .andExpect(content().string(
             containsString("Kosten muss mindestens einen Wert ab 0 Euro haben.")));
     }
 
 
     @Test
-    @WithUserDetails("sarah")
     public void testPostProductEditWrongStreet() throws Exception {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) auth.getPrincipal();
+        UserEntity randomUser = RandomTestData.newRandomTestUser();
+        randomUser.setUserId(1L);
         AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
+        product.setId(1L);
 
-        productService.addProduct(product);
+        when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
+        when(productService.getById(product.getId())).thenReturn(product);
 
-        mockMvc.perform(post("/editproduct/" + product.getId().toString())
-            .param("description","Beschreibung zum TestProdukt")
-            .param("title", "TestProdukt")
-            .param("surety", "100")
-            .param("cost", "100")
-            .param("street", "Test")
-            .param("housenumber", "1")
-            .param("postcode", "11111")
-            .param("city", "Teststadt")
-            .with(csrf()))
-            .andExpect(content().string(
-            containsString("Adresse muss mindestens 5 Zeichen lang sein.")));
+
+        mockMvc
+            .perform(post("/editproduct/" + product.getId().toString())
+                .param("description","Beschreibung zum TestProdukt")
+                .param("title", "TestProdukt")
+                .param("surety", "100")
+                .param("cost", "100")
+                .param("street", "Test")
+                .param("housenumber", "1")
+                .param("postcode", "11111")
+                .param("city", "Teststadt")
+                .with(csrf())
+                .with(user(authenticatedUserService.loadUserByUsername(randomUser.getUsername()))))
+            .andExpect(content()
+                .string(containsString("Adresse muss mindestens 5 Zeichen lang sein.")));
     }
-
-
 }
