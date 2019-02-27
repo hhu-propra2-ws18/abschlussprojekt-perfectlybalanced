@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,18 +74,20 @@ public class LendingService implements ILendingService {
         if(!product.getStatus().equals(Productstatus.forLending)){
             throw new Exception("This Product can only be bought, not lend.");
         }
-        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        for (LendingEntity lend : lendings) {
-            Timestamp lend_start = lend.getStart();
-            Timestamp lend_end = lend.getEnd();
-            if (
-                (start.after(lend_start) && start.before(lend_end))
-                    || (end.after(lend_start) && end.before(lend_end))
-                    || (lend_start.after(start) && lend_start.before(end))
-                    || start.equals(lend_start)
-            ) {
-                throw new Exception("The Product is not available in the selected time.");
-            }
+        if(start.equals(end)) {
+            throw new Exception("You can't lend a product for an instant");
+        }
+        if(start.after(end)) {
+            throw new Exception(
+                "If you are searching for a Bug, there is non here. "
+                + "The end-date must be after the start-date, you genius!"
+            );
+        }
+        if(start.before(Timestamp.valueOf(LocalDateTime.now()))) {
+            throw new Exception(
+                "You can't change the Past. "
+                + "You have to borrow the product after the current time."
+            );
         }
         int totalMoney = product.getSurety()
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
@@ -111,6 +114,33 @@ public class LendingService implements ILendingService {
         if (!lending.getStatus().equals(Lendingstatus.requested)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.requested);
+        }
+        List<LendingEntity> lendings =
+            lendingRepository.getAllLendingsFromProduct(lending.getProduct());
+        Timestamp start = lending.getStart();
+        Timestamp end = lending.getEnd();
+        for (LendingEntity lend : lendings) {
+            if(lend.getStatus() == Lendingstatus.requested
+                || lend.getStatus() == Lendingstatus.denied) {
+                continue;
+            }
+            Timestamp lend_start = lend.getStart();
+            Timestamp lend_end = lend.getEnd();
+            if (
+                    (start.after(lend_start) && start.before(lend_end))
+                            || (end.after(lend_start) && end.before(lend_end))
+                            || (lend_start.after(start) && lend_start.before(end))
+                            || start.equals(lend_start)
+            ) {
+                throw new Exception("The Product is not available in the selected time.");
+            }
+        }
+        int totalMoney = lending.getProduct().getSurety()
+                + lending.getProduct().getCost()
+                * daysBetweenTwoTimestamps(lending.getStart(), lending.getEnd());
+        Long userMoney = paymentService.usersCurrentBalance(lending.getBorrower().getUsername());
+        if (userMoney < totalMoney) {
+            throw new Exception("The borrower currently hasn't enough money for the lending");
         }
         Long costID = paymentService.reservateAmount(
             lending.getBorrower().getUsername(),

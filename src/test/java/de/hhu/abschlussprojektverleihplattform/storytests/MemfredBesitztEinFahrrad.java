@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 
@@ -59,10 +60,13 @@ public class MemfredBesitztEinFahrrad {
         int borrower_old_wealth=1000;
         proPayService.changeUserBalanceBy(borrower.getUsername(),borrower_old_wealth);
 
-        Timestamp[] timespan = RandomTestData.new2Timestamps1DayApart();
+        long day=1000*60*60*24;
+        Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        Timestamp start = new Timestamp(currentMilis + 300000);
+        Timestamp end = new Timestamp(currentMilis + day);
 
         LendingEntity fahrrad_lending =
-                lendingService.requestLending(borrower,fahrrad,timespan[0],timespan[1]);
+                lendingService.requestLending(borrower,fahrrad,start,end);
 
         lendingService.acceptLendingRequest(fahrrad_lending);
 
