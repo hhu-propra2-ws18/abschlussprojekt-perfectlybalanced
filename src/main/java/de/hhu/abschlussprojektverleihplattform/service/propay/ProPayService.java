@@ -7,6 +7,8 @@ import de.hhu.abschlussprojektverleihplattform.service.propay.exceptions.ProPayA
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import java.net.URI;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -17,19 +19,8 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ProPayService implements IProPayService, IPaymentService {
 
-    public static final String baseurl = "http://propra-propay.herokuapp.com/";
-
-    private static ProPayService instance=null;
-
-    //jens said we should use dependency injection
-    /*
-    public synchronized static ProPayService getInstance(){
-        if(instance==null){
-            instance=new ProPayService();
-        }
-        return instance;
-    }
-    */
+    @Value("${propaybaseurl}")
+    public String baseurl;
 
     private ProPayService(){}
 
