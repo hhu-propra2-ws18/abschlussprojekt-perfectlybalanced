@@ -542,13 +542,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -578,13 +578,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -599,7 +599,10 @@ public class LendingServiceTest {
             result = e;
         }
 
-        Assert.assertEquals("The borrower currently hasn't enough money for the lending", result.getMessage());
+        Assert.assertEquals(
+            "The borrower currently hasn't enough money for the lending",
+            result.getMessage()
+        );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.requested, lending.getStatus());
     }
