@@ -10,7 +10,6 @@ import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ public class KathrinHaeckslerAusleihenTest {
         hacksler.setCost(hacksler_cost);
         productService.addProduct(hacksler);
 
-        Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
+        Timestamp[] timestamps = RandomTestData.new2Timestamps1DayApart();
         long days_2=1000*60*60*24*2;
         timestamps[1].setTime(timestamps[0].getTime()+days_2);
         LendingEntity hacksler_lending =

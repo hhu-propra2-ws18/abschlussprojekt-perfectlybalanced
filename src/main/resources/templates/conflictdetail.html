@@ -9,43 +9,62 @@
 <body>
 <nav th:replace="nav-fragment"></nav>
 <div class="container">
-    <h1>Produkt</h1>
+    <h1 th:text="${lending.product.title}">Produkt</h1>
     <div class="m-3"></div>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h3>Verleiher</h3>
-            <span>Benutzername:</span>
+            <span>Benutzername:
+                <span th:text="${lending.product.owner.username}"></span>
+            </span>
             <br>
-            <span>Email:</span>
+            <span>Email:
+                <span th:text="${lending.product.owner.email}"></span>
+            </span>
             <br>
-            <span>Name:</span>
+            <span>Name:
+                <span th:text="${lending.product.owner.lastname}"></span>
+            </span>
             <br>
-            <span>Vorname:</span>
+            <span>Vorname:
+                <span th:text="${lending.product.owner.firstname}"></span>
+            </span>
             <br>
-            <span>Strasse:</span>
             <br>
-            <span>Ort:</span>
-            <br>
+            <form th:action="@{/conflictcenter/decideForOwner(id=${lending.id})}" method="post">
+                <a><button type="submit" class="btn btn-success">Kaution an
+                    <span th:text="${lending.product.owner.username}"></span>
+                    uebergeben</button></a>
+            </form>
         </div>
+
         <div class="col-md-6">
             <h3>Ausleihender</h3>
-            <span>Benutzername:</span>
+            <span>Benutzername:
+                <span th:text="${lending.borrower.username}"></span>
+            </span>
             <br>
-            <span>Email:</span>
+            <span>Email:
+                <span th:text="${lending.borrower.email}"></span>
+            </span>
             <br>
-            <span>Name:</span>
+            <span>Name:
+                <span th:text="${lending.borrower.lastname}"></span>
+            </span>
             <br>
-            <span>Vorname:</span>
+            <span>Vorname:
+                <span th:text="${lending.borrower.firstname}"></span>
+            </span>
             <br>
-            <span>Strasse:</span>
             <br>
-            <span>Ort:</span>
-            <br>
+            <form th:action="@{/conflictcenter/decideForBorrower(id=${lending.id})}" method="post">
+                <a><button type="submit" class="btn btn-success">Kaution an
+                    <span th:text="${lending.borrower.username}"></span>
+                    uebergeben</button></a>
+            </form>
         </div>
     </div>
     <br>
-    <p>Status:</p>
-    <a href="/conflictdetail/" class="btn btn-primary">Konflikt</a>
 </div>
 </body>
 </html>

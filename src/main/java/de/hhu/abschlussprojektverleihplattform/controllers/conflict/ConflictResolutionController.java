@@ -2,13 +2,21 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.conflict;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
+import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
+import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -26,16 +34,41 @@ public class ConflictResolutionController {
         this.productService = productService;
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/conflictcenter")
     public String showConflictCenter(Model model) {
-        List<LendingEntity> lendings = lendingService.getAllConflicts();
-        model.addAttribute(lendings);
+        List<LendingEntity> allLendingConflicts = lendingService.getAllConflicts();
+        model.addAttribute("allLendingConflicts", allLendingConflicts);
         return "conflictcenter";
     }
 
-    @GetMapping("/admin/{id}")
-    public String showConflictDetails(Model model, Long id) {
-        // TODO: suche VerleiherID, inject Service
-        return "conflictdetails";
+    @GetMapping("/conflictcenter/conflictdetail/{id}")
+    public String showConflictDetails(
+            Model model,
+            @PathVariable Long id,
+            @ModelAttribute("user") UserEntity userEntity) throws Exception {
+        LendingEntity lending = lendingService.getLendingById(id);
+        if (lending != null) {
+            model.addAttribute("lending", lending);
+            return "conflictdetail";
+        }
+        return "redirekt:/";
+    }
+
+    @PostMapping("/conflictcenter/decideForOwner")
+    public String resolveConflictForOwner(
+            @RequestParam Long id
+    ) throws Exception {
+        LendingEntity lend = lendingService.getLendingById(id);
+        lendingService.ownerReceivesSuretyAfterConflict(lend);
+        return "redirect:/conflictcenter";
+    }
+
+    @PostMapping("/conflictcenter/decideForBorrower")
+    public String resolveConflictForBorrower(
+            @RequestParam Long id
+    ) throws Exception {
+        LendingEntity lend = lendingService.getLendingById(id);
+        lendingService.borrowerReceivesSuretyAfterConflict(lend);
+        return "redirect:/conflictcenter";
     }
 }

@@ -24,7 +24,7 @@
         </div>
 
         <div class="form-group">
-            <label for="cost">Kosten</label>
+            <label for="cost">Kosten pro Tag</label>
             <input type="text" class="form-control" id="cost" placeholder="Kosten" required th:field="${product.cost}">
             <small class="form-text text-danger" th:if="${#fields.hasErrors('product.cost')}" th:errors="${product.cost}">Error</small>
         </div>

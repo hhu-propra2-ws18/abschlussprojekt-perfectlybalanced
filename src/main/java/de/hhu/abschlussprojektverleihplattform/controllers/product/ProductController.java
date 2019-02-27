@@ -129,7 +129,7 @@ public class ProductController {
         productEntity.setLocation(addressEntity);
         productEntity.setOwner(userEntity);
         productEntity.setStatus(oldProduct.getStatus());
-            productService.editProduct(productEntity);
+        productService.editProduct(productEntity);
         return "redirect:/myproducts";
     }
 

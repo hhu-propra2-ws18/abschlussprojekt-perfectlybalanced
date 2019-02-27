@@ -75,6 +75,7 @@ public class ProductLendingRequestsControllerTest {
         LendingEntity lending = new LendingEntity();
         lending.setId(2L);
         lending.setStatus(Lendingstatus.requested);
+        System.out.println(lending);
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -98,6 +99,7 @@ public class ProductLendingRequestsControllerTest {
         LendingEntity lending = new LendingEntity();
         lending.setId(2L);
         lending.setStatus(Lendingstatus.requested);
+        System.out.println(lending);
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 

@@ -42,8 +42,8 @@ public class UserRepository implements IUserRepository {
     public UserEntity findByUsername(String username) throws EmptyResultDataAccessException {
         String sql="SELECT * FROM USER_ENTITY WHERE username=?";
         return jdbcTemplate.queryForObject(sql,
-                new Object[]{username},
-                new BeanPropertyRowMapper<>(UserEntity.class));
+            new Object[]{username},
+            new BeanPropertyRowMapper<>(UserEntity.class));
     }
 
     @Override

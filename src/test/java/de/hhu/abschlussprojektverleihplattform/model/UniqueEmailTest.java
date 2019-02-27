@@ -30,7 +30,9 @@ public class UniqueEmailTest {
     public void validateDuplicatedEmail() throws Exception {
         // Arrange
         String email = "duplicated@mail.de";
-        UserEntity user = new UserEntity("Max", "Mock", "loginUserName12", "mocking", email);
+        UserEntity user = new UserEntity(
+            "Max", "Mock", "loginUserName12", "mocking", email
+        );
 
         when(userService.findByEmail(ArgumentMatchers.anyString())).thenReturn(user);
 
@@ -38,6 +40,6 @@ public class UniqueEmailTest {
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(user);
 
         // Assert
-        assertEquals(1, violations.size());
+        assertEquals(2, violations.size());
     }
 }

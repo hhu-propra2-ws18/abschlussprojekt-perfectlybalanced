@@ -5,6 +5,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,13 +43,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity findByUsername(String username) {
-        try {
-            return userRepository.findByUsername(username);
-        } catch(Exception e) {
-            return null;
-        }
-
+    public UserEntity findByUsername(String username) throws EmptyResultDataAccessException {
+        return userRepository.findByUsername(username);
     }
 
     @Override

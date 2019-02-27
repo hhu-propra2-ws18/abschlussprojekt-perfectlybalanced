@@ -86,7 +86,9 @@ public class RequestALendingControllerTest {
             RandomTestData
                 .newRandomTestProduct(userOwner, RandomTestData.newRandomTestAddress());
 
-        LendingEntity lending = RandomTestData.newRandomLendingStausDone(userBorrower, productEntity);
+        LendingEntity lending = RandomTestData.newRandomLendingStausDone(
+            userBorrower,
+            productEntity);
         userBorrower.setUserId(1L);
         userOwner.setUserId(2L);
         productEntity.setId(1L);
@@ -97,21 +99,33 @@ public class RequestALendingControllerTest {
         when(productService.getById(ArgumentMatchers.anyLong()))
             .thenReturn(productEntity);
         when(lendingService
-                .requestLending(any(UserEntity.class), any(ProductEntity.class), any(Timestamp.class), any(Timestamp.class)))
+                .requestLending(
+                    any(UserEntity.class),
+                    any(ProductEntity.class),
+                    any(Timestamp.class),
+                    any(Timestamp.class)
+                )
+        )
             .thenReturn(lending);
         when(userService.findByUsername(anyString()))
             .thenReturn(userBorrower);
 
         // Act & Assert
         mockMvc
-            .perform(post(RequestALendingController.requestalendingURL + "?id=" + productEntity.getId())
+            .perform(
+                post(RequestALendingController.requestalendingURL
+                    + "?id="
+                    + productEntity.getId()
+                )
                 .param("start", "2019-02-25T15:15")
                 .param("end", "2019-02-26T15:15")
                 .with(csrf())
                 .with(
                     user(authenticatedUserService
-                        .loadUserByUsername(userBorrower.getUsername()))))
+                        .loadUserByUsername(userBorrower.getUsername())
+                    )
+                )
+            )
             .andExpect(status().is3xxRedirection());
-
     }
 }
