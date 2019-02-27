@@ -89,7 +89,9 @@ public class MyLendingsControllerTest {
         );
         productEntity.setId(1L);
 
-        LendingEntity lending = RandomTestData.newRandomLendingStausDone(userBorrower, productEntity);
+        LendingEntity lending = RandomTestData.newRandomLendingStausDone(
+            userBorrower,
+            productEntity);
         lending.setId(1L);
         lending.setStatus(Lendingstatus.requested);
 
@@ -97,8 +99,13 @@ public class MyLendingsControllerTest {
         confirmedLendings.add(lending);
 
         when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(userBorrower);
-        when(lendingService.getAllLendingsForUser(any(UserEntity.class))).thenReturn(confirmedLendings);
-        when(lendingService.getAllRequestedLendings(confirmedLendings)).thenReturn(confirmedLendings);
+        when(lendingService.getAllLendingsForUser(
+            any(UserEntity.class)
+            )
+        )
+            .thenReturn(confirmedLendings);
+        when(lendingService.getAllRequestedLendings(
+                confirmedLendings)).thenReturn(confirmedLendings);
 
         //user2 should see the products he is currently lending
         mockMvc

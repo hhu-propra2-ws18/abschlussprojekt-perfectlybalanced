@@ -132,7 +132,7 @@ public class ProductControllerTest {
                 .andExpect(content().string(containsString("Titel")))
                 .andExpect(content().string(containsString("Beschreibung")))
                 .andExpect(content().string(containsString("Kosten")))
-                .andExpect(content().string(containsString("Kaution"))) ;
+                .andExpect(content().string(containsString("Kaution")));
     }
 
     @Test
