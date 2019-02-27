@@ -5,10 +5,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DB_HOST=db
-      - DB_PORT=1521
-      - DB_USER=perfectlybalanced
-      - DB_PASSWORD=whatdiditcost
+      - "SPRING_PROFILES_ACTIVE=prod"
     links:
       - datenbank
       - propay
@@ -16,8 +13,6 @@ services:
   datenbank:
     container_name: datenbank
     image: oscarfonts/h2
-    volumes:
-      - ./datenbank:/opt/h2-data
     ports:
       - "1521:1521"
     environment:
@@ -25,11 +20,11 @@ services:
       - H2_USER=perfectlybalanced
       - H2_PASSWORD=whatdiditcost
       - H2_ROOT_PASSWORD=everything
+    volumes:
+      - ./datenbank:/opt/h2-data
 
   propay:
+    container_name: propay
     image: propra/propay
-    ports:
-      - "8888:8888"
-    # Optional
     volumes:
       - ./data:/code/data

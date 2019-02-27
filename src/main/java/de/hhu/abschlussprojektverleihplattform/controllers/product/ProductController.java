@@ -147,6 +147,7 @@ public class ProductController {
         if(product != null) {
             model.addAttribute("product", product);
             model.addAttribute("ListOfReservatedTimes", lendingService.getAvailableTime(product));
+            model.addAttribute("ListOfStrings", lendingService.getAvailabilityStrings(product));
             return "productdetailedview";
         }
         return "redirect:/";
