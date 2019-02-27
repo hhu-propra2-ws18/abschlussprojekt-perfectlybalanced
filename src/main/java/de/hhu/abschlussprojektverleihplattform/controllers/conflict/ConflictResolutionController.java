@@ -51,4 +51,22 @@ public class ConflictResolutionController {
         }
         return "redirekt:/";
     }
+
+    @PostMapping("/conflictcenter/decideForOwner")
+    public String resolveConflictForOwner (
+            @RequestParam Long id
+    ) throws Exception {
+        LendingEntity lend = lendingService.getLendingById(id);
+        lendingService.ownerReceivesSuretyAfterConflict(lend);
+        return "redirect:/conflictcenter";
+    }
+
+    @PostMapping("/conflictcenter/decideForBorrower")
+    public String resolveConflictForBorrower (
+            @RequestParam Long id
+    ) throws Exception {
+        LendingEntity lend = lendingService.getLendingById(id);
+        lendingService.borrowerReceivesSuretyAfterConflict(lend);
+        return "redirect:/conflictcenter";
+    }
 }
