@@ -12,10 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -55,19 +52,21 @@ public class ConflictResolutionController {
         return "redirekt:/";
     }
 
-    @PostMapping("/conflictdetail/{id}")
-    public String postResolveConflict (
-            @ModelAttribute("lending") @Valid LendingEntity lendingEntity,
-            @PathVariable Long id
-            ) throws Exception {
-        if (id == lendingEntity.getBorrower().getUserId()) {
-            lendingService.borrowerReceivesSuretyAfterConflict(lendingEntity);
-            lendingEntity.setStatus(Lendingstatus.done);
-        }
-        else {
-            lendingService.ownerReceivesSuretyAfterConflict(lendingEntity);
-            lendingEntity.setStatus(Lendingstatus.done);
-        }
-        return "redirect:/";
+    @PostMapping("/conflictcenter/decideForOwner")
+    public String resolveConflictForOwner (
+            @RequestParam Long id
+    ) throws Exception {
+        LendingEntity lend = lendingService.getLendingById(id);
+        lendingService.ownerReceivesSuretyAfterConflict(lend);
+        return "redirect:/conflictcenter";
+    }
+
+    @PostMapping("/conflictcenter/decideForBorrower")
+    public String resolveConflictForBorrower (
+            @RequestParam Long id
+    ) throws Exception {
+        LendingEntity lend = lendingService.getLendingById(id);
+        lendingService.borrowerReceivesSuretyAfterConflict(lend);
+        return "redirect:/conflictcenter";
     }
 }

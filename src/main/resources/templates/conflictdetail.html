@@ -31,10 +31,11 @@
             </span>
             <br>
             <br>
-            <a class="btn btn-primary" th:href="@{/conflictcenter}">Kaution an
-                <span th:text="${lending.product.owner.username}"></span>
-                uebergeben
-            </a>
+            <form th:action="@{/conflictcenter/decideForOwner(id=${lending.id})}" method="post">
+                <a><button type="submit" class="btn btn-success">Kaution an
+                    <span th:text="${lending.product.owner.username}"></span>
+                    uebergeben</button></a>
+            </form>
         </div>
 
         <div class="col-md-6">
@@ -56,10 +57,11 @@
             </span>
             <br>
             <br>
-            <a class="btn btn-primary" th:href="@{/conflictcenter}">Kaution an
-                <span th:text="${lending.borrower.username}"></span>
-                uebergeben
-            </a>
+            <form th:action="@{/conflictcenter/decideForBorrower(id=${lending.id})}" method="post">
+                <a><button type="submit" class="btn btn-success">Kaution an
+                    <span th:text="${lending.borrower.username}"></span>
+                    uebergeben</button></a>
+            </form>
         </div>
     </div>
     <br>
