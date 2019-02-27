@@ -89,154 +89,6 @@ public class LendingServiceTest {
     }
 
     @Test
-    public void timeIsBlocked1() {
-        // start is in reservated Time
-        UserEntity actingUser = RandomTestData.newRandomTestUser();
-        UserEntity owner = RandomTestData.newRandomTestUser();
-        AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        Timestamp start1 = new Timestamp(1000L);
-        Timestamp end1 = new Timestamp(2000L);
-        LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
-        );
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
-        Timestamp start2 = new Timestamp(1700L);
-        Timestamp end2 = new Timestamp(3000L);
-
-        Exception result = new Exception("0");
-        try {
-            logic.requestLending(actingUser, product, start2, end2);
-        } catch (Exception e) {
-            result = e;
-        }
-
-        Assert.assertEquals(
-            "The Product is not available in the selected time.",
-            result.getMessage()
-        );
-    }
-
-    @Test
-    public void timeIsBlocked2() {
-        // end is in reservated Time
-        UserEntity actingUser = RandomTestData.newRandomTestUser();
-        UserEntity owner = RandomTestData.newRandomTestUser();
-        AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        Timestamp start1 = new Timestamp(1000L);
-        Timestamp end1 = new Timestamp(2000L);
-        LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
-        );
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
-        Timestamp start2 = new Timestamp(800L);
-        Timestamp end2 = new Timestamp(1500L);
-
-        Exception result = new Exception("0");
-        try {
-            logic.requestLending(actingUser, product, start2, end2);
-        } catch (Exception e) {
-            result = e;
-        }
-
-        Assert.assertEquals(
-            "The Product is not available in the selected time.",
-            result.getMessage()
-        );
-    }
-
-    @Test
-    public void timeIsBlocked3() {
-        // both are in reservated Time
-        UserEntity actingUser = RandomTestData.newRandomTestUser();
-        UserEntity owner = RandomTestData.newRandomTestUser();
-        AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        Timestamp start1 = new Timestamp(1000L);
-        Timestamp end1 = new Timestamp(2000L);
-        LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
-        );
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
-        Timestamp start2 = new Timestamp(1800L);
-        Timestamp end2 = new Timestamp(1900L);
-
-        Exception result = new Exception("0");
-        try {
-            logic.requestLending(actingUser, product, start2, end2);
-        } catch (Exception e) {
-            result = e;
-        }
-
-        Assert.assertEquals(
-            "The Product is not available in the selected time.",
-            result.getMessage()
-        );
-    }
-
-    @Test
-    public void timeIsBlocked4() {
-        // reservated Time within requested Time
-        UserEntity actingUser = RandomTestData.newRandomTestUser();
-        UserEntity owner = RandomTestData.newRandomTestUser();
-        AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        Timestamp start1 = new Timestamp(1000L);
-        Timestamp end1 = new Timestamp(2000L);
-        LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
-        );
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
-        Timestamp start2 = new Timestamp(800L);
-        Timestamp end2 = new Timestamp(3500L);
-
-        Exception result = new Exception("0");
-        try {
-            logic.requestLending(actingUser, product, start2, end2);
-        } catch (Exception e) {
-            result = e;
-        }
-
-        Assert.assertEquals(
-            "The Product is not available in the selected time.",
-            result.getMessage()
-        );
-    }
-
-    @Test
     public void userHasNotEnoughMoney() {
         // reservated Time within requested Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();
@@ -359,8 +211,213 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
     }
 
+    @Test
+    public void timeIsBlocked1() {
+        // start is in reservated Time
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        Timestamp start1 = new Timestamp(1000L);
+        Timestamp end1 = new Timestamp(2000L);
+        Timestamp start2 = new Timestamp(1700L);
+        Timestamp end2 = new Timestamp(3000L);
+        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity timeBlocker = new LendingEntity(
+                Lendingstatus.confirmt,
+                start1,
+                end1,
+                borrower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
+        PaymentServiceDummy paymentService = new PaymentServiceDummy();
+        paymentService.configureReservateAmount(null, false);
+        paymentService.configureTransfer(null, false);
+        LendingService logic = new LendingService(lending_repository, null);
 
 
+        Exception result = new Exception("0");
+        try {
+            logic.acceptLendingRequest(lend);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(
+                "The Product is not available in the selected time.",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void timeIsBlocked2() {
+        // end is in reservated Time
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        Timestamp start1 = new Timestamp(1000L);
+        Timestamp end1 = new Timestamp(2000L);
+        Timestamp start2 = new Timestamp(800L);
+        Timestamp end2 = new Timestamp(1500L);
+        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity timeBlocker = new LendingEntity(
+                Lendingstatus.confirmt,
+                start1,
+                end1,
+                borrower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
+        PaymentServiceDummy paymentService = new PaymentServiceDummy();
+        paymentService.configureReservateAmount(null, false);
+        paymentService.configureTransfer(null, false);
+        LendingService logic = new LendingService(lending_repository, null);
+
+
+        Exception result = new Exception("0");
+        try {
+            logic.acceptLendingRequest(lend);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(
+                "The Product is not available in the selected time.",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void timeIsBlocked3() {
+        // both are in reservated Time
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        Timestamp start1 = new Timestamp(1000L);
+        Timestamp end1 = new Timestamp(2000L);
+        Timestamp start2 = new Timestamp(1700L);
+        Timestamp end2 = new Timestamp(1900L);
+        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity timeBlocker = new LendingEntity(
+                Lendingstatus.confirmt,
+                start1,
+                end1,
+                borrower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
+        PaymentServiceDummy paymentService = new PaymentServiceDummy();
+        paymentService.configureReservateAmount(null, false);
+        paymentService.configureTransfer(null, false);
+        LendingService logic = new LendingService(lending_repository, null);
+
+
+        Exception result = new Exception("0");
+        try {
+            logic.acceptLendingRequest(lend);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(
+                "The Product is not available in the selected time.",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void timeIsBlocked4() {
+        // reservated Time within requested Time
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        Timestamp start1 = new Timestamp(1000L);
+        Timestamp end1 = new Timestamp(2000L);
+        Timestamp start2 = new Timestamp(800L);
+        Timestamp end2 = new Timestamp(3500L);
+        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start2, end2, borrower, product, 0L, 0L);
+        LendingEntity timeBlocker = new LendingEntity(
+                Lendingstatus.confirmt,
+                start1,
+                end1,
+                borrower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
+        PaymentServiceDummy paymentService = new PaymentServiceDummy();
+        paymentService.configureReservateAmount(null, false);
+        paymentService.configureTransfer(null, false);
+        LendingService logic = new LendingService(lending_repository, null);
+
+
+        Exception result = new Exception("0");
+        try {
+            logic.acceptLendingRequest(lend);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(
+                "The Product is not available in the selected time.",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void timeIsBlocked5() {
+        // both times are equal
+        UserEntity borrower = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        Timestamp start = new Timestamp(1000L);
+        Timestamp end = new Timestamp(2000L);
+        LendingEntity lend = new LendingEntity(Lendingstatus.requested, start, end, borrower, product, 0L, 0L);
+        LendingEntity timeBlocker = new LendingEntity(
+                Lendingstatus.confirmt,
+                start,
+                end,
+                borrower,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
+        PaymentServiceDummy paymentService = new PaymentServiceDummy();
+        paymentService.configureReservateAmount(null, false);
+        paymentService.configureTransfer(null, false);
+        LendingService logic = new LendingService(lending_repository, null);
+
+
+        Exception result = new Exception("0");
+        try {
+            logic.acceptLendingRequest(lend);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(
+                "The Product is not available in the selected time.",
+                result.getMessage()
+        );
+    }
 
     @Test
     public void reservation1Fails() {

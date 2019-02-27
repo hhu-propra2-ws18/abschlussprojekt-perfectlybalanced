@@ -47,19 +47,6 @@ public class LendingService implements ILendingService {
         if(!product.getStatus().equals(Productstatus.forLending)){
             throw new Exception("This Product can only be bought, not lend.");
         }
-        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        for (LendingEntity lend : lendings) {
-            Timestamp lend_start = lend.getStart();
-            Timestamp lend_end = lend.getEnd();
-            if (
-                (start.after(lend_start) && start.before(lend_end))
-                    || (end.after(lend_start) && end.before(lend_end))
-                    || (lend_start.after(start) && lend_start.before(end))
-                    || start.equals(lend_start)
-            ) {
-                throw new Exception("The Product is not available in the selected time.");
-            }
-        }
         int totalMoney = product.getSurety()
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
         Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
@@ -85,6 +72,21 @@ public class LendingService implements ILendingService {
         if (!lending.getStatus().equals(Lendingstatus.requested)) {
             throw new Exception("The Lending has the Status: " + lending.getStatus()
                 + " but it needs to be: " + Lendingstatus.requested);
+        }
+        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(lending.getProduct());
+        Timestamp start = lending.getStart();
+        Timestamp end = lending.getEnd();
+        for (LendingEntity lend : lendings) {
+            Timestamp lend_start = lend.getStart();
+            Timestamp lend_end = lend.getEnd();
+            if (
+                    (start.after(lend_start) && start.before(lend_end))
+                            || (end.after(lend_start) && end.before(lend_end))
+                            || (lend_start.after(start) && lend_start.before(end))
+                            || start.equals(lend_start)
+            ) {
+                throw new Exception("The Product is not available in the selected time.");
+            }
         }
         Long costID = paymentService.reservateAmount(
             lending.getBorrower().getUsername(),
