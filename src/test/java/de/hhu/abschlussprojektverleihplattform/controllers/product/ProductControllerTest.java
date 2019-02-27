@@ -6,10 +6,12 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
+import de.hhu.abschlussprojektverleihplattform.service.SellService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +43,9 @@ public class ProductControllerTest {
 
     @MockBean
     ProductService productService;
+
+    @MockBean
+    SellService sellService;
 
     @Autowired
     LendingService lendingService;
@@ -362,4 +367,30 @@ public class ProductControllerTest {
             .andExpect(content()
                 .string(containsString("Adresse muss mindestens 5 Zeichen lang sein.")));
     }
+
+    // Controller-Tests mit SellService
+
+    @Test
+    public void testGoToBuyRequestIsOK() throws Exception {
+        // Arrange
+        String url = "/buyrequests/sendRequest?id=";
+
+        UserEntity user = RandomTestData.newRandomTestUser();
+        user.setUserId(1L);
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        product.setId(1L);
+
+        when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(user);
+        when(productService.getById(ArgumentMatchers.anyLong())).thenReturn(product);
+
+        // Act & Assert
+        mockMvc
+            .perform(get(url + product.getId())
+                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
+                .with(csrf()))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("Kaufanfrage senden")));
+    }
+
 }
