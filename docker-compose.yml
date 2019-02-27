@@ -15,16 +15,9 @@ services:
     image: oscarfonts/h2
     volumes:
       - ./datenbank:/opt/h2-data
-    ports:
-      #Port 81:81 für die H2-console
-      - "81:81"
-      - "1521:1521"
 
   propay:
     container_name: propay
     image: propra/propay
-    ports:
-      - "8888:8888"
-    # Optional
     volumes:
       - ./data:/code/data
