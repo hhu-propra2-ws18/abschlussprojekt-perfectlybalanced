@@ -33,14 +33,14 @@ public class ConflictResolutionController {
     }
 
     @GetMapping("/conflictcenter")
-    public String showConflictCenter (Model model) {
+    public String showConflictCenter(Model model) {
         List<LendingEntity> allLendingConflicts = lendingService.getAllConflicts();
         model.addAttribute("allLendingConflicts", allLendingConflicts);
         return "conflictcenter";
     }
 
     @GetMapping("/conflictdetail/{id}")
-    public String showConflictDetails (
+    public String showConflictDetails(
             Model model,
             @PathVariable Long id,
             @ModelAttribute("user") UserEntity userEntity) throws Exception {
@@ -53,7 +53,7 @@ public class ConflictResolutionController {
     }
 
     @PostMapping("/conflictcenter/decideForOwner")
-    public String resolveConflictForOwner (
+    public String resolveConflictForOwner(
             @RequestParam Long id
     ) throws Exception {
         LendingEntity lend = lendingService.getLendingById(id);
@@ -62,7 +62,7 @@ public class ConflictResolutionController {
     }
 
     @PostMapping("/conflictcenter/decideForBorrower")
-    public String resolveConflictForBorrower (
+    public String resolveConflictForBorrower(
             @RequestParam Long id
     ) throws Exception {
         LendingEntity lend = lendingService.getLendingById(id);
