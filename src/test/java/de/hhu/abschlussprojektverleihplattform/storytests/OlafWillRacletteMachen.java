@@ -2,6 +2,7 @@ package de.hhu.abschlussprojektverleihplattform.storytests;
 
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
+import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
@@ -72,6 +73,8 @@ public class OlafWillRacletteMachen {
 
         lendingService.acceptLendingRequest(raclette_lending);
 
+        assertEquals(Lendingstatus.confirmt,raclette_lending.getStatus());
+
 
         assertEquals(
                 Arrays.stream(proPayService.getAccount(olaf.getUsername()).reservations)
@@ -85,8 +88,10 @@ public class OlafWillRacletteMachen {
         );
 
         lendingService.returnProduct(raclette_lending);
+        assertEquals(Lendingstatus.returned,raclette_lending.getStatus());
 
         lendingService.acceptReturnedProduct(raclette_lending);
+        assertEquals(Lendingstatus.done,raclette_lending.getStatus());
 
         assertEquals(
                 proPayService.getAccount(olaf.getUsername()).amount,
@@ -97,6 +102,8 @@ public class OlafWillRacletteMachen {
                 proPayService.getAccount(olaf.getUsername()).reservations.length,
                 0
         );
+
+
     }
 
 }
