@@ -38,4 +38,9 @@ public class ProductService implements IProductService {
     public List<ProductEntity> getAllProductsFromUser(UserEntity user) {
         return productRepository.getAllProductsFromUser(user);
     }
+
+    @Override
+    public List<ProductEntity> getAllAvailableProducts() {
+        return productRepository.getAllAvailableProducts();
+    }
 }

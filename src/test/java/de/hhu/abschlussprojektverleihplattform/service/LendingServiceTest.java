@@ -17,6 +17,80 @@ public class LendingServiceTest {
     // Tests for requestLending
 
     @Test
+    public void productHasWrongStatus1() {
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        product.setStatus(Productstatus.forBuying);
+        Timestamp start1 = new Timestamp(1000L);
+        Timestamp end1 = new Timestamp(2000L);
+        LendingEntity timeBlocker = new LendingEntity(
+                Lendingstatus.confirmt,
+                start1,
+                end1,
+                actingUser,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
+        LendingService logic = new LendingService(lending_repository, null);
+        Timestamp start2 = new Timestamp(1700L);
+        Timestamp end2 = new Timestamp(3000L);
+
+        Exception result = new Exception("0");
+        try {
+            logic.requestLending(actingUser, product, start2, end2);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(
+                "This Product can only be bought, not lend.",
+                result.getMessage()
+        );
+    }
+
+    @Test
+    public void productHasWrongStatus2() {
+        UserEntity actingUser = RandomTestData.newRandomTestUser();
+        UserEntity owner = RandomTestData.newRandomTestUser();
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
+        product.setStatus(Productstatus.sold);
+        Timestamp start1 = new Timestamp(1000L);
+        Timestamp end1 = new Timestamp(2000L);
+        LendingEntity timeBlocker = new LendingEntity(
+                Lendingstatus.confirmt,
+                start1,
+                end1,
+                actingUser,
+                product,
+                0L,
+                0L
+        );
+        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
+        lending_repository.addLending(timeBlocker);
+        LendingService logic = new LendingService(lending_repository, null);
+        Timestamp start2 = new Timestamp(1700L);
+        Timestamp end2 = new Timestamp(3000L);
+
+        Exception result = new Exception("0");
+        try {
+            logic.requestLending(actingUser, product, start2, end2);
+        } catch (Exception e) {
+            result = e;
+        }
+
+        Assert.assertEquals(
+                "This Product can only be bought, not lend.",
+                result.getMessage()
+        );
+    }
+
+    @Test
     public void timeIsBlocked1() {
         // start is in reservated Time
         UserEntity actingUser = RandomTestData.newRandomTestUser();

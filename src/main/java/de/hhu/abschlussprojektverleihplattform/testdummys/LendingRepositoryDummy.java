@@ -57,7 +57,7 @@ public class LendingRepositoryDummy implements ILendingRepository {
         return isUpdated;
     }
 
-    // Methodes from the Inertface that are not needed for Testing
+    // Methodes from the Interface that are not needed for Testing
     @Override
     public List<LendingEntity> getAllLendings() {
         return null;

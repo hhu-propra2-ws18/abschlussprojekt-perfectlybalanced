@@ -12,6 +12,9 @@ gradlew.bat
 # Log file
 *.log
 
+#Database files
+*.db
+
 # BlueJ files
 *.ctxt
 
@@ -35,3 +38,7 @@ hs_err_pid*
 README.md
 build/
 out/
+bin/*
+data/*
+
+.classpath

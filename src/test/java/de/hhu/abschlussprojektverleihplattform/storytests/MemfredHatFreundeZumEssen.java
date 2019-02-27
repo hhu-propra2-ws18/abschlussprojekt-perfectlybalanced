@@ -57,7 +57,7 @@ public class MemfredHatFreundeZumEssen {
 
         productService.addProduct(teller_3);
 
-        Timestamp[] timestamps = RandomTestData.new2SuccessiveTimestamps();
+        Timestamp[] timestamps = RandomTestData.new2Timestamps1DayApart();
         try {
             lendingService.requestLending(memfred, teller_3, timestamps[0], timestamps[1]);
             Assert.fail();
