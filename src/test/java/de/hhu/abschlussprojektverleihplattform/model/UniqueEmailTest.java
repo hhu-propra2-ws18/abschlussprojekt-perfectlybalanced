@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.model;
 
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -15,6 +16,7 @@ import javax.validation.Validator;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -35,6 +37,11 @@ public class UniqueEmailTest {
         UserEntity user = new UserEntity(
             "Max", "Mock", "loginUserName12", "mocking", email
         );
+        user.setUserId(1L);
+
+        UserEntity userWithSameMail = RandomTestData.newRandomTestUser();
+        userWithSameMail.setEmail(email);
+        userWithSameMail.setUserId(2L);
 
         when(userService.findByEmail(ArgumentMatchers.anyString())).thenReturn(user);
 
@@ -42,6 +49,6 @@ public class UniqueEmailTest {
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(user);
 
         // Assert
-        assertEquals(2, violations.size());
+        assertEquals(1, violations.size());
     }
 }
