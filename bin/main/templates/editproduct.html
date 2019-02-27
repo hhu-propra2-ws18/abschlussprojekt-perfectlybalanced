@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Artikel bearbeiten</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<nav th:replace="nav-fragment"></nav>
+<div class="container">
+    <div class="m-3"></div>
+    <h3>Artikel bearbeiten</h3>
+    <form action="" th:action="@{|~/editproduct/${product.id}|}" method="post">
+
+        <div class="form-group">
+            <label class="label" for="titel">Titel:</label>
+            <input type="text" class="form-control" id="titel" required th:field="${product.title}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('product.title')}" th:errors="${product.title}">Error</small>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="beschreibung">Beschreibung</label>
+            <textarea class="form-control" rows="5" id="beschreibung" required th:field="${product.description}"></textarea>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('product.description')}" th:errors="${product.description}">Error</small>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="kosten">Kosten:</label>
+            <input type="text" class="form-control" id="kosten" required th:field="${product.cost}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('product.cost')}" th:errors="${product.cost}">Error</small>
+        </div>
+
+        <div class="form-group">
+            <label class="label" for="kaution">Kaution:</label>
+            <input type="text" class="form-control" id="kaution" required th:field="${product.surety}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('product.surety')}" th:errors="${product.surety}">Error</small>
+        </div>
+
+        <div class="form-group">
+            <label for="street">Straße</label>
+            <input type="text" class="form-control" id="street" required th:field="${address.street}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('address.street')}" th:errors="${address.street}">Error</small>
+        </div>
+
+        <div class="form-group">
+            <label for="street">Hausnummer</label>
+            <input type="text" class="form-control" id="housenumber" required th:field="${address.housenumber}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('address.housenumber')}" th:errors="${address.housenumber}">Error</small>
+        </div>
+
+        <div class="form-group">
+            <label for="postcode">Postleitzahl</label>
+            <input type="text" class="form-control" id="postcode" required th:field="${address.postcode}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('address.postcode')}" th:errors="${address.postcode}">Error</small>
+        </div>
+
+        <div class="form-group">
+            <label for="city">Stadt</label>
+            <input type="text" class="form-control" id="city" required th:field="${address.city}">
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('address.city')}" th:errors="${address.city}">Error</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Bestätigen</button>
+        <br>
+        <br>
+    </form>
+</div>
+</body>
+</html>
