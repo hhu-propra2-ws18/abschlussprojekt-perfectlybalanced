@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -57,9 +58,12 @@ public class MemfredHatFreundeZumEssen {
 
         productService.addProduct(teller_3);
 
-        Timestamp[] timestamps = RandomTestData.new2Timestamps1DayApart();
+        long day=1000*60*60*24;
+        Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        Timestamp start = new Timestamp(currentMilis + 300000);
+        Timestamp end = new Timestamp(currentMilis + 3000000 + day);
         try {
-            lendingService.requestLending(memfred, teller_3, timestamps[0], timestamps[1]);
+            lendingService.requestLending(memfred, teller_3, start, end);
             Assert.fail();
         }catch (Exception e){
             System.out.println();

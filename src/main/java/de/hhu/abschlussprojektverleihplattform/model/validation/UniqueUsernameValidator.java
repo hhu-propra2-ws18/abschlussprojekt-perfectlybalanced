@@ -20,13 +20,19 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
     }
 
     @Override
-    public boolean isValid(String username, ConstraintValidatorContext context) {
+    public boolean isValid(
+        String username,
+        ConstraintValidatorContext context
+    ) throws EmptyResultDataAccessException {
         try {
-            userService.findByUsername(username);
+            if(userService.findByUsername(username) != null) {
+                return false;
+            }
+            return (!username.isEmpty())
+                && !username.contains(" ");
         } catch (EmptyResultDataAccessException e) {
-            return (username != null)
+            return (!username.isEmpty())
                 && !username.contains(" ");
         }
-        return false;
     }
 }

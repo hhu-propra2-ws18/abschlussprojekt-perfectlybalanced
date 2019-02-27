@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -63,11 +64,14 @@ public class OlafWillRacletteMachen {
 
         productService.addProduct(raclette);
 
-        Timestamp[] successivetimestamps = RandomTestData.new2Timestamps1DayApart();
+        long day=1000*60*60*24;
+        Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        Timestamp start = new Timestamp(currentMilis + 300000);
+        Timestamp end = new Timestamp(currentMilis + day);
 
         LendingEntity raclette_lending = lendingService
                 .requestLending(
-                        olaf,raclette,successivetimestamps[0],successivetimestamps[1]);
+                        olaf,raclette,start,end);
 
 
 
