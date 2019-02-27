@@ -57,10 +57,12 @@ public class RandomTestData {
         return result;
     }
 
-    public static Timestamp[] new2SuccessiveTimestamps(){
+    public static Timestamp[] new2Timestamps1DayApart(){
 
         Timestamp t1 = new Timestamp(new Date().getTime());
-        Timestamp t2 = new Timestamp(t1.getTime()+300000000);
+        int hour_milliseconds=60*60*1000;
+        int day_milliseconds=hour_milliseconds*24;
+        Timestamp t2 = new Timestamp(t1.getTime()+day_milliseconds);
 
         return new Timestamp[]{t1,t2};
     }
