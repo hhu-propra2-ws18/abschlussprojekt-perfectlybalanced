@@ -30,17 +30,16 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            actingUser,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(null, null);
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(3000L);
 
@@ -52,8 +51,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "This Product can only be bought, not lend.",
-                result.getMessage()
+            "This Product can only be bought, not lend.",
+            result.getMessage()
         );
     }
 
@@ -67,17 +66,16 @@ public class LendingServiceTest {
         Timestamp start1 = new Timestamp(1000L);
         Timestamp end1 = new Timestamp(2000L);
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                actingUser,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            actingUser,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(null, null);
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(3000L);
 
@@ -89,8 +87,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "This Product can only be bought, not lend.",
-                result.getMessage()
+            "This Product can only be bought, not lend.",
+            result.getMessage()
         );
     }
 
@@ -100,8 +98,7 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(null, null);
         Timestamp start = new Timestamp(4000L);
         Timestamp end = new Timestamp(4000L);
 
@@ -114,8 +111,8 @@ public class LendingServiceTest {
 
         int totalMoney = product.getSurety() + product.getCost();
         Assert.assertEquals(
-                "You can't lend a product for an instant",
-                result.getMessage()
+            "You can't lend a product for an instant",
+            result.getMessage()
         );
     }
 
@@ -125,8 +122,7 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(null, null);
         Timestamp start = new Timestamp(4000L);
         Timestamp end = new Timestamp(3000L);
 
@@ -139,9 +135,9 @@ public class LendingServiceTest {
 
         int totalMoney = product.getSurety() + product.getCost();
         Assert.assertEquals(
-                "If you are searching for a Bug, there is non here. "
-                + "The end-date must be after the start-date, you genius!",
-                result.getMessage()
+            "If you are searching for a Bug, there is non here. "
+            + "The end-date must be after the start-date, you genius!",
+            result.getMessage()
         );
     }
 
@@ -151,8 +147,7 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(null, null);
         Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
         Timestamp start = new Timestamp(currentMilis - 300);
         Timestamp end = new Timestamp(currentMilis + 3000000);
@@ -166,9 +161,9 @@ public class LendingServiceTest {
 
         int totalMoney = product.getSurety() + product.getCost();
         Assert.assertEquals(
-                "You can't change the Past. "
-                + "You have to borrow the product after the current time.",
-                result.getMessage()
+            "You can't change the Past. "
+            + "You have to borrow the product after the current time.",
+            result.getMessage()
         );
     }
 
@@ -178,10 +173,9 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(0L, null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(null, payment_service);
         Timestamp start = new Timestamp(1589187600000L);
         Timestamp end = new Timestamp(1589549400000L);
 
@@ -195,7 +189,7 @@ public class LendingServiceTest {
         int totalMoney = product.getSurety() + product.getCost() * 5;
         Assert.assertEquals(
             "The cost and the surety sum up to: "
-                + totalMoney + "€, but you only have: " + 0L + "€.",
+            + totalMoney + "€, but you only have: " + 0L + "€.",
             result.getMessage()
         );
     }
@@ -206,11 +200,10 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         Exception exception = new Exception("TestFail");
         payment_service.configurateUsersCurrentBalance(0L, exception, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(null, payment_service);
         Timestamp start = new Timestamp(1589187600000L);
         Timestamp end = new Timestamp(1589549400000L);
 
@@ -264,13 +257,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.done,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.done,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -285,7 +278,7 @@ public class LendingServiceTest {
 
         Assert.assertEquals(
             "The Lending has the Status: " + Lendingstatus.done
-                + " but it needs to be: " + Lendingstatus.requested,
+            + " but it needs to be: " + Lendingstatus.requested,
             result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -304,22 +297,22 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(3000L);
         LendingEntity lend = new LendingEntity(
-                Lendingstatus.requested,
-                start2,
-                end2,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start2,
+            end2,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -337,8 +330,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Product is not available in the selected time.",
-                result.getMessage()
+            "The Product is not available in the selected time.",
+            result.getMessage()
         );
     }
 
@@ -354,22 +347,22 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(1500L);
         LendingEntity lend = new LendingEntity(
-                Lendingstatus.requested,
-                start2,
-                end2,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start2,
+            end2,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -387,8 +380,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Product is not available in the selected time.",
-                result.getMessage()
+            "The Product is not available in the selected time.",
+            result.getMessage()
         );
     }
 
@@ -404,22 +397,22 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(1700L);
         Timestamp end2 = new Timestamp(1900L);
         LendingEntity lend = new LendingEntity(
-                Lendingstatus.requested,
-                start2,
-                end2,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start2,
+            end2,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -437,8 +430,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Product is not available in the selected time.",
-                result.getMessage()
+            "The Product is not available in the selected time.",
+            result.getMessage()
         );
     }
 
@@ -454,22 +447,22 @@ public class LendingServiceTest {
         Timestamp start2 = new Timestamp(800L);
         Timestamp end2 = new Timestamp(3500L);
         LendingEntity lend = new LendingEntity(
-                Lendingstatus.requested,
-                start2,
-                end2,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start2,
+            end2,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start1,
-                end1,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start1,
+            end1,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -487,8 +480,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Product is not available in the selected time.",
-                result.getMessage()
+            "The Product is not available in the selected time.",
+            result.getMessage()
         );
     }
 
@@ -502,22 +495,22 @@ public class LendingServiceTest {
         Timestamp start = new Timestamp(1000L);
         Timestamp end = new Timestamp(2000L);
         LendingEntity lend = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingEntity timeBlocker = new LendingEntity(
-                Lendingstatus.confirmt,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
@@ -535,8 +528,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Product is not available in the selected time.",
-                result.getMessage()
+            "The Product is not available in the selected time.",
+            result.getMessage()
         );
     }
 
@@ -585,13 +578,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -652,12 +645,12 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals((long) lending.getCostReservationID(),
-                (long) payment_service.getLastId());
+            (long) payment_service.getLastId());
         Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
-                = payment_service.findReservation(lending.getCostReservationID());
+            = payment_service.findReservation(lending.getCostReservationID());
         ReservationDummy surety
-                = payment_service.findReservation(lending.getSuretyReservationID());
+            = payment_service.findReservation(lending.getSuretyReservationID());
         Assert.assertEquals(borrower.getUsername(), cost.getFromUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getToUsername());
         //Timedifference is between 5 and 6 Days
@@ -676,13 +669,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -701,12 +694,12 @@ public class LendingServiceTest {
         Assert.assertEquals(Lendingstatus.confirmt, lending.getStatus());
         Assert.assertTrue(payment_service.getLastWasTransfer());
         Assert.assertEquals((long) lending.getCostReservationID(),
-                (long) payment_service.getLastId());
+            (long) payment_service.getLastId());
         Assert.assertEquals(borrower.getUsername(), payment_service.getLastUsername());
         ReservationDummy cost
-                = payment_service.findReservation(lending.getCostReservationID());
+            = payment_service.findReservation(lending.getCostReservationID());
         ReservationDummy surety
-                = payment_service.findReservation(lending.getSuretyReservationID());
+            = payment_service.findReservation(lending.getSuretyReservationID());
         Assert.assertEquals(borrower.getUsername(), cost.getFromUsername());
         Assert.assertEquals(product.getOwner().getUsername(), cost.getToUsername());
         //Timedifference is between 3 and 4 Days
@@ -727,13 +720,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.done,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.done,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -747,9 +740,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Lending has the Status: " + Lendingstatus.done
-                        + " but it needs to be: " + Lendingstatus.requested,
-                result.getMessage()
+            "The Lending has the Status: " + Lendingstatus.done
+            + " but it needs to be: " + Lendingstatus.requested,
+            result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -764,13 +757,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.requested,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.requested,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -793,13 +786,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.done,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.done,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -813,9 +806,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Lending has the Status: " + Lendingstatus.done
-                        + " but it needs to be: " + Lendingstatus.confirmt,
-                result.getMessage()
+            "The Lending has the Status: " + Lendingstatus.done
+            + " but it needs to be: " + Lendingstatus.confirmt,
+            result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -830,13 +823,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.confirmt,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.confirmt,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -863,13 +856,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.done,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.done,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -883,9 +876,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Lending has the Status: " + Lendingstatus.done
-                        + " but it needs to be: " + Lendingstatus.returned,
-                result.getMessage()
+            "The Lending has the Status: " + Lendingstatus.done
+            + " but it needs to be: " + Lendingstatus.returned,
+            result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -900,13 +893,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.returned,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.returned,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -977,13 +970,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.done,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.done,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -997,9 +990,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Lending has the Status: " + Lendingstatus.done
-                        + " but it needs to be: " + Lendingstatus.returned,
-                result.getMessage()
+            "The Lending has the Status: " + Lendingstatus.done
+            + " but it needs to be: " + Lendingstatus.returned,
+            result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1014,13 +1007,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.returned,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.returned,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -1047,13 +1040,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.done,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.done,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -1067,9 +1060,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Lending has the Status: " + Lendingstatus.done
-                        + " but it needs to be: " + Lendingstatus.conflict,
-                result.getMessage()
+            "The Lending has the Status: " + Lendingstatus.done
+            + " but it needs to be: " + Lendingstatus.conflict,
+            result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1120,13 +1113,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.conflict,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.conflict,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -1161,13 +1154,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.done,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.done,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -1181,9 +1174,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-                "The Lending has the Status: " + Lendingstatus.done
-                        + " but it needs to be: " + Lendingstatus.conflict,
-                result.getMessage()
+            "The Lending has the Status: " + Lendingstatus.done
+            + " but it needs to be: " + Lendingstatus.conflict,
+            result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1198,13 +1191,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.conflict,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.conflict,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
@@ -1234,13 +1227,13 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingEntity lending = new LendingEntity(
-                Lendingstatus.conflict,
-                start,
-                end,
-                borrower,
-                product,
-                0L,
-                0L
+            Lendingstatus.conflict,
+            start,
+            end,
+            borrower,
+            product,
+            0L,
+            0L
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
