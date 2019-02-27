@@ -12,8 +12,8 @@ public interface ILendingService {
 
     // maybee needs to be changes, once the ZeitraumModel has been implemented
     List<Timespan> getAvailableTime(ProductEntity product);
-    List<String> getAvailabilityStrings(ProductEntity product);
 
+    List<String> getAvailabilityStrings(ProductEntity product);
 
     // Request a new Lending
     LendingEntity requestLending(
