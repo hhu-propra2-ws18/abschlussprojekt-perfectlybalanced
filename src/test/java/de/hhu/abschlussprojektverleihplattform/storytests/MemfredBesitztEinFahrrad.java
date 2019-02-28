@@ -6,9 +6,9 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,9 @@ public class MemfredBesitztEinFahrrad {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ProPayAdapter proPayAdapter;
+
     @Test
     public void test() throws Exception{
 
@@ -58,7 +61,8 @@ public class MemfredBesitztEinFahrrad {
         UserEntity borrower = RandomTestData.newRandomTestUser();
         userService.addUser(borrower);
         int borrower_old_wealth=1000;
-        proPayService.changeUserBalanceBy(borrower.getUsername(),borrower_old_wealth);
+
+        proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(borrower.getUsername(),borrower_old_wealth);
 
         long day=1000*60*60*24;
         Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
@@ -81,7 +85,7 @@ public class MemfredBesitztEinFahrrad {
 
         //memfred receives cost and surety
         assertEquals(
-                proPayService.getAccount(memfred.getUsername()).amount,
+                proPayAdapter.getAccount(memfred.getUsername()).amount,
                 fahrrad_cost+fahrrad_surety
         );
     }

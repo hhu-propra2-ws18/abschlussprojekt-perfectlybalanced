@@ -6,6 +6,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
@@ -14,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
@@ -34,6 +34,9 @@ public class KathrinHaeckslerAusleihenTest {
     ProPayService proPayService;
 
     @Autowired
+    ProPayAdapter proPayAdapter;
+
+    @Autowired
     LendingService lendingService;
 
     @Autowired
@@ -48,8 +51,8 @@ public class KathrinHaeckslerAusleihenTest {
         userService.addUser(kathrin);
 
         long kathrin_balance_before=500;
-
-        proPayService.changeUserBalanceBy(kathrin.getUsername(),kathrin_balance_before);
+        proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(kathrin.getUsername(),kathrin_balance_before);
 
         //hacksler product mit besitzer erstellen
         UserEntity owner = RandomTestData.newRandomTestUser();
@@ -78,7 +81,7 @@ public class KathrinHaeckslerAusleihenTest {
 
         //assert that amount is reserved on kathrins account
         Reservation[] reservations
-         = proPayService.getAccount(kathrin.getUsername()).reservations;
+         = proPayAdapter.getAccount(kathrin.getUsername()).reservations;
         assertEquals(reservations.length,1);
         assertEquals(reservations[0].amount,hacksler_surety);
 
@@ -89,7 +92,7 @@ public class KathrinHaeckslerAusleihenTest {
         lendingService.acceptReturnedProduct(hacksler_lending);
 
         Account kathrin_account_after_lending=
-                proPayService.getAccount(kathrin.getUsername());
+                proPayAdapter.getAccount(kathrin.getUsername());
 
         //assert that reservation is released and the lending cost is paid
         assertEquals(
@@ -98,6 +101,6 @@ public class KathrinHaeckslerAusleihenTest {
         );
         assertEquals(kathrin_account_after_lending.reservations.length,0);
 
-        assertEquals(proPayService.getAccount(owner.getUsername()).amount,hacksler_cost*2);
+        assertEquals(proPayAdapter.getAccount(owner.getUsername()).amount,hacksler_cost*2);
     }
 }
