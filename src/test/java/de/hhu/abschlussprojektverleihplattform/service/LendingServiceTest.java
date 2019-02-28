@@ -641,7 +641,9 @@ public class LendingServiceTest {
         Exception fail = new Exception("TestFail");
         payment_service.configureReservateAmount(null, false);
         payment_service.configureReservateAmountSecondOneFails(fail);
-        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         Exception result = new Exception("0");
         try {
@@ -682,9 +684,12 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
-        payment_service.configureReservateAmount(null, false);
+        payment_service.configureReservateAmount(null,
+                false);
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         try {
             logic.acceptLendingRequest(lending);
@@ -733,9 +738,12 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
-        payment_service.configureReservateAmount(null, false);
+        payment_service.configureReservateAmount(null,
+                false);
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         try {
             logic.acceptLendingRequest(lending);
@@ -1179,7 +1187,9 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         try {
             logic.ownerReceivesSuretyAfterConflict(lending);

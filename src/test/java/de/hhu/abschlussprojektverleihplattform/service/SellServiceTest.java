@@ -192,7 +192,9 @@ public class SellServiceTest {
         paymentService.configurateUsersCurrentBalance(50L, null, false);
         paymentService.configureReservateAmount(null, false);
         paymentService.configureTransfer(null, false);
-        SellService logic = new SellService(productRepository, paymentService, transactionRepository);
+        SellService logic = new SellService(productRepository,
+                paymentService,
+                transactionRepository);
 
         try {
             logic.buyProduct(actingUser, product);

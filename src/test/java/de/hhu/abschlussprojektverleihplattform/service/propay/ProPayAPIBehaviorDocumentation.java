@@ -1,5 +1,8 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +22,9 @@ public class ProPayAPIBehaviorDocumentation {
     @Autowired
     private ProPayService proPayService;
 
+    @Autowired
+    UserService userService;
+
     @Test
     public void testThatSystemRejectsDecreaseOfAccountBalance() throws Exception{
         String user1 = make_new_user();
@@ -33,12 +39,14 @@ public class ProPayAPIBehaviorDocumentation {
 
     @Test
     public void testPropayApiThatPaymentToNotCreatedAccountSucceeds() throws Exception{
-        String user1 = make_new_user();
-        String user2 = make_new_user();
+        UserEntity user1 = RandomTestData.newRandomTestUser();
+        UserEntity user2 = RandomTestData.newRandomTestUser();
+        userService.addUser(user1);
+        userService.addUser(user2);
 
-        proPayService.createAccountIfNotExists(user1);
-        proPayService.changeUserBalanceBy(user1,10);
+        proPayService.createAccountIfNotExists(user1.getUsername());
+        proPayService.changeUserBalanceBy(user1.getUsername(),10);
 
-        proPayService.makePayment(user1,user2,1);
+        proPayService.makePayment(user1.getUsername(),user2.getUsername(),1);
     }
 }
