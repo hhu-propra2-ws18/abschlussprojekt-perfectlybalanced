@@ -25,6 +25,14 @@ public class RandomTestData {
                 RandomStringUtils.randomAlphabetic(10));
     }
 
+    public static TransactionEntity newRandomTestTransaction(UserEntity sender,UserEntity receiver){
+        Random random = new Random();
+        return new TransactionEntity(sender,
+                receiver,
+                random.nextInt(1000),
+                new Timestamp(System.currentTimeMillis()));
+    }
+
     public static ProductEntity newRandomTestProduct(UserEntity owner, AddressEntity address) {
         Random random = new Random();
         return new ProductEntity(RandomStringUtils.randomAlphabetic(255),
