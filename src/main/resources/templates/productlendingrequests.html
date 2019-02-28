@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Leihanfragen</title>
@@ -22,11 +22,11 @@
                     <div class="col-md-4">
                         <div class="row">
                             <form th:action="@{/lendingrequests/accept(id=${lending.id})}" method="post">
-                                <a><button type="submit" class="btn btn-success">Approve</button></a>
+                                <a><button type="submit" class="btn btn-success">Akzeptieren</button></a>
                             </form>
                             <div class="m-3"></div>
                             <form th:action="@{/lendingrequests/reject(id=${lending.id})}"  method="post">
-                                <a><button type="submit" class="btn btn-warning">Reject</button></a>
+                                <a><button type="submit" class="btn btn-warning">Ablehnen</button></a>
                             </form>
                         </div>
                     </div>

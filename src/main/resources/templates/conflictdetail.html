@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Verleihplattform Konfliktdetails</title>
+    <title>Konfliktdetails</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
@@ -34,7 +33,7 @@
             <form th:action="@{/conflictcenter/decideForOwner(id=${lending.id})}" method="post">
                 <a><button type="submit" class="btn btn-success">Kaution an
                     <span th:text="${lending.product.owner.username}"></span>
-                    uebergeben</button></a>
+                    übergeben</button></a>
             </form>
         </div>
 
@@ -60,7 +59,7 @@
             <form th:action="@{/conflictcenter/decideForBorrower(id=${lending.id})}" method="post">
                 <a><button type="submit" class="btn btn-success">Kaution an
                     <span th:text="${lending.borrower.username}"></span>
-                    uebergeben</button></a>
+                    übergeben</button></a>
             </form>
         </div>
     </div>
