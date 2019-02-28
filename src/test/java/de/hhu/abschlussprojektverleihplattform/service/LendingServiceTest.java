@@ -1,36 +1,28 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.testdummys.LendingRepositoryDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
+import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalTime;
 
 //NOTE:
 //The Dates used here are from May 2020.
 //Should the Tests be run after that Time some will fail, since the Dates will then be in the Past.
 //Should the Application still be needed after that Time, they have to be replaced with later Dates.
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class LendingServiceTest {
 
     // Tests for requestLending
-    @Autowired
-    LendingService lendingService;
 
     @Test
     public void productHasWrongStatus1() {
@@ -1347,15 +1339,18 @@ public class LendingServiceTest {
         entity.setEnd(end);
         all.add(entity);
 
-        LendingEntity entity2 = RandomTestData.newRandomLendingStatusConflict(userBorrower, product2);
+        LendingEntity entity2 =
+                RandomTestData.newRandomLendingStatusConflict(userBorrower, product2);
         entity2.setId(2L);
         entity2.setStatus(Lendingstatus.confirmt);
         System.out.println(entity2.getEnd());
         all.add(entity2);
 
-        System.out.println(lendingService.getAllReminder(all).size());
+        LendingService logic = new LendingService(null, null);
 
-        Assert.assertTrue(lendingService.getAllReminder(all).size() == 1);
+        System.out.println(logic.getAllReminder(all).size());
+
+        Assert.assertTrue(logic.getAllReminder(all).size() == 1);
     }
 
     // Test for getThisMorning
