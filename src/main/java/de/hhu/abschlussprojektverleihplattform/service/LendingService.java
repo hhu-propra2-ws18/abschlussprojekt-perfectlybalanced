@@ -1,11 +1,10 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
 import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
+import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.ITransactionRepository;
-import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
-import de.hhu.abschlussprojektverleihplattform.model.*;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;

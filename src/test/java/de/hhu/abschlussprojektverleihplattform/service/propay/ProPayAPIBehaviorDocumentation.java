@@ -19,6 +19,9 @@ public class ProPayAPIBehaviorDocumentation {
     @Autowired
     private ProPayService proPayService;
 
+    @Autowired
+    UserService userService;
+
     @Test
     public void testPropayApiThatPaymentToNotCreatedAccountSucceeds() throws Exception{
         UserEntity user1 = RandomTestData.newRandomTestUser();
@@ -26,7 +29,9 @@ public class ProPayAPIBehaviorDocumentation {
         userService.addUser(user1);
         userService.addUser(user2);
 
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
 
 
         proPayService.proPayAdapter.makePayment(user1.getUsername(),user2.getUsername(),1);

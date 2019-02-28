@@ -1,22 +1,15 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
-import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
-
-import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
-import de.hhu.abschlussprojektverleihplattform.service.propay.exceptions.ProPayAccountNotExistException;
-import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
+import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
+import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
+import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
-import java.net.URI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ProPayService implements IPaymentService {

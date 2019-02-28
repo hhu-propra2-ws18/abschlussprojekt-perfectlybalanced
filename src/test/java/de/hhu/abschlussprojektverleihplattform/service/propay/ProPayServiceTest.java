@@ -10,10 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,7 +30,8 @@ public class ProPayServiceTest {
     @Test
     public void testNewUserHasZeroBalance() throws Exception {
         String generated_username = RandomTestData.newRandomTestUser().getUsername();
-        Assert.assertEquals(Long.valueOf(0), proPayService.usersCurrentBalance(generated_username));
+        Assert.assertEquals(Long.valueOf(0),
+                proPayService.usersCurrentBalance(generated_username));
     }
 
     @Test
@@ -88,7 +86,8 @@ public class ProPayServiceTest {
                 .proPayAdapter
                 .makePayment(user1.getUsername(),user2.getUsername(),1);
 
-        Assert.assertEquals(proPayService.usersCurrentBalance(user2.getUsername()), Long.valueOf(1));
+        Assert.assertEquals(
+                proPayService.usersCurrentBalance(user2.getUsername()), Long.valueOf(1));
     }
 
 
@@ -103,10 +102,14 @@ public class ProPayServiceTest {
         userService.addUser(user1);
         userService.addUser(user2);
 
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2.getUsername(),0);
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2.getUsername(),0);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
 
-        proPayService.reservateAmount(user1, user2, 1);
+        proPayService.reservateAmount(user1.getUsername(), user2.getUsername(), 1);
 
         Account user1_account = this.proPayService.proPayAdapter.getAccount(user1.getUsername());
 
@@ -126,19 +129,27 @@ public class ProPayServiceTest {
         userService.addUser(user1);
         userService.addUser(user2);
 
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2.getUsername(),0);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2.getUsername(),0);
 
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
 
 
         //make reservation
         Reservation reservation
-            = proPayService.proPayAdapter.makeReservation(user1.getUsername(), user2.getUsername(), 1);
+            = proPayService
+                .proPayAdapter
+                .makeReservation(user1.getUsername(), user2.getUsername(), 1);
 
-        Assert.assertEquals(proPayService.proPayAdapter.getAccount(user1.getUsername()).reservations.length, 1);
+        Assert.assertEquals(proPayService
+                .proPayAdapter
+                .getAccount(user1.getUsername()).reservations.length, 1);
 
         //release reservation
-        proPayService.returnReservedAmount(user1.getUsername(), reservation.id);
+        proPayService.returnReservatedMoney(user1.getUsername(), reservation.id);
 
         //check account for reserved money and no reservations present
         Account user1_account = proPayService.proPayAdapter.getAccount(user1.getUsername());
@@ -154,18 +165,27 @@ public class ProPayServiceTest {
         userService.addUser(user1);
         userService.addUser(user2);
 
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2.getUsername(),0);
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2.getUsername(),0);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1.getUsername(),10);
 
         Reservation reservation=proPayService
-            .proPayAdapter.makeReservation(user1.getUsername(),user2.getUsername(),1);
+            .proPayAdapter
+                .makeReservation(user1.getUsername(),user2.getUsername(),1);
 
-        proPayService.proPayAdapter.punishReservation(user1.getUsername(),reservation.id);
+        proPayService
+                .proPayAdapter
+                .punishReservation(user1.getUsername(),reservation.id);
 
         //assert that user1 has no reservations anymore
-        Assert.assertEquals(0,proPayService.proPayAdapter.getAccount(user1).reservations.length);
+        Assert.assertEquals(0,
+                proPayService.proPayAdapter.getAccount(user1.getUsername()).reservations.length);
 
         //assert that user2 received the reserved amount
-        Assert.assertEquals(1,proPayService.proPayAdapter.getAccount(user2).amount);
+        Assert.assertEquals(1,
+                proPayService.proPayAdapter.getAccount(user2.getUsername()).amount);
     }
 }
