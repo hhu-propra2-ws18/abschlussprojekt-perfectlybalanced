@@ -161,7 +161,6 @@ public class ConflictResolutionControllerTest {
     @Test
     public void conflictCenterShowsNoConflict() throws Exception {
         UserEntity admin = createAdmin();
-        LendingEntity lendingConflict = createConflictItem(1L);
         String username = admin.getUsername();
 
         List<LendingEntity> allConflicts = new ArrayList<>();
