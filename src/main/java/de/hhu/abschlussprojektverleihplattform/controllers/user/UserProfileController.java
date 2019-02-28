@@ -1,6 +1,7 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,13 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserProfileController {
 
     @Autowired
-    public ProPayService proPayService;
+    ProPayService proPayService;
+
+    @Autowired
+    ProPayAdapter proPayAdapter;
 
     @GetMapping("/profile")
     public String getProfile(Model model, Authentication auth) throws Exception{
         UserEntity user = (UserEntity) auth.getPrincipal();
         model.addAttribute("user", user);
-        model.addAttribute("user_balance",proPayService.getBalance(user.getUsername()));
+        model.addAttribute("user_balance",proPayService.usersCurrentBalance(user.getUsername()));
 
         return "profile";
     }
@@ -30,7 +34,7 @@ public class UserProfileController {
     ) throws Exception{
 
         UserEntity user = (UserEntity) auth.getPrincipal();
-        proPayService.changeUserBalanceBy(user.getUsername(),100);
+        proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user.getUsername(),100);
         return "redirect:/profile";
     }
 }

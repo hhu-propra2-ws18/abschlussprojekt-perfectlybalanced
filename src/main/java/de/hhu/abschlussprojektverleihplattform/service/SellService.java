@@ -7,6 +7,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.ITransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
