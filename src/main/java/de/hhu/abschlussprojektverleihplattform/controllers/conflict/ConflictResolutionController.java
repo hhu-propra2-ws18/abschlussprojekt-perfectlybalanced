@@ -44,7 +44,7 @@ public class ConflictResolutionController {
             model.addAttribute("lending", lending);
             return "conflictdetail";
         }
-        return "redirekt:/";
+        return "redirect:/";
     }
 
     @PostMapping("/conflictcenter/decideForOwner")
