@@ -4,14 +4,30 @@ import de.hhu.abschlussprojektverleihplattform.model.AddressEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ProductRepositoryDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import static org.mockito.ArgumentMatchers.any;
 
 public class SellServiceTest {
+
+    @Mock
+    TransactionRepository transactionRepository;
+
+    @Before
+    public void initMocks() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void productIsForLending() {
@@ -165,6 +181,7 @@ public class SellServiceTest {
 
     @Test
     public void buySuccessfull() {
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
         UserEntity owner = RandomTestData.newRandomTestUser();
         UserEntity actingUser = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
@@ -175,7 +192,7 @@ public class SellServiceTest {
         paymentService.configurateUsersCurrentBalance(50L, null, false);
         paymentService.configureReservateAmount(null, false);
         paymentService.configureTransfer(null, false);
-        SellService logic = new SellService(productRepository, paymentService, null);
+        SellService logic = new SellService(productRepository, paymentService, transactionRepository);
 
         try {
             logic.buyProduct(actingUser, product);
