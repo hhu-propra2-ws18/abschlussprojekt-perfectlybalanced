@@ -83,7 +83,7 @@ public class LendingService implements ILendingService {
                 + "The end-date must be after the start-date, you genius!"
             );
         }
-        if(start.before(Timestamp.valueOf(LocalDateTime.now()))) {
+        if(start.before(getThisMorning())) {
             throw new Exception(
                 "You can't change the Past. "
                 + "You have to borrow the product after the current time."
@@ -301,5 +301,14 @@ public class LendingService implements ILendingService {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);
+    }
+
+    protected Timestamp getThisMorning() {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        long millis = now.getTime();
+        long millisPerDay = 1000*60*60*24;
+        millis /= millisPerDay;
+        millis *= millisPerDay;
+        return new Timestamp(millis);
     }
 }
