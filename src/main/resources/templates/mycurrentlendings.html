@@ -24,9 +24,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <p th:text="${lending.getStart().toString()}"></p>
-                <p>bis</p>
-                <p th:text="${lending.getEnd().toString()}"></p>
+                <span th:text="${#dates.format(lending.getStart(), 'dd.MM.yyyy')}"></span>
+                <span>bis</span>
+                <span th:text="${#dates.format(lending.getEnd(), 'dd.MM.yyyy')}"></span>
             </div>
         </div>
     </div>
@@ -48,9 +48,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <p th:text="${lending.getStart().toString()}"></p>
-                <p>bis</p>
-                <p th:text="${lending.getEnd().toString()}"></p>
+                <span th:text="${#dates.format(lending.getStart(), 'dd.MM.yyyy')}"></span>
+                <span>bis</span>
+                <span th:text="${#dates.format(lending.getEnd(), 'dd.MM.yyyy')}"></span>
 
                 <form th:action="@{/mylendings/return(id=${lending.id})}" method="post">
                     <a><button type="submit" class="btn btn-success">Zurückgeben</button></a>
@@ -76,9 +76,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <p th:text="${lending.getStart().toString()}"></p>
-                <p>bis</p>
-                <p th:text="${lending.getEnd().toString()}"></p>
+                <span th:text="${#dates.format(lending.getStart(), 'dd.MM.yyyy')}"></span>
+                <span>bis</span>
+                <span th:text="${#dates.format(lending.getEnd(), 'dd.MM.yyyy')}"></span>
             </div>
         </div>
     </div>
@@ -100,9 +100,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <p th:text="${lending.getStart().toString()}"></p>
-                <p>bis</p>
-                <p th:text="${lending.getEnd().toString()}"></p>
+                <span th:text="${#dates.format(lending.getStart(), 'dd.MM.yyyy')}"></span>
+                <span>bis</span>
+                <span th:text="${#dates.format(lending.getEnd(), 'dd.MM.yyyy')}"></span>
             </div>
         </div>
     </div>
@@ -124,9 +124,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <p th:text="${lending.getStart().toString()}"></p>
-                <p>bis</p>
-                <p th:text="${lending.getEnd().toString()}"></p>
+                <span th:text="${#dates.format(lending.getStart(), 'dd.MM.yyyy')}"></span>
+                <span>bis</span>
+                <span th:text="${#dates.format(lending.getEnd(), 'dd.MM.yyyy')}"></span>
             </div>
         </div>
     </div>
