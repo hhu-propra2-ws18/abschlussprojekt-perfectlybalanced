@@ -27,10 +27,10 @@ public class TransactionEntity {
     }
 
     public TransactionEntity(
-    Long senderID,
-    Long receiverID,
-    int amount,
-    Timestamp date
+        Long senderID,
+        Long receiverID,
+        int amount,
+        Timestamp date
     ){
         this.senderID = senderID;
         this.receiverID = receiverID;
