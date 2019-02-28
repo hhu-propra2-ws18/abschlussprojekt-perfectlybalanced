@@ -18,9 +18,7 @@ import java.util.List;
 public class UserProfileController {
 
     private final ProPayService proPayService;
-
     private final ProPayAdapter proPayAdapter;
-
     private final LendingService lendingService;
 
     @Autowired
