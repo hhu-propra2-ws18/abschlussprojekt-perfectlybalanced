@@ -1,16 +1,23 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.testdummys.LendingRepositoryDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+
+import static org.mockito.ArgumentMatchers.any;
 
 //NOTE:
 //The Dates used here are from May 2020.
@@ -21,6 +28,14 @@ import java.time.LocalDateTime;
 public class LendingServiceTest {
 
     // Tests for requestLending
+
+    @Mock
+    TransactionRepository transactionRepository;
+
+    @Before
+    public void initMocks() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void productHasWrongStatus1() {
@@ -623,7 +638,7 @@ public class LendingServiceTest {
         Exception fail = new Exception("TestFail");
         payment_service.configureReservateAmount(null, false);
         payment_service.configureReservateAmountSecondOneFails(fail);
-        LendingService logic = new LendingService(lending_repository, payment_service, null);
+        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
 
         Exception result = new Exception("0");
         try {
@@ -644,6 +659,7 @@ public class LendingServiceTest {
 
     @Test
     public void requestGetsAccepted1() {
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -665,7 +681,7 @@ public class LendingServiceTest {
         payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
         payment_service.configureReservateAmount(null, false);
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service, null);
+        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
 
         try {
             logic.acceptLendingRequest(lending);
@@ -694,6 +710,7 @@ public class LendingServiceTest {
 
     @Test
     public void requestGetsAccepted2() {
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
         Timestamp start = new Timestamp(1546804200000L);
         Timestamp end = new Timestamp(1547148600000L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -715,7 +732,7 @@ public class LendingServiceTest {
         payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
         payment_service.configureReservateAmount(null, false);
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service, null);
+        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
 
         try {
             logic.acceptLendingRequest(lending);
@@ -1139,6 +1156,7 @@ public class LendingServiceTest {
 
     @Test
     public void ownerRecivesSurety() {
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -1158,7 +1176,7 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service, null);
+        LendingService logic = new LendingService(lending_repository, payment_service, transactionRepository);
 
         try {
             logic.ownerReceivesSuretyAfterConflict(lending);
