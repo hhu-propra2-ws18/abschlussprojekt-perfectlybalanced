@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Kaufanfrage</title>
+    <title>Kaufen</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
 </head><body>
@@ -13,8 +13,8 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title" th:text="${product.title}">Produkt-Titel</h3>
-                    <p class="card-text" th:text="${product.description}">Produkt-Beschreibung.</p>
+                    <h3 class="card-title" th:text="${product.title}">Titel</h3>
+                    <p class="card-text" th:text="${product.description}">Beschreibung.</p>
                     <p class="card-text" th:text="${product.price}">Preis</p>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -27,7 +27,7 @@
         <div class="col-md-6">
             <form th:action="@{|/buyrequests/sendRequest?id=${product.id}|}" method="post">
 
-                <button type="submit" class="btn btn-primary">Kaufanfrage senden</button>
+                <button type="submit" class="btn btn-primary">Produkt kaufen</button>
             </form>
         </div>
     </div>

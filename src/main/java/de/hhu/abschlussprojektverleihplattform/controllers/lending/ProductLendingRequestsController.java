@@ -41,15 +41,11 @@ public class ProductLendingRequestsController {
     public String getLendingRequestsOverview(Model model, Authentication auth) {
         UserEntity user = (UserEntity) auth.getPrincipal();
         List<LendingEntity> lendings = lendingService.getAllRequestsForUser(user);
-        List<LendingEntity> oldLendings = lendingService.getAllLendings();
-        boolean checkMyLendings = lendings.isEmpty();
+        List<LendingEntity> oldLendings = lendingService.getAllLendingsFromUser(user);
         List<LendingEntity> returnedProducts = lendingService.getReturnedLendingFromUser(user);
-        boolean checkMyReturns = returnedProducts.isEmpty();
-        model.addAttribute("checkMyLendings", checkMyLendings);
         model.addAttribute("lendings", lendings);
         model.addAttribute("oldLendings", oldLendings);
         model.addAttribute("returnedProducts", returnedProducts);
-        model.addAttribute("checkMyReturns", checkMyReturns);
         return "productlendingrequests";
     }
 
