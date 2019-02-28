@@ -8,7 +8,7 @@ public interface ITransactionRepository {
 
     TransactionEntity findById(Long transactionId);
 
-    List<TransactionEntity> getAllTransactions(Long userId);
+    List<TransactionEntity> getAllTransactionsFromUser(Long userId);
 
-    void saveTransaction(TransactionEntity transaction);
+    void addTransaction(TransactionEntity transaction);
 }
