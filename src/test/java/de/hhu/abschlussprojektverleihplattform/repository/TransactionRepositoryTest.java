@@ -18,41 +18,61 @@ import static org.junit.Assert.*;
 @SpringBootTest
 public class TransactionRepositoryTest {
 
-
     @Autowired
     TransactionRepository transactionRepository;
 
     @Autowired
     UserRepository userRepository;
 
-
-
-    private UserEntity sender = RandomTestData.newRandomTestUser();
-    private UserEntity receiver = RandomTestData.newRandomTestUser();
+    private UserEntity user1 = RandomTestData.newRandomTestUser();
+    private UserEntity user2 = RandomTestData.newRandomTestUser();
+    private UserEntity user3 = RandomTestData.newRandomTestUser();
 
     @Before
     public void saveSetupEntities(){
-        userRepository.saveUser(sender);
-        userRepository.saveUser(receiver);
+        userRepository.saveUser(user1);
+        userRepository.saveUser(user2);
+        userRepository.saveUser(user3);
     }
+
+    @Test
+    public void addTransaction() {
+        TransactionEntity transactionEntity
+            = RandomTestData.newRandomTestTransaction(user1,user2);
+
+        transactionRepository.addTransaction(transactionEntity);
+
+        Assert.assertTrue(
+            transactionRepository.getAllTransactionsFromUser(
+            user1.getUserId()).contains(transactionEntity)
+        );
+    }
+
     @Test
     public void findById() {
         TransactionEntity transactionEntity
-                = RandomTestData.newRandomTestTransaction(sender,receiver);
+            = RandomTestData.newRandomTestTransaction(user1,user2);
+
         transactionRepository.addTransaction(transactionEntity);
 
-        System.out.println(transactionRepository.getAllTransactionsFromUser(sender.getUserId()));
         Assert.assertEquals(transactionEntity.getId(),
-                transactionRepository.findById(transactionEntity.getId()
-                ).getId()
+            transactionRepository.findById(transactionEntity.getId()
+            ).getId()
         );
     }
 
     @Test
     public void getAllTransactionsFromUser() {
-    }
+        TransactionEntity transactionEntity1
+            = RandomTestData.newRandomTestTransaction(user1,user2);
+        TransactionEntity transactionEntity2
+            = RandomTestData.newRandomTestTransaction(user3,user1);
 
-    @Test
-    public void addTransaction() {
+        transactionRepository.addTransaction(transactionEntity1);
+        transactionRepository.addTransaction(transactionEntity2);
+
+        Assert.assertEquals(2,
+            transactionRepository.getAllTransactionsFromUser(user1.getUserId()).size()
+        );
     }
 }
