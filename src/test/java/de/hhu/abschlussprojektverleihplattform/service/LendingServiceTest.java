@@ -1,5 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.testdummys.LendingRepositoryDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
@@ -1345,7 +1346,7 @@ public class LendingServiceTest {
     public void getThisMornig1() {
         LocalDateTime thisMornigDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0));
         Timestamp thisMorning = Timestamp.valueOf(thisMornigDateTime);
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
 
         Timestamp result = logic.getThisMorning();
 
