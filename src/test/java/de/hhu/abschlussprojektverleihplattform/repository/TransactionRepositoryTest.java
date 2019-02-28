@@ -42,10 +42,10 @@ public class TransactionRepositoryTest {
         transactionRepository.addTransaction(transactionEntity);
 
         System.out.println(transactionRepository.getAllTransactionsFromUser(sender.getUserId()));
-//        Assert.assertEquals(transactionEntity.getId(),
-//                transactionRepository.findById(transactionEntity.getId()
-//                ).getId()
-//        );
+        Assert.assertEquals(transactionEntity.getId(),
+                transactionRepository.findById(transactionEntity.getId()
+                ).getId()
+        );
     }
 
     @Test
