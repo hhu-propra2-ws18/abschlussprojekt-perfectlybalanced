@@ -22,7 +22,7 @@ public class SellServiceTest {
         product.setStatus(Productstatus.forLending);
         ProductRepositoryDummy productRepository = new ProductRepositoryDummy();
         productRepository.setProductToUpdate(product);
-        SellService logic = new SellService(productRepository, null);
+        SellService logic = new SellService(productRepository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -44,7 +44,7 @@ public class SellServiceTest {
         product.setStatus(Productstatus.sold);
         ProductRepositoryDummy productRepository = new ProductRepositoryDummy();
         productRepository.setProductToUpdate(product);
-        SellService logic = new SellService(productRepository, null);
+        SellService logic = new SellService(productRepository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -67,7 +67,7 @@ public class SellServiceTest {
         productRepository.setProductToUpdate(product);
         PaymentServiceDummy paymentService = new PaymentServiceDummy();
         paymentService.configurateUsersCurrentBalance(30L, null, false);
-        SellService logic = new SellService(productRepository, paymentService);
+        SellService logic = new SellService(productRepository, paymentService, null);
 
         Exception result = new Exception("0");
         try {
@@ -92,7 +92,7 @@ public class SellServiceTest {
         PaymentServiceDummy paymentService = new PaymentServiceDummy();
         Exception fail = new Exception("TestFail");
         paymentService.configurateUsersCurrentBalance(30L, fail, true);
-        SellService logic = new SellService(productRepository, paymentService);
+        SellService logic = new SellService(productRepository, paymentService, null);
 
         Exception result = new Exception("0");
         try {
@@ -117,7 +117,7 @@ public class SellServiceTest {
         paymentService.configurateUsersCurrentBalance(50L, null, false);
         Exception fail = new Exception("TestFail");
         paymentService.configureReservateAmount(fail, true);
-        SellService logic = new SellService(productRepository, paymentService);
+        SellService logic = new SellService(productRepository, paymentService, null);
 
         Exception result = new Exception("0");
         try {
@@ -143,7 +143,7 @@ public class SellServiceTest {
         paymentService.configureReservateAmount(null, false);
         Exception fail = new Exception("TestFail");
         paymentService.configureTransfer(fail, true);
-        SellService logic = new SellService(productRepository, paymentService);
+        SellService logic = new SellService(productRepository, paymentService, null);
 
         Exception result = new Exception("0");
         try {
@@ -175,7 +175,7 @@ public class SellServiceTest {
         paymentService.configurateUsersCurrentBalance(50L, null, false);
         paymentService.configureReservateAmount(null, false);
         paymentService.configureTransfer(null, false);
-        SellService logic = new SellService(productRepository, paymentService);
+        SellService logic = new SellService(productRepository, paymentService, null);
 
         try {
             logic.buyProduct(actingUser, product);

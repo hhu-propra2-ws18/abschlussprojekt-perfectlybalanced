@@ -23,7 +23,7 @@ public class TransactionRowMapper implements RowMapper {
 
         int id = rs.findColumn("ID");
         int senderId = rs.findColumn("SENDER_USER_ID");
-        int receiverId = rs.findColumn("RECIEVER_USER_ID");
+        int receiverId = rs.findColumn("RECEIVER_USER_ID");
         int amount = rs.findColumn("AMOUNT");
         int date = rs.findColumn("DATE");
 
