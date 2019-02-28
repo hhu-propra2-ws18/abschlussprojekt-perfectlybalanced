@@ -498,7 +498,7 @@ public class ProductControllerTest {
                 .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
                 .with(csrf()))
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString("Kaufanfrage senden")));
+            .andExpect(content().string(containsString("Produkt kaufen")));
     }
 
 }
