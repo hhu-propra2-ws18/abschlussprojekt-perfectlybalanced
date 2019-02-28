@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-public class ConflictResolutionControllerTest {
+public class ConflictResolutionController {
 
     private final LendingService lendingService;
     private final ProductService productService;
 
     @Autowired
-    public ConflictResolutionControllerTest(
+    public ConflictResolutionController(
             LendingService lendingService,
             ProductService productService
     ) {
