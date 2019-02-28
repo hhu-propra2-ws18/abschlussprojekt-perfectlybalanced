@@ -27,14 +27,14 @@ public class TransactionEntity {
     }
 
     public TransactionEntity(
-    Long sender,
-    Long receiver,
-    int cost,
+    Long senderID,
+    Long receiverID,
+    int amount,
     Timestamp date
     ){
-        this.sender = sender;
-        this.receiver = receiver;
-        this.cost = cost;
+        this.senderID = senderID;
+        this.receiverID = receiverID;
+        this.amount = amount;
         this.date = date;
     }
 }
