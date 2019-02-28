@@ -2,11 +2,15 @@ package de.hhu.abschlussprojektverleihplattform.service.propay;
 
 import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtils.make_new_user;
 
+import de.hhu.abschlussprojektverleihplattform.model.TransactionEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
+import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.exceptions.ProPayAccountNotExistException;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Account;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import java.net.URI;
+import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -22,7 +26,14 @@ public class ProPayService implements IProPayService, IPaymentService {
     @Value("${propaybaseurl}")
     public String baseurl;
 
-    private ProPayService(){}
+    private final TransactionRepository transactionRepository;
+    private final UserRepository userRepository;
+
+    private ProPayService(TransactionRepository transactionRepository,
+                          UserRepository userRepository){
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
+    }
 
     // ---- implement circumvent() to circumvent inconvenience in live propay api ------
 
@@ -119,6 +130,14 @@ public class ProPayService implements IProPayService, IPaymentService {
 
         String url = baseurl + "account/"+username;
         restTemplate.postForEntity(url, request, Account.class);
+
+        UserEntity user = userRepository.findByUsername(username);
+
+        TransactionEntity transaction = new TransactionEntity(user,
+                user,
+                (int)delta,
+                new Timestamp(System.currentTimeMillis()));
+        transactionRepository.addTransaction(transaction);
     }
 
     @Override
