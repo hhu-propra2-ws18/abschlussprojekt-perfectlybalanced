@@ -45,7 +45,7 @@ public class TransactionRepository implements ITransactionRepository {
     @Override
     public List<TransactionEntity> getAllTransactionsFromUser(Long userId){
         String sql ="SELECT * FROM TRANSACTION_ENTITY WHERE RECEIVER_USER_ID = "+ userId
-                + "UNION (SELECT * FROM TRANSACTION_ENTITY WHERE SENDER_USER_ID = " + userId +");";
+                + " UNION (SELECT * FROM TRANSACTION_ENTITY WHERE SENDER_USER_ID = " + userId +");";
         return (List<TransactionEntity>) jdbcTemplate.query(sql,
                 new TransactionRowMapper(userRepository));
     }
