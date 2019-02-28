@@ -2,21 +2,14 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.conflict;
 
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
-import de.hhu.abschlussprojektverleihplattform.model.Lendingstatus;
-import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -51,7 +44,7 @@ public class ConflictResolutionController {
             model.addAttribute("lending", lending);
             return "conflictdetail";
         }
-        return "redirekt:/";
+        return "redirect:/";
     }
 
     @PostMapping("/conflictcenter/decideForOwner")
