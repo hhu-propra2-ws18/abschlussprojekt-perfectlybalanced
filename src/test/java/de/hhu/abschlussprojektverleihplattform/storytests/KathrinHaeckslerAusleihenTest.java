@@ -52,7 +52,9 @@ public class KathrinHaeckslerAusleihenTest {
 
         long kathrin_balance_before=500;
         proPayAdapter
-                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(kathrin.getUsername(),kathrin_balance_before);
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(
+                        kathrin.getUsername(),
+                        kathrin_balance_before);
 
         //hacksler product mit besitzer erstellen
         UserEntity owner = RandomTestData.newRandomTestUser();

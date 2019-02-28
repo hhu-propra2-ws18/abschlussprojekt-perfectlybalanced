@@ -62,7 +62,10 @@ public class MemfredBesitztEinFahrrad {
         userService.addUser(borrower);
         int borrower_old_wealth=1000;
 
-        proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(borrower.getUsername(),borrower_old_wealth);
+        proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(
+                        borrower.getUsername(),
+                        borrower_old_wealth);
 
         long day=1000*60*60*24;
         Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();

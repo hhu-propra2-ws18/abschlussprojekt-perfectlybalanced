@@ -27,14 +27,16 @@ public class ProPayServiceTest {
     @Test
     public void testNewUserHasZeroBalance() throws Exception {
         String generated_username = RandomTestData.newRandomTestUser().getUsername();
-        Assert.assertEquals(new Long(0), proPayService.usersCurrentBalance(generated_username));
+        Assert.assertEquals(Long.valueOf(0), proPayService.usersCurrentBalance(generated_username));
     }
 
     @Test
     public void testCanCreateAccount() {
         String user1 = RandomTestData.newRandomTestUser().getUsername();
         try {
-            this.proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,0);
+            proPayService
+                    .proPayAdapter
+                    .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,0);
         } catch (Exception e) {
             Assert.fail();
         }
@@ -44,7 +46,9 @@ public class ProPayServiceTest {
     public void testCanIncreaseUserBalance() {
         try {
             String user1 = make_new_user();
-            this.proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,1);
+            proPayService
+                    .proPayAdapter
+                    .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,1);
 
             Assert.assertTrue(this.proPayService.usersCurrentBalance(user1) == 1);
         } catch (Exception e) {
@@ -59,14 +63,22 @@ public class ProPayServiceTest {
         String user1 = make_new_user();
         String user2 = make_new_user();
 
-        this.proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,0);
-        this.proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2,0);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,0);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user2,0);
 
-        proPayService.proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,1);
+        proPayService
+                .proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,1);
 
-        proPayService.proPayAdapter.makePayment(user1,user2,1);
+        proPayService
+                .proPayAdapter
+                .makePayment(user1,user2,1);
 
-        Assert.assertEquals(proPayService.usersCurrentBalance(user2),new Long(1));
+        Assert.assertEquals(proPayService.usersCurrentBalance(user2), Long.valueOf(1));
     }
 
 

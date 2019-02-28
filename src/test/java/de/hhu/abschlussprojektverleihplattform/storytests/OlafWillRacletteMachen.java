@@ -51,7 +51,10 @@ public class OlafWillRacletteMachen {
         UserEntity olaf = RandomTestData.newRandomTestUser();
         olaf.setFirstname("olaf");
         userService.addUser(olaf);
-        proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(olaf.getUsername(),olaf_old_wealth);
+        proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(
+                        olaf.getUsername(),
+                        olaf_old_wealth);
 
         UserEntity raclette_owner = RandomTestData.newRandomTestUser();
         userService.addUser(raclette_owner);

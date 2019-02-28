@@ -61,7 +61,7 @@ public class ProPayAdapter implements IProPayAdapter {
 
         String url = baseurl + "account/" + sourceUsername+"/transfer/"+destinationUsername;
         ResponseEntity<String> response = restTemplate.postForEntity(url,request,String.class);
-
+        System.out.println(response);
     }
 
     @Override
