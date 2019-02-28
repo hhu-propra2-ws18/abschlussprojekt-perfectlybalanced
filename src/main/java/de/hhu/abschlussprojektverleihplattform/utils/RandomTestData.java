@@ -20,7 +20,7 @@ public class RandomTestData {
     public static AddressEntity newRandomTestAddress() {
         Random random = new Random();
         return new AddressEntity(RandomStringUtils.randomAlphabetic(10),
-                random.nextInt(),
+                random.nextInt() + RandomStringUtils.randomAlphabetic(1),
                 random.nextInt(10000) + 9999,
                 RandomStringUtils.randomAlphabetic(10));
     }
