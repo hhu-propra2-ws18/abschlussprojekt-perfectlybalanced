@@ -1,12 +1,12 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -20,35 +20,19 @@ public class UserServiceTest {
 
     @Test
     public void saveOneUser() {
-        UserEntity test = new UserEntity(
-	    "Max",
-	    "Mustermann",
-	    "maxmustermann",
-	    "password",
-	    "test@mailtest.test");
+        UserEntity user = RandomTestData.newRandomTestUser();
+        userService.addUser(user);
+        UserEntity expected = userService.findByUsername(user.getUsername());
 
-        userService.addUser(test);
-        UserEntity expected = userService.findByUsername(test.getUsername());
-
-        Assert.assertEquals(expected.getUsername(), test.getUsername());
-
+        Assert.assertEquals(user,expected);
     }
 
     @Test
     public void findUserById() {
-        UserEntity newUser = new UserEntity(
-            "Moritz",
-            "Mustermann",
-            "moritzmustermann",
-            "password",
-            "moritz@tester.com");
-
+        UserEntity newUser = RandomTestData.newRandomTestUser();
         userService.addUser(newUser);
-        UserEntity expected = userService.findByUsername("moritzmustermann");
-
-        UserEntity test = userService.showUserById(expected.getUserId());
-
-        Assert.assertEquals(test, expected);
+        UserEntity loadedUser = userService.showUserById(newUser.getUserId());
+        Assert.assertEquals(newUser,loadedUser);
     }
 
     @Test

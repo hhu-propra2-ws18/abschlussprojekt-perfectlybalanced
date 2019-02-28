@@ -26,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -62,6 +63,8 @@ public class MyLendingsControllerTest {
     @Autowired
     ProPayService proPayService;
 
+    private Random randomID = new Random();
+
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders
@@ -75,24 +78,25 @@ public class MyLendingsControllerTest {
         MockitoAnnotations.initMocks(this);
     }
 
+
     @Test
     public void testCanSeeMyLendingRequest() throws Exception {
 
         UserEntity userOwner = RandomTestData.newRandomTestUser();
         UserEntity userBorrower = RandomTestData.newRandomTestUser();
-        userOwner.setUserId(1L);
-        userBorrower.setUserId(2L);
+        userOwner.setUserId(randomID.nextLong());
+        userBorrower.setUserId(randomID.nextLong());
 
         ProductEntity productEntity = RandomTestData.newRandomTestProduct(
             userOwner,
             RandomTestData.newRandomTestAddress()
         );
-        productEntity.setId(1L);
+        productEntity.setId(randomID.nextLong());
 
         LendingEntity lending = RandomTestData.newRandomLendingStausDone(
             userBorrower,
             productEntity);
-        lending.setId(1L);
+        lending.setId(randomID.nextLong());
         lending.setStatus(Lendingstatus.requested);
 
         List<LendingEntity> confirmedLendings = new ArrayList<>();

@@ -5,16 +5,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,12 +23,15 @@ public class CustomEmailTest {
     @Autowired
     private Validator validator;
 
+    private Random randomID = new Random();
+
+
     @Test
     public void validEmail() {
         // Arrange
         String email = "sam+love@test.de";
         UserEntity userEntity = new UserEntity("Sam", "Love", "sam", "sassel", email);
-        userEntity.setUserId(1L);
+        userEntity.setUserId(randomID.nextLong());
 
         // Act
         Set<ConstraintViolation<UserEntity>> violations = validator.validate(userEntity);
