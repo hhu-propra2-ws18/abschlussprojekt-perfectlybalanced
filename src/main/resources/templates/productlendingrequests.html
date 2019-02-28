@@ -10,7 +10,7 @@
     <div class="container">
         <div class="m-3"></div>
         <h3>Leihanfragen</h3>
-        <span th:if="${checkMyLendings}==true">Aktuell liegen keine Anfragen vor.</span>
+        <span th:if="${lendings.isEmpty()}==true">Aktuell liegen keine Anfragen vor.</span>
             <div class="card" th:each="lending : ${lendings}">
                 <div class="row">
                     <div class="col-md-8">
@@ -37,7 +37,7 @@
     <div class="container">
         <div class="m-3"></div>
         <h3>Zurückgegebene Artikel</h3>
-        <span th:if="${checkMyReturns}==true">Aktuell liegen keine Rückgaben vor.</span>
+        <span th:if="${returnedProducts.isEmpty()}==true">Aktuell liegen keine Rückgaben vor.</span>
         <div class="card" th:each="lending : ${returnedProducts}">
             <div class="row">
                 <div class="col-md-8">
