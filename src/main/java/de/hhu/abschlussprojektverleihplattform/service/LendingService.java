@@ -28,7 +28,7 @@ public class LendingService implements ILendingService {
 
     public List<Timespan> getAvailableTime(ProductEntity product) {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        List<Timespan> list = new ArrayList<Timespan>();
+        List<Timespan> list = new ArrayList<>();
         for (LendingEntity lend : lendings) {
             if (
                 lend.getStatus() != Lendingstatus.done
@@ -43,7 +43,7 @@ public class LendingService implements ILendingService {
 
     public List<String> getAvailabilityStrings(ProductEntity product) {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         for (LendingEntity lending : lendings) {
             if (
                 lending.getStatus() != Lendingstatus.done
@@ -309,13 +309,13 @@ public class LendingService implements ILendingService {
             .collect(Collectors.toList());
     }
 
-    protected int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
+    int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);
     }
 
-    protected Timestamp getThisMorning() {
+    Timestamp getThisMorning() {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         //aktuelle zeit holen
         long millis = now.getTime();

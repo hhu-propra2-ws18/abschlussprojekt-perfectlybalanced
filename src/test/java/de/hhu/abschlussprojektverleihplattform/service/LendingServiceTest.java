@@ -1,25 +1,23 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
+import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.testdummys.LendingRepositoryDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
-import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.constraints.AssertTrue;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalTime;
 
 //NOTE:
 //The Dates used here are from May 2020.

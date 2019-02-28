@@ -25,9 +25,10 @@ public class UserProfileController {
     @GetMapping("/profile")
     public String getProfile(Model model, Authentication auth) throws Exception{
         UserEntity user = (UserEntity) auth.getPrincipal();
+        List<LendingEntity> getUserLendings = lendingService.getAllLendingsForUser(user);
+
         List<LendingEntity> reminder = lendingService
-            .getAllReminder(lendingService
-                .getAllLendingsForUser(user));
+            .getAllReminder(getUserLendings);
 
         model.addAttribute("user", user);
         model.addAttribute("user_balance",proPayService.getBalance(user.getUsername()));
