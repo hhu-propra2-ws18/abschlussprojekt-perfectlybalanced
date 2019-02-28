@@ -16,9 +16,9 @@ public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long sender;
-    private Long receiver;
-    private int cost;
+    private Long senderID;
+    private Long receiverID;
+    private int amount;
     @SuppressFBWarnings(justification="generated code")
     private Timestamp date;
 
@@ -27,10 +27,10 @@ public class TransactionEntity {
     }
 
     public TransactionEntity(
-            Long sender,
-            Long receiver,
-            int cost,
-            Timestamp date
+    Long sender,
+    Long receiver,
+    int cost,
+    Timestamp date
     ){
         this.sender = sender;
         this.receiver = receiver;
