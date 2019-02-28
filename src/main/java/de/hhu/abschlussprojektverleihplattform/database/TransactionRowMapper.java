@@ -22,8 +22,8 @@ public class TransactionRowMapper implements RowMapper {
         TransactionEntity transaction = new TransactionEntity();
 
         int id = rs.findColumn("ID");
-        int senderId = rs.findColumn("SENDER_ID");
-        int receiverId = rs.findColumn("RECIEVER_ID");
+        int senderId = rs.findColumn("SENDER_USER_ID");
+        int receiverId = rs.findColumn("RECIEVER_USER_ID");
         int amount = rs.findColumn("AMOUNT");
         int date = rs.findColumn("DATE");
 
