@@ -12,13 +12,13 @@ public interface IProPayAdapter {
 
     //Accounts
     Account getAccount(String username)
-            throws HttpClientErrorException, ProPayAccountNotExistException;
+            throws Exception;
 
     Account createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(
             String username,
             long amount
     )
-            throws HttpClientErrorException;
+            throws Exception;
 
     //Payments
     void makePayment(
@@ -26,7 +26,7 @@ public interface IProPayAdapter {
             String destinationUsername,
             long amount
     )
-            throws HttpClientErrorException;
+            throws Exception;
 
     //Reservations
     Reservation makeReservation(
