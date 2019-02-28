@@ -1322,7 +1322,7 @@ public class LendingServiceTest {
     public void getThisMornig1() {
         // LocalTime seems to depended on the summer/winter time.
         // Possible the one in LocalTime.of(1,0) need to be change to a 0 during summertime
-        LocalDateTime thisMornigDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(1,0));
+        LocalDateTime thisMornigDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0));
         Timestamp thisMorning = Timestamp.valueOf(thisMornigDateTime);
         LendingService logic = new LendingService(null, null);
 

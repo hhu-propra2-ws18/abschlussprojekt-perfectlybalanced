@@ -306,9 +306,10 @@ public class LendingService implements ILendingService {
     protected Timestamp getThisMorning() {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         long millis = now.getTime();
-        long millisPerDay = 1000*60*60*24;
+        long millisPerHour = 1000*60*60;
+        long millisPerDay = millisPerHour * 24;
         millis /= millisPerDay;
         millis *= millisPerDay;
-        return new Timestamp(millis);
+        return new Timestamp(millis - millisPerHour);
     }
 }
