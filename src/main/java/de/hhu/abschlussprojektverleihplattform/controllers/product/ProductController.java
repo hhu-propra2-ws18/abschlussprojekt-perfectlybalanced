@@ -133,11 +133,6 @@ public class ProductController {
         return "redirect:/myproducts";
     }
 
-    @GetMapping("/removeproduct")
-    public String getRemoveProduct(Model model) {
-        return "removeproduct";
-    }
-
     @GetMapping("/productdetail/{id}")
     public String getProductDetails(
             Model model,
