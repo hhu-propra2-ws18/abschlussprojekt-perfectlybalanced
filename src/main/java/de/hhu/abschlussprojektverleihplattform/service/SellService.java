@@ -4,7 +4,7 @@ import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
-import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -7,10 +7,11 @@ import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 //NOTE:
 //The Dates used here are from May 2020.
@@ -124,9 +125,10 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         LendingService logic = new LendingService(null, null);
-        Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
-        Timestamp start = new Timestamp(currentMilis - 300);
-        Timestamp end = new Timestamp(currentMilis + 3000000);
+        Long currentMillis = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        long millisPerDay = 1000*60*60*24;
+        Timestamp start = new Timestamp(currentMillis - millisPerDay);
+        Timestamp end = new Timestamp(currentMillis);
 
         Exception result = new Exception("0");
         try {
@@ -1312,5 +1314,23 @@ public class LendingServiceTest {
         int result = logic.daysBetweenTwoTimestamps(first, second);
 
         Assert.assertEquals(4, result);
+    }
+
+    // Test for getThisMorning
+
+    //Testing this method is very difficult, since without the Usage of LocalDateTime etc
+    // i would have to write the same code i used inside the method.
+    //And that would make the Test senseless.
+    //The Test with LocalDateTime etc runs local, but i doent work on TravisCI,
+    // LocalDateTime etc work different there.
+    //@Test
+    public void getThisMornig1() {
+        LocalDateTime thisMornigDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0));
+        Timestamp thisMorning = Timestamp.valueOf(thisMornigDateTime);
+        LendingService logic = new LendingService(null, null);
+
+        Timestamp result = logic.getThisMorning();
+
+        Assert.assertEquals(thisMorning, result);
     }
 }

@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.service.propay;
+package de.hhu.abschlussprojektverleihplattform.service.propay.interfaces;
 
 public interface IPaymentService {
 
