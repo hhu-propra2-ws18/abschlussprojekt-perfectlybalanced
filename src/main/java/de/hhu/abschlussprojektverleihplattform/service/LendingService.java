@@ -2,7 +2,6 @@ package de.hhu.abschlussprojektverleihplattform.service;
 
 import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
-import de.hhu.abschlussprojektverleihplattform.repository.ITransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import org.springframework.stereotype.Service;
@@ -19,21 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class LendingService implements ILendingService {
 
-    private final ILendingRepository lendingRepository;
-    private final IPaymentService paymentService;
-    private final ITransactionRepository transactionRepository;
+    private ILendingRepository lendingRepository;
+    private IPaymentService paymentService;
 
-    public LendingService(ILendingRepository lendingRepository,
-                          IPaymentService paymentService,
-                          ITransactionRepository transactionRepository) {
+    public LendingService(ILendingRepository lendingRepository, IPaymentService paymentService) {
         this.lendingRepository = lendingRepository;
         this.paymentService = paymentService;
-        this.transactionRepository = transactionRepository;
     }
 
     public List<Timespan> getAvailableTime(ProductEntity product) {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        List<Timespan> list = new ArrayList<>();
+        List<Timespan> list = new ArrayList<Timespan>();
         for (LendingEntity lend : lendings) {
             if (
                 lend.getStatus() != Lendingstatus.done
@@ -48,7 +43,7 @@ public class LendingService implements ILendingService {
 
     public List<String> getAvailabilityStrings(ProductEntity product) {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
         for (LendingEntity lending : lendings) {
             if (
                 lending.getStatus() != Lendingstatus.done
@@ -169,12 +164,6 @@ public class LendingService implements ILendingService {
         lending.setCostReservationID(costID);
         lending.setSuretyReservationID(suretyID);
         lendingRepository.update(lending);
-
-        TransactionEntity transaction = new TransactionEntity(lending.getBorrower(),
-                lending.getProduct().getOwner(),
-                lending.getProduct().getCost(),
-                lending.getStart());
-        transactionRepository.addTransaction(transaction);
     }
 
     public void denyLendingRequest(LendingEntity lending) throws Exception {
@@ -228,12 +217,6 @@ public class LendingService implements ILendingService {
         );
         lending.setStatus(Lendingstatus.done);
         lendingRepository.update(lending);
-
-        TransactionEntity transaction = new TransactionEntity(lending.getBorrower(),
-                lending.getProduct().getOwner(),
-                lending.getProduct().getSurety(),
-                lending.getStart());
-        transactionRepository.addTransaction(transaction);
     }
 
     public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {

@@ -37,7 +37,7 @@ public class ProductEntityRowMapper implements RowMapper{
         int price = rs.findColumn("PRICE");
 
         location.setCity(rs.getString(city));
-        location.setHousenumber(rs.getString(houseNumber));
+        location.setHousenumber(rs.getInt(houseNumber));
         location.setPostcode(rs.getInt(postCode));
         location.setStreet(rs.getString(street));
 

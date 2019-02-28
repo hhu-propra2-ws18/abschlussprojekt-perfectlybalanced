@@ -2,28 +2,20 @@ package de.hhu.abschlussprojektverleihplattform.service;
 
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.Productstatus;
-import de.hhu.abschlussprojektverleihplattform.model.TransactionEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.IProductRepository;
-import de.hhu.abschlussprojektverleihplattform.repository.ITransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
 import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
 
 @Service
 public class SellService implements ISellService {
 
-    private final IProductRepository productRepository;
-    private final IPaymentService paymentService;
-    private final ITransactionRepository transactionRepository;
+    private IProductRepository productRepository;
+    private IPaymentService paymentService;
 
-    public SellService(IProductRepository productRepository,
-                       IPaymentService paymentService,
-                       ITransactionRepository transactionRepository) {
+    public SellService(IProductRepository productRepository, IPaymentService paymentService) {
         this.productRepository = productRepository;
         this.paymentService = paymentService;
-        this.transactionRepository = transactionRepository;
     }
 
     public void buyProduct(UserEntity actingUser, ProductEntity product) throws Exception {
@@ -46,11 +38,5 @@ public class SellService implements ISellService {
         paymentService.tranferReservatedMoney(actingUser.getUsername(), paymentID);
         product.setStatus(Productstatus.sold);
         productRepository.editProduct(product);
-
-        TransactionEntity transaction = new TransactionEntity(actingUser,
-                product.getOwner(),
-                product.getPrice(),
-                new Timestamp(System.currentTimeMillis()));
-        transactionRepository.addTransaction(transaction);
     }
 }
