@@ -3,10 +3,7 @@ package de.hhu.abschlussprojektverleihplattform.model;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Data
@@ -16,8 +13,10 @@ public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long senderID;
-    private Long receiverID;
+    @OneToOne
+    private UserEntity sender;
+    @OneToOne
+    private UserEntity receiver;
     private int amount;
     @SuppressFBWarnings(justification="generated code")
     private Timestamp date;
@@ -27,13 +26,13 @@ public class TransactionEntity {
     }
 
     public TransactionEntity(
-        Long senderID,
-        Long receiverID,
+        UserEntity sender,
+        UserEntity receiver,
         int amount,
         Timestamp date
     ){
-        this.senderID = senderID;
-        this.receiverID = receiverID;
+        this.sender = sender;
+        this.receiver = receiver;
         this.amount = amount;
         this.date = date;
     }
