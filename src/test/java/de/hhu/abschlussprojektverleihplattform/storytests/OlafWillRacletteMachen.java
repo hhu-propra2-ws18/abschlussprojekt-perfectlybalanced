@@ -8,10 +8,10 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,9 @@ public class OlafWillRacletteMachen {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ProPayAdapter proPayAdapter;
+
     @Test
     public void test_olaf_raclette_machen() throws Exception{
 
@@ -48,7 +51,10 @@ public class OlafWillRacletteMachen {
         UserEntity olaf = RandomTestData.newRandomTestUser();
         olaf.setFirstname("olaf");
         userService.addUser(olaf);
-        proPayService.changeUserBalanceBy(olaf.getUsername(),olaf_old_wealth);
+        proPayAdapter
+                .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(
+                        olaf.getUsername(),
+                        olaf_old_wealth);
 
         UserEntity raclette_owner = RandomTestData.newRandomTestUser();
         userService.addUser(raclette_owner);
@@ -81,7 +87,7 @@ public class OlafWillRacletteMachen {
 
 
         assertEquals(
-                Arrays.stream(proPayService.getAccount(olaf.getUsername()).reservations)
+                Arrays.stream(proPayAdapter.getAccount(olaf.getUsername()).reservations)
                         .reduce((r1,r2)->{
                             Reservation result = new Reservation();
                             result.amount=r1.amount+r2.amount;
@@ -98,12 +104,12 @@ public class OlafWillRacletteMachen {
         assertEquals(Lendingstatus.done,raclette_lending.getStatus());
 
         assertEquals(
-                proPayService.getAccount(olaf.getUsername()).amount,
+                proPayAdapter.getAccount(olaf.getUsername()).amount,
                 olaf_old_wealth-raclette.getCost()
         );
 
         assertEquals(
-                proPayService.getAccount(olaf.getUsername()).reservations.length,
+                proPayAdapter.getAccount(olaf.getUsername()).reservations.length,
                 0
         );
 

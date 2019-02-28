@@ -5,6 +5,7 @@ import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.ProductService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
+import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
@@ -12,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
@@ -35,6 +35,9 @@ public class MemfredHatFreundeZumEssen {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ProPayAdapter proPayAdapter;
+
     @Test
     public void test() throws Exception{
 
@@ -42,7 +45,7 @@ public class MemfredHatFreundeZumEssen {
         UserEntity memfred = RandomTestData.newRandomTestUser();
         memfred.setFirstname("memfred");
         userService.addUser(memfred);
-        proPayService.changeUserBalanceBy(memfred.getUsername(),30);
+        proPayAdapter.createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(memfred.getUsername(),30);
 
         UserEntity teller_owner = RandomTestData.newRandomTestUser();
         userService.addUser(teller_owner);
