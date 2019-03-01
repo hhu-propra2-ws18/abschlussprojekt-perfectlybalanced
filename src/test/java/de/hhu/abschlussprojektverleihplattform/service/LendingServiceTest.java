@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalTime;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -25,7 +27,6 @@ import static org.mockito.ArgumentMatchers.any;
 //The Dates used here are from May 2020.
 //Should the Tests be run after that Time some will fail, since the Dates will then be in the Past.
 //Should the Application still be needed after that Time, they have to be replaced with later Dates.
-
 
 public class LendingServiceTest {
 
@@ -1343,6 +1344,42 @@ public class LendingServiceTest {
         int result = logic.daysBetweenTwoTimestamps(first, second);
 
         Assert.assertEquals(4, result);
+    }
+
+    @Test
+    public void reminderList() {
+        List<LendingEntity> all = new ArrayList<>();
+        UserEntity userBorrower = RandomTestData.newRandomTestUser();
+        UserEntity userOwner = RandomTestData.newRandomTestUser();
+        userBorrower.setUserId(1L);
+        userOwner.setUserId(2L);
+
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(userOwner, address);
+        ProductEntity product2 = RandomTestData.newRandomTestProduct(userOwner, address);
+
+        Timestamp start = Timestamp.valueOf(LocalDateTime.now().minusDays(7L));
+        Timestamp end = Timestamp.valueOf(LocalDateTime.now().minusDays(1L));
+
+        LendingEntity entity = RandomTestData.newRandomLendingStatusConflict(userBorrower, product);
+        entity.setId(1L);
+        entity.setStatus(Lendingstatus.confirmt);
+        entity.setStart(start);
+        entity.setEnd(end);
+        all.add(entity);
+
+        LendingEntity entity2 =
+                RandomTestData.newRandomLendingStatusConflict(userBorrower, product2);
+        entity2.setId(2L);
+        entity2.setStatus(Lendingstatus.confirmt);
+        System.out.println(entity2.getEnd());
+        all.add(entity2);
+
+        LendingService logic = new LendingService(null, null, null);
+
+        System.out.println(logic.getAllReminder(all).size());
+
+        Assert.assertTrue(logic.getAllReminder(all).size() == 1);
     }
 
     // Test for getThisMorning
