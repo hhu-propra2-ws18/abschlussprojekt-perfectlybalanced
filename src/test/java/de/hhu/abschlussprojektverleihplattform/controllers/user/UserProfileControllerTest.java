@@ -14,13 +14,13 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Random;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +45,6 @@ public class UserProfileControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-
     @MockBean
     TransactionRepository transactionRepository;
 
@@ -65,14 +64,17 @@ public class UserProfileControllerTest {
     @Autowired
     AuthenticatedUserService authenticatedUserService;
 
-    @Autowired
+    @MockBean
     UserService userService;
 
+    private Random randomID = new Random();
 
     @Test
     public void testControllerIsThere() throws Exception {
         UserEntity user = RandomTestData.newRandomTestUser();
-        userService.addUser(user);
+        user.setUserId(randomID.nextLong());
+
+        when(userService.findByUsername(user.getUsername())).thenReturn(user);
 
         mockMvc
             .perform(get("/profile")
@@ -86,9 +88,10 @@ public class UserProfileControllerTest {
 
     @Test
     public void testSarahCanDepositMoneyAndSeeHerBalance() throws Exception{
-
         UserEntity user = RandomTestData.newRandomTestUser();
-        userService.addUser(user);
+        user.setUserId(randomID.nextLong());
+
+        when(userService.findByUsername(user.getUsername())).thenReturn(user);
 
         Mockito.doNothing().when(transactionRepository).addTransaction(any());
 

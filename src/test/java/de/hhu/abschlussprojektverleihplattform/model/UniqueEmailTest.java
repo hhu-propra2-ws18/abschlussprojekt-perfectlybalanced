@@ -7,16 +7,15 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Random;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -30,6 +29,8 @@ public class UniqueEmailTest {
     @Autowired
     private Validator validator;
 
+    private Random randomID = new Random();
+
     @Test
     public void validateDuplicatedEmail() throws Exception {
         // Arrange
@@ -37,11 +38,11 @@ public class UniqueEmailTest {
         UserEntity user = new UserEntity(
             "Max", "Mock", "loginUserName12", "mocking", email
         );
-        user.setUserId(1L);
+        user.setUserId(randomID.nextLong());
 
         UserEntity userWithSameMail = RandomTestData.newRandomTestUser();
         userWithSameMail.setEmail(email);
-        userWithSameMail.setUserId(2L);
+        userWithSameMail.setUserId(randomID.nextLong());
 
         when(userService.findByEmail(ArgumentMatchers.anyString())).thenReturn(user);
 

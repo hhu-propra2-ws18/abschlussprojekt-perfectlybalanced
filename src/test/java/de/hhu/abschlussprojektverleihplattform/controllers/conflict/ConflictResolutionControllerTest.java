@@ -25,9 +25,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -58,6 +57,8 @@ public class ConflictResolutionControllerTest {
     @MockBean
     LendingService lendingService;
 
+    private Random randomID = new Random();
+
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders
@@ -70,7 +71,6 @@ public class ConflictResolutionControllerTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
     }
-
 
     @Test
     public void conflictCenterIsOk() throws Exception {
@@ -91,7 +91,7 @@ public class ConflictResolutionControllerTest {
     @Test
     public void conflictCenterIsForbiddenForUser() throws Exception {
         UserEntity user = RandomTestData.newRandomTestUser();
-        user.setUserId(1L);
+        user.setUserId(randomID.nextLong());
 
         String username = user.getUsername();
         when(userService.findByUsername(username))
@@ -107,7 +107,7 @@ public class ConflictResolutionControllerTest {
     @Test
     public void conflictCenterShowConflict() throws Exception {
         UserEntity admin = createAdmin();
-        LendingEntity lendingConflict = createConflictItem(1L);
+        LendingEntity lendingConflict = createConflictItem(randomID.nextLong());
         String username = admin.getUsername();
         List<LendingEntity> allConflicts = new ArrayList<>();
         allConflicts.add(lendingConflict);
@@ -128,8 +128,8 @@ public class ConflictResolutionControllerTest {
     @Test
     public void conflictCenterShowsTwoConflicts() throws Exception {
         UserEntity admin = createAdmin();
-        LendingEntity lendingConflict = createConflictItem(1L);
-        LendingEntity lendingConflict2 = createConflictItem(2L);
+        LendingEntity lendingConflict = createConflictItem(randomID.nextLong());
+        LendingEntity lendingConflict2 = createConflictItem(randomID.nextLong());
         String username = admin.getUsername();
 
         List<LendingEntity> allConflicts = new ArrayList<>();
@@ -181,7 +181,7 @@ public class ConflictResolutionControllerTest {
     @Test
     public void conflictCenterShowDetail() throws Exception {
         UserEntity admin = createAdmin();
-        LendingEntity lendingConflict = createConflictItem(1L);
+        LendingEntity lendingConflict = createConflictItem(randomID.nextLong());
         String username = admin.getUsername();
 
         when(userService.findByUsername(username))
@@ -212,7 +212,7 @@ public class ConflictResolutionControllerTest {
     @Test
     public void conflictCenterDetailRedirectWhenLendingIsNull() throws Exception {
         UserEntity admin = createAdmin();
-        LendingEntity lendingConflict = createConflictItem(1L);
+        LendingEntity lendingConflict = createConflictItem(randomID.nextLong());
         String username = admin.getUsername();
 
         when(userService.findByUsername(username))
@@ -230,7 +230,7 @@ public class ConflictResolutionControllerTest {
     @Test
     public void decideForOwner() throws Exception {
         UserEntity admin = createAdmin();
-        LendingEntity lendingConflict = createConflictItem(1L);
+        LendingEntity lendingConflict = createConflictItem(randomID.nextLong());
         String username = admin.getUsername();
 
         when(userService.findByUsername(username))
@@ -269,7 +269,7 @@ public class ConflictResolutionControllerTest {
 
     private UserEntity createAdmin() {
         UserEntity admin = RandomTestData.newRandomTestUser();
-        admin.setUserId(1L);
+        admin.setUserId(randomID.nextLong());
         admin.setRole(Role.ROLE_ADMIN);
         return admin;
     }
