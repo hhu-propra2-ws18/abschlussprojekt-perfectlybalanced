@@ -13,6 +13,7 @@ import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -494,6 +495,10 @@ public class ProductControllerTest {
 
         when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(user);
         when(productService.getById(ArgumentMatchers.anyLong())).thenReturn(product);
+        Mockito
+            .doNothing()
+            .when(sellService)
+            .buyProduct(ArgumentMatchers.any(UserEntity.class), ArgumentMatchers.any(ProductEntity.class));
 
         // Act & Assert
         mockMvc
@@ -502,6 +507,27 @@ public class ProductControllerTest {
                 .with(csrf()))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("Produkt kaufen")));
+    }
+
+    @Test
+    public void testGoToBuyRequestNotFound() throws Exception {
+        // Arrange
+        String url = "/buyrequests/sendRequest?id=";
+
+        UserEntity user = RandomTestData.newRandomTestUser();
+        user.setUserId(randomID.nextLong());
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        product.setId(randomID.nextLong());
+
+        when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(user);
+
+        // Act & Assert
+        mockMvc
+            .perform(get(url + product.getId())
+                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
+                .with(csrf()))
+            .andExpect(status().is5xxServerError());
     }
 
 }
