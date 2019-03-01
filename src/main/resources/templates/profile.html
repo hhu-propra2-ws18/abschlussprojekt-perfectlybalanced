@@ -32,6 +32,28 @@
                 <span>100 Euro auf dieses Konto einzahlen</span>
                 <button type="submit">Einzahlen</button>
             </form>
+            <br>
+            <h3>History</h3>
+            <div class="card" th:each="transactions : ${transaction}">
+                <div class="row">
+                    <div class="col-md-12" th:if="${transactions.sender}!=${transactions.receiver}">
+                        <span th:text="${transactions.sender.username}"></span>
+                        <span>hat am </span>
+                        <span th:text="${#dates.format(transactions.date, 'dd.MM.yyyy')}"></span>
+                        <span th:text="${transactions.amount}"></span>
+                        <span>Euro an </span>
+                        <span th:text="${transactions.receiver.username}"></span>
+                        <span>überwiesen.</span>
+                    </div>
+                    <div class="col-md-12" th:if="${transactions.sender}==${transactions.receiver}">
+                        <span th:text="${transactions.sender.username}"></span>
+                        <span> hat am </span>
+                        <span th:text="${#dates.format(transactions.date, 'dd.MM.yyyy')}"></span>
+                        <span th:text="${transactions.amount}"></span>
+                        <span> Euro eingezahlt.</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-6"></div>
         <div class="col-md-6">
