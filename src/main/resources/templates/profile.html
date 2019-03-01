@@ -36,14 +36,20 @@
             <h3>History</h3>
             <div class="card" th:each="transactions : ${transaction}">
                 <div class="row">
-                    <div class="col-md-6">
-                    <span th:text="${transactions.sender.username}"></span>
-                    <span>hat am </span>
-                    <span th:text="${transactions.date.toString()}"></span>
-                    <span th:text="${transactions.amount}"></span>
-                    <span>Euro an </span>
-                    <span th:text="${transactions.receiver.username}"></span>
-                    <span>ueberwiesen.</span>
+                    <div class="col-md-12" th:if="${transactions.sender}!=${transactions.receiver}">
+                        <span th:text="${transactions.sender.username}"></span>
+                        <span>hat am </span>
+                        <span th:text="${transactions.date.toString()}"></span>
+                        <span th:text="${transactions.amount}"></span>
+                        <span>Euro an </span>
+                        <span th:text="${transactions.receiver.username}"></span>
+                        <span>ueberwiesen.</span>
+                    </div>
+                    <div class="col-md-12" th:if="${transactions.sender}==${transactions.receiver}">
+                        <span th:text="${transactions.sender.username}"></span>
+                        <span> hat </span>
+                        <span th:text="${transactions.amount}"></span>
+                        <span> Euro eingezahlt.</span>
                     </div>
                 </div>
             </div>
