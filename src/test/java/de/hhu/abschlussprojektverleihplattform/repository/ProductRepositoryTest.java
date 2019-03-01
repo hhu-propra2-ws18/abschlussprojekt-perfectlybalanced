@@ -68,8 +68,8 @@ public class ProductRepositoryTest {
         );
         productRepository.saveProduct(testProduct);
         testProduct.setPrice(500);
-        testProduct.setStatus(Productstatus.sold);
-        productRepository.editProduct(testProduct);
+        //testProduct.setStatus(Productstatus.sold);
+        productRepository.saveProduct(testProduct);
         ProductEntity loadedProduct = productRepository.getProductById(testProduct.getId());
         Assert.assertEquals(testProduct, loadedProduct);
     }
