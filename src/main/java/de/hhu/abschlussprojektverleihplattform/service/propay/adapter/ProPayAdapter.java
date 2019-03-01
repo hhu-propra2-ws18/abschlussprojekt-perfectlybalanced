@@ -1,5 +1,9 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay.adapter;
 
+import de.hhu.abschlussprojektverleihplattform.model.TransactionEntity;
+import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
+import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.exceptions.ProPayAccountNotExistException;
 import de.hhu.abschlussprojektverleihplattform.service.propay.exceptions.ProPayTimeoutException;
 import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IProPayAdapter;
@@ -13,6 +17,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.sql.Timestamp;
 
 import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtil.makeHttpRequestWithParameter;
 
@@ -21,6 +26,14 @@ public class ProPayAdapter implements IProPayAdapter {
 
     @Value("${propaybaseurl}")
     private String baseurl;
+
+    private final UserService userService;
+    private final TransactionRepository transactionRepository;
+
+    public ProPayAdapter(UserService userService, TransactionRepository transactionRepository) {
+        this.userService = userService;
+        this.transactionRepository = transactionRepository;
+    }
 
     private void handleHttClientErrorException(HttpClientErrorException ex) throws Exception{
 
@@ -56,6 +69,8 @@ public class ProPayAdapter implements IProPayAdapter {
     @Override
     public Account createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(String username, long amount)
             throws Exception {
+        UserEntity user = userService.findByUsername(username);
+
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -64,6 +79,15 @@ public class ProPayAdapter implements IProPayAdapter {
             String url = baseurl + "account/" + username;
             ResponseEntity<Account> response =
                     restTemplate.postForEntity(url, request, Account.class);
+
+            if (amount != 0){
+                TransactionEntity transaction = new TransactionEntity(user,
+                        user,
+                        (int)amount,
+                        new Timestamp(System.currentTimeMillis()));
+                transactionRepository.addTransaction(transaction);
+            }
+
             return response.getBody();
         }catch (HttpClientErrorException ex){
             handleHttClientErrorException(ex);
