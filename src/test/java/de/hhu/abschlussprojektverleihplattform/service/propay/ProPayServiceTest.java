@@ -29,14 +29,18 @@ public class ProPayServiceTest {
 
     @Test
     public void testNewUserHasZeroBalance() throws Exception {
-        String generated_username = RandomTestData.newRandomTestUser().getUsername();
+        UserEntity user = RandomTestData.newRandomTestUser();
+        userService.addUser(user);
+        String generated_username = user.getUsername();
         Assert.assertEquals(Long.valueOf(0),
                 proPayService.usersCurrentBalance(generated_username));
     }
 
     @Test
     public void testCanCreateAccount() {
-        String user1 = RandomTestData.newRandomTestUser().getUsername();
+        UserEntity user = RandomTestData.newRandomTestUser();
+        userService.addUser(user);
+        String user1 = user.getUsername();
         try {
             proPayService
                     .proPayAdapter
@@ -51,12 +55,11 @@ public class ProPayServiceTest {
         UserEntity user = RandomTestData.newRandomTestUser();
         userService.addUser(user);
         try {
-            String user1 = make_new_user();
             proPayService
                     .proPayAdapter
-                    .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user1,1);
+                    .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user.getUsername(),1);
 
-            Assert.assertTrue(this.proPayService.usersCurrentBalance(user1) == 1);
+            Assert.assertEquals(1, (long) this.proPayService.usersCurrentBalance(user.getUsername()));
         } catch (Exception e) {
             Assert.fail();
         }
