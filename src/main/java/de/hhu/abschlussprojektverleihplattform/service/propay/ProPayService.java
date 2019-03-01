@@ -48,6 +48,15 @@ public class ProPayService implements IPaymentService {
         }
     }
 
+    public boolean isAvailable(){
+        try{
+            proPayAdapter.getDefaultRoute();
+            return false;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
 
     @Override

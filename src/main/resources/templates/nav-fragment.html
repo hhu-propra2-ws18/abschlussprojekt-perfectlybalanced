@@ -27,6 +27,16 @@
         </ul>
         <div th:switch="${#authentication} ? ${#authorization.expression('isAuthenticated()')} : ${false}">
             <ul class="ml-auto navbar-nav" th:case="${true}">
+                <li class="nav-item float-right">
+
+                    <div class="badge badge-success" th:if="${propayavailability}">
+                        ProPay is available
+                    </div>
+                    <div class="badge badg-warning" th:if="${!propayavailability}">
+                        ProPay not available
+                    </div>
+                </li>
+
                 <li class="nav-item float-right" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" th:href="@{/conflictcenter}" th:text="Konflikt-Center">Konflikt-Center</a>
                 </li>
