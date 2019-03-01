@@ -35,7 +35,7 @@ public class SellService implements ISellService {
         }
         Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
         if (userMoney < product.getPrice()) {
-            throw new Exception("Dieses Prddukt kostet: " + product.getPrice()
+            throw new Exception("Dieses Produkt kostet: " + product.getPrice()
                     + "€, aber sie haben nur: " + userMoney + "€ auf ihrem Konto.");
         }
         Long paymentID = paymentService.reservateAmount(

@@ -54,11 +54,11 @@ public class LendingService implements ILendingService {
             throw new Exception("Dieses Produkt kann nur gekauft, nicht geliehen werden.");
         }
         if(start.equals(end)) {
-            throw new Exception("Start und Ende der Ausleihe dürfen nicht indentisch sein.");
+            throw new Exception("Start und Ende der Ausleihe dürfen nicht identisch sein.");
         }
         if(start.after(end)) {
             throw new Exception(
-                "Falls sie einen Bug suchsen, hier ist keiner. "
+                "Falls sie einen Bug suchen, hier ist keiner. "
                 + "Das Ende muss nach dem Start sein, sie Genie!"
             );
         }
@@ -91,8 +91,8 @@ public class LendingService implements ILendingService {
 
     public void acceptLendingRequest(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.requested)) {
-            throw new Exception("Die Ausleihe musste den Status: " + lending.getStatus()
-                + " haben, aber hat den Status: " + Lendingstatus.requested);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.requested
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         List<LendingEntity> lendings =
             lendingRepository.getAllLendingsFromProduct(lending.getProduct());
@@ -153,8 +153,8 @@ public class LendingService implements ILendingService {
 
     public void denyLendingRequest(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.requested)) {
-            throw new Exception("Die Ausleihe musste den Status: " + lending.getStatus()
-                    + " haben, aber hat den Status: " + Lendingstatus.requested);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.requested
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
@@ -162,8 +162,8 @@ public class LendingService implements ILendingService {
 
     public void returnProduct(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.confirmt)) {
-            throw new Exception("Die Ausleihe musste den Status: " + lending.getStatus()
-                    + " haben, aber hat den Status: " + Lendingstatus.confirmt);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.confirmt
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
@@ -171,8 +171,8 @@ public class LendingService implements ILendingService {
 
     public void acceptReturnedProduct(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.returned)) {
-            throw new Exception("Die Ausleihe musste den Status: " + lending.getStatus()
-                    + " haben, aber hat den Status: " + Lendingstatus.returned);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.returned
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         paymentService.returnReservatedMoney(
             lending.getBorrower().getUsername(),
@@ -184,8 +184,8 @@ public class LendingService implements ILendingService {
 
     public void denyReturnedProduct(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.returned)) {
-            throw new Exception("Die Ausleihe musste den Status: " + lending.getStatus()
-                    + " haben, aber hat den Status: " + Lendingstatus.returned);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.returned
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
@@ -193,8 +193,8 @@ public class LendingService implements ILendingService {
 
     public void ownerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.conflict)) {
-            throw new Exception("Die Ausleihe musste den Status: " + lending.getStatus()
-                    + " haben, aber hat den Status: " + Lendingstatus.conflict);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         paymentService.tranferReservatedMoney(
             lending.getBorrower().getUsername(),
@@ -212,8 +212,8 @@ public class LendingService implements ILendingService {
 
     public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.conflict)) {
-            throw new Exception("Die Ausleihe musste den Status: " + lending.getStatus()
-                    + " haben, aber hat den Status: " + Lendingstatus.conflict);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         paymentService.returnReservatedMoney(
             lending.getBorrower().getUsername(),
