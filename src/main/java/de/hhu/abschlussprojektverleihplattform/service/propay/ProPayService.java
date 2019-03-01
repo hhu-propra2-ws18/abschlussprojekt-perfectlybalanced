@@ -61,10 +61,12 @@ public class ProPayService implements IPaymentService {
         long current_time = System.currentTimeMillis();
 
         long interval_to_check = 10000;
-        
+
         if(last_checked_availability_milliseconds-current_time > interval_to_check) {
 
             last_checked_availability_milliseconds=current_time;
+
+            System.out.println("checking for propay availability");
 
             URL u = new URL(proPayAdapter.baseurl);
             InputStream in = u.openStream();
