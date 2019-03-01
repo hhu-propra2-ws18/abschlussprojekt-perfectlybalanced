@@ -18,6 +18,11 @@
                 </div>
                 <div class="card-body">
                     <div class="card-text" th:text="${product.description}">Produktbeschreibung</div>
+                </div>
+                <div class="card-footer">
+                    <span>Status: </span>
+                    <span class="card-text" th:text="${product.status.toString()}"></span>
+                    <br>
                     <a class="card-footer-item" th:href="@{|~/productdetail/${product.id}|}">Details</a>
                     <a class="card-footer-item" th:href="@{|~/editproduct/${product.id}|}">Editieren</a>
                 </div>
