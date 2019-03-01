@@ -100,8 +100,6 @@ public class ProductRepository implements IProductRepository {
                 + "STREET = ?, "
                 + "SURETY = ?, "
                 + "TITLE = ?, "
-                + "OWNER_USER_ID = ?, "
-                + "STATUS = ?, "
                 + "PRICE = ?"
                 + " WHERE ID = ?",
                 productEntity.getCost(),
@@ -112,8 +110,6 @@ public class ProductRepository implements IProductRepository {
                 productEntity.getLocation().getStreet(),
                 productEntity.getSurety(),
                 productEntity.getTitle(),
-                productEntity.getOwner().getUserId(),
-                productEntity.getStatus().ordinal(),
                 productEntity.getPrice(),
                 productEntity.getId()
         );

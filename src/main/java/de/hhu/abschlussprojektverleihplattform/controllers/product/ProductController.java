@@ -119,16 +119,12 @@ public class ProductController {
         BindingResult bindingResultProduct,
         @ModelAttribute("address") @Valid AddressEntity addressEntity,
         BindingResult bindingResultAddress,
-        @ModelAttribute("user") UserEntity userEntity,
         @PathVariable Long id
     ){
         if(bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "editproduct";
         }
-        ProductEntity oldProduct = productService.getById(id);
         productEntity.setLocation(addressEntity);
-        productEntity.setOwner(userEntity);
-        productEntity.setStatus(oldProduct.getStatus());
         productService.editProduct(productEntity);
         return "redirect:/myproducts";
     }
