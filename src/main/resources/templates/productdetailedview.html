@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Verleihplattform Produkt Detailansicht</title>
+    <title>Produkt Detailansicht</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
@@ -42,12 +42,14 @@
                     </li>
                 </ul>
 
-                <div class="card" th:each="zeitraum : ${ListOfStrings}">
+                <div class="card" th:if="${ListOfReservatedTimes.isEmpty() == false}">
                     <div class="card-header">
                         <p >Belegter Zeitraum</p>
                     </div>
-                    <div class="card-body">
-                        <span th:text="${zeitraum}">fertig</span>
+                    <div class="card-body" th:each="zeitraum : ${ListOfReservatedTimes}">
+                        <span th:text="${#dates.format(zeitraum.start, 'dd.MM.yyyy')}"></span>
+                        <span>bis</span>
+                        <span th:text="${#dates.format(zeitraum.end, 'dd.MM.yyyy')}"></span>
                     </div>
                 </div>
 

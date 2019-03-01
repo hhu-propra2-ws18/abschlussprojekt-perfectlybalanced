@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Leihanfragen</title>
@@ -10,7 +10,7 @@
     <div class="container">
         <div class="m-3"></div>
         <h3>Leihanfragen</h3>
-        <span th:if="${checkMyLendings}==true">Aktuell liegen keine Anfragen vor.</span>
+        <span th:if="${lendings.isEmpty()}==true">Aktuell liegen keine Anfragen vor.</span>
             <div class="card" th:each="lending : ${lendings}">
                 <div class="row">
                     <div class="col-md-8">
@@ -18,15 +18,20 @@
                         <span> möchte das Produkt </span>
                         <span th:text="${lending.product.title}"></span>
                         <span> von dir ausleihen </span>
+                        <p class="text-muted">
+                            <span th:text="${#dates.format(lending.start, 'dd.MM.yyyy')}">01.01.2019</span>
+                            -
+                            <span th:text="${#dates.format(lending.end, 'dd.MM.yyyy')}">01.12.2019</span>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <div class="row">
                             <form th:action="@{/lendingrequests/accept(id=${lending.id})}" method="post">
-                                <a><button type="submit" class="btn btn-success">Approve</button></a>
+                                <a><button type="submit" class="btn btn-success">Akzeptieren</button></a>
                             </form>
                             <div class="m-3"></div>
                             <form th:action="@{/lendingrequests/reject(id=${lending.id})}"  method="post">
-                                <a><button type="submit" class="btn btn-warning">Reject</button></a>
+                                <a><button type="submit" class="btn btn-warning">Ablehnen</button></a>
                             </form>
                         </div>
                     </div>
@@ -37,7 +42,7 @@
     <div class="container">
         <div class="m-3"></div>
         <h3>Zurückgegebene Artikel</h3>
-        <span th:if="${checkMyReturns}==true">Aktuell liegen keine Rückgaben vor.</span>
+        <span th:if="${returnedProducts.isEmpty()}==true">Aktuell liegen keine Rückgaben vor.</span>
         <div class="card" th:each="lending : ${returnedProducts}">
             <div class="row">
                 <div class="col-md-8">

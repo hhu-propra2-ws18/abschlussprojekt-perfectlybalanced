@@ -15,8 +15,8 @@ public class AddressEntity {
     @Size(min=5, message = "Adresse {address.size.error}")
     private String street;
     @NotNull
-    @Min(value=0, message = "{address.housenumber.error}")
-    private int housenumber;
+    @Size(min=1, message = "{address.housenumber.error}")
+    private String housenumber;
     @NotNull
     @Range(min= 10000, max=99999, message = "{address.postcode.error}")
     private int postcode;
@@ -29,7 +29,7 @@ public class AddressEntity {
 
     }
 
-    public AddressEntity(String street, int housenumber, int postcode, String city) {
+    public AddressEntity(String street, String housenumber, int postcode, String city) {
         this.street = street;
         this.housenumber = housenumber;
         this.postcode = postcode;

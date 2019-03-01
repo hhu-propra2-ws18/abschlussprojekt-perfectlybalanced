@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Verleihplattform Products Overview</title>
+    <title>Produktübersicht</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
@@ -15,8 +15,12 @@
                     <p th:text="${product.title}"></p>
                 </div>
                 <div class="card-body">
-                    <div class="card-text" th:text="${product.description}">
-                    </div>
+                    <p><div class="card-text" th:text="${product.description}"></div></p>
+                </div>
+                <div class="card-footer">
+                    <span>Status: </span>
+                    <span class="card-text" th:text="${product.status.toString()}"></span>
+                    <br>
                     <a class="card-footer-item" title="" href="#" th:href="@{|~/productdetail/${product.id}|}">Details</a>
                 </div>
             </div>

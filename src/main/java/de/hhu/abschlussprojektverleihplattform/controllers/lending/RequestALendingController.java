@@ -51,8 +51,8 @@ public class RequestALendingController {
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
 
-        String startTimeStampString = start + "T00:00:00";
-        String endTimeStampString = end + "T00:00:00";
+        String startTimeStampString = start + "T01:00:00";
+        String endTimeStampString = end + "T01:00:00";
 
         Timestamp startTimestamp
             = Timestamp.valueOf(startTimeStampString.replace("T", " "));

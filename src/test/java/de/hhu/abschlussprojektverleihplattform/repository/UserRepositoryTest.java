@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -34,78 +33,42 @@ public class UserRepositoryTest {
 
     @Test
     public void saveOneUserToDatabase() {
-        UserEntity user = new UserEntity(
-	    "firstName",
-	    "LastName",
-	    "username",
-	    "password",
-	    "email@mail.com"
-	);
+        UserEntity user = RandomTestData.newRandomTestUser();
+
         userRepository.saveUser(user);
         UserEntity loadedUser = userRepository.findById(user.getUserId());
-        Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname())
-            && user.getLastname().equals(loadedUser.getLastname())
-            && user.getUsername().equals(loadedUser.getUsername())
-            && user.getPassword().equals(loadedUser.getPassword())
-            && user.getEmail().equals(loadedUser.getEmail()));
+
+        Assert.assertEquals(user,loadedUser);
     }
 
     @Test
-    public void startConfigTestLoadMaxMusterMann() {
+    public void findUserById() {
+        UserEntity user = RandomTestData.newRandomTestUser();
 
-        UserEntity user = new UserEntity(
-	    "Max",
-	    "Mustermann",
-	    "MMustermann",
-	    "MaxMuster223",
-	    "Max@Mustermann.de"
-	);
-        UserEntity loadedUser = userRepository.findById(1L);
-        Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname())
-            && user.getLastname().equals(loadedUser.getLastname())
-            && user.getUsername().equals(loadedUser.getUsername())
-            && user.getEmail().equals(loadedUser.getEmail()));
+        userRepository.saveUser(user);
+        UserEntity loadedUser = userRepository.findById(user.getUserId());
+
+        Assert.assertEquals(user,loadedUser);
     }
 
     @Test
     public void findUserByUsername() {
+        UserEntity user = RandomTestData.newRandomTestUser();
 
-        UserEntity user = new UserEntity(
-            "Max",
-            "Mustermann",
-            "MMustermann",
-            "MaxMuster223",
-            "Max@Mustermann.de"
-        );
+        userRepository.saveUser(user);
+        UserEntity loadedUser = userRepository.findByUsername(user.getUsername());
 
-        UserEntity loadedUser = userRepository.findByUsername("MMustermann");
-
-        Assert.assertTrue(user.getFirstname().equals(loadedUser.getFirstname())
-            && user.getLastname().equals(loadedUser.getLastname())
-            && user.getUsername().equals(loadedUser.getUsername())
-            && user.getEmail().equals(loadedUser.getEmail()));
-
+        Assert.assertEquals(user,loadedUser);
     }
 
     @Test
     public void findByEmail() {
-        // Arrange
-        UserEntity user = new UserEntity(
-                "Markus",
-                "Mueller",
-                "muellerTest",
-                "mueller",
-                "mueller@test.de");
+        UserEntity user = RandomTestData.newRandomTestUser();
+
         userRepository.saveUser(user);
+        UserEntity loadedUser = userRepository.findByEmail(user.getEmail());
 
-        // Act
-        UserEntity loadedUser = userRepository.findByEmail("mueller@test.de");
-
-        // Assert
-        Assert.assertTrue(user.getEmail().equals(loadedUser.getEmail())
-            && user.getUsername().equals(loadedUser.getUsername()));
-
-
+        Assert.assertEquals(user,loadedUser);
     }
 
     @Test
@@ -141,7 +104,7 @@ public class UserRepositoryTest {
     @Test
     public void getAllUsersAfterAddingOneUser() {
         int numberOfUserAtTestStart = userRepository.getNumberOfUsers();
-        UserEntity user = new UserEntity("vorname", "LastName", "username2", "password", "email");
+        UserEntity user = RandomTestData.newRandomTestUser();
         userRepository.saveUser(user);
         List<UserEntity> allUser = userRepository.getAllUser();
         Assert.assertEquals(numberOfUserAtTestStart + 1, allUser.size());

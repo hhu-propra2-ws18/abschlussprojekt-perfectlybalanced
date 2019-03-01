@@ -2,7 +2,6 @@ package de.hhu.abschlussprojektverleihplattform.model;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.context.ActiveProfiles;
 
 
 public class LendingStatusTest {

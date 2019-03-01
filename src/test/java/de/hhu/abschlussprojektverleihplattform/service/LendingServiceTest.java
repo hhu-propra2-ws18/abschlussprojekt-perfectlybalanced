@@ -1,26 +1,44 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.testdummys.LendingRepositoryDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.PaymentServiceDummy;
 import de.hhu.abschlussprojektverleihplattform.testdummys.ReservationDummy;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.time.LocalTime;
+
+import static org.mockito.ArgumentMatchers.any;
 
 //NOTE:
 //The Dates used here are from May 2020.
 //Should the Tests be run after that Time some will fail, since the Dates will then be in the Past.
 //Should the Application still be needed after that Time, they have to be replaced with later Dates.
 
-
 public class LendingServiceTest {
 
     // Tests for requestLending
+
+    @Mock
+    TransactionRepository transactionRepository;
+
+    @Before
+    public void initMocks() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void productHasWrongStatus1() {
@@ -29,7 +47,7 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         product.setStatus(Productstatus.forBuying);
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
         Timestamp start = new Timestamp(1700L);
         Timestamp end = new Timestamp(3000L);
 
@@ -41,7 +59,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "This Product can only be bought, not lend.",
+            "Dieses Produkt kann nur gekauft, nicht geliehen werden.",
             result.getMessage()
         );
     }
@@ -53,7 +71,7 @@ public class LendingServiceTest {
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         product.setStatus(Productstatus.sold);
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
         Timestamp start = new Timestamp(1700L);
         Timestamp end = new Timestamp(3000L);
 
@@ -65,7 +83,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "This Product can only be bought, not lend.",
+            "Dieses Produkt kann nur gekauft, nicht geliehen werden.",
             result.getMessage()
         );
     }
@@ -76,7 +94,7 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
         Timestamp start = new Timestamp(4000L);
         Timestamp end = new Timestamp(4000L);
 
@@ -88,7 +106,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "You can't lend a product for an instant",
+            "Start und Ende der Ausleihe dürfen nicht identisch sein.",
             result.getMessage()
         );
     }
@@ -99,7 +117,7 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
         Timestamp start = new Timestamp(4000L);
         Timestamp end = new Timestamp(3000L);
 
@@ -111,8 +129,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "If you are searching for a Bug, there is non here. "
-            + "The end-date must be after the start-date, you genius!",
+            "Falls sie einen Bug suchen, hier ist keiner. "
+            + "Das Ende muss nach dem Start sein, sie Genie!",
             result.getMessage()
         );
     }
@@ -123,10 +141,11 @@ public class LendingServiceTest {
         UserEntity owner = RandomTestData.newRandomTestUser();
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
-        LendingService logic = new LendingService(null, null);
-        Long currentMilis = Timestamp.valueOf(LocalDateTime.now()).getTime();
-        Timestamp start = new Timestamp(currentMilis - 300);
-        Timestamp end = new Timestamp(currentMilis + 3000000);
+        LendingService logic = new LendingService(null, null, null);
+        Long currentMillis = Timestamp.valueOf(LocalDateTime.now()).getTime();
+        long millisPerDay = 1000*60*60*24;
+        Timestamp start = new Timestamp(currentMillis - millisPerDay);
+        Timestamp end = new Timestamp(currentMillis);
 
         Exception result = new Exception("0");
         try {
@@ -136,8 +155,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "You can't change the Past. "
-            + "You have to borrow the product after the current time.",
+            "Sie können die Vergangenheit nicht ändern. "
+            + "Sie müssen das Produkt nach dem aktuellen Zeitpunkt ausleihen.",
             result.getMessage()
         );
     }
@@ -150,7 +169,7 @@ public class LendingServiceTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(owner, address);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(0L, null, false);
-        LendingService logic = new LendingService(null, payment_service);
+        LendingService logic = new LendingService(null, payment_service, null);
         Timestamp start = new Timestamp(1589187600000L);
         Timestamp end = new Timestamp(1589549400000L);
 
@@ -163,8 +182,8 @@ public class LendingServiceTest {
 
         int totalMoney = product.getSurety() + product.getCost() * 5;
         Assert.assertEquals(
-            "The cost and the surety sum up to: "
-            + totalMoney + "€, but you only have: " + 0L + "€.",
+            "Die Kosten und die Kaution ergeben zusammen: "
+            + totalMoney + "€, aber sie haben nur: " + 0L + "€ auf ihrem Konto.",
             result.getMessage()
         );
     }
@@ -178,7 +197,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         Exception exception = new Exception("TestFail");
         payment_service.configurateUsersCurrentBalance(0L, exception, true);
-        LendingService logic = new LendingService(null, payment_service);
+        LendingService logic = new LendingService(null, payment_service, null);
         Timestamp start = new Timestamp(1589187600000L);
         Timestamp end = new Timestamp(1589549400000L);
 
@@ -201,7 +220,7 @@ public class LendingServiceTest {
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(20000000L, null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
         Timestamp start = new Timestamp(1589187600000L);
         Timestamp end = new Timestamp(1589549400000L);
 
@@ -242,7 +261,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -252,8 +271,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.requested,
+            "Die Ausleihe musste den Status: " + Lendingstatus.requested
+            + " haben, aber hat den Status: " + Lendingstatus.done,
             result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -291,7 +310,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -301,7 +320,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -337,7 +356,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -347,7 +366,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -383,7 +402,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -393,7 +412,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -429,7 +448,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -439,7 +458,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -473,7 +492,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.addLending(timeBlocker);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -483,7 +502,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -510,7 +529,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         Exception fail = new Exception("TestFail");
         payment_service.configurateUsersCurrentBalance(0L, fail, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         Exception result = new Exception("0");
         try {
@@ -545,7 +564,7 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(0L, null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         Exception result = new Exception("0");
         try {
@@ -555,7 +574,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The borrower currently hasn't enough money for the lending",
+            "Der Leihende hat momentan nicht genügend Geld für den Leihvorgang.",
             result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -585,7 +604,7 @@ public class LendingServiceTest {
         Exception fail = new Exception("TestFail");
         payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
         payment_service.configureReservateAmount(fail, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         Exception result = new Exception("0");
         try {
@@ -623,7 +642,9 @@ public class LendingServiceTest {
         Exception fail = new Exception("TestFail");
         payment_service.configureReservateAmount(null, false);
         payment_service.configureReservateAmountSecondOneFails(fail);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         Exception result = new Exception("0");
         try {
@@ -644,6 +665,7 @@ public class LendingServiceTest {
 
     @Test
     public void requestGetsAccepted1() {
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
         Timestamp start = new Timestamp(1521811800000L);
         Timestamp end = new Timestamp(1522326000000L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -663,9 +685,12 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
-        payment_service.configureReservateAmount(null, false);
+        payment_service.configureReservateAmount(null,
+                false);
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         try {
             logic.acceptLendingRequest(lending);
@@ -694,6 +719,7 @@ public class LendingServiceTest {
 
     @Test
     public void requestGetsAccepted2() {
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
         Timestamp start = new Timestamp(1546804200000L);
         Timestamp end = new Timestamp(1547148600000L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -713,9 +739,12 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configurateUsersCurrentBalance(Long.MAX_VALUE, null, false);
-        payment_service.configureReservateAmount(null, false);
+        payment_service.configureReservateAmount(null,
+                false);
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         try {
             logic.acceptLendingRequest(lending);
@@ -763,7 +792,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -773,8 +802,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.requested,
+            "Die Ausleihe musste den Status: " + Lendingstatus.requested
+            + " haben, aber hat den Status: " + Lendingstatus.done,
             result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -800,7 +829,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         logic.denyLendingRequest(lending);
 
@@ -829,7 +858,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -839,9 +868,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.confirmt,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.confirmt
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -866,7 +895,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         try {
             logic.returnProduct(lending);
@@ -899,7 +928,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -909,9 +938,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.returned,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.returned
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -939,7 +968,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         Exception fail = new Exception("TestFail");
         payment_service.configureReturn(fail, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         Exception result = new Exception("0");
         try {
@@ -974,7 +1003,7 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configureReturn(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         try {
             logic.acceptReturnedProduct(lending);
@@ -1013,7 +1042,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -1023,9 +1052,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.returned,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.returned
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1050,7 +1079,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         try {
             logic.denyReturnedProduct(lending);
@@ -1083,7 +1112,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -1093,9 +1122,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.conflict,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1123,7 +1152,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         Exception fail = new Exception("TestFail");
         payment_service.configureTransfer(fail, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         Exception result = new Exception("0");
         try {
@@ -1139,6 +1168,7 @@ public class LendingServiceTest {
 
     @Test
     public void ownerRecivesSurety() {
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
         Timestamp start = new Timestamp(300L);
         Timestamp end = new Timestamp(500L);
         UserEntity borrower = RandomTestData.newRandomTestUser();
@@ -1158,7 +1188,9 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository,
+                payment_service,
+                transactionRepository);
 
         try {
             logic.ownerReceivesSuretyAfterConflict(lending);
@@ -1197,7 +1229,7 @@ public class LendingServiceTest {
         );
         LendingRepositoryDummy lending_repository = new LendingRepositoryDummy();
         lending_repository.setLendingToUpdate(lending);
-        LendingService logic = new LendingService(lending_repository, null);
+        LendingService logic = new LendingService(lending_repository, null, null);
 
         Exception result = new Exception("0");
         try {
@@ -1207,9 +1239,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.conflict,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1237,7 +1269,7 @@ public class LendingServiceTest {
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         Exception fail = new Exception("TestFail");
         payment_service.configureReturn(fail, true);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         Exception result = new Exception("0");
         try {
@@ -1272,7 +1304,7 @@ public class LendingServiceTest {
         lending_repository.setLendingToUpdate(lending);
         PaymentServiceDummy payment_service = new PaymentServiceDummy();
         payment_service.configureTransfer(null, false);
-        LendingService logic = new LendingService(lending_repository, payment_service);
+        LendingService logic = new LendingService(lending_repository, payment_service, null);
 
         try {
             logic.borrowerReceivesSuretyAfterConflict(lending);
@@ -1296,7 +1328,7 @@ public class LendingServiceTest {
     public void differenceIs3() {
         Timestamp first = new Timestamp(1557266400000L);
         Timestamp second = new Timestamp(1557525600000L);
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
 
         int result = logic.daysBetweenTwoTimestamps(first, second);
 
@@ -1307,10 +1339,59 @@ public class LendingServiceTest {
     public void differenceIs4() {
         Timestamp first = new Timestamp(1557266400000L);
         Timestamp second = new Timestamp(1557525600010L);
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
 
         int result = logic.daysBetweenTwoTimestamps(first, second);
 
         Assert.assertEquals(4, result);
+    }
+
+    @Test
+    public void reminderList() {
+        List<LendingEntity> all = new ArrayList<>();
+        UserEntity userBorrower = RandomTestData.newRandomTestUser();
+        UserEntity userOwner = RandomTestData.newRandomTestUser();
+        userBorrower.setUserId(1L);
+        userOwner.setUserId(2L);
+
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(userOwner, address);
+        ProductEntity product2 = RandomTestData.newRandomTestProduct(userOwner, address);
+
+        Timestamp start = Timestamp.valueOf(LocalDateTime.now().minusDays(7L));
+        Timestamp end = Timestamp.valueOf(LocalDateTime.now().minusDays(1L));
+
+        LendingEntity entity = RandomTestData.newRandomLendingStatusConflict(userBorrower, product);
+        entity.setId(1L);
+        entity.setStatus(Lendingstatus.confirmt);
+        entity.setStart(start);
+        entity.setEnd(end);
+        all.add(entity);
+
+        LendingEntity entity2 =
+                RandomTestData.newRandomLendingStatusConflict(userBorrower, product2);
+        entity2.setId(2L);
+        entity2.setStatus(Lendingstatus.confirmt);
+        System.out.println(entity2.getEnd());
+        all.add(entity2);
+
+        LendingService logic = new LendingService(null, null, null);
+
+        System.out.println(logic.getAllReminder(all).size());
+
+        Assert.assertTrue(logic.getAllReminder(all).size() == 1);
+    }
+
+    // Test for getThisMorning
+
+    //@Test
+    public void getThisMornig1() {
+        LocalDateTime thisMornigDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0));
+        Timestamp thisMorning = Timestamp.valueOf(thisMornigDateTime);
+        LendingService logic = new LendingService(null, null, null);
+
+        Timestamp result = logic.getThisMorning();
+
+        Assert.assertEquals(thisMorning, result);
     }
 }

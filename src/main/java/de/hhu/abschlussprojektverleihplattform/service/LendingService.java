@@ -1,16 +1,15 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
-import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
-import de.hhu.abschlussprojektverleihplattform.service.propay.IPaymentService;
+import de.hhu.abschlussprojektverleihplattform.model.Timespan;
 import de.hhu.abschlussprojektverleihplattform.model.*;
+import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
+import de.hhu.abschlussprojektverleihplattform.repository.ITransactionRepository;
+import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,17 +17,21 @@ import java.util.stream.Collectors;
 @Service
 public class LendingService implements ILendingService {
 
-    private ILendingRepository lendingRepository;
-    private IPaymentService paymentService;
+    private final ILendingRepository lendingRepository;
+    private final IPaymentService paymentService;
+    private final ITransactionRepository transactionRepository;
 
-    public LendingService(ILendingRepository lendingRepository, IPaymentService paymentService) {
+    public LendingService(ILendingRepository lendingRepository,
+                          IPaymentService paymentService,
+                          ITransactionRepository transactionRepository) {
         this.lendingRepository = lendingRepository;
         this.paymentService = paymentService;
+        this.transactionRepository = transactionRepository;
     }
 
     public List<Timespan> getAvailableTime(ProductEntity product) {
         List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        List<Timespan> list = new ArrayList<Timespan>();
+        List<Timespan> list = new ArrayList<>();
         for (LendingEntity lend : lendings) {
             if (
                 lend.getStatus() != Lendingstatus.done
@@ -41,30 +44,6 @@ public class LendingService implements ILendingService {
         return list;
     }
 
-    public List<String> getAvailabilityStrings(ProductEntity product) {
-        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        List<String> list = new ArrayList<String>();
-        for (LendingEntity lending : lendings) {
-            if (
-                lending.getStatus() != Lendingstatus.done
-                    && lending.getStatus() != Lendingstatus.denied
-                    && lending.getStatus() != Lendingstatus.requested
-            ) {
-                Timestamp start = lending.getStart();
-                Timestamp end = lending.getEnd();
-                Date startDate = new Date();
-                startDate.setTime(start.getTime());
-                Date endDate = new Date();
-                endDate.setTime(end.getTime());
-                String formattedStartDate = new SimpleDateFormat("dd.MM.yyyy").format(startDate);
-                String formattedEndDate = new SimpleDateFormat("dd.MM.yyyy").format(endDate);
-                String blockedTimeString = formattedStartDate + " bis " + formattedEndDate;
-                list.add(blockedTimeString);
-            }
-        }
-        return list;
-    }
-
     public LendingEntity requestLending(
             UserEntity actingUser,
             ProductEntity product,
@@ -72,29 +51,29 @@ public class LendingService implements ILendingService {
             Timestamp end
     ) throws Exception{
         if(!product.getStatus().equals(Productstatus.forLending)){
-            throw new Exception("This Product can only be bought, not lend.");
+            throw new Exception("Dieses Produkt kann nur gekauft, nicht geliehen werden.");
         }
         if(start.equals(end)) {
-            throw new Exception("You can't lend a product for an instant");
+            throw new Exception("Start und Ende der Ausleihe dürfen nicht identisch sein.");
         }
         if(start.after(end)) {
             throw new Exception(
-                "If you are searching for a Bug, there is non here. "
-                + "The end-date must be after the start-date, you genius!"
+                "Falls sie einen Bug suchen, hier ist keiner. "
+                + "Das Ende muss nach dem Start sein, sie Genie!"
             );
         }
-        if(start.before(Timestamp.valueOf(LocalDateTime.now()))) {
+        if(start.before(getThisMorning())) {
             throw new Exception(
-                "You can't change the Past. "
-                + "You have to borrow the product after the current time."
+                "Sie können die Vergangenheit nicht ändern. "
+                + "Sie müssen das Produkt nach dem aktuellen Zeitpunkt ausleihen."
             );
         }
         int totalMoney = product.getSurety()
             + product.getCost() * daysBetweenTwoTimestamps(start, end);
         Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
         if (userMoney < totalMoney) {
-            throw new Exception("The cost and the surety sum up to: "
-                + totalMoney + "€, but you only have: " + userMoney + "€.");
+            throw new Exception("Die Kosten und die Kaution ergeben zusammen: "
+                + totalMoney + "€, aber sie haben nur: " + userMoney + "€ auf ihrem Konto.");
         }
         LendingEntity lending = new LendingEntity(
             Lendingstatus.requested,
@@ -112,8 +91,8 @@ public class LendingService implements ILendingService {
 
     public void acceptLendingRequest(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.requested)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus()
-                + " but it needs to be: " + Lendingstatus.requested);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.requested
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         List<LendingEntity> lendings =
             lendingRepository.getAllLendingsFromProduct(lending.getProduct());
@@ -132,7 +111,7 @@ public class LendingService implements ILendingService {
                             || (lend_start.after(start) && lend_start.before(end))
                             || start.equals(lend_start)
             ) {
-                throw new Exception("The Product is not available in the selected time.");
+                throw new Exception("Das Produkt ist innerhalb des Zeitraums bereits vergeben.");
             }
         }
         int totalMoney = lending.getProduct().getSurety()
@@ -140,7 +119,9 @@ public class LendingService implements ILendingService {
                 * daysBetweenTwoTimestamps(lending.getStart(), lending.getEnd());
         Long userMoney = paymentService.usersCurrentBalance(lending.getBorrower().getUsername());
         if (userMoney < totalMoney) {
-            throw new Exception("The borrower currently hasn't enough money for the lending");
+            throw new Exception(
+                "Der Leihende hat momentan nicht genügend Geld für den Leihvorgang."
+            );
         }
         Long costID = paymentService.reservateAmount(
             lending.getBorrower().getUsername(),
@@ -164,12 +145,18 @@ public class LendingService implements ILendingService {
         lending.setCostReservationID(costID);
         lending.setSuretyReservationID(suretyID);
         lendingRepository.update(lending);
+
+        TransactionEntity transaction = new TransactionEntity(lending.getBorrower(),
+                lending.getProduct().getOwner(),
+                lending.getProduct().getCost(),
+                lending.getStart());
+        transactionRepository.addTransaction(transaction);
     }
 
     public void denyLendingRequest(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.requested)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus()
-                + " but it needs to be: " + Lendingstatus.requested);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.requested
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         lending.setStatus(Lendingstatus.denied);
         lendingRepository.update(lending);
@@ -177,8 +164,8 @@ public class LendingService implements ILendingService {
 
     public void returnProduct(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.confirmt)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus()
-                + " but it needs to be: " + Lendingstatus.confirmt);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.confirmt
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         lending.setStatus(Lendingstatus.returned);
         lendingRepository.update(lending);
@@ -186,8 +173,8 @@ public class LendingService implements ILendingService {
 
     public void acceptReturnedProduct(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.returned)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus()
-                + " but it needs to be: " + Lendingstatus.returned);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.returned
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         paymentService.returnReservatedMoney(
             lending.getBorrower().getUsername(),
@@ -199,8 +186,8 @@ public class LendingService implements ILendingService {
 
     public void denyReturnedProduct(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.returned)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus()
-                + " but it needs to be: " + Lendingstatus.returned);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.returned
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         lending.setStatus(Lendingstatus.conflict);
         lendingRepository.update(lending);
@@ -208,8 +195,8 @@ public class LendingService implements ILendingService {
 
     public void ownerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.conflict)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus()
-                    + " but it needs to be: " + Lendingstatus.conflict);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         paymentService.tranferReservatedMoney(
             lending.getBorrower().getUsername(),
@@ -217,12 +204,18 @@ public class LendingService implements ILendingService {
         );
         lending.setStatus(Lendingstatus.done);
         lendingRepository.update(lending);
+
+        TransactionEntity transaction = new TransactionEntity(lending.getBorrower(),
+                lending.getProduct().getOwner(),
+                lending.getProduct().getSurety(),
+                lending.getStart());
+        transactionRepository.addTransaction(transaction);
     }
 
     public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
         if (!lending.getStatus().equals(Lendingstatus.conflict)) {
-            throw new Exception("The Lending has the Status: " + lending.getStatus()
-                    + " but it needs to be: " + Lendingstatus.conflict);
+            throw new Exception("Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                    + " haben, aber hat den Status: " + lending.getStatus());
         }
         paymentService.returnReservatedMoney(
             lending.getBorrower().getUsername(),
@@ -297,9 +290,31 @@ public class LendingService implements ILendingService {
                 .collect(Collectors.toList());
     }
 
-    protected int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
+    public List<LendingEntity> getAllReminder(List<LendingEntity> allLendings) {
+        return allLendings
+            .stream()
+            .filter(lendingEntity -> lendingEntity
+                .getEnd()
+                .before(Timestamp.valueOf(LocalDateTime.now())))
+            .filter(lendingEntity -> lendingEntity
+                .getStatus()
+                .equals(Lendingstatus.confirmt))
+            .collect(Collectors.toList());
+    }
+
+    int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);
+    }
+
+    Timestamp getThisMorning() {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        long millis = now.getTime();
+        long millisPerHour = 1000*60*60;
+        long millisPerDay = millisPerHour * 24;
+        millis /= millisPerDay;
+        millis *= millisPerDay;
+        return new Timestamp(millis - millisPerHour);
     }
 }

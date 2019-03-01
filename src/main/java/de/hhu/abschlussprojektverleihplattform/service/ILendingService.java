@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
+import de.hhu.abschlussprojektverleihplattform.model.Timespan;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
@@ -10,10 +10,7 @@ import java.util.List;
 
 public interface ILendingService {
 
-    // maybee needs to be changes, once the ZeitraumModel has been implemented
     List<Timespan> getAvailableTime(ProductEntity product);
-
-    List<String> getAvailabilityStrings(ProductEntity product);
 
     // Request a new Lending
     LendingEntity requestLending(
@@ -77,4 +74,6 @@ public interface ILendingService {
 
     //Done and Denied Lendings, scine bothe are just history and have no further interactions
     List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings);
+
+    List<LendingEntity> getAllReminder(List<LendingEntity> allLendings);
 }
