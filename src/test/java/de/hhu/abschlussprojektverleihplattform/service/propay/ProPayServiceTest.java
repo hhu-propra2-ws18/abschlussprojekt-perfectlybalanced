@@ -59,7 +59,8 @@ public class ProPayServiceTest {
                     .proPayAdapter
                     .createAccountIfNotAlreadyExistsAndIncreaseBalanceBy(user.getUsername(),1);
 
-            Assert.assertEquals(1, (long) this.proPayService.usersCurrentBalance(user.getUsername()));
+            Assert.assertEquals(1,
+                    (long) this.proPayService.usersCurrentBalance(user.getUsername()));
         } catch (Exception e) {
             Assert.fail();
         }
