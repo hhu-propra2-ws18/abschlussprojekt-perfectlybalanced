@@ -36,7 +36,7 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 * [x] Sinnvoll getestet.
 * [x] Travis CI Configuration
 * [x] mit docker-compose startbar
-* [ ] ist nur unter port 8080 erreichbar
+* [x] ist nur unter port 8080 erreichbar
 * [x] Dokumentation, die grundlegende Funktionen beschreibt
 * [x] Mit der ProPay REST-Schnittstelle interagieren
 
@@ -53,7 +53,7 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 ** [x] Für alle Interaktionen außer anmelden und registrieren muss man eingeloggt sein
 ** [x] Benutzer kann mit username und email angelegt werden
 ** [x] Mehrere Benutzer können die Anwendung gleichzeitig nutzen
-* [ ] Detailansicht
+* [x] Detailansicht
 ** [x] Titel,Beschreibung
 ** [ ] (optional) Fotos
 ** [x] Angaben zur Verfügbarkeit
@@ -76,7 +76,7 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 === TODO
 * [x] Ausleihprozess
 * [x] Bezahlvorgang
-* [ ] Benutzerkontenverwaltung:
+* [x] Benutzerkontenverwaltung:
 ** [x] Profil einsehen, mit Anzeige vom Propay Konto
 ** [ ] (optional) Profil bearbeiten
 ** [x] Geld auf das Propay Konto einzahlen

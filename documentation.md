@@ -4,15 +4,30 @@
 
 **Start der Anwendung**
 
-Sobald man die Anwendung <mit docker-compose up> gestartet hat,
+Sobald man die Anwendung mit docker-compose up gestartet hat,
 lässt sich unsere Anwendung mit dem Link http://localhost:8080/ öffnen.
 Mit diesem Link gelangt man auf die Startseite unserer Anwendung,
 auf der alle verfügbaren Produkte angezeigt werden.
 Um weitere Interaktionen durchzuführen, muss man eingeloggt sein.
 Falls man noch keinen Account besitzt, kann man in der Navigationbar oben Rechts auf Registrierung und sich registrieren lassen.
 Nach der Registrierung wird man automatisch angemeldet. Falls man bereits einen Account besitzt, so kann man sich unter Login anmelden.
-Nachdem man sich angemeldet hat, wird man auf seine Profilseite weitergeleitet
-Wenn man angemeldet ist kann man in der Navigationbar zwischen allen Produkten, den Produkten des Users, Produkte einstellen, Leih-Anfragen und dem Profil wechseln.
+Nachdem man sich angemeldet hat, wird man auf seine Profilseite weitergeleitet.
+Wenn man angemeldet ist kann man in der Navigationbar zwischen allen Produkten, den Produkten des Users, Produkte einstellen, Leih-Anfragen, Ausleihen des Users und dem Profil wechseln.
+
+In der Datenbank existieren bereits zwei User, die benutzt werden können,um die Anwendung auszuprobieren.
+Optional können noch beliebig viele neue User angestellt werden, die alle die Rolle *User* besitzen.
+
+***Rolle User***
+
+Username: sarah
+
+Passwort: sarah
+
+***Rolle Admin***
+
+Username: admin
+
+Passwort: admin
 
 **Benutzerverwaltung**
 
@@ -29,24 +44,26 @@ Nach dem Login/Registrierung wird man automatisch auf die Profilseite weitergele
 Auf der *Profilseite* stehen alle Informationen zum eingeloggten User.
 Außerdem wird das ProPay Konto mit dem Kontostand und der Möglichkeit Geld auf das Konto einzuzahlen angezeigt. 
 Werden Leihfristen nicht eingehalten, wird eine Liste der Versäumnisse aufgelistet.
+Zusätzlich findet man eine Historie aller bisherigen ProPay Transaktionen
 
 **Produkte ansehen**
 
-Auf der *Start* Seite werden alle Produkte mit deren Beschreibung und einen dazugehörigen Detaillink angezeigt.
+Auf der *Start* Seite werden alle Produkte mit deren Beschreibung, dem aktuellen Status und einen dazugehörigen Detaillink angezeigt.
 
 **Produktdetail**
 
-Auf der *Detailseite* angekommen, erhält man alle Informationen zum ausgewählten Produkt mit einem Button zum ausleihen.
-Wenn man das Produkt ausleihen möchte, klickt man auf den Button und die verleihende Person erhält eine Anfrage zum ausleihen unter *Leih-Anfragen*
-Alternativ befindet sich dort statdessen ein Button zum kaufen, jenachdem ob das Produkt zum Verleih oder zum Verkauf steht.
+Auf der *Detailseite* angekommen, erhält man alle Informationen zum ausgewählten Produkt.
+Je nachdem ob das Produkt verliehen oder verkauft wird, wird entweder der Button "Ausleihen" oder "Kaufen" angezeigt.
+Diese Buttons werden außerdem nur angezeigt, wenn der User, der sich das Produkt anschaut, nicht gleichzeitig der Besitzer des Produkts ist.
+Wenn man ein zum Verleih stehendes Produkt ausleihen möchte, klickt man auf den Button und an die verleihende Person wird eine Anfrage zum Ausleihen gesendet.
+Möchte man stattdessen ein zum Verkauf stehendes Produkt kaufen, klickt man auf den Button und muss auf einer weiteren Seite bestätigen, dass man dieses Produkt kaufen möchte.
 
 **Leih-Anfragen**
-<Todo Leih-Anfragen mit Zeitstempel>
 
-Wenn ein anderer User ein Produkt des eingeloggten Users ausleihen möchte,so erscheint auf der Seite *Leih-Anfragen* unter Leih Anfragen die Meldung, dass der User mit dem Username das ausgewählte Produkt ausleihen möchte.
+Wenn ein anderer User ein Produkt des eingeloggten Users ausleihen möchte, so erscheint auf der Seite *Leih-Anfragen* unter Leih Anfragen die Meldung, dass der User mit dem Username das ausgewählte Produkt für den Zeitraum ausleihen möchte.
 Der Besitzer kann nun entscheiden, ob er das Produkt verleiht oder nicht.
 Desweiteren befinden sich dort Meldungen für alle zurückgegebenen Produkte.
-Der Besitzer kann dort entscheiden, ob das Produkt in ordnungsgemäßem Zustand zurückgegeben wurde oder nicht.
+Der Besitzer kann nach der Rückgabe eines Produkts dort entscheiden, ob das Produkt in ordnungsgemäßem Zustand zurückgegeben wurde oder nicht.
 Damit wird entweder die Kaution des Leihenden wieder freigegeben und der Ausleihvorgang abgeschlossen,
 oder der Ausleihvorgang an die Konfliktlösungsstelle weitergeleitet.
 Unter den Leih Anfragen befindet sich außerdem noch die Historie aller Leihanfragen an den Besitzer mit dem jeweiligen Status.
@@ -62,8 +79,9 @@ Unter der Seite werden alle Produkte des Users mit dem Titel, der Beschreibung, 
 
 **Produkt einstellen**
 
-Um ein neues Produkt einzustellen, füllt man das gegebene Formular aus und klickt im Anschluss auf Erstellen
+Um ein neues Produkt einzustellen, füllt man das gegebene Formular aus und klickt im Anschluss auf Erstellen.
 Dabei muss man sich vor dem Ausfüllen entscheiden, ob man das Produkt verleihen oder verkaufen möchte.
+Durch den Validator wird gewährleistet, dass die eingegebenen Daten im Formular korrekt sind, damit nur vollständige Produkte erstellt werden können.
 
 **Produkt editieren**
 
@@ -75,6 +93,11 @@ Um die Änderungen zu übernehmen, klickt man auf den Button Bearbeiten.
 
 Um sich abzumelden, klickt man in der Navigationbar oben rechts auf Logout.
 
+**Konfliktlösungsstelle**
+
+Falls ein Produkt in einem schlechten Zustand zurückgegeben wird, kann der Verleihende einen Konflikt starten. Dieser wird dann in der Konfliktlösungsstelle angezeigt, die nur für User mit der Rolle *Admin* verfügbar ist.
+Dort kann der Admin eine Übersicht aller derzeitigen Konflikte sehen.
+Unter den Details des Konflikts findet der Admin die Kontaktdaten des Verleihenden und des Ausleihers, um sich per Mail an die Personen zu wenden und den Konflikt extern zu lösen. Nach der Lösung des Konflikts kann der Admin auswählen, ob der Verleiher oder der Ausleihende die Kaution erhält.
 
 ## Anmerkungen zu verschiedenen Bereichen des Projektes
 ### Anmerkungen der Geschäftslogik
@@ -84,15 +107,15 @@ In der Klasse LendingService werden alle Aktionen die den Verleihvorgang betreff
 während im SellService lediglich die Methode zur Kaufabwicklung ist.
 
 In der Klasse LendingService gibt es drei Kategorien von Methoden:
-Methoden die Teil der Geschäftsabwicklung sind,
-Methoden die Informationen für die Views bereitstellen ohne irgendwelche Daten zu ändern,
-und zwei private Methoden die weitere Funktionen zu den Timestamps bereitstellen.
+Methoden, die Teil der Geschäftsabwicklung sind,
+Methoden, die Informationen für die Views bereitstellen ohne irgendwelche Daten zu ändern,
+und zwei private Methoden, die weitere Funktionen zu den Timestamps bereitstellen.
 
 Die Methode getAvailableTime prüft für ein Produkt in welchen Zeiträumen es bereits belegt ist.
 Dabei werden die Zeiträume als Timespan ausgegeben,
 wobei ein Timespan Beginn und Ende der belegten Zeit als Timestamps enthält.
 
-Die Methode requestLending nimmt die Informationen aus dem Formular entgegen,
+Die Methode requestLending nimmt die Informationen aus dem Formular entgegen
 und prüft die Zeitangaben sowie den Kontostand des Benutzers.
 Die bereits belegten Zeiträume des Produkt werden dabei ausdrücklich nicht geprüft.
 Somit ist es möglich dass mehrere Nutzer eine Anfrage für den gleichen Zeitraum stellen,
@@ -101,7 +124,7 @@ der Besitzer des Produktes kann sich dann aussuchen wem er sein Produkt leihen m
 Die Methode acceptLendingRequest prüft nun ob das Produkt im entsprechenden Zeitraum verfügbar ist,
 sowie erneut ob der Leihende genügend Geld parat hat.
 Anschließend werden die Kosten sowie die Kaution reserviert.
-Waren beide Reservierungen erfolgreich, so werden die Kosten an den Besitzer des Produkten ausgezahlt,
+Waren beide Reservierungen erfolgreich, so werden die Kosten an den Besitzer des Produkten ausgezahlt
 und der Verleihvorgang bestätigt.
 Sollte die zweite Reservierungen fehlschlagen nachdem die erste erfolgreich war,
 so wird die erste Reservierungen wieder zurückgezahlt um das Konto in den vorherigen Zustand zurückzusetzen.
@@ -110,8 +133,8 @@ Die Methode denyLendingRequest lehnt eine Anfrage ab.
 
 Die Methode returnProduct ermöglicht es dem Leihenden anzugeben, dass er das geliehene Produkt zurückgegeben hat.
 
-Die Methode acceptReturnedProduct wird aufgerufen, wenn der Besitzer eines Produktes findet,
-das es in guten Zustand zurückgeben wurde.
+Die Methode acceptReturnedProduct wird aufgerufen, wenn der Besitzer eines Produktes der Meinung ist,
+dass es in einem guten Zustand zurückgeben wurde.
 Dann wird die Kaution an den Leihenden zurückgezahlt, und der Ausleihvorgang abgeschlossen.
 
 Die Methode denyReturnedProduct markiert den Ausleihvorgang als Konflikt,
@@ -140,9 +163,9 @@ Dabei wird der Wert aufgerundet, da jeder angefangene Tag bezahlt werden muss.
 Die Methode getThisMorning nimmt den aktuellen Timestamp (der Systemzeit) und entfernt die Uhrzeit aus diesem,
 indem der Wert ganzzahlig durch die Länge eines Tages geteilt wird,
 und anschließend mit diesem wieder multipliziert wird.
-Diese Methode dient lediglich der Prüfung ob ein Datum in der Vergangenheit liegt,
+Diese Methode dient lediglich der Prüfung, ob ein Datum in der Vergangenheit liegt,
 ansonsten hat sie keinerlei Einfluss auf die Logik.
-Daher ist es auch nicht alzu schlimm, dass sich diese Methode nicht vernünftig testen lässt:
+Daher ist es auch nicht allzu schlimm, dass sich diese Methode nicht vernünftig testen lässt:
 Würde ich diese Methode nur mit eigenem Code testen, so würde im Test der gleiche Code stehen wie in der Anwendung,
 was den Sinn des Testes damit aufhebt.
 Sollte ich einen Denkfehler in der Berechnung machen, so würde es sowohl in der Anwendung als auch im Test vorkommen,
@@ -150,7 +173,7 @@ und der Test würde somit auch im Fehlerfall erfolgreich durchlaufen.
 Daher habe ich beim Testen LocalDateTime usw verwendet, welche allerdings sehr abhängig von Zeitzonen usw sind.
 Lokal bei mir läuft der Tests ohne Probleme durch, und Tests mit der Laufenden Anwendung zeigen das auch dort die Methode funktioniert,
 aber auf TravisCI läuft der Test nicht durch.
-Ich vermute das die Server von TravisCI in einer anderen Zeitzone stehen und der Fehler daher kommt.
+Ich vermute, dass die Server von TravisCI in einer anderen Zeitzone stehen und der Fehler daher kommt.
 Folglich musste ich den Test wieder deaktivieren, damit die TravisCI-Tests ordnungsgemäß durchlaufen können.
 
 In der Klasse SellService befindet sich nur eine Methode: buyProduct.
