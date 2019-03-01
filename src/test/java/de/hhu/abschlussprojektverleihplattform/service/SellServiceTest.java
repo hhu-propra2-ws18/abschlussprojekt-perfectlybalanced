@@ -48,7 +48,10 @@ public class SellServiceTest {
         }
 
         Assert.assertFalse(productRepository.getHasBeenUpdated());
-        Assert.assertEquals("This Product can only be lend, not bought.", result.getMessage());
+        Assert.assertEquals(
+            "Dieses Produkt kann nur geliehen, nicht gekauft werden",
+            result.getMessage()
+        );
     }
 
     @Test
@@ -70,7 +73,7 @@ public class SellServiceTest {
         }
 
         Assert.assertFalse(productRepository.getHasBeenUpdated());
-        Assert.assertEquals("This Product already has been sold.", result.getMessage());
+        Assert.assertEquals("Dieses Produkt wurde bereits verkauft.", result.getMessage());
     }
 
     @Test
@@ -93,8 +96,8 @@ public class SellServiceTest {
         }
 
         Assert.assertFalse(productRepository.getHasBeenUpdated());
-        Assert.assertEquals("The cost and the surety sum up to: "
-                + 40 + "€, but you only have: " + 30 + "€.", result.getMessage());
+        Assert.assertEquals("Dieses Produkt kostet: " + 40
+                + "€, aber sie haben nur: " + 30 + "€ auf ihrem Konto.", result.getMessage());
     }
 
     @Test

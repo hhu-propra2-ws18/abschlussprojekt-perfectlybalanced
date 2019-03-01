@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
+import de.hhu.abschlussprojektverleihplattform.model.Timespan;
 import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
