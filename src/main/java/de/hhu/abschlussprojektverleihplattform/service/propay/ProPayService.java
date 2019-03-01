@@ -5,12 +5,10 @@ import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
-import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -62,16 +60,11 @@ public class ProPayService implements IPaymentService {
 
         long interval_to_check = 10000;
 
-        if(last_checked_availability_milliseconds-current_time > interval_to_check) {
+        if((current_time-last_checked_availability_milliseconds) > interval_to_check) {
 
             last_checked_availability_milliseconds=current_time;
 
-            System.out.println("checking for propay availability");
-
-            URL u = new URL(proPayAdapter.baseurl);
-            InputStream in = u.openStream();
-            String s = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            in.close();
+            check_available();
 
             was_available_recently=true;
         }else{
@@ -79,6 +72,15 @@ public class ProPayService implements IPaymentService {
                 throw new Exception("ProPay not available");
             }
         }
+    }
+
+    private void check_available() throws Exception{
+        System.out.println("checking for propay availability");
+
+        URL u = new URL(proPayAdapter.baseurl);
+        InputStream in = u.openStream();
+        String s = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        in.close();
     }
 
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
