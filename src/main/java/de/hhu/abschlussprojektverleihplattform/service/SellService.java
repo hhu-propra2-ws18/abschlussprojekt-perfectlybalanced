@@ -28,15 +28,15 @@ public class SellService implements ISellService {
 
     public void buyProduct(UserEntity actingUser, ProductEntity product) throws Exception {
         if(product.getStatus().equals(Productstatus.forLending)){
-            throw new Exception("This Product can only be lend, not bought.");
+            throw new Exception("Dieses Produkt kann nur geliehen, nicht gekauft werden");
         }
         if(product.getStatus().equals(Productstatus.sold)){
-            throw new Exception("This Product already has been sold.");
+            throw new Exception("Dieses Produkt wurde bereits verkauft.");
         }
         Long userMoney = paymentService.usersCurrentBalance(actingUser.getUsername());
         if (userMoney < product.getPrice()) {
-            throw new Exception("The cost and the surety sum up to: "
-                    + product.getPrice() + "€, but you only have: " + userMoney + "€.");
+            throw new Exception("Dieses Prddukt kostet: " + product.getPrice()
+                    + "€, aber sie haben nur: " + userMoney + "€ auf ihrem Konto.");
         }
         Long paymentID = paymentService.reservateAmount(
             actingUser.getUsername(),
