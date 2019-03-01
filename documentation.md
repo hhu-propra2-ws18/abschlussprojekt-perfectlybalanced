@@ -159,3 +159,24 @@ nur Kleinigkeiten haben überlebt.
 zB. Mutationen wie if (userMoney < totalMoney) --> if (userMoney <= totalMoney) haben überlebt,
 aber derartige Mutationen kann man nur mit erheblichem Aufwand testen,
 welche sich bei derartigen Kleinigkeiten einfach nicht lohnt.
+
+## Anmerkungen zur Datenbank
+
+Wir haben uns für eine H2-Datenbank entscheiden, da diese allen Teammitgliedern bekannt war und diese von Springboot nativ unterstützt wird.
+So war sichergestellt, dass wir schnell mit der Entwicklung beginnen konnten, ohne die Datenbank aufwendig zu konfigurieren.
+
+Ursprüglich war am Anfang des Projekts der Plan,
+die Datenbankkommunikation ohne die Hilfe eines Frameworks zu realisieren. Dieser Plan wurde jedoch schnell verworfen, da der Arbeitsaufwand 
+doch zu hoch war. Um dennoch die maximale Kontrolle zu behalten, haben wir uns dafür entschieden, die Tabellen mit JPA erstellen zu lassen. Weiterhin 
+verwaltet die Kommunikation das JDBC-Template. So konnten wir die Datenbankabfragen selber schreiben, ohne uns Sorgen machen zu müssen, die Verbindungen zur
+Datenbank verwalten zu müssen.
+
+## Anmerkungen zur Umsetzung des Kaufen-Features
+
+Um das Kaufen-Feature in unsere Applikation zu integrierern, haben wir in die Entität Produkt das Feld "status" hinzugefügt. Dieses ist ein Enum, welches 
+drei Werte enthält (forBuying, forLending, sold). 
+Weiterhin haben wir dann die View zu Einstellen eines Produktes angepasst. Man entscheidet sich im Vorfeld ob man ein Produkt verkaufen oder verleihen möchte.
+In Abhängigkeit dieser Entscheidung wird dann eine View angezeigt, in welcher man entweder den Kaufpreis oder die Kaution sowie Verleihkosten angeben kann.
+Beim Einstellen des Produkts wird dann der jeweilige Status gespeichert.
+
+Kauft man ein Produkt, verschwindet dieses aus der Produktübersicht.
