@@ -119,7 +119,9 @@ public class LendingService implements ILendingService {
                 * daysBetweenTwoTimestamps(lending.getStart(), lending.getEnd());
         Long userMoney = paymentService.usersCurrentBalance(lending.getBorrower().getUsername());
         if (userMoney < totalMoney) {
-            throw new Exception("Der Leihende hat momentan nicht genügend Geld für den Leihvorgang.");
+            throw new Exception(
+                "Der Leihende hat momentan nicht genügend Geld für den Leihvorgang."
+            );
         }
         Long costID = paymentService.reservateAmount(
             lending.getBorrower().getUsername(),
