@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -48,6 +48,8 @@ public class ProductLendingRequestsControllerTest {
     @Autowired
     AuthenticatedUserService authenticatedUserService;
 
+    private Random randomID = new Random();
+
     @Test
     public void contexLoads() {
         assertThat(controller).isNotNull();
@@ -56,7 +58,7 @@ public class ProductLendingRequestsControllerTest {
     @Test
     public void testcontrolleristhere() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -72,17 +74,17 @@ public class ProductLendingRequestsControllerTest {
     @Test
     public void rejectRequest() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
+        lending.setId(randomID.nextLong());
         lending.setStatus(Lendingstatus.requested);
         System.out.println(lending);
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
         mockMvc.perform(post(
-                ProductLendingRequestsController.lendingRequestsRejectURL +"?id=2")
+                ProductLendingRequestsController.lendingRequestsRejectURL +"?id=" +lending.getId())
                 .with(csrf())
                 .with(user(authenticatedUserService.loadUserByUsername(
                         randomUser.getUsername()
@@ -90,16 +92,16 @@ public class ProductLendingRequestsControllerTest {
         )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(ProductLendingRequestsController.class));
-        verify(lendingService).getLendingById(2L);
+        verify(lendingService).getLendingById(lending.getId());
         verify(lendingService).denyLendingRequest(null);
     }
 
     @Test
     public void acceptRequest() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
         LendingEntity lending = new LendingEntity();
-        lending.setId(2L);
+        lending.setId(randomID.nextLong());
         lending.setStatus(Lendingstatus.requested);
         System.out.println(lending);
 
@@ -107,14 +109,14 @@ public class ProductLendingRequestsControllerTest {
 
         mockMvc
             .perform(post(
-                ProductLendingRequestsController.lendingRequestsAcceptURL+"?id=2")
+                ProductLendingRequestsController.lendingRequestsAcceptURL+"?id=" +lending.getId())
                 .with(csrf())
                 .with(user(authenticatedUserService
                     .loadUserByUsername(randomUser.getUsername()))))
             .andExpect(status().is3xxRedirection())
             .andExpect(handler().handlerType(ProductLendingRequestsController.class));
 
-        verify(lendingService).getLendingById(2L);
+        verify(lendingService).getLendingById(lending.getId());
         verify(lendingService).acceptLendingRequest(null);
     }
 }

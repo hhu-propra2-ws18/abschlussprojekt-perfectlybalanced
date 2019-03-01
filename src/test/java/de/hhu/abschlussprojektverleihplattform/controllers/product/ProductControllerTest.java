@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
@@ -55,13 +56,15 @@ public class ProductControllerTest {
     @Autowired
     AuthenticatedUserService authenticatedUserService;
 
+    private Random randomID = new Random();
+
     @Test
     public void testDetailsControllerIsThere() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
-        product.setId(1L);
+        product.setId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
         when(productService.getById(product.getId())).thenReturn(product);
@@ -80,7 +83,7 @@ public class ProductControllerTest {
     @Test
     public void testAddControllerIsThere() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -98,7 +101,7 @@ public class ProductControllerTest {
     @Test
     public void testAddSellingControllerIsThere() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -118,7 +121,7 @@ public class ProductControllerTest {
     @Test
     public void testAddLendingControllerIsThere() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -139,11 +142,11 @@ public class ProductControllerTest {
     @Test
     public void testEditControllerIsThereSellingProduct() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
         product.setStatus(Productstatus.forBuying);
-        product.setId(1L);
+        product.setId(randomID.nextLong());
 
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
@@ -164,11 +167,11 @@ public class ProductControllerTest {
     @Test
     public void testEditControllerIsThereLendingProduct() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
         product.setStatus(Productstatus.forLending);
-        product.setId(1L);
+        product.setId(randomID.nextLong());
 
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
@@ -190,13 +193,13 @@ public class ProductControllerTest {
     @Test
     public void testMyProductsControllerIsThere() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
         AddressEntity address1 = RandomTestData.newRandomTestAddress();
         ProductEntity product1 = RandomTestData.newRandomTestProduct(randomUser, address1);
-        product1.setId(1L);
+        product1.setId(randomID.nextLong());
         AddressEntity address2 = RandomTestData.newRandomTestAddress();
         ProductEntity product2 = RandomTestData.newRandomTestProduct(randomUser, address2);
-        product2.setId(2L);
+        product2.setId(randomID.nextLong());
         List<ProductEntity> products = new ArrayList<>();
         products.add(product1);
         products.add(product2);
@@ -220,7 +223,7 @@ public class ProductControllerTest {
     @Test
     public void testPostValidProductAddSelling() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -244,7 +247,7 @@ public class ProductControllerTest {
     @Test
     public void testPostValidProductAddLending() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -269,7 +272,7 @@ public class ProductControllerTest {
     @Test
     public void testPostProductAddSellingWrongTitle() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -293,7 +296,7 @@ public class ProductControllerTest {
     @Test
     public void testPostProductAddLendingWrongTitle() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -318,7 +321,7 @@ public class ProductControllerTest {
     @Test
     public void testPostProductAddSellingWrongPrice() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -343,7 +346,7 @@ public class ProductControllerTest {
     @Test
     public void testPostProductAddLendingWrongCost() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -368,7 +371,7 @@ public class ProductControllerTest {
     @Test
     public void testPostProductAddSellingWrongStreet() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -392,7 +395,7 @@ public class ProductControllerTest {
     @Test
     public void testPostProductAddLendingWrongStreet() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
 
@@ -418,11 +421,11 @@ public class ProductControllerTest {
     @Test
     public void testPostValidProductEditSelling() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
         product.setStatus(Productstatus.forBuying);
-        product.setId(1L);
+        product.setId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
         when(productService.getById(product.getId())).thenReturn(product);
@@ -447,11 +450,11 @@ public class ProductControllerTest {
     @Test
     public void testPostValidProductEditLending() throws Exception {
         UserEntity randomUser = RandomTestData.newRandomTestUser();
-        randomUser.setUserId(1L);
+        randomUser.setUserId(randomID.nextLong());
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(randomUser, address);
         product.setStatus(Productstatus.forLending);
-        product.setId(1L);
+        product.setId(randomID.nextLong());
 
         when(userService.findByUsername(randomUser.getUsername())).thenReturn(randomUser);
         when(productService.getById(product.getId())).thenReturn(product);
@@ -484,10 +487,10 @@ public class ProductControllerTest {
         String url = "/buyrequests/sendRequest?id=";
 
         UserEntity user = RandomTestData.newRandomTestUser();
-        user.setUserId(1L);
+        user.setUserId(randomID.nextLong());
         AddressEntity address = RandomTestData.newRandomTestAddress();
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
-        product.setId(1L);
+        product.setId(randomID.nextLong());
 
         when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(user);
         when(productService.getById(ArgumentMatchers.anyLong())).thenReturn(product);

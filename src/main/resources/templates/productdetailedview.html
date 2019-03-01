@@ -42,12 +42,14 @@
                     </li>
                 </ul>
 
-                <div class="card" th:each="zeitraum : ${ListOfStrings}">
+                <div class="card" th:if="${ListOfReservatedTimes.isEmpty() == false}">
                     <div class="card-header">
                         <p >Belegter Zeitraum</p>
                     </div>
-                    <div class="card-body">
-                        <span th:text="${zeitraum}">fertig</span>
+                    <div class="card-body" th:each="zeitraum : ${ListOfReservatedTimes}">
+                        <span th:text="${#dates.format(zeitraum.start, 'dd.MM.yyyy')}"></span>
+                        <span>bis</span>
+                        <span th:text="${#dates.format(zeitraum.end, 'dd.MM.yyyy')}"></span>
                     </div>
                 </div>
 
