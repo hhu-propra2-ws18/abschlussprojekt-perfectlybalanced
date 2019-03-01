@@ -14,17 +14,17 @@ public class TransactionService implements ITransactionService {
     TransactionRepository transactionRepository;
 
     @Override
-    public TransactionEntity findById (Long transactionId) {
+    public TransactionEntity findById(Long transactionId) {
         return transactionRepository.findById(transactionId);
     }
 
     @Override
-    public List<TransactionEntity> getAllTransactionsFromUser (Long userId) {
+    public List<TransactionEntity> getAllTransactionsFromUser(Long userId) {
         return transactionRepository.getAllTransactionsFromUser(userId);
     }
 
     @Override
-    public void addTransaction (TransactionEntity transaction) {
+    public void addTransaction(TransactionEntity transaction) {
         transactionRepository.addTransaction(transaction);
     }
 

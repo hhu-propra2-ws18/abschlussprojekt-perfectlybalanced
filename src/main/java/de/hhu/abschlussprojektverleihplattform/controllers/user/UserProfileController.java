@@ -40,7 +40,8 @@ public class UserProfileController {
     @GetMapping("/profile")
     public String getProfile(Model model, Authentication auth) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
-        List<TransactionEntity> transactions = transactionService.getAllTransactionsFromUser(user.getUserId());
+        List<TransactionEntity> transactions = transactionService
+                .getAllTransactionsFromUser(user.getUserId());
         List<LendingEntity> getUserLendings = lendingService.getAllLendingsForUser(user);
         List<LendingEntity> reminder = lendingService.getAllReminder(getUserLendings);
         model.addAttribute("user", user);
