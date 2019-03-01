@@ -44,6 +44,7 @@ Nach dem Login/Registrierung wird man automatisch auf die Profilseite weitergele
 Auf der *Profilseite* stehen alle Informationen zum eingeloggten User.
 Außerdem wird das ProPay Konto mit dem Kontostand und der Möglichkeit Geld auf das Konto einzuzahlen angezeigt. 
 Werden Leihfristen nicht eingehalten, wird eine Liste der Versäumnisse aufgelistet.
+Zusätzlich findet man eine Historie aller bisherigen ProPay Transaktionen
 
 **Produkte ansehen**
 
