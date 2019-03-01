@@ -20,9 +20,17 @@ public class RandomTestData {
     public static AddressEntity newRandomTestAddress() {
         Random random = new Random();
         return new AddressEntity(RandomStringUtils.randomAlphabetic(10),
-                random.nextInt(),
+                random.nextInt() + RandomStringUtils.randomAlphabetic(1),
                 random.nextInt(10000) + 9999,
                 RandomStringUtils.randomAlphabetic(10));
+    }
+
+    public static TransactionEntity newRandomTestTransaction(UserEntity sender,UserEntity receiver){
+        Random random = new Random();
+        return new TransactionEntity(sender,
+                receiver,
+                random.nextInt(1000),
+                new Timestamp(System.currentTimeMillis()));
     }
 
     public static ProductEntity newRandomTestProduct(UserEntity owner, AddressEntity address) {
