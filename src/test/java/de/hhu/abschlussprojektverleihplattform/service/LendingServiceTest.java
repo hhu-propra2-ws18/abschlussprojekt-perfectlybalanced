@@ -59,7 +59,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "This Product can only be bought, not lend.",
+            "Dieses Produkt kann nur gekauft, nicht geliehen werden.",
             result.getMessage()
         );
     }
@@ -83,7 +83,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "This Product can only be bought, not lend.",
+            "Dieses Produkt kann nur gekauft, nicht geliehen werden.",
             result.getMessage()
         );
     }
@@ -106,7 +106,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "You can't lend a product for an instant",
+            "Start und Ende der Ausleihe dürfen nicht identisch sein.",
             result.getMessage()
         );
     }
@@ -129,8 +129,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "If you are searching for a Bug, there is non here. "
-            + "The end-date must be after the start-date, you genius!",
+            "Falls sie einen Bug suchen, hier ist keiner. "
+            + "Das Ende muss nach dem Start sein, sie Genie!",
             result.getMessage()
         );
     }
@@ -155,8 +155,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "You can't change the Past. "
-            + "You have to borrow the product after the current time.",
+            "Sie können die Vergangenheit nicht ändern. "
+            + "Sie müssen das Produkt nach dem aktuellen Zeitpunkt ausleihen.",
             result.getMessage()
         );
     }
@@ -182,8 +182,8 @@ public class LendingServiceTest {
 
         int totalMoney = product.getSurety() + product.getCost() * 5;
         Assert.assertEquals(
-            "The cost and the surety sum up to: "
-            + totalMoney + "€, but you only have: " + 0L + "€.",
+            "Die Kosten und die Kaution ergeben zusammen: "
+            + totalMoney + "€, aber sie haben nur: " + 0L + "€ auf ihrem Konto.",
             result.getMessage()
         );
     }
@@ -271,8 +271,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.requested,
+            "Die Ausleihe musste den Status: " + Lendingstatus.requested
+            + " haben, aber hat den Status: " + Lendingstatus.done,
             result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -320,7 +320,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -366,7 +366,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -412,7 +412,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -458,7 +458,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -502,7 +502,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Product is not available in the selected time.",
+            "Das Produkt ist innerhalb des Zeitraums bereits vergeben.",
             result.getMessage()
         );
     }
@@ -574,7 +574,7 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The borrower currently hasn't enough money for the lending",
+            "Der Leihende hat momentan nicht genügend Geld für den Leihvorgang.",
             result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -802,8 +802,8 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.requested,
+            "Die Ausleihe musste den Status: " + Lendingstatus.requested
+            + " haben, aber hat den Status: " + Lendingstatus.done,
             result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
@@ -868,9 +868,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.confirmt,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.confirmt
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -938,9 +938,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.returned,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.returned
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1052,9 +1052,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.returned,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.returned
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1122,9 +1122,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.conflict,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1239,9 +1239,9 @@ public class LendingServiceTest {
         }
 
         Assert.assertEquals(
-            "The Lending has the Status: " + Lendingstatus.done
-            + " but it needs to be: " + Lendingstatus.conflict,
-            result.getMessage()
+                "Die Ausleihe musste den Status: " + Lendingstatus.conflict
+                        + " haben, aber hat den Status: " + Lendingstatus.done,
+                result.getMessage()
         );
         Assert.assertFalse(lending_repository.hasBeenUpdated());
         Assert.assertEquals(Lendingstatus.done, lending.getStatus());
@@ -1384,11 +1384,6 @@ public class LendingServiceTest {
 
     // Test for getThisMorning
 
-    //Testing this method is very difficult, since without the Usage of LocalDateTime etc
-    // i would have to write the same code i used inside the method.
-    //And that would make the Test senseless.
-    //The Test with LocalDateTime etc runs local, but i doent work on TravisCI,
-    // LocalDateTime etc work different there.
     //@Test
     public void getThisMornig1() {
         LocalDateTime thisMornigDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0));

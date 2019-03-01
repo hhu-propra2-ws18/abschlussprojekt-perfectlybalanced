@@ -11,6 +11,9 @@
 - mailto:alexander.hansen@hhu.de[Alexander Hansen]
 - mailto:thbar105@uni-duesseldorf.de[Thomas]
 
+== Anwendung starten
+Die Anwendung kann mit docker-compose up gestartet werden. Auf die Startseite gelang man, wenn man http://localhost:8080/ aufruft.
+
 === Raumplanung
 25.41.U1.22 +
 Ausnahme am 21.02.2019: 25.13.U1.24
@@ -32,9 +35,9 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 * [x] Datenbank soll in einem Container laufen können
 * [x] Sinnvoll getestet.
 * [x] Travis CI Configuration
-* [ ] mit docker-compose startbar
+* [x] mit docker-compose startbar
 * [ ] ist nur unter port 8080 erreichbar
-* [ ] Dokumentation, die grundlegende Funktionen beschreibt
+* [x] Dokumentation, die grundlegende Funktionen beschreibt
 * [x] Mit der ProPay REST-Schnittstelle interagieren
 
 
@@ -44,24 +47,24 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 
 
 === Minimalanforderungen
-* [ ] Benutzerverwaltung
+* [x] Benutzerverwaltung
 ** [x] Unterschiedliche Benutzerkonten
 ** [x] Benutzer anmelden, abmelden
-** [ ] Für alle Interaktionen außer anmelden und registrieren muss man eingeloggt sein
+** [x] Für alle Interaktionen außer anmelden und registrieren muss man eingeloggt sein
 ** [x] Benutzer kann mit username und email angelegt werden
 ** [x] Mehrere Benutzer können die Anwendung gleichzeitig nutzen
 * [ ] Detailansicht
 ** [x] Titel,Beschreibung
 ** [ ] (optional) Fotos
-** [ ] Angaben zur Verfügbarkeit
+** [x] Angaben zur Verfügbarkeit
 ** [x] Kaution, Kosten der Ausleihe
 ** [x] Angaben zum Standort
 ** [ ] (optional) Karte zum Standort
 ** [x] Angaben zur verleihenden Person
 ** [x] Button um den Ausleihprozess zu starten
-* [ ] Übersicht der Artikel
+* [x] Übersicht der Artikel
 ** [x] Übersicht mit Links zur Detailansicht der Artikel
-* [ ] Einstellen eines Artikels
+* [x] Einstellen eines Artikels
 ** [x] Titel
 ** [x] Beschreibung
 ** [ ] (optional) Fotos
@@ -71,16 +74,16 @@ und welche davon implementiert bzw. noch nicht implementiert sind.
 
 
 === TODO
-* [ ] Ausleihprozess
-* [ ] Bezahlvorgang
+* [x] Ausleihprozess
+* [x] Bezahlvorgang
 * [ ] Benutzerkontenverwaltung:
 ** [x] Profil einsehen, mit Anzeige vom Propay Konto
 ** [ ] (optional) Profil bearbeiten
-** [ ] Geld auf das Propay Konto einzahlen
-** [ ] Verlauf der Transaktionen einsehen
-* [ ] Konfliktloesungsstelle:
-** [ ] Admin soll Kaution im Streitfall zuweisen können
-* [ ] ProPay
+** [x] Geld auf das Propay Konto einzahlen
+** [x] Verlauf der Transaktionen einsehen
+* [x] Konfliktloesungsstelle:
+** [x] Admin soll Kaution im Streitfall zuweisen können
+* [x] ProPay
 ** [x] ProPay muss per Docker als Service eingebunden sein
 
 ==== Optionale Erweiterungen
