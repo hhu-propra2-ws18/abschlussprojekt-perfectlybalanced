@@ -65,11 +65,12 @@ public class ProductController {
     }
 
     @PostMapping("/addproductlending")
-    public String postLendProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
-                                  BindingResult bindingResultProduct,
-                                  @ModelAttribute("address") @Valid AddressEntity addressEntity,
-                                  BindingResult bindingResultAddress,
-                                  @ModelAttribute("user") UserEntity userEntity) {
+    public String postLendProduct(
+        @ModelAttribute("product") @Valid ProductEntity productEntity,
+        BindingResult bindingResultProduct,
+        @ModelAttribute("address") @Valid AddressEntity addressEntity,
+        BindingResult bindingResultAddress,
+        @ModelAttribute("user") UserEntity userEntity) {
 
         if (bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "addproductlending";
@@ -83,11 +84,12 @@ public class ProductController {
     }
 
     @PostMapping("/addproductselling")
-    public String postSellProduct(@ModelAttribute("product") @Valid ProductEntity productEntity,
-                                  BindingResult bindingResultProduct,
-                                  @ModelAttribute("address") @Valid AddressEntity addressEntity,
-                                  BindingResult bindingResultAddress,
-                                  @ModelAttribute("user") UserEntity userEntity) {
+    public String postSellProduct(
+        @ModelAttribute("product") @Valid ProductEntity productEntity,
+        BindingResult bindingResultProduct,
+        @ModelAttribute("address") @Valid AddressEntity addressEntity,
+        BindingResult bindingResultAddress,
+        @ModelAttribute("user") UserEntity userEntity) {
 
         if (bindingResultProduct.hasErrors() || bindingResultAddress.hasErrors()) {
             return "addproductselling";
@@ -101,9 +103,10 @@ public class ProductController {
     }
 
     @GetMapping("/editproduct/{id}")
-    public String getEditProduct(Model model,
-                                 @PathVariable Long id,
-                                 @ModelAttribute("user") UserEntity userEntity) {
+    public String getEditProduct(
+        Model model,
+        @PathVariable Long id,
+        @ModelAttribute("user") UserEntity userEntity) {
         ProductEntity product = productService.getById(id);
         if (product != null && product.getOwner().getUserId().equals(userEntity.getUserId())) {
             model.addAttribute("product", product);
@@ -176,9 +179,10 @@ public class ProductController {
     }
 
     @PostMapping("/buyrequests/sendRequest")
-    public String performBuyRequest(Model model,
-                                    @RequestParam Long id,
-                                    Authentication auth
+    public String performBuyRequest(
+        Model model,
+        @RequestParam Long id,
+        Authentication auth
     ) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
         ProductEntity product = productService.getById(id);
