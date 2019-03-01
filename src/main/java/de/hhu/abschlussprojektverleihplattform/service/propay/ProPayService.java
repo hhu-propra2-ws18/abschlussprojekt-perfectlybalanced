@@ -8,6 +8,10 @@ import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.io.InputStream.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,6 +50,40 @@ public class ProPayService implements IPaymentService {
         for(String username : usernames){
             create_account_if_not_exists(username);
         }
+    }
+
+    private long interval_to_check = 10000;
+
+    private boolean was_available_recently = false;
+    private long last_checked_availability_milliseconds
+            =System.currentTimeMillis()-(interval_to_check*2);
+
+    public void isAvailable() throws Exception {
+
+        long current_time = System.currentTimeMillis();
+
+
+
+        if((current_time-last_checked_availability_milliseconds) > interval_to_check) {
+
+            last_checked_availability_milliseconds=current_time;
+
+            check_available();
+
+            was_available_recently=true;
+        }else{
+            if(!was_available_recently){
+                throw new Exception("ProPay not available");
+            }
+        }
+    }
+
+    private void check_available() throws Exception{
+        System.out.println("checking for propay availability");
+
+        URL u = new URL(proPayAdapter.baseurl);
+        InputStream in = u.openStream();
+        in.close();
     }
 
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
