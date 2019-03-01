@@ -77,8 +77,9 @@ Methoden die Teil der Geschäftsabwicklung sind,
 Methoden die Informationen für die Views bereitstellen ohne irgendwelche Daten zu ändern,
 und zwei private Methoden die weitere Funktionen zu den Timestamps bereitstellen.
 
-Die Methode getAvailabilityStrings prüft für ein Produkt in welchen Zeiträumen es bereits belegt ist.
-Dabei werden die Zeiträume als formatierte Strings ausgegeben, um dierekt in den Views verwendet werde zu können.
+Die Methode getAvailableTime prüft für ein Produkt in welchen Zeiträumen es bereits belegt ist.
+Dabei werden die Zeiträume als Timespan ausgegeben,
+wobei ein Timespan Beginn und Ende der belegten Zeit als Timestamps enthält.
 
 Die Methode requestLending nimmt die Informationen aus dem Formular entgegen,
 und prüft die Zeitangaben sowie den Kontostand des Benutzers.
