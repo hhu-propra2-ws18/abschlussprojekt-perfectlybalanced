@@ -516,18 +516,41 @@ public class ProductControllerTest {
 
         UserEntity user = RandomTestData.newRandomTestUser();
         user.setUserId(randomID.nextLong());
-        AddressEntity address = RandomTestData.newRandomTestAddress();
-        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
-        product.setId(randomID.nextLong());
 
         when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(user);
 
         // Act & Assert
         mockMvc
-            .perform(get(url + product.getId())
+            .perform(get(url + "9999999")
                 .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
                 .with(csrf()))
-            .andExpect(status().is5xxServerError());
+            .andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void testGoToBuyPostIsSuccessful() throws Exception {
+        // Arrange
+        String url = "/buyrequests/sendRequest?id=";
+
+        UserEntity user = RandomTestData.newRandomTestUser();
+        user.setUserId(randomID.nextLong());
+        AddressEntity address = RandomTestData.newRandomTestAddress();
+        ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
+        product.setId(randomID.nextLong());
+
+        when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(user);
+        when(productService.getById(ArgumentMatchers.anyLong())).thenReturn(product);
+        Mockito
+            .doNothing()
+            .when(sellService)
+            .buyProduct(ArgumentMatchers.any(UserEntity.class), ArgumentMatchers.any(ProductEntity.class));
+
+        // Act & Assert
+        mockMvc
+            .perform(post(url + product.getId())
+                .with(user(authenticatedUserService.loadUserByUsername(user.getUsername())))
+                .with(csrf()))
+            .andExpect(status().is3xxRedirection());
     }
 
 }
