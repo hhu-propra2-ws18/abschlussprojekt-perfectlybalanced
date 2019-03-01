@@ -2,12 +2,14 @@ package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
 
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
 import de.hhu.abschlussprojektverleihplattform.security.AuthenticatedUserService;
 import de.hhu.abschlussprojektverleihplattform.service.UserService;
 import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Random;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -43,9 +46,7 @@ public class UserProfileControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
-
-    private Random randomID = new Random();
+    TransactionRepository transactionRepository;
 
     @Before
     public void setup() {
@@ -63,6 +64,10 @@ public class UserProfileControllerTest {
     @Autowired
     AuthenticatedUserService authenticatedUserService;
 
+    @MockBean
+    UserService userService;
+
+    private Random randomID = new Random();
 
     @Test
     public void testControllerIsThere() throws Exception {
@@ -87,6 +92,8 @@ public class UserProfileControllerTest {
         user.setUserId(randomID.nextLong());
 
         when(userService.findByUsername(user.getUsername())).thenReturn(user);
+
+        Mockito.doNothing().when(transactionRepository).addTransaction(any());
 
         mockMvc
             .perform(post("/profile/deposit")

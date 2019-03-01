@@ -1,14 +1,15 @@
 package de.hhu.abschlussprojektverleihplattform.service.propay;
 
+import de.hhu.abschlussprojektverleihplattform.repository.TransactionRepository;
+import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ProPayService implements IPaymentService {
@@ -22,7 +23,14 @@ public class ProPayService implements IPaymentService {
     @Autowired
     ProPayAdapter proPayAdapter;
 
-    private ProPayService(){}
+    private final TransactionRepository transactionRepository;
+    private final UserRepository userRepository;
+
+    private ProPayService(TransactionRepository transactionRepository,
+                          UserRepository userRepository){
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
+    }
 
     private void create_account_if_not_exists(String username) throws Exception{
         //we can call this method before others to make sure propay knows of
