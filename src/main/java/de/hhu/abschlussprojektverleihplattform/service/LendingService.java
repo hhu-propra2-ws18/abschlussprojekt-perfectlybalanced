@@ -1,6 +1,6 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
-import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
+import de.hhu.abschlussprojektverleihplattform.model.Timespan;
 import de.hhu.abschlussprojektverleihplattform.model.*;
 import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
 import de.hhu.abschlussprojektverleihplattform.repository.ITransactionRepository;
@@ -8,10 +8,8 @@ import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymen
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

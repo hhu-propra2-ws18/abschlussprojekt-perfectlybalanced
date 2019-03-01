@@ -1,4 +1,4 @@
-package de.hhu.abschlussprojektverleihplattform.logic;
+package de.hhu.abschlussprojektverleihplattform.model;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
