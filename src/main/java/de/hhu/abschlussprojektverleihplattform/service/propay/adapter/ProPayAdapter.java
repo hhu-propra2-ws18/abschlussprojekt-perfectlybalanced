@@ -27,7 +27,7 @@ import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtil.
 public class ProPayAdapter implements IProPayAdapter {
 
     @Value("${propaybaseurl}")
-    private String baseurl;
+    public String baseurl;
 
     private final UserService userService;
     private final TransactionRepository transactionRepository;
@@ -201,10 +201,6 @@ public class ProPayAdapter implements IProPayAdapter {
                 return null;
             }
         }
-    }
-
-    public void getDefaultRoute() throws Exception{
-        HttpClient.New(new URL(baseurl)).getURLFile();
     }
 
 }

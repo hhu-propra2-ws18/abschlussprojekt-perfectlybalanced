@@ -13,6 +13,11 @@ public class ProPayAvailabilityAdvice {
 
     @ModelAttribute("propayavailability")
     public boolean propayavailable() {
-        return proPayService.isAvailable();
+        try {
+            proPayService.isAvailable();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }

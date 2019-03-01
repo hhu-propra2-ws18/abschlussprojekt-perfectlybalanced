@@ -5,9 +5,14 @@ import de.hhu.abschlussprojektverleihplattform.repository.UserRepository;
 import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.model.Reservation;
+import de.hhu.abschlussprojektverleihplattform.utils.RandomTestData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,13 +53,11 @@ public class ProPayService implements IPaymentService {
         }
     }
 
-    public boolean isAvailable(){
-        try{
-            proPayAdapter.getDefaultRoute();
-            return false;
-        }catch (Exception e){
-            return false;
-        }
+    public void isAvailable() throws Exception {
+        URL u = new URL(proPayAdapter.baseurl);
+        InputStream in = u.openStream();
+        String s = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        in.close();
     }
 
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
