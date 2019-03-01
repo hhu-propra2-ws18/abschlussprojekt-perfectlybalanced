@@ -11,13 +11,28 @@ auf der alle verfügbaren Produkte angezeigt werden.
 Um weitere Interaktionen durchzuführen, muss man eingeloggt sein.
 Falls man noch keinen Account besitzt, kann man in der Navigationbar oben Rechts auf Registrierung und sich registrieren lassen.
 Nach der Registrierung wird man automatisch angemeldet. Falls man bereits einen Account besitzt, so kann man sich unter Login anmelden.
-Nachdem man sich angemeldet hat, wird man auf seine Profilseite weitergeleitet
+Nachdem man sich angemeldet hat, wird man auf seine Profilseite weitergeleitet.
 Wenn man angemeldet ist kann man in der Navigationbar zwischen allen Produkten, den Produkten des Users, Produkte einstellen, Leih-Anfragen und dem Profil wechseln.
+
+In der Datenbank existieren bereits zwei User, die benutzt werden können, um die Anwendung auszuprobieren. Optional können noch beliebig viele neue User angestellt werden, die alle die Rolle *User* besitzen.
+
+***Rolle User***
+
+Username: sarah
+
+Passwort: sarah
+
+***Rolle Admin***
+
+Username: admin
+
+Passwort: admin
 
 **Profile**
 
 Auf der *Profilseite* stehen alle Informationen zum eingeloggten User.
 Außerdem wird das ProPay Konto mit dem Kontostand und der Möglichkeit Geld auf das Konto einzuzahlen angezeigt.
+Zusätzlich findet man eine Historie aller bisherigen ProPay Transaktionen.
 
 **Produkte ansehen**
 
@@ -25,17 +40,19 @@ Auf der *Start* Seite werden alle Produkte mit deren Beschreibung und einen dazu
 
 **Produktdetail**
 
-Auf der *Detailseite* angekommen, erhält man alle Informationen zum ausgewählten Produkt mit einem Button zum ausleihen.
-Wenn man das Produkt ausleihen möchte, klickt man auf den Button und die verleihende Person erhält eine Anfrage zum ausleihen unter *Leih-Anfragen*
-Alternativ befindet sich dort statdesseb ein Button zum kaufen, jenachdem ob das Produkt zum Verleih oder zum Verkauf steht.
+Auf der *Detailseite* angekommen, erhält man alle Informationen zum ausgewählten Produkt.
+Je nachdem ob das Produkt verliehen oder verkauft wird, wird entweder der Button "Ausleihen" oder "Kaufen" angezeigt. Diese Buttons werden außerdem nur angezeigt, wenn der User, der sich das Produkt anschaut, nicht gleichzeitig der Besitzer des Produkts ist.
+Wenn man ein zum Verleih stehendes Produkt ausleihen möchte, klickt man auf den Button und an die verleihende Person wird eine Anfrage zum Ausleihen gesendet.
+Möchte man stattdessen ein zum Verkauf stehendes Produkt kaufen, klickt man auf den Button und muss auf einer weiteren Seite bestätigen, dass man dieses Produkt kaufen möchte.
+
 
 **Leih-Anfragen**
 <Todo Leih-Anfragen mit Zeitstempel>
 
-Wenn ein anderer User ein Produkt des eingeloggten Users ausleihen möchte,so erscheint auf der Seite *Leih-Anfragen* unter Leih Anfragen die Meldung, dass der User mit dem Username das ausgewählte Produkt ausleihen möchte.
+Wenn ein anderer User ein Produkt des eingeloggten Users ausleihen möchte, so erscheint auf der Seite *Leih-Anfragen* unter Leih Anfragen die Meldung, dass der User mit dem Username das ausgewählte Produkt ausleihen möchte.
 Der Besitzer kann nun entscheiden, ob er das Produkt verleiht oder nicht.
 Desweiteren befinden sich dort Meldungen für alle zurückgegebenen Produkte.
-Der Besitzer kann dort entscheiden, ob das Produkt in ordnungsgemäßem Zustand zurückgegeben wurde oder nicht.
+Der Besitzer kann nach der Rückgabe eines Produkts dort entscheiden, ob das Produkt in ordnungsgemäßem Zustand zurückgegeben wurde oder nicht.
 Damit wird entweder die Kaution des Leihenden wieder freigegeben und der Ausleihvorgang abgeschlossen,
 oder der Ausleihvorgang an die Konfliktlösungsstelle weitergeleitet.
 Unter den Leih Anfragen befindet sich außerdem noch die Historie aller Leihanfragen an den Besitzer mit dem jeweiligen Status.
@@ -51,8 +68,10 @@ Unter der Seite werden alle Produkte des Users mit dem Titel, der Beschreibung, 
 
 **Produkt einstellen**
 
-Um ein neues Produkt einzustellen, füllt man das gegebene Formular aus und klickt im Anschluss auf Erstellen
+Um ein neues Produkt einzustellen, füllt man das gegebene Formular aus und klickt im Anschluss auf Erstellen.
 Dabei muss man sich vor dem Ausfüllen entscheiden, ob man das Produkt verleihen oder verkaufen möchte.
+
+Durch den Validator wird gewährleistet, dass die eingegebenen Daten im Formular korrekt sind, damit nur vollständige Produkte erstellt werden können.
 
 **Produkt editieren**
 
@@ -63,6 +82,12 @@ Um die Änderungen zu übernehmen, klickt man auf den Button Bearbeiten.
 **Ausloggen**
 
 Um sich abzumelden, klickt man in der Navigationbar oben rechts auf Logout.
+
+**Konfliktlösungsstelle**
+
+Falls ein Produkt in einem schlechten Zustand zurückgegeben wird, kann der Verleihende einen Konflikt starten. Dieser wird dann in der Konfliktlösungsstelle angezeigt, die nur für User mit der Rolle *Admin* verfügbar ist.
+
+Dort kann der Admin eine Übersicht aller derzeitigen Konflikte sehen. Unter den Details des Konflikts findet der Admin die Kontaktdaten des Verleihenden und des Ausleihers, um sich per Mail an die Personen zu wenden und den Konflikt extern zu lösen. Nach der Lösung des Konflikts kann der Admin auswählen, ob der Verleiher oder der Ausleihende die Kaution erhält.
 
 
 ## Anmerkungen zu verschiedenen Bereichen des Projektes
