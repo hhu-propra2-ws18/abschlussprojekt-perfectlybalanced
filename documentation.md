@@ -179,4 +179,4 @@ Weiterhin haben wir dann die View zu Einstellen eines Produktes angepasst. Man e
 In Abhängigkeit dieser Entscheidung wird dann eine View angezeigt, in welcher man entweder den Kaufpreis oder die Kaution sowie Verleihkosten angeben kann.
 Beim Einstellen des Produkts wird dann der jeweilige Status gespeichert.
 
-Kauft man ein Produkt, verschwindet dieser aus der Produktübersicht.
+Kauft man ein Produkt, verschwindet dieses aus der Produktübersicht.
