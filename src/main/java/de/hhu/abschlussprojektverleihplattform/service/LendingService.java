@@ -334,14 +334,11 @@ public class LendingService implements ILendingService {
 
     Timestamp getThisMorning() {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-        //aktuelle zeit holen
         long millis = now.getTime();
         long millisPerHour = 1000*60*60;
         long millisPerDay = millisPerHour * 24;
-        // rest (also uhrzeit) entfernen
         millis /= millisPerDay;
         millis *= millisPerDay;
-        // enie stunde subtrahieren
         return new Timestamp(millis - millisPerHour);
     }
 }
