@@ -493,12 +493,16 @@ public class ProductControllerTest {
         ProductEntity product = RandomTestData.newRandomTestProduct(user, address);
         product.setId(randomID.nextLong());
 
-        when(userService.findByUsername(ArgumentMatchers.anyString())).thenReturn(user);
-        when(productService.getById(ArgumentMatchers.anyLong())).thenReturn(product);
+        when(userService.findByUsername(ArgumentMatchers.anyString()))
+            .thenReturn(user);
+        when(productService.getById(ArgumentMatchers.anyLong()))
+            .thenReturn(product);
         Mockito
             .doNothing()
             .when(sellService)
-            .buyProduct(ArgumentMatchers.any(UserEntity.class), ArgumentMatchers.any(ProductEntity.class));
+            .buyProduct(
+                ArgumentMatchers.any(UserEntity.class),
+                ArgumentMatchers.any(ProductEntity.class));
 
         // Act & Assert
         mockMvc
@@ -543,7 +547,9 @@ public class ProductControllerTest {
         Mockito
             .doNothing()
             .when(sellService)
-            .buyProduct(ArgumentMatchers.any(UserEntity.class), ArgumentMatchers.any(ProductEntity.class));
+            .buyProduct(
+                ArgumentMatchers.any(UserEntity.class),
+                ArgumentMatchers.any(ProductEntity.class));
 
         // Act & Assert
         mockMvc
