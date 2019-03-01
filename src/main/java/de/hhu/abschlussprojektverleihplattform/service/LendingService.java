@@ -46,30 +46,6 @@ public class LendingService implements ILendingService {
         return list;
     }
 
-    public List<String> getAvailabilityStrings(ProductEntity product) {
-        List<LendingEntity> lendings = lendingRepository.getAllLendingsFromProduct(product);
-        List<String> list = new ArrayList<>();
-        for (LendingEntity lending : lendings) {
-            if (
-                lending.getStatus() != Lendingstatus.done
-                    && lending.getStatus() != Lendingstatus.denied
-                    && lending.getStatus() != Lendingstatus.requested
-            ) {
-                Timestamp start = lending.getStart();
-                Timestamp end = lending.getEnd();
-                Date startDate = new Date();
-                startDate.setTime(start.getTime());
-                Date endDate = new Date();
-                endDate.setTime(end.getTime());
-                String formattedStartDate = new SimpleDateFormat("dd.MM.yyyy").format(startDate);
-                String formattedEndDate = new SimpleDateFormat("dd.MM.yyyy").format(endDate);
-                String blockedTimeString = formattedStartDate + " bis " + formattedEndDate;
-                list.add(blockedTimeString);
-            }
-        }
-        return list;
-    }
-
     public LendingEntity requestLending(
             UserEntity actingUser,
             ProductEntity product,
