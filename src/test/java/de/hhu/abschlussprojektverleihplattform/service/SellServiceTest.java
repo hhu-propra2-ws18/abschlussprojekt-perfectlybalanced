@@ -48,7 +48,10 @@ public class SellServiceTest {
         }
 
         Assert.assertFalse(productRepository.getHasBeenUpdated());
-        Assert.assertEquals("Dieses Produkt kann nur geliehen, nicht gekauft werden", result.getMessage());
+        Assert.assertEquals(
+            "Dieses Produkt kann nur geliehen, nicht gekauft werden",
+            result.getMessage()
+        );
     }
 
     @Test
