@@ -1,9 +1,10 @@
 package de.hhu.abschlussprojektverleihplattform.service;
 
 import de.hhu.abschlussprojektverleihplattform.logic.Timespan;
-import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
-import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import de.hhu.abschlussprojektverleihplattform.model.*;
+import de.hhu.abschlussprojektverleihplattform.repository.ILendingRepository;
+import de.hhu.abschlussprojektverleihplattform.repository.ITransactionRepository;
+import de.hhu.abschlussprojektverleihplattform.service.propay.interfaces.IPaymentService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -18,12 +19,16 @@ import java.util.stream.Collectors;
 @Service
 public class LendingService implements ILendingService {
 
-    private ILendingRepository lendingRepository;
-    private IPaymentService paymentService;
+    private final ILendingRepository lendingRepository;
+    private final IPaymentService paymentService;
+    private final ITransactionRepository transactionRepository;
 
-    public LendingService(ILendingRepository lendingRepository, IPaymentService paymentService) {
+    public LendingService(ILendingRepository lendingRepository,
+                          IPaymentService paymentService,
+                          ITransactionRepository transactionRepository) {
         this.lendingRepository = lendingRepository;
         this.paymentService = paymentService;
+        this.transactionRepository = transactionRepository;
     }
 
     public List<Timespan> getAvailableTime(ProductEntity product) {
@@ -164,6 +169,12 @@ public class LendingService implements ILendingService {
         lending.setCostReservationID(costID);
         lending.setSuretyReservationID(suretyID);
         lendingRepository.update(lending);
+
+        TransactionEntity transaction = new TransactionEntity(lending.getBorrower(),
+                lending.getProduct().getOwner(),
+                lending.getProduct().getCost(),
+                lending.getStart());
+        transactionRepository.addTransaction(transaction);
     }
 
     public void denyLendingRequest(LendingEntity lending) throws Exception {
@@ -217,6 +228,12 @@ public class LendingService implements ILendingService {
         );
         lending.setStatus(Lendingstatus.done);
         lendingRepository.update(lending);
+
+        TransactionEntity transaction = new TransactionEntity(lending.getBorrower(),
+                lending.getProduct().getOwner(),
+                lending.getProduct().getSurety(),
+                lending.getStart());
+        transactionRepository.addTransaction(transaction);
     }
 
     public void borrowerReceivesSuretyAfterConflict(LendingEntity lending) throws Exception {
