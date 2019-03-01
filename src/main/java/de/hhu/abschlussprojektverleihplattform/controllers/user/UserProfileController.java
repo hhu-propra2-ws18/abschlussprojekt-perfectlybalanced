@@ -1,7 +1,9 @@
 package de.hhu.abschlussprojektverleihplattform.controllers.user;
 
-import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
+import de.hhu.abschlussprojektverleihplattform.model.TransactionEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
+import de.hhu.abschlussprojektverleihplattform.service.propay.TransactionService;
+import de.hhu.abschlussprojektverleihplattform.model.LendingEntity;
 import de.hhu.abschlussprojektverleihplattform.service.LendingService;
 import de.hhu.abschlussprojektverleihplattform.service.propay.adapter.ProPayAdapter;
 import de.hhu.abschlussprojektverleihplattform.service.propay.ProPayService;
@@ -32,17 +34,20 @@ public class UserProfileController {
         this.lendingService = lendingService;
     }
 
+    @Autowired
+    TransactionService transactionService;
+
     @GetMapping("/profile")
     public String getProfile(Model model, Authentication auth) throws Exception {
         UserEntity user = (UserEntity) auth.getPrincipal();
+        List<TransactionEntity> transactions = transactionService
+                .getAllTransactionsFromUser(user.getUserId());
         List<LendingEntity> getUserLendings = lendingService.getAllLendingsForUser(user);
-
-        List<LendingEntity> reminder = lendingService
-            .getAllReminder(getUserLendings);
-
+        List<LendingEntity> reminder = lendingService.getAllReminder(getUserLendings);
         model.addAttribute("user", user);
         model.addAttribute("user_balance", proPayService.usersCurrentBalance(user.getUsername()));
         model.addAttribute("lending_reminder", reminder);
+        model.addAttribute("transaction", transactions);
         return "profile";
     }
 
