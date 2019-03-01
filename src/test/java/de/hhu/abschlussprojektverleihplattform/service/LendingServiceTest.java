@@ -1384,11 +1384,6 @@ public class LendingServiceTest {
 
     // Test for getThisMorning
 
-    //Testing this method is very difficult, since without the Usage of LocalDateTime etc
-    // i would have to write the same code i used inside the method.
-    //And that would make the Test senseless.
-    //The Test with LocalDateTime etc runs local, but i doent work on TravisCI,
-    // LocalDateTime etc work different there.
     //@Test
     public void getThisMornig1() {
         LocalDateTime thisMornigDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0));
