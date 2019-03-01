@@ -27,7 +27,7 @@ Auf der *Start* Seite werden alle Produkte mit deren Beschreibung und einen dazu
 
 Auf der *Detailseite* angekommen, erhält man alle Informationen zum ausgewählten Produkt mit einem Button zum ausleihen.
 Wenn man das Produkt ausleihen möchte, klickt man auf den Button und die verleihende Person erhält eine Anfrage zum ausleihen unter *Leih-Anfragen*
-Alternativ befindet sich dort statdesseb ein Button zum kaufen, jenachdem ob das Produkt zum Verleih oder zum Verkauf steht.
+Alternativ befindet sich dort statdessen ein Button zum kaufen, jenachdem ob das Produkt zum Verleih oder zum Verkauf steht.
 
 **Leih-Anfragen**
 <Todo Leih-Anfragen mit Zeitstempel>
@@ -70,7 +70,7 @@ Um sich abzumelden, klickt man in der Navigationbar oben rechts auf Logout.
 
 Die Geschäftslogik befindet sich in den beiden Klassen LendingService und SellService.
 In der Klasse LendingService werden alle Aktionen die den Verleihvorgang betreffen durchgeführt,
-während im SellService ledinglich die Methode zur Kaufabwicklung ist.
+während im SellService lediglich die Methode zur Kaufabwicklung ist.
 
 In der Klasse LendingService gibt es drei Kategorien von Methoden:
 Methoden die Teil der Geschäftsabwicklung sind,
@@ -97,7 +97,7 @@ so wird die erste Reservierungen wieder zurückgezahlt um das Konto in den vorhe
 
 Die Methode denyLendingRequest lehnt eine Anfrage ab.
 
-Die Methode returnProduct ermöglicht es dem Leihenden anzugeben, das er das geliehene Produkt zurückgegeben hat.
+Die Methode returnProduct ermöglicht es dem Leihenden anzugeben, dass er das geliehene Produkt zurückgegeben hat.
 
 Die Methode acceptReturnedProduct wird aufgerufen, wenn der Besitzer eines Produktes findet,
 das es in guten Zustand zurückgeben wurde.
@@ -123,34 +123,37 @@ was die Datenbank unnötig auslasten würde.
 
 Es folgen die beiden privaten Methoden zu den Timestamps:
 In der Methode daysBetweenTwoTimestamps wird die Zeit zwischen zwei Timestamps in Tagen ausgegeben.
-Dieser Wert wird benötig, um die Ausleihkosten zu berechnen.
-Dabei wird der Wert aufgerundet, da jeder angefange Tag bezahlt werden muss.
+Dieser Wert wird benötigt, um die Ausleihkosten zu berechnen.
+Dabei wird der Wert aufgerundet, da jeder angefangene Tag bezahlt werden muss.
 
 Die Methode getThisMorning nimmt den aktuellen Timestamp (der Systemzeit) und entfernt die Uhrzeit aus diesem,
 indem der Wert ganzzahlig durch die Länge eines Tages geteilt wird,
-und anschließend mit diesem wieder mutlipliziert wird.
-Diese Methode dient ledinglich der Prüfung ob ein Datum in der Vergangenheit liegt,
+und anschließend mit diesem wieder multipliziert wird.
+Diese Methode dient lediglich der Prüfung ob ein Datum in der Vergangenheit liegt,
 ansonsten hat sie keinerlei Einfluss auf die Logik.
-Daher ist es auch nicht alzuschlimm, das sich diese Methode nicht vernünftig testen lässt:
+Daher ist es auch nicht alzu schlimm, dass sich diese Methode nicht vernünftig testen lässt:
 Würde ich diese Methode nur mit eigenem Code testen, so würde im Test der gleiche Code stehen wie in der Anwendung,
 was den Sinn des Testes damit aufhebt.
 Sollte ich einen Denkfehler in der Berechnung machen, so würde es sowohl in der Anwendung als auch im Test vorkommen,
 und der Test würde somit auch im Fehlerfall erfolgreich durchlaufen.
 Daher habe ich beim Testen LocalDateTime usw verwendet, welche allerdings sehr abhängig von Zeitzonen usw sind.
-Lokal bei mir läuft der Tests ohne Probleme durch, und Tests mit der Laufenden Anwendung zeigen das acuh dort die Methode funktioniert,
+Lokal bei mir läuft der Tests ohne Probleme durch, und Tests mit der Laufenden Anwendung zeigen das auch dort die Methode funktioniert,
 aber auf TravisCI läuft der Test nicht durch.
 Ich vermute das die Server von TravisCI in einer anderen Zeitzone stehen und der Fehler daher kommt.
-Foglich musste ich den Test wieder deaktivieren, damit die TravisCI-Tests ordnungsgemäß durchlaufen könen.
+Folglich musste ich den Test wieder deaktivieren, damit die TravisCI-Tests ordnungsgemäß durchlaufen können.
 
 In der Klasse SellService befindet sich nur eine Methode: buyProduct.
 Diese prüft ob das Produkt verkaufbar ist und der Käufer genügend Geld besitzt,
 dann wird der Kauf abgewickelt.
 
-Weitere Anmerkungen:
+Anmerkungen zu den Tests:
 
-In den View-Methoden findet keine Logik statt, entsprechenden ist es nicht sinvoll diese auf Service-Ebene zu testen.
+In den View-Methoden findet keine Logik statt, entsprechenden ist es nicht sinnvoll diese auf Service-Ebene zu testen.
 
-Die Tests der Geschäftslogik wurden (ausserhalb des Repos um die build.gradle nicht unötig zu vergrößern) mit pitest überprüft:
+Da ich auch das ausgeben von Exceptions usw test, sowie meine Anforderungen an die Test-Dummys sehr hoch sind,
+habe ich mich dazu entschieden die Dummys zu schreiben anstatt Mockito zu benutzen.
+
+Die Tests der Geschäftslogik wurden (außerhalb des Repos um die build.gradle nicht unnötig zu vergrößern) mit pitest überprüft:
 Dabei wurden die meisten Mutationen erfolgreich eliminiert,
 nur Kleinigkeiten haben überlebt.
 zB. Mutationen wie if (userMoney < totalMoney) --> if (userMoney <= totalMoney) haben überlebt,

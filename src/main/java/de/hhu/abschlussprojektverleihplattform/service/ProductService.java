@@ -4,6 +4,7 @@ import de.hhu.abschlussprojektverleihplattform.model.ProductEntity;
 import de.hhu.abschlussprojektverleihplattform.model.UserEntity;
 import de.hhu.abschlussprojektverleihplattform.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductEntity getById(Long productId){
+    public ProductEntity getById(Long productId) throws EmptyResultDataAccessException {
         return productRepository.getProductById(productId);
     }
 
