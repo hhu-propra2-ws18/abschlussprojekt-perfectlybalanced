@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
+import java.io.InputStream.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -54,7 +55,8 @@ public class ProPayService implements IPaymentService {
     private long interval_to_check = 10000;
 
     private boolean was_available_recently = false;
-    private long last_checked_availability_milliseconds=System.currentTimeMillis()-(interval_to_check*2);
+    private long last_checked_availability_milliseconds
+            =System.currentTimeMillis()-(interval_to_check*2);
 
     public void isAvailable() throws Exception {
 
@@ -81,7 +83,6 @@ public class ProPayService implements IPaymentService {
 
         URL u = new URL(proPayAdapter.baseurl);
         InputStream in = u.openStream();
-        String s = new String(in.readAllBytes(), StandardCharsets.UTF_8);
         in.close();
     }
 

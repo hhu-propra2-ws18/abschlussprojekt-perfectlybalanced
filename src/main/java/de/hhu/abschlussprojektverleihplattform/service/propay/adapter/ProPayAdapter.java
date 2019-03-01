@@ -15,10 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import sun.net.www.http.HttpClient;
 
 import java.net.URI;
-import java.net.URL;
 import java.sql.Timestamp;
 
 import static de.hhu.abschlussprojektverleihplattform.service.propay.ProPayUtil.makeHttpRequestWithParameter;
