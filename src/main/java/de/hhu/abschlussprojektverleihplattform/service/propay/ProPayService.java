@@ -53,11 +53,30 @@ public class ProPayService implements IPaymentService {
         }
     }
 
+    private boolean was_available_recently = false;
+    private long last_checked_availability_milliseconds=System.currentTimeMillis();
+
     public void isAvailable() throws Exception {
-        URL u = new URL(proPayAdapter.baseurl);
-        InputStream in = u.openStream();
-        String s = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-        in.close();
+
+        long current_time = System.currentTimeMillis();
+
+        long interval_to_check = 10000;
+        
+        if(last_checked_availability_milliseconds-current_time > interval_to_check) {
+
+            last_checked_availability_milliseconds=current_time;
+
+            URL u = new URL(proPayAdapter.baseurl);
+            InputStream in = u.openStream();
+            String s = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            in.close();
+
+            was_available_recently=true;
+        }else{
+            if(!was_available_recently){
+                throw new Exception("ProPay not available");
+            }
+        }
     }
 
     //------------------- implement methods from Johannes LendingService Interfaces ---------------
