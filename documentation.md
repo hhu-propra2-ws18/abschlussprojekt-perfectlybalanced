@@ -146,9 +146,12 @@ In der Klasse SellService befindet sich nur eine Methode: buyProduct.
 Diese prüft ob das Produkt verkaufbar ist und der Käufer genügend Geld besitzt,
 dann wird der Kauf abgewickelt.
 
-Weitere Anmerkungen:
+Anmerkungen zu den Tests:
 
 In den View-Methoden findet keine Logik statt, entsprechenden ist es nicht sinvoll diese auf Service-Ebene zu testen.
+
+Da ich auch das ausgeben von Exeptions usw test, sowie meine Anforderungen an die Test-Dummys sehr hoch sind,
+habe ich mich dazu entschieden die Dummys zu schreiben anstatt Mockito zu benutzen.
 
 Die Tests der Geschäftslogik wurden (ausserhalb des Repos um die build.gradle nicht unötig zu vergrößern) mit pitest überprüft:
 Dabei wurden die meisten Mutationen erfolgreich eliminiert,
