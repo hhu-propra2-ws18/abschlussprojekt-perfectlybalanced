@@ -13,8 +13,6 @@ services:
   datenbank:
     container_name: datenbank
     image: oscarfonts/h2
-    ports:
-      - "1521:1521"
     environment:
       - H2_DATABASE=datenbank
       - H2_USER=perfectlybalanced
