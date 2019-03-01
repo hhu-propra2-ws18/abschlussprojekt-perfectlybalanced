@@ -51,14 +51,16 @@ public class ProPayService implements IPaymentService {
         }
     }
 
+    private long interval_to_check = 10000;
+
     private boolean was_available_recently = false;
-    private long last_checked_availability_milliseconds=System.currentTimeMillis();
+    private long last_checked_availability_milliseconds=System.currentTimeMillis()-(interval_to_check*2);
 
     public void isAvailable() throws Exception {
 
         long current_time = System.currentTimeMillis();
 
-        long interval_to_check = 10000;
+
 
         if((current_time-last_checked_availability_milliseconds) > interval_to_check) {
 
