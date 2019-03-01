@@ -314,13 +314,25 @@ public class LendingService implements ILendingService {
                 .collect(Collectors.toList());
     }
 
-    protected int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
+    public List<LendingEntity> getAllReminder(List<LendingEntity> allLendings) {
+        return allLendings
+            .stream()
+            .filter(lendingEntity -> lendingEntity
+                .getEnd()
+                .before(Timestamp.valueOf(LocalDateTime.now())))
+            .filter(lendingEntity -> lendingEntity
+                .getStatus()
+                .equals(Lendingstatus.confirmt))
+            .collect(Collectors.toList());
+    }
+
+    int daysBetweenTwoTimestamps(Timestamp start, Timestamp end) {
         long differenceInMillis = end.getTime() - start.getTime();
         double differenceInDays = differenceInMillis / (1000.0 * 60 * 60 * 24);
         return (int) Math.ceil(differenceInDays);
     }
 
-    protected Timestamp getThisMorning() {
+    Timestamp getThisMorning() {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         //aktuelle zeit holen
         long millis = now.getTime();

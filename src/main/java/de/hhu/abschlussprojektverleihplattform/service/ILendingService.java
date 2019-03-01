@@ -77,4 +77,6 @@ public interface ILendingService {
 
     //Done and Denied Lendings, scine bothe are just history and have no further interactions
     List<LendingEntity> getAllCompletedLendings(List<LendingEntity> allLendings);
+
+    List<LendingEntity> getAllReminder(List<LendingEntity> allLendings);
 }
