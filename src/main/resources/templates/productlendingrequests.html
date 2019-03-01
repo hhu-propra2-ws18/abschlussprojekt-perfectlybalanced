@@ -18,6 +18,11 @@
                         <span> möchte das Produkt </span>
                         <span th:text="${lending.product.title}"></span>
                         <span> von dir ausleihen </span>
+                        <p class="text-muted">
+                            <span th:text="${#dates.format(lending.start, 'dd.MM.yyyy')}">01.01.2019</span>
+                            -
+                            <span th:text="${#dates.format(lending.end, 'dd.MM.yyyy')}">01.12.2019</span>
+                        </p>
                     </div>
                     <div class="col-md-4">
                         <div class="row">

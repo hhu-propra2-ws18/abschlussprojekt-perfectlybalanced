@@ -29,11 +29,21 @@ Username: admin
 
 Passwort: admin
 
-**Profile**
+**Benutzerverwaltung**
+
+Die Benutzerverwaltung erfolgt über Spring Security. 
+Es gibt die zwei Rollen "User" und "Admin", die hauptsächlich die Applikation bedienen können.
+Der Admin hat zusätzlich die Berechtigung, auf das Konflikt-Center zuzugreifen.
+Die Startseite, Registrierungs- und Login-Formulare sind für Nicht-Registrierte Nutzer (Gäste) sichtbar.
+Über das Login-Formular wird der Benutzer dazu aufgefordert, Nutzernamen und Passwort einzugeben, um den Zugang zu erhalten. 
+Username und Passwort sind (mit einigen String-Einschränkungen) frei wählbar, welches im Registrierungsformular (zu den zzgl. Angaben wie E-Mail und Namen) mitgegeben werden muss.
+Die Überprüfung des Registrierungsformular erfolgt durch Java-Validator, die Login-Prüfung übernimmt Spring Security.
+Die Passwörter werden durch bCrypt verschlüsselt.
+Nach dem Login/Registrierung wird man automatisch auf die Profilseite weitergeleitet.
 
 Auf der *Profilseite* stehen alle Informationen zum eingeloggten User.
-Außerdem wird das ProPay Konto mit dem Kontostand und der Möglichkeit Geld auf das Konto einzuzahlen angezeigt.
-Zusätzlich findet man eine Historie aller bisherigen ProPay Transaktionen und eine Meldung, ob verspätete Ausleihen vorliegen.
+Außerdem wird das ProPay Konto mit dem Kontostand und der Möglichkeit Geld auf das Konto einzuzahlen angezeigt. 
+Werden Leihfristen nicht eingehalten, wird eine Liste der Versäumnisse aufgelistet.
 
 **Produkte ansehen**
 
@@ -182,3 +192,24 @@ nur Kleinigkeiten haben überlebt.
 zB. Mutationen wie if (userMoney < totalMoney) --> if (userMoney <= totalMoney) haben überlebt,
 aber derartige Mutationen kann man nur mit erheblichem Aufwand testen,
 welche sich bei derartigen Kleinigkeiten einfach nicht lohnt.
+
+## Anmerkungen zur Datenbank
+
+Wir haben uns für eine H2-Datenbank entscheiden, da diese allen Teammitgliedern bekannt war und diese von Springboot nativ unterstützt wird.
+So war sichergestellt, dass wir schnell mit der Entwicklung beginnen konnten, ohne die Datenbank aufwendig zu konfigurieren.
+
+Ursprüglich war am Anfang des Projekts der Plan,
+die Datenbankkommunikation ohne die Hilfe eines Frameworks zu realisieren. Dieser Plan wurde jedoch schnell verworfen, da der Arbeitsaufwand 
+doch zu hoch war. Um dennoch die maximale Kontrolle zu behalten, haben wir uns dafür entschieden, die Tabellen mit JPA erstellen zu lassen. Weiterhin 
+verwaltet die Kommunikation das JDBC-Template. So konnten wir die Datenbankabfragen selber schreiben, ohne uns Sorgen machen zu müssen, die Verbindungen zur
+Datenbank verwalten zu müssen.
+
+## Anmerkungen zur Umsetzung des Kaufen-Features
+
+Um das Kaufen-Feature in unsere Applikation zu integrierern, haben wir in die Entität Produkt das Feld "status" hinzugefügt. Dieses ist ein Enum, welches 
+drei Werte enthält (forBuying, forLending, sold). 
+Weiterhin haben wir dann die View zu Einstellen eines Produktes angepasst. Man entscheidet sich im Vorfeld ob man ein Produkt verkaufen oder verleihen möchte.
+In Abhängigkeit dieser Entscheidung wird dann eine View angezeigt, in welcher man entweder den Kaufpreis oder die Kaution sowie Verleihkosten angeben kann.
+Beim Einstellen des Produkts wird dann der jeweilige Status gespeichert.
+
+Kauft man ein Produkt, verschwindet dieses aus der Produktübersicht.
