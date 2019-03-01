@@ -1375,7 +1375,7 @@ public class LendingServiceTest {
         System.out.println(entity2.getEnd());
         all.add(entity2);
 
-        LendingService logic = new LendingService(null, null);
+        LendingService logic = new LendingService(null, null, null);
 
         System.out.println(logic.getAllReminder(all).size());
 
