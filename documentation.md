@@ -162,7 +162,7 @@ welche sich bei derartigen Kleinigkeiten einfach nicht lohnt.
 
 ## Anmerkungen zur Datenbank
 
-Wir haben uns für eine H2-Datenbank entscheiden, da diese allen Teammitgliedern bekannt war diese von Springboot nativ unterstützt wird.
+Wir haben uns für eine H2-Datenbank entscheiden, da diese allen Teammitgliedern bekannt war und diese von Springboot nativ unterstützt wird.
 So war sichergestellt, dass wir schnell mit der Entwicklung beginnen konnten, ohne die Datenbank aufwendig zu konfigurieren.
 
 Ursprüglich war am Anfang des Projekts der Plan,
