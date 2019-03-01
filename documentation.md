@@ -14,10 +14,21 @@ Nach der Registrierung wird man automatisch angemeldet. Falls man bereits einen 
 Nachdem man sich angemeldet hat, wird man auf seine Profilseite weitergeleitet
 Wenn man angemeldet ist kann man in der Navigationbar zwischen allen Produkten, den Produkten des Users, Produkte einstellen, Leih-Anfragen und dem Profil wechseln.
 
-**Profile**
+**Benutzerverwaltung**
+
+Die Benutzerverwaltung erfolgt über Spring Security. 
+Es gibt die zwei Rollen "User" und "Admin", die hauptsächlich die Applikation bedienen können.
+Der Admin hat zusätzlich die Berechtigung, auf das Konflikt-Center zuzugreifen.
+Die Startseite, Registrierungs- und Login-Formulare sind für Nicht-Registrierte Nutzer (Gäste) sichtbar.
+Über das Login-Formular wird der Benutzer dazu aufgefordert, Nutzernamen und Passwort einzugeben, um den Zugang zu erhalten. 
+Username und Passwort sind (mit einigen String-Einschränkungen) frei wählbar, welches im Registrierungsformular (zu den zzgl. Angaben wie E-Mail und Namen) mitgegeben werden muss.
+Die Überprüfung des Registrierungsformular erfolgt durch Java-Validator, die Login-Prüfung übernimmt Spring Security.
+Die Passwörter werden durch bCrypt verschlüsselt.
+Nach dem Login/Registrierung wird man automatisch auf die Profilseite weitergeleitet.
 
 Auf der *Profilseite* stehen alle Informationen zum eingeloggten User.
-Außerdem wird das ProPay Konto mit dem Kontostand und der Möglichkeit Geld auf das Konto einzuzahlen angezeigt.
+Außerdem wird das ProPay Konto mit dem Kontostand und der Möglichkeit Geld auf das Konto einzuzahlen angezeigt. 
+Werden Leihfristen nicht eingehalten, wird eine Liste der Versäumnisse aufgelistet.
 
 **Produkte ansehen**
 
