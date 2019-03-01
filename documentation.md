@@ -20,9 +20,9 @@ Die Benutzerverwaltung erfolgt über Spring Security.
 Es gibt die zwei Rollen "User" und "Admin", die hauptsächlich die Applikation bedienen können.
 Der Admin hat zusätzlich die Berechtigung, auf das Konflikt-Center zuzugreifen.
 Die Startseite, Registrierungs- und Login-Formulare sind für Nicht-Registrierte Nutzer (Gäste) sichtbar.
-Über das Login-Formular wird der Benutzer dazu aufgefordert, Nutzernamen und Passwort einzugeben, um den Zugang zu erhalten. +
+Über das Login-Formular wird der Benutzer dazu aufgefordert, Nutzernamen und Passwort einzugeben, um den Zugang zu erhalten. 
 Username und Passwort sind (mit einigen String-Einschränkungen) frei wählbar, welches im Registrierungsformular (zu den zzgl. Angaben wie E-Mail und Namen) mitgegeben werden muss.
-Die Überprüfung des Registrierungsformular erfolgt durch Java-Validator, die Login-Prüfung übernimmt Spring Security. +
+Die Überprüfung des Registrierungsformular erfolgt durch Java-Validator, die Login-Prüfung übernimmt Spring Security.
 Die Passwörter werden durch bCrypt verschlüsselt.
 Nach dem Login/Registrierung wird man automatisch auf die Profilseite weitergeleitet.
 
